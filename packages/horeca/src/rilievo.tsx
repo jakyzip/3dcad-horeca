@@ -304,6 +304,10 @@ const definition: NodeDefinition<typeof RilievoNode> = {
     return JSON.stringify([n.unit, n.opacity, n.layers.map((l) => l.visible), n.layers.length])
   },
   floorplan: (node, ctx) => rilievoFloorplan(node as unknown as RilievoNode, ctx),
+  // Not about surveys: the pack's one-per-canvas render helper rides on this always-installed kind.
+  system: {
+    module: () => import('./render-system').then(({ RenderSystem }) => ({ default: RenderSystem })),
+  },
   presentation: {
     label: 'Rilievo DXF',
     description: 'Disegno DXF importato come base da ricalcare.',

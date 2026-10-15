@@ -114,7 +114,7 @@ Dal render di riferimento (laboratorio di gelateria): tavolo su gambe (ripiano s
 ### 2e. Etichette 3D (fatto, da provare nell'editor)
 Sopra ogni attrezzatura, nella vista 3D, compare il nome: quello dell'articolo, altrimenti il nome dato all'oggetto, altrimenti il tipo ("Mantecatore"). Si accendono e spengono dal pannello Ho.Re.Ca ("Mostra i nomi delle attrezzature nel 3D"); la scelta resta salvata nel browser. Le etichette seguono l'oggetto quando lo sposti e spariscono se lo nascondi. Non finiscono negli export GLB/PDF (sono testo della pagina, non geometria). Codice: `packages/horeca/src/labels.ts` e `labels-3d.tsx`.
 
-Stato al 2026-10-15: forme 2c e piastrelle 2d committate (`1a999d5`); etichette 2e committate sul branch `fase-2c-forme`. Fase 3a (import DXF) committata sul branch `fase-3-dxf`; 3b (export DXF) e 3c (muri e quote dal rilievo) committate; fase 4a (invio distinta al CRM) committata; fase 5 in corso. Catalogo dal CRM (2b) provato dall'utente con un account vero: funziona. `bun run ci` passa. Prova a mano nell'editor ancora da fare per 2c, 2d e 2e.
+Stato al 2026-10-15: forme 2c e piastrelle 2d committate (`1a999d5`); etichette 2e committate sul branch `fase-2c-forme`. Fase 3a (import DXF) committata sul branch `fase-3-dxf`; 3b (export DXF) e 3c (muri e quote dal rilievo) committate; fase 4a (invio distinta al CRM) committata; fase 5a (render) committata, da provare nel browser. Catalogo dal CRM (2b) provato dall'utente con un account vero: funziona. `bun run ci` passa. Prova a mano nell'editor ancora da fare per 2c, 2d e 2e.
 
 ## Fase 3: rilievo e DXF
 
@@ -164,7 +164,14 @@ Due copie dello stesso progetto collegate allo stesso cliente hanno lo stesso `d
 
 ## Fase 5: render
 
-Rendering di qualità media dentro il viewer, con esportazione PNG. Candidato: `three-gpu-pathtracer` (verificarne licenza e compatibilità con la versione di Three.js in uso).
+Scelta dell'utente (2026-10-15): prima un render con il motore dell'editor, poi eventualmente il path tracing come modalità "alta qualità".
+
+### 5a. Render con il motore dell'editor (fatto, da provare nell'editor)
+Pannello Ho.Re.Ca → "Render": la vista 3D com'è inquadrata, ridisegnata a 1920, 2560 o 3840 px di larghezza (l'altezza segue le proporzioni della vista), senza griglia, guide, zone, scansioni, selezione ed evidenziazione; i nomi delle attrezzature solo se richiesti. Usa la grafica del viewer (WebGPU con luce indiretta SSGI, denoise, ombre, texture): alza per qualche istante il rapporto di pixel, aspetta 40 fotogrammi perché la luce si stabilizzi, legge l'immagine subito dopo un fotogramma (con WebGPU va letta nello stesso istante) e rimette tutto com'era. Codice: `render-store.ts`, `render-system.tsx` (montato come `system` del tipo rilievo, sempre installato con il pacchetto), `render-section.tsx`. Nessuna libreria nuova.
+Non provato nel browser: il controllo a mano è la prima cosa da fare.
+
+### 5b. Path tracing (da decidere dopo la prova di 5a)
+`three-gpu-pathtracer` 0.0.27 (MIT, ottobre 2026) funziona solo con `WebGLRenderer` e materiali standard, mentre il viewer usa `WebGPURenderer` con materiali TSL: servirebbe una seconda scena con i materiali convertiti. Immagini più realistiche, ma minuti per immagine.
 
 ## Fase 6: desktop
 

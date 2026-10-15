@@ -27,6 +27,7 @@ import { planToDxf } from './dxf-export'
 import { parseDxfRilievo } from './dxf-import'
 import { useHorecaLabels } from './labels'
 import { levelPlanEntries } from './plan-entries'
+import { RenderSection } from './render-section'
 import { RilievoNode } from './rilievo'
 
 function armTool(kind: string, defaults: Record<string, unknown> | null = null) {
@@ -550,6 +551,7 @@ export default function HorecaPanel() {
       </section>
       <DistintaSection />
       <CrmSendSection />
+      <RenderSection />
     </div>
   )
 }
