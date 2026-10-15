@@ -215,8 +215,8 @@ Avvisi, mai blocchi: attrezzature che si sovrappongono (solo se si sovrappongono
 Pannello Ho.Re.Ca → "Composizioni": selezionate alcune attrezzature (Maiusc + clic), "Salva" con un nome; "Inserisci" la ricrea al centro della stanza del piano (centro dei muri), già selezionata da spostare, in un solo passo di annulla. Porta con sé misure, opzioni, articolo e allacciamenti, posizioni relative e rotazioni. Salvate su questo computer (memoria del browser, come il catalogo); "Esporta" / "Importa" un file `composizioni.json` per passarle a un altro computer. Codice: `composizioni.ts`, `composizioni-store.ts`, `composizioni-section.tsx`.
 App desktop: porta fissa 39203 (un'altra solo se occupata), perché la memoria del browser dipende dall'indirizzo con la porta e con una porta nuova a ogni avvio catalogo, composizioni ed etichette si perdevano.
 
-### 8d. Progetti modello (da fare)
-Un progetto nuovo che parte da un modello già arredato, e "salva come modello".
+### 8d. Progetti modello (fatto, da provare)
+Un modello è un progetto il cui nome comincia per "Modello" (es. "Modello – Laboratorio gelateria"): si modifica come gli altri, sta nella sezione "Modelli" della pagina iniziale. Menu della scheda: "Usa come modello" / "Togli dai modelli" (rinomina), e sui modelli "Nuovo progetto da questo modello" (anche come pulsante sotto la scheda): crea "Progetto #n" con una copia completa, senza il collegamento al CRM, e lo apre. Codice: `apps/editor/lib/templates.ts`, `scene-card.tsx`, `app/page.tsx`.
 
 ### 8e. Banconi e vetrine componibili (da decidere con l'utente)
 Servono i moduli usati davvero (tipi, larghezze standard, angoli).

@@ -5,6 +5,7 @@ import { CreateProjectButton } from '@/components/create-project-button'
 import { SceneCard, type SceneCardData } from '@/components/scene-card'
 import { getSceneOperations } from '@/lib/scene-store-server'
 import { sceneThumbnailUrl } from '@/lib/scene-thumbnails'
+import { isTemplateName } from '@/lib/templates'
 
 export const dynamic = 'force-dynamic'
 
@@ -42,6 +43,8 @@ function nextProjectNumber(names: string[]): number {
 export default async function HomePage() {
   const scenes = await fetchScenes()
   const nextNumber = nextProjectNumber(scenes.map((scene) => scene.name))
+  const templates = scenes.filter((scene) => isTemplateName(scene.name))
+  const projects = scenes.filter((scene) => !isTemplateName(scene.name))
 
   return (
     <AppShell>
@@ -68,12 +71,31 @@ export default async function HomePage() {
           </div>
         ) : (
           <>
+            {templates.length > 0 && (
+              <section className="mb-10">
+                <h1 className="mb-1 font-semibold text-lg">Modelli</h1>
+                <p className="mb-6 text-muted-foreground text-sm">
+                  Punti di partenza: “Nuovo progetto da questo modello” ne fa una copia.
+                </p>
+                <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {templates.map((scene) => (
+                    <SceneCard key={scene.id} nextNumber={nextNumber} scene={scene} template />
+                  ))}
+                </ul>
+              </section>
+            )}
             <h1 className="mb-6 font-semibold text-lg">Progetti</h1>
-            <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {scenes.map((scene) => (
-                <SceneCard key={scene.id} scene={scene} />
-              ))}
-            </ul>
+            {projects.length === 0 ? (
+              <p className="text-muted-foreground text-sm">
+                Nessun progetto: creane uno nuovo o parti da un modello.
+              </p>
+            ) : (
+              <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {projects.map((scene) => (
+                  <SceneCard key={scene.id} nextNumber={nextNumber} scene={scene} />
+                ))}
+              </ul>
+            )}
           </>
         )}
       </main>
