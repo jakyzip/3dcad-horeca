@@ -1,0 +1,27 @@
+{
+  "name": "@3dcad-horeca/desktop",
+  "version": "0.1.0",
+  "productName": "3DCadHo.Re.Ca",
+  "private": true,
+  "description": "3DCadHo.Re.Ca come app desktop (Electron) per Mac, Windows e Linux",
+  "author": "Jacopo Donà",
+  "license": "MIT",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "bun build src/main.ts --target node --format cjs --external electron --outfile dist/main.js",
+    "check-types": "tsc --noEmit",
+    "stage": "bun scripts/stage.ts",
+    "start": "bun run build && electron .",
+    "dist": "bun run build && bun run stage && electron-builder",
+    "dist:mac": "bun run build && bun run stage && electron-builder --mac",
+    "dist:win": "bun run build && bun run stage && electron-builder --win",
+    "dist:linux": "bun run build && bun run stage && electron-builder --linux"
+  },
+  "devDependencies": {
+    "@pascal/typescript-config": "*",
+    "@types/node": "^26.6.5",
+    "electron": "44.7.2",
+    "electron-builder": "26.15.3",
+    "typescript": "7.0.2"
+  }
+}

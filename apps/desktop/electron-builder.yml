@@ -1,0 +1,39 @@
+# Installers for Mac (.dmg), Windows (.exe) and Linux (.AppImage). The editor's web runtime,
+# staged by `bun run stage`, travels next to the app as a plain folder (no asar: Node reads it).
+appId: it.jacopodona.3dcadhoreca
+productName: 3DCadHo.Re.Ca
+copyright: Copyright © 2026 Pascal Group Inc., © 2026 Jacopo Donà
+directories:
+  output: release
+  buildResources: resources
+files:
+  - dist/**
+  - package.json
+extraResources:
+  # Copied from `build`, not `build/runtime`: the copier always drops a node_modules folder
+  # sitting directly in `from`, and the server needs it. Dot folders (.next) must be named too.
+  - from: build
+    to: .
+    filter:
+      - "runtime/**/*"
+      - "runtime/**/.next/**"
+  - from: ../../LICENSE
+    to: LICENSE
+  - from: ../../THIRD_PARTY_NOTICES.md
+    to: THIRD_PARTY_NOTICES.md
+mac:
+  category: public.app-category.graphics-design
+  target: dmg
+  icon: resources/icon.png
+win:
+  target: nsis
+  icon: resources/icon.png
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+linux:
+  # The default comes from the package name (@3dcad-horeca/desktop), not usable as a file name.
+  executableName: 3dcadhoreca
+  target: AppImage
+  category: Graphics
+  icon: resources/icon.png

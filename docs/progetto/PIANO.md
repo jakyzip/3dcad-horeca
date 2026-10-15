@@ -114,7 +114,7 @@ Dal render di riferimento (laboratorio di gelateria): tavolo su gambe (ripiano s
 ### 2e. Etichette 3D (fatto, da provare nell'editor)
 Sopra ogni attrezzatura, nella vista 3D, compare il nome: quello dell'articolo, altrimenti il nome dato all'oggetto, altrimenti il tipo ("Mantecatore"). Si accendono e spengono dal pannello Ho.Re.Ca ("Mostra i nomi delle attrezzature nel 3D"); la scelta resta salvata nel browser. Le etichette seguono l'oggetto quando lo sposti e spariscono se lo nascondi. Non finiscono negli export GLB/PDF (sono testo della pagina, non geometria). Codice: `packages/horeca/src/labels.ts` e `labels-3d.tsx`.
 
-Stato al 2026-10-15: forme 2c e piastrelle 2d committate (`1a999d5`); etichette 2e committate sul branch `fase-2c-forme`. Fase 3a (import DXF) committata sul branch `fase-3-dxf`; 3b (export DXF) e 3c (muri e quote dal rilievo) committate; fase 4a (invio distinta al CRM) committata; fase 5a (render) committata, da provare nel browser. Catalogo dal CRM (2b) provato dall'utente con un account vero: funziona. `bun run ci` passa. Prova a mano nell'editor ancora da fare per 2c, 2d e 2e.
+Stato al 2026-10-15: forme 2c e piastrelle 2d committate (`1a999d5`); etichette 2e committate sul branch `fase-2c-forme`. Fase 3a (import DXF) committata sul branch `fase-3-dxf`; 3b (export DXF) e 3c (muri e quote dal rilievo) committate; fase 4a (invio distinta al CRM) committata; fase 5a (render) committata, da provare nel browser. Fase 6a (app desktop Electron) pronta per il Mac, non committata; installatori Linux e Windows in attesa. Catalogo dal CRM (2b) provato dall'utente con un account vero: funziona. `bun run ci` passa. Prova a mano nell'editor ancora da fare per 2c, 2d e 2e.
 
 ## Fase 3: rilievo e DXF
 
@@ -175,7 +175,17 @@ Non provato nel browser: il controllo a mano è la prima cosa da fare.
 
 ## Fase 6: desktop
 
-Confrontare Tauri (servirebbe un processo Node o Bun incluso per API e SQLite) con l'installazione web self-hosted (`bun` o Docker, già previsti dal repository). Decidere con l'utente.
+Scelta dell'utente (2026-10-15): **Electron** (niente server: chi usa l'app, per esempio il papà dell'utente, la installa sul proprio computer e lavora offline). Electron porta il suo Chromium, quindi WebGPU va anche su Linux (con gli switch `enable-unsafe-webgpu` e Vulkan). Tauri scartato: su Linux il browser di sistema non ha WebGPU. Licenze: `electron` 44.7.2 e `electron-builder` 26.15.3, MIT (da aggiungere a `THIRD_PARTY_NOTICES.md`).
+
+### 6a. App desktop (fatta per il Mac, non committata)
+`apps/desktop`:
+- `src/main.ts`: avvia il server dell'editor (build standalone di Next in `runtime/`) con il Node di Electron (`ELECTRON_RUN_AS_NODE=1`) su una porta libera di 127.0.0.1, dati in `userData/data` (`PASCAL_DATA_DIR`), registro in `userData/logs/editor.log`; finestra con schermata "Avvio…", link esterni nel browser, istanza singola, server spento alla chiusura (anche `process.on('exit')` e SIGINT/SIGTERM);
+- `scripts/stage.ts`: build `PASCAL_PORTABLE_BUILD=1` dell'editor e preparazione in `build/runtime` con `stageWebRuntime`, estratta dallo script del CLI in `packages/cli/scripts/web-runtime.ts` (lo usa anche `stage-runtime.ts`);
+- `electron-builder.yml`: dmg / nsis / AppImage, icona `resources/icon.png` (dal logo). Il runtime si copia da `build` con filtro `runtime/**/*` e `runtime/**/.next/**`: electron-builder scarta sempre un `node_modules` in cima a `from` e le cartelle che iniziano col punto;
+- comandi: `bun run start` (prova), `bun run dist:mac|win|linux`.
+Verificato: in sviluppo e impacchettata (Mac arm64) l'app avvia il server, apre l'editor, crea un progetto con la scena 3D (WebGPU disponibile); chiudendo la finestra si spegne anche il server. Creati `3DCadHo.Re.Ca-0.1.0-arm64.dmg` (~149 MB) e la versione Intel.
+Fatto anche: `executableName: 3dcadhoreca` per Linux (l'AppImage falliva per il nome del pacchetto), note di licenza di Electron in `THIRD_PARTY_NOTICES.md`, icona in `ASSETS.md`; `bun run ci` passa.
+**In attesa (scelta dell'utente, 2026-10-15)**: installatori Linux (AppImage) e Windows (nsis), da creare e provare più avanti (anche con la CI della fase 7). Aperti: firma del codice (Apple 99 $/anno, Windows), icone iconify scaricate da internet (offline mancano), aggiornamenti automatici.
 
 ## Fase 7: rilascio
 

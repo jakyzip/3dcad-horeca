@@ -36,6 +36,8 @@ Licenze lette nel file LICENSE di ciascun pacchetto. Serve solo conservare la no
 | `dxf` 5.3.1 (dipendenze `lodash`, `vecks`, `commander`: MIT) | MIT | © 2014-2018 Ben Nortier | Lettura del rilievo DXF (fase 3) |
 | `@tarikjabiri/dxf` 2.9.0 | MIT | © 2021-present EL JABIRI Tarik | Scrittura DXF (esempio di rilievo, export della fase 3b) |
 | `@react-three/drei` (già presente in upstream) | MIT | © 2020 react-spring | Etichette 3D delle attrezzature (fase 2e) |
+| `electron` 44.7.2 | MIT | © Electron contributors, © 2013-2020 GitHub Inc. | App desktop (fase 6). Include Chromium e Node.js: le loro licenze viaggiano nell'app (`LICENSE` e `LICENSES.chromium.html`, aggiunti da Electron stesso) |
+| `electron-builder` 26.15.3 (solo per creare gli installatori, non è dentro l'app) | MIT | © 2015 Loopline Systems | Installatori dmg / exe / AppImage (fase 6) |
 
 ## Eliminate nella fase 0
 
