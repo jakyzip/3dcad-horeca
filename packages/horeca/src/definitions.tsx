@@ -202,6 +202,12 @@ function defineEquipment<S extends ZodObject>(spec: EquipmentSpec<S>): AnyNodeDe
         dashed: Boolean(spec.wallMounted),
       })
     },
+    system: {
+      module: () =>
+        import('./labels-3d').then(({ labelsSystemFor }) => ({
+          default: labelsSystemFor(spec.kind, spec.label),
+        })),
+    },
     tool: () =>
       import('./tool').then(({ placementToolFor }) => ({
         default: placementToolFor({

@@ -22,6 +22,7 @@ import {
   distintaCsv,
   distintaHash,
 } from './distinta'
+import { useHorecaLabels } from './labels'
 
 function armTool(kind: string, defaults: Record<string, unknown> | null = null) {
   const editor = useEditor.getState()
@@ -386,6 +387,17 @@ function DistintaSection() {
   )
 }
 
+function LabelsToggle() {
+  const shown = useHorecaLabels((s) => s.shown)
+  const setShown = useHorecaLabels((s) => s.setShown)
+  return (
+    <label className="flex cursor-pointer items-center gap-2">
+      <input checked={shown} onChange={(e) => setShown(e.target.checked)} type="checkbox" />
+      Mostra i nomi delle attrezzature nel 3D
+    </label>
+  )
+}
+
 /** Sidebar panel: catalog, shapes per category, free placement, the distinta. */
 export default function HorecaPanel() {
   return (
@@ -413,6 +425,7 @@ export default function HorecaPanel() {
             )
           })}
         </div>
+        <LabelsToggle />
       </section>
       <DistintaSection />
     </div>

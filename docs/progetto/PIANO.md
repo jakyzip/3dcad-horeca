@@ -95,7 +95,7 @@ Rivista il 2026-10-15 con l'utente. Il catalogo vero sta nel CRM (`catalog_items
 - Pannello: importa file, cerca e inserisci articolo (misure e dati già compilati), forma per categoria. Inspector: "Forma" cambia la forma di un elemento già piazzato in un solo passo annullabile.
 - File di prova: `docs/progetto/esempio-catalogo.csv` (attrezzature di un laboratorio di gelateria, codici inventati).
 
-### 2b. Catalogo dal CRM (fatto, da provare con un utente vero)
+### 2b. Catalogo dal CRM (fatto e provato)
 - `crm.ts`: login Supabase (email e password, la password non si salva), rinnovo della sessione, lettura di `catalog_items` a pagine da 1000 con i nomi da `catalog_categories`; dalla seconda volta solo le modifiche (`updated_at`) e le cancellazioni (`deleted_rows`); articoli disattivati tolti. Stesse richieste del CAD in Rust.
 - Gli articoli del CRM entrano nello stesso catalogo locale (sorgente `crm`); quelli da file restano.
 - Configurazione in `.env.local` (esclusa da git): `NEXT_PUBLIC_CRM_SUPABASE_URL`, `NEXT_PUBLIC_CRM_SUPABASE_KEY` (chiave publishable). Verificato senza credenziali: il CRM risponde, accetta richieste dal browser e senza login non mostra il catalogo (RLS).
@@ -111,10 +111,10 @@ Dal render di riferimento (laboratorio di gelateria): tavolo su gambe (ripiano s
 - Registrate all'avvio nella libreria materiali (categoria "tile") con `registerLibraryMaterials` in `apps/editor/lib/bootstrap.ts`.
 - Rivestimento parziale (es. fino a 150 cm): l'editor lo supporta già con le "regioni" di faccia del muro (`WallFaceRegion`, `v1` = altezza). Da verificare nell'editor come si crea una regione dal pannello Paint.
 
-### 2e. Etichette 3D (da fare)
-Nome dell'attrezzatura sopra ogni elemento nella vista 3D, attivabili/disattivabili, come nel render di riferimento.
+### 2e. Etichette 3D (fatto, da provare nell'editor)
+Sopra ogni attrezzatura, nella vista 3D, compare il nome: quello dell'articolo, altrimenti il nome dato all'oggetto, altrimenti il tipo ("Mantecatore"). Si accendono e spengono dal pannello Ho.Re.Ca ("Mostra i nomi delle attrezzature nel 3D"); la scelta resta salvata nel browser. Le etichette seguono l'oggetto quando lo sposti e spariscono se lo nascondi. Non finiscono negli export GLB/PDF (sono testo della pagina, non geometria). Codice: `packages/horeca/src/labels.ts` e `labels-3d.tsx`.
 
-Stato al 2026-10-15: branch `fase-2c-forme`, non ancora committato (forme 2c + piastrelle 2d). `bun run ci` passa. Prova a mano nell'editor ancora da fare per 2c e 2d.
+Stato al 2026-10-15: forme 2c e piastrelle 2d committate (`1a999d5`); etichette 2e committate sul branch `fase-2c-forme`. Catalogo dal CRM (2b) provato dall'utente con un account vero: funziona. `bun run ci` passa. Prova a mano nell'editor ancora da fare per 2c, 2d e 2e.
 
 ## Fase 3: rilievo e DXF
 
