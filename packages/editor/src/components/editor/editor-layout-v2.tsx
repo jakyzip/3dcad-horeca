@@ -1,0 +1,360 @@
+'use client'
+
+import { type ReactNode, useCallback, useEffect, useRef } from 'react'
+import { useIsMobile } from '../../hooks/use-mobile'
+import {
+  openSidebarPanel,
+  SIDEBAR_MIN_WIDTH,
+  setSidebarTabIds,
+  showSidebarPanel,
+  useShownSidebarPanel,
+} from '../../lib/sidebar-panel'
+import useEditor from '../../store/use-editor'
+
+import { useSidebarStore } from '../ui/primitives/sidebar'
+import { IconRail, type SidebarTab } from '../ui/sidebar/tab-bar'
+import { EditorLayoutMobile } from './editor-layout-mobile'
+import { useSceneSpan } from './views/scene-region'
+import { ViewBarRow } from './views/view-bar'
+
+const SIDEBAR_MAX_WIDTH = 800
+const SIDEBAR_COLLAPSE_THRESHOLD = 220
+// Matches the `w-14` rail in <IconRail>; the resize math is relative to it.
+const RAIL_WIDTH = 56
+
+// ── Left column: resizable panel with tab bar ────────────────────────────────
+
+function LeftColumn({
+  tabs,
+  renderTabContent,
+  sidebarOverlay,
+}: {
+  tabs: SidebarTab[]
+  renderTabContent: (tabId: string) => ReactNode
+  sidebarOverlay?: ReactNode
+}) {
+  const width = useSidebarStore((s) => s.width)
+  const isCollapsed = useSidebarStore((s) => s.isCollapsed)
+  const setIsCollapsed = useSidebarStore((s) => s.setIsCollapsed)
+  const setWidth = useSidebarStore((s) => s.setWidth)
+  const isDragging = useSidebarStore((s) => s.isDragging)
+  const setIsDragging = useSidebarStore((s) => s.setIsDragging)
+  const activePanel = useShownSidebarPanel(tabs)
+  const setActivePanel = useEditor((s) => s.setActiveSidebarPanel)
+
+  const isResizing = useRef(false)
+
+  // Publish the rail's tabs so keyboard shortcuts (B, P) can open a panel.
+  useEffect(() => {
+    setSidebarTabIds(tabs.map((tab) => tab.id))
+    return () => setSidebarTabIds([])
+  }, [tabs])
+
+  // A stage entry whose surface has left the stage (its view closed from the
+  // view bar) hands the rail back to the panel that was open before it.
+  const lastPanelTab = useRef<string | null>(null)
+  const activeTab = tabs.find((t) => t.id === activePanel)
+  if (activeTab && !activeTab.noPanel) lastPanelTab.current = activeTab.id
+  useEffect(() => {
+    if (activeTab?.stageActive !== false) return
+    const fallback = tabs.find((t) => t.id === lastPanelTab.current) ?? tabs.find((t) => !t.noPanel)
+    if (fallback) setActivePanel(fallback.id)
+  }, [activeTab, tabs, setActivePanel])
+
+  // Leaving the items tab with the item tool in hand drops back to select mode
+  useEffect(() => {
+    if (activePanel === 'items') return
+    const { mode, tool, setMode } = useEditor.getState()
+    if (mode === 'build' && tool === 'item') {
+      setMode('select')
+    }
+  }, [activePanel])
+
+  // Paint mode entered without the panel (command palette, a material's "paint
+  // with") brings the host's Paint panel along, so the rail reflects the mode.
+  useEffect(
+    () =>
+      useEditor.subscribe((state, prev) => {
+        if (state.mode !== prev.mode && state.mode === 'material-paint') {
+          openSidebarPanel(['paint'])
+        }
+      }),
+    [],
+  )
+
+  // Closing (collapsing) the sidebar disarms any build tool back to select
+  useEffect(() => {
+    if (!isCollapsed) return
+    const { mode, setMode } = useEditor.getState()
+    if (mode === 'build') {
+      setMode('select')
+    }
+  }, [isCollapsed])
+
+  const handleResizerDown = useCallback(
+    (e: React.PointerEvent) => {
+      e.preventDefault()
+      isResizing.current = true
+      setIsDragging(true)
+      document.body.style.cursor = 'col-resize'
+      document.body.style.userSelect = 'none'
+    },
+    [setIsDragging],
+  )
+
+  // Rail click: reopen a collapsed panel (at a usable width), collapse when
+  // re-clicking the open tab, otherwise switch tabs.
+  const handleRailClick = useCallback(
+    (id: string) => {
+      const tab = tabs.find((t) => t.id === id)
+      if (id !== activePanel) tabs.find((t) => t.id === activePanel)?.onDeselect?.()
+      tab?.onSelect?.()
+      // noPanel tabs drive the stage, not the panel — leave collapse state alone.
+      if (tab?.noPanel) {
+        setActivePanel(id)
+        return
+      }
+      if (isCollapsed) {
+        showSidebarPanel(id)
+        return
+      }
+      if (id === activePanel) {
+        setIsCollapsed(true)
+        return
+      }
+      setActivePanel(id)
+    },
+    [tabs, isCollapsed, activePanel, setIsCollapsed, setActivePanel],
+  )
+
+  useEffect(() => {
+    const handlePointerMove = (e: PointerEvent) => {
+      if (!isResizing.current) return
+      // Rail occupies the leftmost 48px; the panel starts after it.
+      const newWidth = e.clientX - RAIL_WIDTH
+      if (newWidth < SIDEBAR_COLLAPSE_THRESHOLD) {
+        setIsCollapsed(true)
+      } else {
+        setIsCollapsed(false)
+        setWidth(Math.max(SIDEBAR_MIN_WIDTH, Math.min(newWidth, SIDEBAR_MAX_WIDTH)))
+      }
+    }
+    const handlePointerUp = () => {
+      isResizing.current = false
+      setIsDragging(false)
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+    }
+    window.addEventListener('pointermove', handlePointerMove)
+    window.addEventListener('pointerup', handlePointerUp)
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove)
+      window.removeEventListener('pointerup', handlePointerUp)
+    }
+  }, [setWidth, setIsCollapsed, setIsDragging])
+
+  return (
+    <div className="relative z-10 flex h-full flex-shrink-0 bg-sidebar text-sidebar-foreground">
+      <IconRail
+        activeTab={activePanel}
+        collapsed={isCollapsed}
+        onIconClick={handleRailClick}
+        tabs={tabs}
+      />
+      {!isCollapsed && !tabs.find((t) => t.id === activePanel)?.noPanel && (
+        <div
+          className="relative flex h-full flex-col"
+          style={{
+            width,
+            transition: isDragging ? 'none' : 'width 150ms ease',
+          }}
+        >
+          <div className="relative flex flex-1 flex-col overflow-hidden">
+            {renderTabContent(activePanel)}
+            {sidebarOverlay && <div className="absolute inset-0 z-50">{sidebarOverlay}</div>}
+          </div>
+
+          {/* Resize handle + hit area */}
+          <div
+            className="absolute inset-y-0 -right-3 z-[100] flex w-6 cursor-col-resize items-center justify-center"
+            onPointerDown={handleResizerDown}
+          >
+            <div className="h-8 w-1 rounded-full bg-neutral-500" />
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Right column: viewer area with toolbar ───────────────────────────────────
+
+/**
+ * Host toolbars floating over the stage. The right one carries scene controls
+ * (wall mode, display), so it sits at the right edge of the scene panes; the
+ * left one floats only when there is no view bar row to carry it.
+ */
+function StageToolbar({
+  toolbarLeft,
+  toolbarRight,
+}: {
+  toolbarLeft?: ReactNode
+  toolbarRight?: ReactNode
+}) {
+  const scene = useSceneSpan()
+  return (
+    <div className="pointer-events-none absolute top-3 right-0 left-0 z-20 h-8">
+      {toolbarLeft && (
+        <div className="pointer-events-auto absolute top-0 left-3 flex items-center gap-2">
+          {toolbarLeft}
+        </div>
+      )}
+      {toolbarRight && scene && (
+        <div
+          className="pointer-events-auto absolute top-0 flex items-center gap-2"
+          style={{ right: `calc(${(1 - scene.right) * 100}% + 12px)` }}
+        >
+          {toolbarRight}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function RightColumn({
+  toolbarLeft,
+  toolbarRight,
+  viewBar,
+  children,
+  overlays,
+  stageOverlay,
+}: {
+  toolbarLeft?: ReactNode
+  toolbarRight?: ReactNode
+  viewBar: boolean
+  children: ReactNode
+  overlays?: ReactNode
+  stageOverlay?: ReactNode
+}) {
+  return (
+    <div className="relative flex min-w-0 flex-1 flex-col overflow-hidden">
+      {/* The view bar row sits above the stage, one bar per pane; the host's
+          left toolbar rides after the first pane's views. */}
+      {viewBar && <ViewBarRow leading={toolbarLeft} />}
+      <div
+        className="relative flex min-h-0 flex-1 flex-col overflow-hidden"
+        style={{
+          borderTopLeftRadius: 16,
+          clipPath: 'inset(0 0 0 0 round 16px 0 0 0)',
+          boxShadow: '-4px -2px 16px rgba(0, 0, 0, 0.08), -1px 0 4px rgba(0, 0, 0, 0.04)',
+        }}
+      >
+        {((!viewBar && toolbarLeft) || toolbarRight) && (
+          <StageToolbar
+            toolbarLeft={viewBar ? undefined : toolbarLeft}
+            toolbarRight={toolbarRight}
+          />
+        )}
+        {/* Canvas area. `isolate` matters: drei's `<Html>` computes a z-index
+            from camera distance and defaults to a range topping out at
+            16,777,271, and without a stacking context here those values compete
+            directly with the viewer toolbar (z-20), the stage overlay (z-10) and
+            the overlay band (z-30) — so an in-scene tool badge painted over all
+            three. Isolating pins every in-scene HTML layer inside the canvas,
+            where it belongs, and leaves their order relative to each other
+            untouched. */}
+        <div className="relative isolate flex-1 overflow-hidden">{children}</div>
+        {/* Stage overlay — replaces the whole stage visually (e.g. the item
+            builder) while keeping the canvas mounted. The view bar row steps
+            aside for it (see `EditorLayoutV2`); the host's toolbars stay above. */}
+        {stageOverlay && <div className="absolute inset-0 z-10">{stageOverlay}</div>}
+        {/* Overlays scoped to the stage. `data-viewer-bounds` marks the
+            draggable region the floating inspector clamps itself to. */}
+        {overlays && (
+          <div
+            className="pointer-events-none absolute inset-0 z-30"
+            data-viewer-bounds
+            style={{ transform: 'translateZ(0)' }}
+          >
+            {overlays}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ── Main v2 layout ───────────────────────────────────────────────────────────
+
+export interface EditorLayoutV2Props {
+  navbarSlot?: ReactNode
+  sidebarTabs?: SidebarTab[]
+  renderTabContent: (tabId: string) => ReactNode
+  sidebarOverlay?: ReactNode
+  viewerToolbarLeft?: ReactNode
+  viewerToolbarRight?: ReactNode
+  viewerContent: ReactNode
+  overlays?: ReactNode
+  stageOverlay?: ReactNode
+  /** Show each pane's view bar. Off for hosts that present one fixed view. */
+  viewBar?: boolean
+}
+
+export function EditorLayoutV2({
+  navbarSlot,
+  sidebarTabs = [],
+  renderTabContent,
+  sidebarOverlay,
+  viewerToolbarLeft,
+  viewerToolbarRight,
+  viewerContent,
+  overlays,
+  stageOverlay,
+  viewBar = true,
+}: EditorLayoutV2Props) {
+  const isCaptureMode = useEditor((s) => s.isCaptureMode)
+  const isMobile = useIsMobile()
+
+  if (isMobile) {
+    return (
+      <EditorLayoutMobile
+        navbarSlot={navbarSlot}
+        overlays={overlays}
+        renderTabContent={renderTabContent}
+        sidebarOverlay={sidebarOverlay}
+        sidebarTabs={sidebarTabs.filter((t) => !t.noPanel || t.onSelect)}
+        viewerContent={viewerContent}
+        viewBar={viewBar}
+        viewerToolbarLeft={viewerToolbarLeft}
+        viewerToolbarRight={viewerToolbarRight}
+      />
+    )
+  }
+
+  return (
+    <div className="flex h-full w-full flex-col bg-sidebar text-foreground">
+      {/* Top navbar */}
+      {navbarSlot}
+
+      {/* Main content: left column + right column */}
+      <div className="flex min-h-0 flex-1">
+        {!isCaptureMode && sidebarTabs.length > 0 && (
+          <LeftColumn
+            renderTabContent={renderTabContent}
+            sidebarOverlay={sidebarOverlay}
+            tabs={sidebarTabs}
+          />
+        )}
+        <RightColumn
+          overlays={overlays}
+          stageOverlay={stageOverlay}
+          toolbarLeft={isCaptureMode ? undefined : viewerToolbarLeft}
+          toolbarRight={isCaptureMode ? undefined : viewerToolbarRight}
+          viewBar={viewBar && !isCaptureMode && !stageOverlay}
+        >
+          {viewerContent}
+        </RightColumn>
+      </div>
+    </div>
+  )
+}

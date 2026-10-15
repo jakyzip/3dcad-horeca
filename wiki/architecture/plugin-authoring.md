@@ -1,0 +1,403 @@
+# Plugin authoring
+
+*Public contract for external node packs that extend the Pascal editor.*
+
+Applies to: anything that ships a `Plugin` for the editor to load.
+
+This page documents the **contract**, not a loader implementation. The host call site (`discoverPlugins()`) is in place; turning it into a real network loader is a separate plan.
+
+## Plugin shape
+
+A plugin is a JS object exporting one symbol — the manifest:
+
+```ts
+import type { Plugin } from '@pascal-app/core'
+
+export const myPlugin: Plugin = {
+  id: 'acme:furniture-pack',
+  apiVersion: 1,
+  nodes: [
+    couchDefinition,
+    armchairDefinition,
+    // ...
+  ],
+}
+```
+
+| Field | Required | Notes |
+|---|---|---|
+| `id` | yes | Globally unique. Use `vendor:pack-name` to avoid collisions. The host treats it as opaque. |
+| `apiVersion` | yes | Currently `1`. The host throws on mismatch — bumping breaks plugins, intentionally. |
+| `nodes` | optional | Array of `AnyNodeDefinition`. |
+
+The standalone [`pascalorg/plugin-trees`](https://github.com/pascalorg/plugin-trees) repository is the worked example. Clone it as a starting point.
+
+The same shape powers the built-in `pascal:core` plugin in `@pascal-app/nodes` — there's no "internal" plugin format. Whatever works for built-ins works for third parties.
+
+## What a `NodeDefinition` can contribute
+
+The core `Plugin` manifest owns semantic node definitions (and registry-backed inspector extensions); host UI and viewer-wide presentation remain separate exports. Each `nodes` entry is a `NodeDefinition<S extends ZodObject>` that the registry stamps with `kind`, `schemaVersion`, `schema`, and any combination of:
+
+- `defaults` — initial field values for new instances.
+- `capabilities` — `selectable` / `duplicable` / `deletable` / `surfaces` / `relations` flags consumed by the framework. `reveal` (`{ phase, style }`, plus `height` in metres for `settle`, `drop` and `assemble`) stages the kind when an agent builds it (see [`systems.md`](systems.md#construction-reveal)); without it the node appears with its parent, or drops in as a part of an `assemble` parent.
+- `parametrics` — auto-derived inspector UI shape (`fields` + optional `customPanel` escape hatch).
+- `renderer` — custom 3D React component (GLB, drei, TSL — opt-out of `def.geometry`).
+- `system` — per-frame work (animation, dirty-cascade, runtime state).
+- `geometry` — pure `(node, ctx) => Object3D` for the generic `<GeometrySystem>`.
+- `floorplan` — pure `(node, ctx) => FloorplanGeometry` for the 2D layer.
+- `floorplanAffordances` / `floorplanMoveTarget` — 2D drag handlers.
+- `tool` / `affordanceTools` — 3D placement + move tools (lazy components).
+- `affordanceHints` — HUD hints for a kind-owned reshape, keyed like `affordanceTools`; the floorplan extension's `reshapeLayers` (its 2D sibling) and `actionMenu.actions` (action-menu buttons) complete the set.
+- `presentation` — palette / sidebar metadata (`label`, `icon`, `paletteSection`, etc.).
+- `mcp` — MCP tool descriptions for AI consumers.
+- `relations` / `computeLevelData` — sibling lookups + level-batch precompute.
+
+See [`node-definitions.md`](node-definitions.md) for the three-checkbox composition model that ties these together.
+
+A kind whose top support has a data-defined footprint can implement
+`capabilities.surfaces.top.supportHeight(node, x, z, { nodes })`. Return the
+support height at that point or `null` outside the footprint. Otherwise the host
+samples the registered rendered surface.
+
+## Hosting children
+
+A custom parametric renderer is assumed to mount arbitrary children unless its
+definition declares `rendersChildren: false`. Declare false for selection proxies,
+collective renderers and renderers that only display a restricted child kind. A
+geometry-only definition inherits child mounting from the framework. The host's
+`children` schema must retain the child's actual ID, including plugin-specific ID
+prefixes. `capabilities.surfaces.hosting: false` opts out as a host;
+`capabilities.surfacePlacement: 'floor-only'` opts out as a hosted child.
+
+## Standing on the ground (terrain)
+
+The site carries a sculpted heightfield, so "the floor" is not the plane `y = 0`. A plugin kind that
+hardcodes `0` as its base looks correct on a flat lot and buries itself in the hillside on a sculpted
+one. There is no capability to declare and nothing to register — pick whichever of these matches how
+your kind gets its Y, and terrain follows:
+
+- **Your node stands on a surface** → declare `capabilities.floorPlaced` with a `footprint` (or
+  `footprints` for a composite). `FloorElevationSystem` then lifts the registered mesh every frame,
+  electing between overlapping slabs and the ground per footprint. This is the whole contract: a tree,
+  a bench, a planter needs nothing else.
+- **Your `def.geometry` builder bakes its own vertical origin** → read `ctx.levelBaseAt(x, z)`
+  instead of writing `0`. It returns the ground at that level-local point (`0` when there is no
+  terrain under the storey). Calling it also enrols your kind in terrain invalidation, so the builder
+  re-runs when the ground moves; you don't wire a dirty rule. It is **absent for `def.floorplan`** —
+  the plan view has no elevation — so a builder shared between 2D and 3D must use
+  `ctx.levelBaseAt?.(x, z) ?? 0`.
+- **You ship a collective `renderer`** (one component drawing many nodes — instanced meshes, a merged
+  buffer) → you own each instance's Y. `FloorElevationSystem` writes to the node's *registered*
+  object, which for a collective kind is the invisible selection proxy, not the instance, so a raw
+  `node.position[1]` per instance ignores both slabs and terrain. Resolve through
+  `getFloorStackedPosition({ node, nodes, position })` when writing each instance matrix, and commit
+  the **base** position (`[x, 0, z]`) from your placement tool — the lift is presentation, never
+  stored.
+
+Sample the ground at the same XZ your geometry is anchored at. A handle, a snap guide and the mesh
+that sample different points on a slope will visibly disagree. Background:
+[`vertical-model.md`](vertical-model.md#inheriting-terrain-the-generic-seam).
+
+## Importing host packages
+
+A plugin imports from the published `@pascal-app/*` packages — same surface the built-ins use, peer-dependency-style:
+
+```ts
+// Schemas, types, registry types
+import {
+  type AnyNode,
+  type NodeDefinition,
+  type Plugin,
+  z, // re-exported from zod for schema authoring
+} from '@pascal-app/core'
+
+// Viewer-side primitives (lazy: only inside renderers / systems)
+import { useNodeEvents, NodeRenderer } from '@pascal-app/viewer'
+
+// Editor-side primitives (lazy: only inside `tool` / `affordanceTools`)
+import { useDragAction, EDITOR_LAYER } from '@pascal-app/editor'
+```
+
+The packages are **peer dependencies**, not normal dependencies — the host app owns the version. A plugin that pins its own copy of `@pascal-app/core` would create two registries and silently fail. (npm peer-dep resolution catches this at install time.)
+
+## Following viewer appearance and performance preferences
+
+A custom `renderer` owns its materials, so it must follow the same host appearance
+axes as built-in nodes. Subscribe read-only to `useViewer` for `shading`, `textures`,
+`colorPreset`, and `sceneTheme`; do not add plugin-specific quality toggles or copy
+those values into scene data.
+
+- **Colored + Rendered** keeps an imported model's authored materials.
+- **Colored + Solid** uses `createDefaultMaterial(..., 'solid')` or another cached
+  `MeshLambertNodeMaterial` variant. Preserve the authored albedo map, colour,
+  transparency, and material slots, but omit PBR-only maps that defeat the cheaper
+  Solid path.
+- **Monochrome** uses `createSurfaceRoleMaterial(def.surfaceRole, colorPreset, side,
+  sceneTheme)`. Imported props normally declare `surfaceRole: 'furnishing'`.
+- Capture authored materials once when the model loads, cache variants per source
+  material, swap only when preferences change, and restore before disposal. Never
+  clone materials per frame, mutate loader-cached authored materials, or dispose a
+  material returned from a host cache.
+
+`shadows`, `edges`, and the Solid/Rendered post-processing cost are host-global.
+Normal plugin geometry stays on `SCENE_LAYER`, so the light rig and depth/normal
+pipeline include it automatically. Editor-only placement previews belong on
+`OVERLAY_LAYER` / `EDITOR_LAYER`; that keeps ghosts out of shadow, SSGI, and ink-edge
+passes. A plugin only needs to manage `castShadow` / `receiveShadow` for transparent
+or overlay meshes rather than duplicating the host settings.
+
+See [materials and themes](materials-and-themes.md#external-plugin-renderers) for the
+material lifecycle pattern.
+
+## Lifecycle
+
+```mermaid
+graph TD
+  Boot["App boot"] --> LoadBuiltin["loadPlugin(builtinPlugin)"]
+  LoadBuiltin --> Discover["await discoverPlugins()"]
+  Discover --> LoadEach["for each plugin: await loadPlugin(plugin)"]
+  LoadEach --> Ready["Registry frozen for the session"]
+```
+
+`loadPlugin` is **add-only** for v1. Hot-removing a kind would require tearing down every mounted instance in the scene — out of scope. Plugins are loaded once at boot.
+
+`registerNode` throws on duplicate `kind`, so two plugins shipping a `kind: 'couch'` is a startup-time error, not a silent overwrite.
+
+## Discovery: `setPluginDiscovery`
+
+The host calls `discoverPlugins()` after the built-in plugin loads. The default implementation returns `[]`. Apps that ship external plugins replace it before the bootstrap module evaluates:
+
+```ts
+// In app boot, BEFORE `import './pascal-bootstrap'`
+import { setPluginDiscovery } from '@pascal-app/core'
+import { myPlugin } from '@acme/furniture-pack'
+
+setPluginDiscovery(async () => {
+  // Static import: bundled into the app.
+  return [myPlugin]
+
+  // Or fetch a manifest, dynamic-import each entry, etc.
+  // const manifest = await fetch('/plugins.json').then(r => r.json())
+  // return Promise.all(manifest.map(m => import(m.url).then(mod => mod.default)))
+})
+```
+
+`setPluginDiscovery` is global. Calling it twice silently overwrites — order with the bootstrap import matters.
+
+## Host panels and project installation
+
+The core `Plugin` manifest remains renderer-agnostic. A plugin that also ships editor UI exports an `EditorHostPanel` separately:
+
+```ts
+import type { EditorHostPanel } from '@pascal-app/editor'
+
+export const myHostPanel: EditorHostPanel = {
+  id: 'acme:furniture-pack:catalog',
+  pluginId: 'acme:furniture-pack',
+  label: 'Furniture pack',
+  description: 'A curated furniture catalog.',
+  creator: {
+    name: 'Acme',
+    url: 'https://acme.example',
+  },
+  pluginUrl: 'https://github.com/acme/pascal-furniture-pack',
+  icon: { kind: 'iconify', name: 'lucide:armchair' },
+  component: () => import('./catalog-panel'),
+}
+```
+
+The host registers that panel with `registerEditorHostPanel`. Registered plugins appear in the Plugins view (the rail's "+"), while the scene graph's `installedPlugins: string[]` controls which plugin panels appear in that project's icon rail. `defaultInstalled: true` opts a first-party plugin into legacy and newly created projects; Nature uses this today.
+
+Install/uninstall is a project-level visibility operation. Plugin code and node definitions stay loaded for the browser session because `loadPlugin` is add-only, but an uninstalled plugin's panel, placement UI, renderers, systems, and floor-plan output are disabled. Existing plugin nodes remain serialized in the scene graph and become visible again when the plugin is reinstalled; uninstall never deletes project data.
+
+`creator` and `pluginUrl` are optional manager metadata. The Plugins view is a directory: categories, search and an installed / available filter over every registered plugin, one card per plugin, and a detail with the install control. Three more optional fields feed it:
+
+- `category` — the directory group, e.g. `'Outdoor & site'` (uncategorised plugins list under *Other*).
+- `summary` — one line for the card; `description` is the full text on the detail.
+- `access: PluginAccess[]` — what the plugin reaches once installed (`kind: 'ai' | 'media' | 'data' | 'account' | 'sharing'`, `label`, `detail`, `usesCredits`, `chip`). This is the host's policy, so a host usually sets it when it registers the panel rather than trusting the manifest.
+
+The host tells the directory about the open project with `setPluginDirectoryContext({ projectName, credits, notes })`: the project shown on "Install in …", the credits plugin calls spend, and the house rules under the categories.
+
+Host panels mount lazily inside an error boundary. Use host CSS variables, keep CSS scoped to the plugin, and do not write global styles.
+
+The rail remembers the panel last open in each workspace (Edit, Studio, …) with the editor's preferences (`sidebarPanels`): entering a workspace reopens its own, and a reload opens Edit on its last panel, the sidebar's width and collapse kept. A remembered panel the rail does not have — a plugin's panels join once the scene's `installedPlugins` load, or the plugin was uninstalled — leaves the first panel showing and is not overwritten by it (`useShownSidebarPanel`); `activeSidebarPanel` is always the panel on screen. A restored panel opens in select mode, so a panel that arms a tool arms it when the user opens it, not when it mounts (the community Paint panel; on mobile, tapping Items arms the item tool). `showSidebarPanel(id)` picks a panel and expands a collapsed sidebar onto it, in that order, so the panel left open never opens on the way. Host code that sets a persisted editor field before the editor mounts waits for `useEditor.persist.onFinishHydration`: until the editor rehydrates, writes are not saved, and the stored preferences replace them. A tab saves its preferences only when they change, so another tab's update leaves them alone.
+
+## Host views
+
+The stage is one or two panes, and each pane shows a *view*: the 3D scene, the 2D plan, or a view a host or plugin registered. A view is the place for a surface that wants the room of the canvas — a schedule, a directory, a gallery — rather than the width of the rail. A plugin can ship panels, views or both, and as many of each as it needs; each view carries the plugin's `pluginId`:
+
+```ts
+import type { EditorHostView } from '@pascal-app/editor'
+
+export const scheduleView: EditorHostView = {
+  id: 'acme:schedules:rooms',
+  pluginId: 'acme:schedules',
+  label: 'Room schedule',
+  icon: { kind: 'iconify', name: 'lucide:table' },
+  component: () => import('./room-schedule-view'),
+  workspaces: ['edit'], // default; 'studio' to offer it in Studio
+}
+```
+
+The host registers each with `registerEditorHostView`, in the same bootstrap pass as the panels. The view is offered only in its workspaces and only while its plugin is in the project's `installedPlugins`; registration is session-add-only, like panels.
+
+- **The view bar.** Each pane has a bar: its pinned views, the view it shows, and a "More views" menu with the rest. A registered view starts unpinned unless it sets `defaultPinned: true`; people pin and unpin per browser. The last pane's bar carries Split (`\`) and, split, the swap.
+- **Opening a view.** `openEditorView(id)` shows it — focusing it if it is on screen, else in the focused pane; `openEditorView(id, { beside: true })` splits and opens it next to what is there. A panel's "Open beside the scene" button is this call.
+- **One pane per view.** A view sits in at most one pane: picking the other pane's view swaps the two. The 3D canvas and the plan stay mounted across every layout change; a registered view mounts lazily while it is in a pane, inside an error boundary, and unmounts when it leaves.
+- **Scene chrome.** The level selector, the tool dock and the host's scene controls belong to the 3D and 2D views: side by side they span both panes, beside another view they sit over the scene pane, and with no scene view on screen they are hidden. A view draws its own chrome inside its pane, below the view bar.
+- **Reading the layout.** Code that hands input between the canvas and the plan reads `visibleScene(state)` (`'3d' | '2d' | 'split' | null`) or `isViewVisible(state, id)` — never a stored pane — so capture and first person, which show 3D alone, are accounted for.
+
+Each workspace keeps its own layout, so Studio can sit on 3D beside its gallery while Edit stays on the plan beside 3D. A layout naming a view that is not available — its plugin uninstalled, or not registered yet — keeps the choice and the pane says so, so the view comes back with its plugin.
+
+## Viewer presentation contributions
+
+A plugin can also export a presentation-only R3F subtree separately from its
+core manifest. Use this for scene-wide derived visuals such as atmosphere,
+weather, or surroundings that are not authored nodes:
+
+```tsx
+import type { ViewerPresentationContribution } from '@pascal-app/viewer'
+
+export const myPresentation: ViewerPresentationContribution = {
+  id: 'acme:landscape:presentation',
+  pluginId: 'acme:landscape',
+  component: () => import('./presentation'),
+}
+```
+
+The application registers it during the same bootstrap pass as the plugin and
+host panel:
+
+```ts
+import { registerViewerPresentation } from '@pascal-app/viewer'
+
+registerViewerPresentation(myPresentation)
+```
+
+`@pascal-app/editor` mounts the public `<ViewerPresentations />` contribution
+host once in both its edit and preview viewers. A host composing raw
+`<Viewer>` mounts `<ViewerPresentations />` explicitly. Do not also put the
+same contribution in `viewerSceneSlot`; that double-mounts it.
+
+When `pluginId` is present, the contribution is mounted only while that id is
+in the project's `installedPlugins`. Registration remains session-add-only;
+project uninstall releases the mounted subtree and reinstall creates a fresh
+one. Lazy load and render failures are isolated per contribution. Contributions
+must clean up Three.js resources on unmount and keep all scene-scoped ownership
+per R3F `Scene`, so two Viewer instances cannot affect each other.
+
+Presentation is outside `scene-renderer` and therefore outside semantic model
+export. It must not create authored nodes, `pascalId` values, selection/query
+targets, or history entries. Registration also provides no persistence:
+versioned plugin configuration belongs in a host-owned project sidecar, and
+the host must call the plugin's public import/export functions explicitly.
+
+## Agent tools and chat extensions
+
+A plugin can give agents its own tools, in a host's chat and on the MCP server, without changing the `Plugin` manifest. Like panels and views, they ship as separate exports:
+
+| Export | Holds | Imported by | Rule |
+|---|---|---|---|
+| `./agent-tools` | one `PluginAgentTools` (`@pascal-app/core/agent-tools`): contracts, skills, instructions | wherever a host declares agent tools, a sandboxed durable workflow included | zod and the plugin's own dependency-free files only, the rule `core/agent-tools` follows (`contracts-purity.test.ts`); run the same check on your entry |
+| `./agent-operations` | one `AgentOperations` (`@pascal-app/core/agent-operations`): an operation per `runsIn: 'operation'` tool | a server (the MCP) and the editor tab | pure: core and the plugin's own pure files; no browser, no stores |
+| main entry | one `PluginChatExtension` (`@pascal-app/editor`) | the browser | runs the `runsIn: 'editor'` tools, renders cards |
+
+```ts
+// src/agent-tools.ts → "./agent-tools"
+import type { PluginAgentTools } from '@pascal-app/core/agent-tools'
+import { z } from 'zod'
+
+export const signageAgentTools: PluginAgentTools = {
+  pluginId: 'acme:signage',
+  apiVersion: 1,
+  version: '1.2.0',
+  tools: [
+    {
+      name: 'signage_place_exit_signs',
+      title: 'Place exit signs',
+      description: 'Place an exit sign above each exit door of a level. Refused with no_exit_doors when the level has none.',
+      input: { levelId: z.string(), text: z.string().max(40).optional() },
+      runsIn: 'operation',
+    },
+    {
+      name: 'signage_schedule',
+      title: 'Sign schedule',
+      description: 'Lay out the schedule of every sign and open it beside the scene.',
+      input: {},
+      runsIn: 'editor',
+      rendersView: true,
+    },
+  ],
+  skills: [{ name: 'egress-signage', summary: 'Where exit signs go and how high', body: '…' }],
+}
+```
+
+```ts
+// src/agent-operations.ts → "./agent-operations"
+import type { AgentOperations } from '@pascal-app/core/agent-operations'
+import { refuse } from '@pascal-app/core/agent-tools'
+
+export const signageAgentOperations = {
+  signage_place_exit_signs: (nodes, input: { levelId: string; text?: string }) => {
+    const doors = exitDoorsOn(nodes, input.levelId)
+    if (!doors.length) refuse('no_exit_doors', `Level ${input.levelId} has no exit door.`)
+    return { result: { placed: doors.length }, changes: { create: doors.map(signAbove) } }
+  },
+} satisfies AgentOperations
+```
+
+`satisfies` checks the map against `AgentOperations` and keeps each operation's own input type for your tests. An outcome may write nodes (`create`, `update`, `delete`), collections (`collections`), or plan a follow-up once the host has derived construction (`afterReconcile`); a surface applies all of it as one undo step.
+
+```ts
+// src/chat.ts → the main entry
+import type { PluginChatExtension } from '@pascal-app/editor'
+
+export const signageChat: PluginChatExtension = {
+  pluginId: 'acme:signage',
+  execute: async (name, input, { signal }) => renderSchedule(input, signal),
+  cards: { signage_schedule: () => import('./schedule-card') },
+  actions: [{ id: 'exit-signs', label: 'Exit signs', hint: 'Sign every exit', prompt: 'Place exit signs on every level.' }],
+  accepts: ['.csv'],
+  start: () => import('./chat-start'),
+}
+```
+
+- **Where a tool runs.** `'operation'`: a pure function over the scene's nodes that returns `{ result, changes }` or refuses with `refuse(code, message)`, like core's operations; every surface runs it. The MCP registers it with `registerOperationTool(server, operations, { contract, operation, annotations })` from `@pascal-app/mcp/tools/shared-tools`, the runner of the shared tools; a chat applies it to the live store in one undo step. `'editor'`: it needs the live editor (a renderer, the plugin's stores), so it runs in an editor tab through `execute`; a surface without a tab refuses it or hands it to one. Prefer `'operation'` whenever a tool only reads and writes nodes.
+- **Names.** A tool name is unique across the host's tools and every plugin's: prefix it with the plugin (`signage_…`). A host refuses a collision rather than picking a winner.
+- **Versions.** `apiVersion` is the shape of `PluginAgentTools`; `version` is the revision of your contracts. Bump it whenever a tool's name, input or meaning changes: a host may pin the revision a long run was offered and refuse an executor that no longer matches it.
+- **Annotations are hints.** A contract's `annotations` (`readOnlyHint`, `destructiveHint`, …) say what the plugin believes. A host classifies each tool from its own review and passes its own annotations to `registerOperationTool`; nothing a plugin declares grants a permission or a write scope.
+- **The host decides.** Which tools a turn offers, to whom and at what cost, whether a `chatOnly` request is honoured, and how far `timeoutMs` may go are host policy, like a panel's `access`. Being in `installedPlugins` is necessary, not sufficient. These packages define the shapes; a host keeps its own catalog of the plugins it serves.
+- **Trusted code.** These exports run with the application's privileges: a zod schema is code, and an executor or a card runs in the page. Hosts load reviewed, pinned plugins. The purity rule keeps contracts loadable in a sandboxed workflow; it does not isolate them.
+- **Cards and outputs.** A card renders from the persisted call alone (`toolName`, `input`, `output`, `state`), so a reloaded chat shows the same card; its `actions` open a view, select nodes or send a prompt. A `ChatToolOutput` carries images by reference (`ref`), never bytes. `actions` add entries to the composer's `/` menu; `accepts` lists the file types the plugin's tools read.
+- **A start screen.** `start` is what the host's chat shows while its thread is empty. It acts only through its `ChatStartProps`: `send` a message (pictures by reference) or `attach` files to the composer, both at the level the plugin's tools run at, and `requirePro()` before a step that needs that level: it answers false after the host offered the upgrade, and changes nothing in the chat. Render registry icons with `IconRefGlyph`, as the editor does.
+
+The rules both surfaces follow for these tools are in [agent surfaces](agent-surfaces.md#plugin-tools).
+
+## Versioning
+
+`apiVersion: 1` covers the surface above. The host bumps the major when it removes or changes the shape of an existing field. New optional fields don't bump. The plan is to keep additions backwards-compatible as long as possible — the bump is the escape hatch, not the default.
+
+`packages/core/src/registry/plugin-v1-conformance.test.ts` pins v1 with synthetic plugins at the registry and scene-store level: capabilities, ports and surfaces, relations, editing and reload, clone, and projects that have not installed the plugin. `packages/viewer/src/components/viewer/plugin-dispatch.test.tsx` proves the same kinds render, build, run their systems and restore in the baked viewer only while installed; `packages/editor/src/lib/glb-export.test.ts` covers export. A change that fails them breaks shipped plugins. `test.failing` cases are known v1 gaps.
+
+A plugin's own data versioning is `schemaVersion` on each `NodeDefinition`. The host doesn't migrate; the plugin's `migrate(node, fromVersion)` (future) handles its own legacy persisted nodes.
+
+## What's *not* a plugin contribution (yet)
+
+- **Materials** — there's no `plugin.materials` slot. Use `createMaterial` from `@pascal-app/viewer` inside your `def.renderer` / `def.system`.
+- **Floor-plan primitives** — the `FloorplanGeometry` union is host-owned. To draw something the union can't express, fall back to `def.renderer` and render through a different 2D mount (or open an issue).
+- **Panels, views, agent tools and other UI in the core manifest** — host-specific. Export an `EditorHostPanel` / `EditorHostView` / `PluginChatExtension`, and the `./agent-tools` and `./agent-operations` entries, separately.
+- **Clone remapping for plugin-owned references** — project clone (`cloneSceneGraph`) and subtree duplicate (`cloneNodesInto`) remap `id`, `parentId` and `children` only. A plugin field that stores other node ids (an ordered camera list, a target list) is copied verbatim and keeps pointing at the source scene. Keep hosted ids in `children` where you can.
+- **Stores** — plugins create their own Zustand stores; they don't extend `useScene`, `useEditor`, or `useViewer`. A renderer may subscribe read-only to exported host presentation state such as `useViewer` appearance axes, but must not treat host stores as plugin-owned state.
+- **Routes / pages** — plugins are visualisation + interaction code, not full app surfaces. Hosting a settings page belongs to the app.
+
+The boundary stays narrow on purpose so the contract is shippable. Each "not yet" item is a plan, not a "never."
+
+## Testing your plugin
+
+`@pascal-app/nodes` is the built-in reference implementation, and [`pascalorg/plugin-trees`](https://github.com/pascalorg/plugin-trees) is the standalone example. To test locally:
+
+1. Build your plugin as a normal npm package with `@pascal-app/*` as peerDependencies.
+2. In a host app that consumes your built-ins (`apps/editor` is the easiest target), wire `setPluginDiscovery` to return your plugin.
+3. The dev-mode `[pascal:registry]` console log shows the loaded plugin id + node count — that's the verification anchor.
+
+The host's own parity test (`packages/nodes/src/index.test.ts`) asserts every `AnyNode` discriminator has a registered kind. Plugin-contributed kinds don't participate in that test (they're not in `AnyNode`); add an equivalent test on your own side if you maintain a hand-typed union elsewhere.

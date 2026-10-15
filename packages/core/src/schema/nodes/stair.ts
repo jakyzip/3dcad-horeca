@@ -1,0 +1,215 @@
+import dedent from 'dedent'
+import { z } from 'zod'
+import { BaseNode, nodeType, objectId } from '../base'
+import type { MaterialSchema as MaterialSchemaType } from '../material'
+import { MaterialSchema } from '../material'
+import { StairDesignTargets } from './stair-design-targets'
+import { StairRailingMode, StairRailingStyle } from './stair-types'
+
+export { StairDesignTargets } from './stair-design-targets'
+export { StairRailingMode, StairRailingStyle } from './stair-types'
+
+import { StairConstruction } from './stair-construction'
+import { StairSegmentNode } from './stair-segment'
+
+export const StairType = z.enum(['straight', 'curved', 'spiral'])
+export const StairTopLandingMode = z.enum(['none', 'integrated'])
+export const StairSlabOpeningMode = z.enum(['none', 'destination'])
+
+export type StairType = z.infer<typeof StairType>
+export type StairTopLandingMode = z.infer<typeof StairTopLandingMode>
+export type StairSlabOpeningMode = z.infer<typeof StairSlabOpeningMode>
+export type StairSurfaceMaterialRole = 'railing' | 'tread' | 'side'
+export type StairSurfaceMaterialSpec = {
+  material?: MaterialSchemaType
+  materialPreset?: string
+}
+
+const StairHandrailEnd = z.object({
+  extension: z.number().finite().nonnegative().default(0),
+  return: z.enum(['none', 'wall', 'post', 'floor']).default('none'),
+  returnLength: z.number().finite().nonnegative().default(0.1),
+})
+
+export const StairNode = BaseNode.extend({
+  id: objectId('stair'),
+  type: nodeType('stair'),
+  material: MaterialSchema.optional(),
+  materialPreset: z.string().optional(),
+  railingMaterial: MaterialSchema.optional(),
+  railingMaterialPreset: z.string().optional(),
+  treadMaterial: MaterialSchema.optional(),
+  treadMaterialPreset: z.string().optional(),
+  sideMaterial: MaterialSchema.optional(),
+  sideMaterialPreset: z.string().optional(),
+  // Unified paint-slot refs (`scene:`/`library:` MaterialRef per slot id),
+  // matching the slot model items/slab/shelf use. Absent = declared default.
+  slots: z.record(z.string(), z.string()).optional(),
+  position: z.tuple([z.number(), z.number(), z.number()]).default([0, 0, 0]),
+  // Rotation around Y axis in radians
+  rotation: z.number().default(0),
+  // Persisted slab-support host — see ItemNode.supportSlabId for the rules.
+  supportSlabId: z.string().optional(),
+  stairType: StairType.default('straight'),
+  fromLevelId: z.string().nullable().default(null),
+  toLevelId: z.string().nullable().default(null),
+  // Destination deck (a slab id). When set, the stair's rise follows that
+  // slab's elevation live. An explicit `totalRise` still wins when BOTH are
+  // set (edge case — the panel clears the custom rise when attaching).
+  deckSlabId: z.string().optional(),
+  slabOpeningMode: StairSlabOpeningMode.default('none'),
+  openingOffset: z.number().default(0),
+  width: z.number().default(1.0),
+  totalRise: z.number().optional(),
+  designTargets: StairDesignTargets.optional(),
+  uniformRisers: z.boolean().optional(),
+  stepCount: z.number().default(10),
+  thickness: z.number().default(0.25),
+  fillToFloor: z.boolean().default(true),
+  construction: StairConstruction.optional(),
+  innerRadius: z.number().default(0.9),
+  sweepAngle: z.number().default(Math.PI / 2),
+  topLandingMode: StairTopLandingMode.default('none'),
+  topLandingDepth: z.number().default(0.9),
+  showCenterColumn: z.boolean().default(true),
+  showStepSupports: z.boolean().default(true),
+  railingMode: StairRailingMode.default('none'),
+  railingHeight: z.number().default(0.92),
+  railingStyle: StairRailingStyle.optional(),
+  railingPath: z.enum(['original', 'continuous']).optional(),
+  handrail: z
+    .object({
+      mode: StairRailingMode.default('both'),
+      height: z.number().positive().default(0.9),
+      diameter: z.number().positive().default(0.045),
+      offset: z.number().nonnegative().default(0.06),
+      bottom: StairHandrailEnd.optional(),
+      top: StairHandrailEnd.optional(),
+    })
+    .optional(),
+  // 'post-and-rail' only: false leaves the TOP post out so the rail dies
+  // into a post that already stands there (a porch's 6x6 beside the flight).
+  railingTopPost: z.boolean().optional(),
+  // Guard styles: how far past the top nosing, along the slope, the rails run
+  // to die into the post standing there (a porch post set back from the edge).
+  railingTopReach: z.number().min(0).optional(),
+  railingPostThrough: z.boolean().optional(),
+  // Child stair segment IDs
+  children: z.array(StairSegmentNode.shape.id).default([]),
+}).describe(
+  dedent`
+  Stair node - a container for stair segments.
+  Acts as a group that either holds one or more StairSegmentNodes (stairs)
+  or stores stair-level geometry properties for curved stairs.
+  - position: center position of the stair group
+  - rotation: rotation around Y axis
+  - stairType: straight (segment-based), curved (arc-based), or spiral
+  - fromLevelId / toLevelId: source and destination levels used for auto slab cutouts
+  - deckSlabId: destination deck (slab) — the rise derives from its elevation while set
+  - slabOpeningMode: whether a destination-level slab opening is generated for this stair
+  - openingOffset: extra opening expansion applied after the cutout polygon is computed
+  - width: stair width
+  - totalRise: total stair height
+  - stepCount: number of visible steps
+  - construction: optional explicit construction and finish details, inherited by child segments; absence preserves legacy bodies
+  - thickness: stair slab / tread thickness
+  - fillToFloor: whether the stair mass fills down to the floor or uses tread thickness only
+  - innerRadius: inner curve radius for curved stairs
+  - sweepAngle: total curved stair sweep in radians
+  - topLandingMode: optional integrated top landing for spiral stairs
+  - topLandingDepth: depth used to size the integrated spiral top landing
+  - showCenterColumn: whether spiral stairs render a center column
+  - showStepSupports: whether spiral stairs render step support brackets
+  - railingMode: whether to render railings and on which side(s)
+  - railingHeight: top height of the railing above the stair surface
+  - railingStyle: balusters, post-and-rail, cable, boards, glass (flat panels) or metal (steel posts and balusters); balusters when absent
+  - railingPath: original per-flight paths or continuous guards through turns and exposed landing edges
+  - designTargets: optional riser, going and headroom preferences in metres, not code certification
+  - uniformRisers: distribute the total flight rise by riser count when enabled
+  - railingTopPost: guard styles only — false leaves the top post out so the rails die into a post already standing there (a porch post); railingTopReach runs the rails that far past the top nosing along the slope to reach it (top post on, reach 0 when absent)
+  - railingPostThrough: guard styles — the posts run past the cap rail and get a cap of their own (off when absent)
+  - handrail: independent rail; optional bottom/top end extension (bottom sloped, top horizontal), return none/wall/post/floor, and returnLength in metres for outward wall-facing or downward post-facing geometry. Returns do not attach to hosts. Floor returns meet the source/arrival elevation. Closed paths have no end details.
+  - children: array of StairSegmentNode IDs for stairs
+  `,
+)
+
+export type StairNode = z.infer<typeof StairNode>
+
+function getLegacyStairSurfaceMaterial(node: StairNode): StairSurfaceMaterialSpec {
+  return {
+    material: node.material,
+    materialPreset: node.materialPreset,
+  }
+}
+
+export function getEffectiveStairSurfaceMaterial(
+  node: StairNode,
+  role: StairSurfaceMaterialRole,
+): StairSurfaceMaterialSpec {
+  if (role === 'railing') {
+    if (node.railingMaterial !== undefined || typeof node.railingMaterialPreset === 'string') {
+      return {
+        material: node.railingMaterial,
+        materialPreset:
+          typeof node.railingMaterialPreset === 'string' ? node.railingMaterialPreset : undefined,
+      }
+    }
+  }
+
+  if (role === 'tread') {
+    if (node.treadMaterial !== undefined || typeof node.treadMaterialPreset === 'string') {
+      return {
+        material: node.treadMaterial,
+        materialPreset:
+          typeof node.treadMaterialPreset === 'string' ? node.treadMaterialPreset : undefined,
+      }
+    }
+  }
+
+  if (role === 'side') {
+    if (node.sideMaterial !== undefined || typeof node.sideMaterialPreset === 'string') {
+      return {
+        material: node.sideMaterial,
+        materialPreset:
+          typeof node.sideMaterialPreset === 'string' ? node.sideMaterialPreset : undefined,
+      }
+    }
+  }
+
+  const treadFallback = {
+    material: node.treadMaterial,
+    materialPreset:
+      typeof node.treadMaterialPreset === 'string' ? node.treadMaterialPreset : undefined,
+  }
+  const sideFallback = {
+    material: node.sideMaterial,
+    materialPreset:
+      typeof node.sideMaterialPreset === 'string' ? node.sideMaterialPreset : undefined,
+  }
+
+  if (
+    role === 'tread' &&
+    (sideFallback.material !== undefined || sideFallback.materialPreset !== undefined)
+  ) {
+    return sideFallback
+  }
+
+  if (
+    role === 'side' &&
+    (treadFallback.material !== undefined || treadFallback.materialPreset !== undefined)
+  ) {
+    return treadFallback
+  }
+
+  if (role === 'railing') {
+    if (treadFallback.material !== undefined || treadFallback.materialPreset !== undefined) {
+      return treadFallback
+    }
+
+    if (sideFallback.material !== undefined || sideFallback.materialPreset !== undefined) {
+      return sideFallback
+    }
+  }
+
+  return getLegacyStairSurfaceMaterial(node)
+}

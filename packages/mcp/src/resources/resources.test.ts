@@ -1,0 +1,347 @@
+// Side-effect import MUST come first: installs RAF polyfill before core loads.
+import '../bridge/node-shims'
+
+import { beforeEach, describe, expect, test } from 'bun:test'
+import { Client } from '@modelcontextprotocol/sdk/client/index.js'
+import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js'
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
+import { WallNode, ZoneNode } from '@pascal-app/core/schema'
+import useScene from '@pascal-app/core/store'
+import { SceneBridge } from '../bridge/scene-bridge'
+import { createPascalMcpServer } from '../server'
+import { InMemorySceneStore } from '../tools/scene-lifecycle/test-utils'
+import { registerAgentGuide } from './agent-guide'
+import { registerCatalogItems } from './catalog-items'
+import { registerConstraints } from './constraints'
+import { registerSceneCurrent } from './scene-current'
+import { registerSceneSummary } from './scene-summary'
+
+type ClientServerPair = {
+  client: Client
+  server: McpServer
+  bridge: SceneBridge
+  close: () => Promise<void>
+}
+
+async function spinUp(
+  register: (server: McpServer, bridge: SceneBridge) => void,
+): Promise<ClientServerPair> {
+  const bridge = new SceneBridge()
+  const server = new McpServer({ name: 'test', version: '0.0.0' })
+  register(server, bridge)
+  const client = new Client({ name: 'test-client', version: '0.0.0' })
+  const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair()
+  await Promise.all([server.connect(serverTransport), client.connect(clientTransport)])
+  return {
+    client,
+    server,
+    bridge,
+    close: async () => {
+      await client.close()
+      await server.close()
+    },
+  }
+}
+
+/** Reset the store between tests so temporal history and nodes don't leak. */
+function resetScene(): void {
+  useScene.getState().unloadScene()
+  useScene.temporal.getState().clear()
+}
+
+describe('pascal://scene/current', () => {
+  beforeEach(() => resetScene())
+
+  test('returns the full scene JSON', async () => {
+    const pair = await spinUp(registerSceneCurrent)
+    try {
+      pair.bridge.loadDefault()
+      const res = await pair.client.readResource({ uri: 'pascal://scene/current' })
+      expect(res.contents).toHaveLength(1)
+      const content = res.contents[0]
+      expect(content).toBeDefined()
+      const c = content as { uri: string; mimeType?: string; text?: string }
+      expect(c.mimeType).toBe('application/json')
+      expect(c.uri).toBe('pascal://scene/current')
+      const parsed = JSON.parse(c.text ?? '{}')
+      expect(parsed).toHaveProperty('nodes')
+      expect(parsed).toHaveProperty('rootNodeIds')
+      expect(parsed).toHaveProperty('collections')
+      expect(Array.isArray(parsed.rootNodeIds)).toBe(true)
+      expect(parsed.rootNodeIds.length).toBeGreaterThan(0)
+    } finally {
+      await pair.close()
+    }
+  })
+
+  test('reflects mutations to the store', async () => {
+    const pair = await spinUp(registerSceneCurrent)
+    try {
+      pair.bridge.loadDefault()
+      const beforeRes = await pair.client.readResource({
+        uri: 'pascal://scene/current',
+      })
+      const beforeText = (beforeRes.contents[0] as { text: string }).text
+      const before = JSON.parse(beforeText)
+      const beforeCount = Object.keys(before.nodes).length
+
+      // Add a zone.
+      const level = pair.bridge
+        .findNodes({ type: 'level' as never })
+        .find((n) => n.type === 'level')
+      if (!level) throw new Error('no level')
+      const zone = ZoneNode.parse({
+        name: 'Living',
+        parentId: level.id,
+        polygon: [
+          [0, 0],
+          [3, 0],
+          [3, 3],
+          [0, 3],
+        ],
+      })
+      pair.bridge.createNode(zone, level.id as never)
+
+      const afterRes = await pair.client.readResource({
+        uri: 'pascal://scene/current',
+      })
+      const afterText = (afterRes.contents[0] as { text: string }).text
+      const after = JSON.parse(afterText)
+      expect(Object.keys(after.nodes).length).toBe(beforeCount + 1)
+    } finally {
+      await pair.close()
+    }
+  })
+})
+
+describe('pascal://scene/current/summary', () => {
+  beforeEach(() => resetScene())
+
+  test('returns markdown with counts and bbox', async () => {
+    const pair = await spinUp(registerSceneSummary)
+    try {
+      pair.bridge.loadDefault()
+      const res = await pair.client.readResource({
+        uri: 'pascal://scene/current/summary',
+      })
+      const content = res.contents[0] as { uri: string; mimeType?: string; text?: string }
+      expect(content.mimeType).toBe('text/markdown')
+      const text = content.text ?? ''
+      expect(text.startsWith('# Scene summary')).toBe(true)
+      expect(text).toContain('Sites:')
+      expect(text).toContain('Buildings:')
+      expect(text).toContain('Levels:')
+      expect(text).toContain('Scene bbox')
+    } finally {
+      await pair.close()
+    }
+  })
+
+  test('estimated floor area sums zone polygon areas', async () => {
+    const pair = await spinUp(registerSceneSummary)
+    try {
+      pair.bridge.loadDefault()
+      const level = pair.bridge
+        .findNodes({ type: 'level' as never })
+        .find((n) => n.type === 'level')
+      if (!level) throw new Error('no level')
+      const zone = ZoneNode.parse({
+        name: 'Big',
+        parentId: level.id,
+        polygon: [
+          [0, 0],
+          [4, 0],
+          [4, 3],
+          [0, 3],
+        ],
+      })
+      pair.bridge.createNode(zone, level.id as never)
+
+      const res = await pair.client.readResource({
+        uri: 'pascal://scene/current/summary',
+      })
+      const text = (res.contents[0] as { text: string }).text
+      expect(text).toContain('12.00 m^2')
+    } finally {
+      await pair.close()
+    }
+  })
+
+  test('empty scene returns a markdown skeleton without crashing', async () => {
+    const pair = await spinUp(registerSceneSummary)
+    try {
+      // deliberately do NOT call loadDefault()
+      const res = await pair.client.readResource({
+        uri: 'pascal://scene/current/summary',
+      })
+      const text = (res.contents[0] as { text: string }).text
+      expect(text.startsWith('# Scene summary')).toBe(true)
+      expect(text).toContain('Total nodes: 0')
+    } finally {
+      await pair.close()
+    }
+  })
+})
+
+describe('pascal://catalog/items', () => {
+  beforeEach(() => resetScene())
+
+  test('returns built-in catalog subset', async () => {
+    const pair = await spinUp(registerCatalogItems)
+    try {
+      const res = await pair.client.readResource({ uri: 'pascal://catalog/items' })
+      const content = res.contents[0] as { uri: string; mimeType?: string; text?: string }
+      expect(content.mimeType).toBe('application/json')
+      const parsed = JSON.parse(content.text ?? '{}')
+      expect(parsed.status).toBe('ok')
+      expect(parsed.items.length).toBeGreaterThan(0)
+      expect(parsed.items.map((item: { id: string }) => item.id)).toContain('sofa')
+      expect(typeof parsed.note).toBe('string')
+    } finally {
+      await pair.close()
+    }
+  })
+})
+
+describe('pascal://agent-guide', () => {
+  beforeEach(() => resetScene())
+
+  test('returns MCP-first project guidance', async () => {
+    const pair = await spinUp(registerAgentGuide)
+    try {
+      const res = await pair.client.readResource({ uri: 'pascal://agent-guide' })
+      const content = res.contents[0] as { uri: string; mimeType?: string; text?: string }
+      expect(content.mimeType).toBe('text/markdown')
+      const text = content.text ?? ''
+      expect(text).toContain('create_project')
+      expect(text).toContain('save_scene')
+      expect(text).toContain('get_project_status')
+      expect(text).toContain('editorUrl')
+      expect(text).toContain('0 to 1 along the wall')
+      expect(text).toMatch(/glass meets at a corner.*add_corner_window/)
+      expect(text).toContain('room_named_by_person')
+      expect(text).toContain('rename: true` only when the person asked')
+      expect(text).toContain('editor_tab_busy')
+      expect(text).toContain('invalid_input')
+    } finally {
+      await pair.close()
+    }
+  })
+
+  // The guide is the one text an agent is sure to read: a tool it names that the server does not
+  // serve (`get_capabilities` was one) sends every agent to a missing tool on its first step.
+  const REFUSAL_CODES = [
+    'editor_tab_busy',
+    'editor_tab_hidden',
+    'editor_tab_required',
+    'invalid_input',
+    'roof_exists',
+    // verify_scene's issue type, which names move_roofs_to_roof_level
+    'roof_mixed_in_storey',
+    'room_named_by_person',
+    'scene_wipe_blocked',
+  ]
+  // Hosted-only tools: the hosted server registers them beside the package's.
+  const HOSTED_ONLY_TOOLS = [
+    'search_project_chats',
+    'read_project_chat',
+    'get_project_assets',
+    'read_project_asset',
+    'list_project_members',
+  ]
+  test('every tool the guide names is a tool the server serves', async () => {
+    const bridge = new SceneBridge()
+    const server = createPascalMcpServer({ bridge, store: new InMemorySceneStore() })
+    const client = new Client({ name: 'guide-tools', version: '0.0.0' })
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair()
+    await Promise.all([server.connect(serverTransport), client.connect(clientTransport)])
+    const pair = await spinUp(registerAgentGuide)
+    try {
+      const served = new Set((await client.listTools()).tools.map((tool) => tool.name))
+      const res = await pair.client.readResource({ uri: 'pascal://agent-guide' })
+      const text = (res.contents[0] as { text?: string }).text ?? ''
+      const named = [...new Set([...text.matchAll(/`([a-z]+(?:_[a-z]+)+)`/g)].map((m) => m[1]!))]
+      const unknown = named.filter(
+        (name) =>
+          !(served.has(name) || REFUSAL_CODES.includes(name) || HOSTED_ONLY_TOOLS.includes(name)),
+      )
+      expect(unknown).toEqual([])
+      expect(text).not.toContain('get_capabilities')
+    } finally {
+      await pair.close()
+      await client.close()
+      await server.close()
+    }
+  })
+
+  test('keeps the legacy agent guide URI as an alias', async () => {
+    const pair = await spinUp(registerAgentGuide)
+    try {
+      const res = await pair.client.readResource({ uri: 'pascal://agent/guide' })
+      const text = (res.contents[0] as { text?: string }).text ?? ''
+      expect(text).toContain('Pascal MCP Agent Guide')
+    } finally {
+      await pair.close()
+    }
+  })
+})
+
+describe('pascal://constraints/{levelId}', () => {
+  beforeEach(() => resetScene())
+
+  test('returns slabs + wall footprints for a known level', async () => {
+    const pair = await spinUp(registerConstraints)
+    try {
+      pair.bridge.loadDefault()
+      const level = pair.bridge
+        .findNodes({ type: 'level' as never })
+        .find((n) => n.type === 'level')
+      if (!level) throw new Error('no level')
+      // Add a wall so wallPolygons is non-empty.
+      const wall = WallNode.parse({
+        parentId: level.id,
+        start: [0, 0],
+        end: [4, 0],
+        thickness: 0.2,
+      })
+      pair.bridge.createNode(wall, level.id as never)
+
+      const res = await pair.client.readResource({
+        uri: `pascal://constraints/${level.id}`,
+      })
+      const content = res.contents[0] as { uri: string; mimeType?: string; text?: string }
+      expect(content.mimeType).toBe('application/json')
+      const parsed = JSON.parse(content.text ?? '{}')
+      expect(parsed.levelId).toBe(level.id)
+      expect(Array.isArray(parsed.slabs)).toBe(true)
+      expect(Array.isArray(parsed.wallPolygons)).toBe(true)
+      expect(parsed.wallPolygons.length).toBe(1)
+      expect(parsed.wallPolygons[0].wallId).toBe(wall.id)
+      expect(Array.isArray(parsed.wallPolygons[0].footprint)).toBe(true)
+      expect(parsed.wallPolygons[0].footprint.length).toBeGreaterThan(0)
+      // Each footprint point should be [x, y].
+      for (const pt of parsed.wallPolygons[0].footprint) {
+        expect(pt).toHaveLength(2)
+      }
+    } finally {
+      await pair.close()
+    }
+  })
+
+  test('returns {error:"level_not_found"} for unknown levelId', async () => {
+    const pair = await spinUp(registerConstraints)
+    try {
+      pair.bridge.loadDefault()
+      const res = await pair.client.readResource({
+        uri: 'pascal://constraints/level_nope',
+      })
+      const content = res.contents[0] as { text?: string }
+      const parsed = JSON.parse(content.text ?? '{}')
+      expect(parsed.error).toBe('level_not_found')
+      expect(parsed.slabs).toEqual([])
+      expect(parsed.wallPolygons).toEqual([])
+    } finally {
+      await pair.close()
+    }
+  })
+})

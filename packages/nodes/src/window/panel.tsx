@@ -1,0 +1,1080 @@
+'use client'
+
+import {
+  type AnyNode,
+  type AnyNodeId,
+  cornerPair,
+  fusesAtCorner,
+  runAsSingleSceneHistoryStep,
+  scriptImages,
+  useInteractive,
+  useScene,
+  type WindowNode,
+} from '@pascal-app/core'
+import { isAgentRefusal } from '@pascal-app/core/agent-tools'
+import {
+  cornerPartnerUpdates,
+  cornerSideWidth,
+  getWindowStyleOverrides,
+  SHAPED_WINDOW_TYPES,
+  SILLLESS_WINDOW_TYPES,
+  unwrapCorner,
+  WINDOW_STYLE_CHOICES,
+  WINDOW_STYLE_LABELS,
+  windowStylesOf,
+  windowTakesStyle,
+  windowTypeChange,
+  wrapCorner,
+} from '@pascal-app/core/building'
+import {
+  ActionButton,
+  ActionGroup,
+  cn,
+  duplicateNodeAndPickUp,
+  PanelSection,
+  PanelWrapper,
+  SegmentedControl,
+  SliderControl,
+  ToggleControl,
+  triggerSFX,
+  useEditor,
+  writeWindowChanges,
+} from '@pascal-app/editor'
+import { useViewer } from '@pascal-app/viewer'
+import { Copy, FlipHorizontal2, Move, Trash2 } from 'lucide-react'
+import { useCallback, useEffect, useMemo } from 'react'
+import { AuthoredParams } from '../item/authored-params'
+import { constrainCurtainOpening, curtainOpeningLimits } from '../shared/curtain-opening-limits'
+import { createOpeningPropertyPreview } from '../shared/opening-property-preview'
+import { openingPropertyPreviewHost } from '../shared/opening-property-preview-host'
+import { windowTypeOptions } from './placement'
+
+function isSameWindowValue(current: unknown, next: unknown): boolean {
+  if (typeof current === 'number' && typeof next === 'number') {
+    return Math.abs(current - next) < 1e-6
+  }
+
+  if (Array.isArray(current) && Array.isArray(next)) {
+    return (
+      current.length === next.length &&
+      current.every((value, index) => isSameWindowValue(value, next[index]))
+    )
+  }
+
+  return Object.is(current, next)
+}
+
+function getMaxSharedWindowRadius(width: number, height: number) {
+  return Math.max(0, Math.min(width / 2, height / 2))
+}
+
+function normalizeWindowCornerRadii(
+  radii: [number, number, number, number],
+  width: number,
+  height: number,
+): [number, number, number, number] {
+  const next = radii.map((radius) => Math.max(radius, 0)) as [number, number, number, number]
+  const scale = Math.min(
+    1,
+    Math.max(width, 0) / Math.max(next[0] + next[1], 1e-6),
+    Math.max(width, 0) / Math.max(next[3] + next[2], 1e-6),
+    Math.max(height, 0) / Math.max(next[0] + next[3], 1e-6),
+    Math.max(height, 0) / Math.max(next[1] + next[2], 1e-6),
+  )
+
+  if (scale >= 1) return next
+
+  return next.map((radius) => radius * scale) as [number, number, number, number]
+}
+
+/** The Corner section's pill buttons: a token hover, the press, the keyboard focus ring. */
+const CORNER_BUTTON =
+  'outline-hidden transition-[background-color,scale] duration-150 hover:bg-foreground/[0.06] focus-visible:outline-2 focus-visible:outline-foreground/50 focus-visible:outline-offset-2 motion-safe:active:scale-[0.96]'
+
+/** A change to one side of a corner window that both share, made on its partner too. */
+function syncCornerPartner(windowId: string, updates: Partial<WindowNode>) {
+  const scene = useScene.getState()
+  const partnerUpdate = cornerPartnerUpdates(scene.nodes, windowId, updates)
+  const partnerId = (scene.nodes[windowId as AnyNodeId] as WindowNode | undefined)?.corner
+    ?.partnerId
+  if (!partnerUpdate || !partnerId) return
+  scene.updateNode(partnerId as AnyNodeId, partnerUpdate)
+  scene.dirtyNodes.add(partnerId as AnyNodeId)
+  const parentId = scene.nodes[partnerId as AnyNodeId]?.parentId
+  if (parentId) scene.dirtyNodes.add(parentId as AnyNodeId)
+}
+
+export default function WindowPanel() {
+  const selectedId = useViewer((s) => s.selection.selectedIds[0])
+  const setSelection = useViewer((s) => s.setSelection)
+  const deleteNode = useScene((s) => s.deleteNode)
+  const setMovingNode = useEditor((s) => s.setMovingNode)
+  const preview = useMemo(
+    () =>
+      selectedId
+        ? createOpeningPropertyPreview<WindowNode>(
+            selectedId as AnyNodeId,
+            openingPropertyPreviewHost,
+          )
+        : null,
+    [selectedId],
+  )
+  useEffect(() => () => preview?.cancel(), [preview])
+
+  const node = useScene((s) =>
+    selectedId ? (s.nodes[selectedId as AnyNode['id']] as WindowNode | undefined) : undefined,
+  )
+
+  // Stable handler refs ("Custom panels" in wiki/architecture/node-definitions.md).
+  // Without them, the 15+ SliderControls in this panel would loop on drag.
+  const handleUpdate = useCallback(
+    (updates: Partial<WindowNode>) => {
+      if (!selectedId) return
+      const liveNode = useScene.getState().nodes[selectedId as AnyNodeId]
+      if (liveNode?.type !== 'window') return
+
+      updates = constrainCurtainOpening(liveNode, updates, useScene.getState().nodes)
+      const hasChange = Object.entries(updates).some(([key, value]) => {
+        const currentValue = liveNode[key as keyof WindowNode]
+        return !isSameWindowValue(currentValue, value)
+      })
+      if (!hasChange) return
+
+      // A corner window's partner follows in the same undo step, so undo never splits the pair.
+      runAsSingleSceneHistoryStep(useScene, () => {
+        useScene.getState().updateNode(selectedId as AnyNode['id'], updates)
+        const scene = useScene.getState()
+        scene.dirtyNodes.add(selectedId as AnyNodeId)
+        if (liveNode.parentId) scene.dirtyNodes.add(liveNode.parentId as AnyNodeId)
+        syncCornerPartner(selectedId, updates)
+      })
+    },
+    [selectedId],
+  )
+
+  // A corner window's sides: its partner, and whether this window can wrap its corner. Planned
+  // when the window, its wall or its partner changes, not on every scene update.
+  const hostWall = useScene((s) =>
+    node?.parentId ? s.nodes[node.parentId as AnyNodeId] : undefined,
+  )
+  const cornerPartner = useScene((s) => {
+    const partner = node?.corner ? s.nodes[node.corner.partnerId as AnyNodeId] : undefined
+    return partner?.type === 'window' ? (partner as WindowNode) : undefined
+  })
+  const cornerState = useMemo(() => {
+    // Read from the scene below; these only say when to plan again.
+    void hostWall
+    void cornerPartner
+    if (node?.type !== 'window') return 'none'
+    const nodes = useScene.getState().nodes
+    if (cornerPair(nodes, node)) return 'paired'
+    // Within 0.30 m of a corner, not only at it: the window waiting there is adopted, or a partner made.
+    try {
+      wrapCorner(nodes, node.id)
+      return 'wrappable'
+    } catch (error) {
+      if (isAgentRefusal(error)) return 'none'
+      throw error
+    }
+  }, [node, hostWall, cornerPartner])
+  const corner =
+    cornerState === 'paired' && cornerPartner
+      ? { paired: true as const, partner: cornerPartner }
+      : cornerState === 'wrappable'
+        ? { paired: false as const }
+        : null
+  const writeWindows = (updates: Record<string, Partial<WindowNode>>) =>
+    writeWindowChanges({ create: null, updates, remove: [] })
+  const wrapTheCorner = () => {
+    if (!selectedId) return
+    try {
+      const { create, updates } = wrapCorner(useScene.getState().nodes, selectedId)
+      writeWindowChanges({ create, updates, remove: [] })
+    } catch (error) {
+      // The scene changed since the panel offered it: the window stays as it is.
+      if (!isAgentRefusal(error)) throw error
+    }
+  }
+  const setCornerWidth = (windowId: string, width: number) => {
+    const update = cornerSideWidth(useScene.getState().nodes, windowId, width)
+    if (update) writeWindows({ [windowId]: update })
+  }
+  const setCornerPost = (post: 'none' | 'post') => {
+    if (!(selectedId && corner?.paired && node?.corner)) return
+    writeWindows({
+      [selectedId]: { corner: { ...node.corner, post } },
+      [corner.partner.id]: { corner: { ...corner.partner.corner!, post } },
+    })
+  }
+
+  const previewWindowUpdate = <K extends keyof WindowNode>(key: K, value: WindowNode[K]) =>
+    preview?.preview({ [key]: value } as Partial<WindowNode>)
+  // A committed change a corner window shares with its partner (its height, frame, sill) takes the
+  // partner along, in the same undo step.
+  const commitPreview = (updates: Partial<WindowNode>) =>
+    runAsSingleSceneHistoryStep(useScene, () => {
+      preview?.commit(updates)
+      if (selectedId) syncCornerPartner(selectedId, updates)
+    })
+  const commitWindowPreview = <K extends keyof WindowNode>(key: K, value: WindowNode[K]) =>
+    commitPreview({ [key]: value } as Partial<WindowNode>)
+
+  const handleClose = useCallback(() => {
+    setSelection({ selectedIds: [] })
+  }, [setSelection])
+
+  const handleFlip = useCallback(() => {
+    if (!node) return
+    handleUpdate({
+      side: node.side === 'front' ? 'back' : 'front',
+      rotation: [node.rotation[0], node.rotation[1] + Math.PI, node.rotation[2]],
+    })
+  }, [node, handleUpdate])
+
+  const handleMove = useCallback(() => {
+    if (!node) return
+    triggerSFX('sfx:item-pick')
+    setMovingNode(node)
+    setSelection({ selectedIds: [] })
+  }, [node, setMovingNode, setSelection])
+
+  const handleDelete = useCallback(() => {
+    if (!(selectedId && node)) return
+    triggerSFX('sfx:item-delete')
+    deleteNode(selectedId as AnyNode['id'])
+    if (node.parentId) useScene.getState().dirtyNodes.add(node.parentId as AnyNodeId)
+    setSelection({ selectedIds: [] })
+  }, [selectedId, node, deleteNode, setSelection])
+
+  const handleDuplicate = useCallback(() => {
+    if (node) duplicateNodeAndPickUp(node)
+  }, [node])
+
+  if (!(node && node.type === 'window' && selectedId)) return null
+
+  const limits = curtainOpeningLimits(node, useScene.getState().nodes)
+  const numCols = node.columnRatios.length
+  const numRows = node.rowRatios.length
+
+  const colSum = node.columnRatios.reduce((a, b) => a + b, 0)
+  const rowSum = node.rowRatios.reduce((a, b) => a + b, 0)
+  const normCols = node.columnRatios.map((r) => r / colSum)
+  const normRows = node.rowRatios.map((r) => r / rowSum)
+  const isOpening = node.openingKind === 'opening'
+  // Built from a script: its params replace the parametric frame's fields, as on an authored item.
+  const scripted = Boolean(node.source)
+  const openingShape = node.openingShape ?? 'rectangle'
+  const windowShape =
+    openingShape === 'arch' || openingShape === 'rounded' ? openingShape : 'rectangle'
+  const openingRadiusMode = node.openingRadiusMode ?? 'all'
+  const openingCornerRadii = node.openingCornerRadii ?? [0.15, 0.15, 0.15, 0.15]
+  const cornerRadius = node.cornerRadius ?? 0.15
+  const archHeight = node.archHeight ?? 0.35
+  const openingRevealRadius = node.openingRevealRadius ?? 0.025
+  const maxRoundedRadius = Math.max(0.01, getMaxSharedWindowRadius(node.width, node.height))
+  const displayedWindowType = node.windowType === 'hopper' ? 'awning' : (node.windowType ?? 'fixed')
+  const awningDirection = node.windowType === 'hopper' ? 'down' : (node.awningDirection ?? 'up')
+  const windowType = node.windowType ?? 'fixed'
+  const isFixedWindow = windowType === 'fixed'
+  const isTrackSashWindow =
+    windowType === 'sliding' || windowType === 'single-hung' || windowType === 'double-hung'
+  const isOperableSashWindow =
+    windowType === 'casement' ||
+    windowType === 'awning' ||
+    windowType === 'hopper' ||
+    windowType === 'louvered'
+  const isOperableWindow = isTrackSashWindow || isOperableSashWindow
+  const supportsWindowShape = SHAPED_WINDOW_TYPES.has(node.windowType ?? 'fixed')
+  const supportsGrid = isFixedWindow
+  const supportsSill = !SILLLESS_WINDOW_TYPES.has(node.windowType)
+  const showWindowTypeSection = !scripted && !isOpening
+  const windowStyles = windowStylesOf(node)
+  const showWindowShapeSection = !scripted && !isOpening && supportsWindowShape
+  const showOpeningShapeSection = !scripted && isOpening
+  const showFrameSection = !scripted && !isOpening
+  const showGridSection = !scripted && !isOpening && supportsGrid
+  const showStyleSection = !scripted && !isOpening && windowTakesStyle(node.windowType)
+  const showSillSection = !scripted && !isOpening && supportsSill
+  const showOperationSection = !scripted && !isOpening && isOperableWindow
+  const showAwningDirectionSection = !scripted && !isOpening && displayedWindowType === 'awning'
+  const showCasementSection = !scripted && !isOpening && windowType === 'casement'
+  const showFlipSide = !isOpening
+  const operationLabel = isTrackSashWindow
+    ? windowType === 'sliding'
+      ? 'Slide'
+      : 'Raise'
+    : windowType === 'casement'
+      ? 'Swing'
+      : windowType === 'louvered'
+        ? 'Slats'
+        : 'Tilt'
+
+  const setOperationState = (value: number) => {
+    useInteractive.getState().cancelWindowAnimation(node.id)
+    useInteractive.getState().removeWindowOpenState(node.id)
+    handleUpdate({ operationState: Math.max(0, Math.min(1, value)) })
+  }
+
+  const getDimensionUpdates = (updates: Partial<Pick<WindowNode, 'width' | 'height'>>) => {
+    const nextWidth = updates.width ?? node.width
+    const nextHeight = updates.height ?? node.height
+    const nextUpdates: Partial<WindowNode> = { ...updates }
+
+    if (openingShape === 'rounded') {
+      if (openingRadiusMode === 'individual') {
+        const nextRadii = normalizeWindowCornerRadii(
+          openingCornerRadii as [number, number, number, number],
+          nextWidth,
+          nextHeight,
+        )
+        nextUpdates.openingCornerRadii = nextRadii
+      } else {
+        const nextRadius = Math.min(
+          Math.max(cornerRadius, 0),
+          getMaxSharedWindowRadius(nextWidth, nextHeight),
+        )
+        nextUpdates.cornerRadius = nextRadius
+      }
+    }
+
+    if (openingShape === 'arch') {
+      const nextArchHeight = Math.min(Math.max(archHeight, 0.05), Math.max(nextHeight, 0.05))
+      nextUpdates.archHeight = nextArchHeight
+    }
+
+    return nextUpdates
+  }
+
+  const setOpeningCornerRadius = (index: number, value: number, commit = false) => {
+    const next = [...openingCornerRadii] as [number, number, number, number]
+    next[index] = value
+    if (commit) {
+      commitWindowPreview('openingCornerRadii', next)
+    } else {
+      previewWindowUpdate('openingCornerRadii', next)
+    }
+  }
+
+  const setColumnRatio = (index: number, newVal: number) => {
+    const clamped = Math.max(0.05, Math.min(0.95, newVal))
+    const neighborIdx = index < numCols - 1 ? index + 1 : index - 1
+    const delta = clamped - normCols[index]!
+    const neighborVal = Math.max(0.05, normCols[neighborIdx]! - delta)
+    const newRatios = normCols.map((v, i) => {
+      if (i === index) return clamped
+      if (i === neighborIdx) return neighborVal
+      return v
+    })
+    handleUpdate({ columnRatios: newRatios })
+  }
+
+  const setRowRatio = (index: number, newVal: number) => {
+    const clamped = Math.max(0.05, Math.min(0.95, newVal))
+    const neighborIdx = index < numRows - 1 ? index + 1 : index - 1
+    const delta = clamped - normRows[index]!
+    const neighborVal = Math.max(0.05, normRows[neighborIdx]! - delta)
+    const newRatios = normRows.map((v, i) => {
+      if (i === index) return clamped
+      if (i === neighborIdx) return neighborVal
+      return v
+    })
+    handleUpdate({ rowRatios: newRatios })
+  }
+
+  return (
+    <PanelWrapper
+      icon={scriptImages(node)?.thumbnail ?? '/icons/window.webp'}
+      onClose={handleClose}
+      title={node.name || 'Window'}
+      width={320}
+    >
+      {!scripted && (
+        <PanelSection title="Type">
+          <SegmentedControl
+            onChange={(value) =>
+              handleUpdate({
+                openingKind: value as WindowNode['openingKind'],
+                ...(value === 'opening'
+                  ? {
+                      openingShape,
+                      openingRadiusMode,
+                      openingCornerRadii,
+                      cornerRadius,
+                      archHeight,
+                      openingRevealRadius,
+                    }
+                  : {}),
+              })
+            }
+            options={[
+              { value: 'window', label: 'Window' },
+              { value: 'opening', label: 'Opening' },
+            ]}
+            value={node.openingKind ?? 'window'}
+          />
+        </PanelSection>
+      )}
+
+      {showWindowTypeSection && (
+        <PanelSection title="Window Type">
+          <div className="grid grid-cols-2 gap-2 px-1 pt-1">
+            {windowTypeOptions.map((option) => {
+              const isSelected = displayedWindowType === option.value
+              return (
+                <button
+                  className={cn(
+                    'flex min-h-12 items-center rounded-lg border px-3 py-2.5 text-left text-xs transition-colors',
+                    isSelected
+                      ? 'border-orange-400/60 bg-orange-400/10 text-foreground'
+                      : 'border-border/50 bg-black/4 dark:bg-[#2C2C2E] text-muted-foreground hover:bg-black/8 dark:hover:bg-[#3e3e3e] hover:text-foreground',
+                  )}
+                  key={option.value}
+                  onClick={() =>
+                    handleUpdate({
+                      ...windowTypeChange(node, option.value),
+                      ...(option.value === 'awning' ? { awningDirection } : {}),
+                    })
+                  }
+                  type="button"
+                >
+                  <span className="truncate font-medium">{option.label}</span>
+                </button>
+              )
+            })}
+          </div>
+          {showAwningDirectionSection && (
+            <div className="mt-2">
+              <SegmentedControl
+                onChange={(value) =>
+                  handleUpdate({
+                    windowType: 'awning',
+                    awningDirection: value as WindowNode['awningDirection'],
+                  })
+                }
+                options={[
+                  { value: 'up', label: 'Up' },
+                  { value: 'down', label: 'Down' },
+                ]}
+                value={awningDirection}
+              />
+            </div>
+          )}
+          {showCasementSection && (
+            <div className="mt-2 space-y-2">
+              <SegmentedControl
+                onChange={(value) =>
+                  handleUpdate({ casementStyle: value as WindowNode['casementStyle'] })
+                }
+                options={[
+                  { value: 'single', label: 'Single' },
+                  { value: 'french', label: 'French' },
+                ]}
+                value={node.casementStyle ?? 'single'}
+              />
+              {(node.casementStyle ?? 'single') === 'single' && (
+                <SegmentedControl
+                  onChange={(value) =>
+                    handleUpdate({ hingesSide: value as WindowNode['hingesSide'] })
+                  }
+                  options={[
+                    { value: 'left', label: 'Left' },
+                    { value: 'right', label: 'Right' },
+                  ]}
+                  value={node.hingesSide ?? 'left'}
+                />
+              )}
+            </div>
+          )}
+          {showOperationSection && (
+            <div className="mt-2">
+              <SliderControl
+                label={operationLabel}
+                max={1}
+                min={0}
+                onChange={setOperationState}
+                precision={2}
+                restoreOnCommit={false}
+                step={0.05}
+                value={Math.round((node.operationState ?? 0) * 100) / 100}
+              />
+            </div>
+          )}
+        </PanelSection>
+      )}
+
+      {showStyleSection && (
+        <PanelSection title="Style">
+          <div className="grid grid-cols-2 gap-2 px-1 pt-1">
+            {WINDOW_STYLE_CHOICES.map((style) => (
+              <button
+                aria-pressed={windowStyles.includes(style)}
+                className={cn(
+                  'flex min-h-10 items-center rounded-lg border px-3 py-2 text-left text-xs transition-colors',
+                  windowStyles.includes(style)
+                    ? 'border-orange-400/60 bg-orange-400/10 text-foreground'
+                    : 'border-border/50 bg-black/4 dark:bg-[#2C2C2E] text-muted-foreground hover:bg-black/8 dark:hover:bg-[#3e3e3e] hover:text-foreground',
+                )}
+                key={style}
+                onClick={() => handleUpdate(getWindowStyleOverrides(style))}
+                type="button"
+              >
+                <span className="truncate font-medium">{WINDOW_STYLE_LABELS[style]}</span>
+              </button>
+            ))}
+          </div>
+          {!windowStyles.length && (
+            <p className="px-1 pt-2 text-muted-foreground text-xs">
+              Custom: the panes match no style.
+            </p>
+          )}
+        </PanelSection>
+      )}
+
+      {corner && (
+        <PanelSection title="Corner">
+          {corner.paired ? (
+            <div className="flex flex-col gap-2 px-1 pb-1">
+              <div className="flex items-center justify-between gap-2 text-xs">
+                <span className="text-muted-foreground">
+                  Wraps the corner with {corner.partner.name || 'its partner'}
+                </span>
+                <button
+                  className={cn(
+                    'rounded-full border border-border/50 px-3 py-1 text-xs',
+                    CORNER_BUTTON,
+                  )}
+                  onClick={() =>
+                    selectedId && writeWindows(unwrapCorner(useScene.getState().nodes, selectedId))
+                  }
+                  type="button"
+                >
+                  Unwrap
+                </button>
+              </div>
+              <SliderControl
+                label="This side"
+                min={0.1}
+                onChange={(v) => selectedId && setCornerWidth(selectedId, v)}
+                precision={2}
+                step={0.05}
+                unit="m"
+                value={node.width}
+              />
+              <SliderControl
+                label="Other side"
+                min={0.1}
+                onChange={(v) => setCornerWidth(corner.partner.id, v)}
+                precision={2}
+                step={0.05}
+                unit="m"
+                value={corner.partner.width}
+              />
+              {/* Only a fixed window's glass fuses; the other types' frames meet at the corner. */}
+              {fusesAtCorner(node) && (
+                <SegmentedControl
+                  onChange={setCornerPost}
+                  options={[
+                    { label: 'Fused glass', value: 'none' },
+                    { label: 'Corner post', value: 'post' },
+                  ]}
+                  value={node.corner?.post ?? 'none'}
+                />
+              )}
+            </div>
+          ) : (
+            <div className="px-1 pb-1">
+              <button
+                className={cn(
+                  'w-full rounded-full border border-border/50 px-3 py-2 text-xs',
+                  CORNER_BUTTON,
+                )}
+                onClick={wrapTheCorner}
+                type="button"
+              >
+                Wrap the corner
+              </button>
+            </div>
+          )}
+        </PanelSection>
+      )}
+
+      <PanelSection title="Position">
+        {!corner?.paired && (
+          <SliderControl
+            label={
+              <>
+                X<sub className="ml-[1px] text-[11px] opacity-70">pos</sub>
+              </>
+            }
+            onChange={(v) => handleUpdate({ position: [v, node.position[1], node.position[2]] })}
+            precision={2}
+            step={0.1}
+            unit="m"
+            value={node.position[0]}
+          />
+        )}
+        <SliderControl
+          label={
+            <>
+              Y<sub className="ml-[1px] text-[11px] opacity-70">pos</sub>
+            </>
+          }
+          onChange={(v) => handleUpdate({ position: [node.position[0], v, node.position[2]] })}
+          precision={2}
+          step={0.1}
+          unit="m"
+          value={node.position[1]}
+        />
+        {showFlipSide && (
+          <div className="px-1 pt-2 pb-1">
+            <ActionButton
+              className="w-full"
+              icon={<FlipHorizontal2 className="h-4 w-4" />}
+              label="Flip Side"
+              onClick={handleFlip}
+            />
+          </div>
+        )}
+      </PanelSection>
+
+      {scripted && <AuthoredParams node={node} />}
+
+      {!scripted && (
+        <PanelSection title="Dimensions">
+          {limits && (
+            <p className="text-[11px] text-muted-foreground">
+              Size is limited to the wall, including clearance for the opening frame.
+            </p>
+          )}
+          {!corner?.paired && (
+            <SliderControl
+              label="Width"
+              max={limits?.width}
+              min={0.01}
+              onChange={(v) => preview?.preview(getDimensionUpdates({ width: v }))}
+              onCommit={(v) => preview?.commit(getDimensionUpdates({ width: v }))}
+              onCancel={() => preview?.cancel()}
+              previewWhileTyping
+              precision={2}
+              restoreOnCommit={false}
+              step={0.01}
+              unit="m"
+              value={node.width}
+            />
+          )}
+          <SliderControl
+            label="Height"
+            max={limits?.height}
+            min={0.01}
+            onChange={(v) => preview?.preview(getDimensionUpdates({ height: v }))}
+            onCommit={(v) => commitPreview(getDimensionUpdates({ height: v }))}
+            onCancel={() => preview?.cancel()}
+            previewWhileTyping
+            precision={2}
+            restoreOnCommit={false}
+            step={0.01}
+            unit="m"
+            value={node.height}
+          />
+        </PanelSection>
+      )}
+
+      {showWindowShapeSection && (
+        <PanelSection title="Top Shape">
+          <SegmentedControl
+            onChange={(value) =>
+              handleUpdate({
+                openingShape: value as WindowNode['openingShape'],
+                ...(value === 'rounded'
+                  ? {
+                      openingRadiusMode,
+                      openingCornerRadii,
+                      cornerRadius: Math.min(cornerRadius, maxRoundedRadius),
+                      openingRevealRadius,
+                      sill: false,
+                    }
+                  : {}),
+                ...(value === 'arch' ? { archHeight } : {}),
+              })
+            }
+            options={[
+              { value: 'rectangle', label: 'Rect' },
+              { value: 'rounded', label: 'Rounded' },
+              { value: 'arch', label: 'Arch' },
+            ]}
+            value={windowShape}
+          />
+          {windowShape === 'rounded' && (
+            <div className="mt-2 flex flex-col gap-1">
+              <SegmentedControl
+                onChange={(value) =>
+                  handleUpdate({ openingRadiusMode: value as WindowNode['openingRadiusMode'] })
+                }
+                options={[
+                  { value: 'all', label: 'All' },
+                  { value: 'individual', label: 'Individual' },
+                ]}
+                value={openingRadiusMode}
+              />
+              {openingRadiusMode === 'all' ? (
+                <SliderControl
+                  label="Corner Radius"
+                  max={maxRoundedRadius}
+                  min={0}
+                  onChange={(value) => previewWindowUpdate('cornerRadius', value)}
+                  onCommit={(value) => commitWindowPreview('cornerRadius', value)}
+                  onCancel={() => preview?.cancel()}
+                  previewWhileTyping
+                  restoreOnCommit={false}
+                  precision={2}
+                  step={0.05}
+                  unit="m"
+                  value={cornerRadius}
+                />
+              ) : (
+                <>
+                  {[
+                    ['Top Left', 0],
+                    ['Top Right', 1],
+                    ['Bottom Right', 2],
+                    ['Bottom Left', 3],
+                  ].map(([label, index]) => (
+                    <SliderControl
+                      key={label}
+                      label={label}
+                      max={maxRoundedRadius}
+                      min={0}
+                      onChange={(value) => setOpeningCornerRadius(index as number, value)}
+                      onCommit={(value) => setOpeningCornerRadius(index as number, value, true)}
+                      onCancel={() => preview?.cancel()}
+                      previewWhileTyping
+                      restoreOnCommit={false}
+                      precision={2}
+                      step={0.05}
+                      unit="m"
+                      value={openingCornerRadii[index as number] ?? 0}
+                    />
+                  ))}
+                </>
+              )}
+              <SliderControl
+                label="Reveal Radius"
+                max={0.08}
+                min={0}
+                onChange={(value) => previewWindowUpdate('openingRevealRadius', value)}
+                onCommit={(value) => commitWindowPreview('openingRevealRadius', value)}
+                onCancel={() => preview?.cancel()}
+                previewWhileTyping
+                restoreOnCommit={false}
+                precision={3}
+                step={0.005}
+                unit="m"
+                value={openingRevealRadius}
+              />
+            </div>
+          )}
+          {windowShape === 'arch' && (
+            <div className="mt-2 flex flex-col gap-1">
+              <SliderControl
+                label="Arch Height"
+                max={Math.max(0.05, node.height)}
+                min={0.05}
+                onChange={(value) => previewWindowUpdate('archHeight', value)}
+                onCommit={(value) => commitWindowPreview('archHeight', value)}
+                onCancel={() => preview?.cancel()}
+                previewWhileTyping
+                precision={2}
+                restoreOnCommit={false}
+                step={0.05}
+                unit="m"
+                value={archHeight}
+              />
+            </div>
+          )}
+        </PanelSection>
+      )}
+
+      {showOpeningShapeSection && (
+        <PanelSection title="Opening Shape">
+          <SegmentedControl
+            onChange={(value) =>
+              handleUpdate({ openingShape: value as WindowNode['openingShape'] })
+            }
+            options={[
+              { value: 'rectangle', label: 'Rect' },
+              { value: 'rounded', label: 'Rounded' },
+              { value: 'arch', label: 'Arch' },
+            ]}
+            value={openingShape}
+          />
+          {openingShape === 'rounded' && (
+            <div className="mt-2 flex flex-col gap-1">
+              <SegmentedControl
+                onChange={(value) =>
+                  handleUpdate({ openingRadiusMode: value as WindowNode['openingRadiusMode'] })
+                }
+                options={[
+                  { value: 'all', label: 'All' },
+                  { value: 'individual', label: 'Individual' },
+                ]}
+                value={openingRadiusMode}
+              />
+              {openingRadiusMode === 'all' ? (
+                <SliderControl
+                  label="Corner Radius"
+                  max={maxRoundedRadius}
+                  min={0}
+                  onChange={(value) => previewWindowUpdate('cornerRadius', value)}
+                  onCommit={(value) => commitWindowPreview('cornerRadius', value)}
+                  onCancel={() => preview?.cancel()}
+                  previewWhileTyping
+                  restoreOnCommit={false}
+                  precision={2}
+                  step={0.05}
+                  unit="m"
+                  value={cornerRadius}
+                />
+              ) : (
+                <>
+                  {[
+                    ['Top Left', 0],
+                    ['Top Right', 1],
+                    ['Bottom Right', 2],
+                    ['Bottom Left', 3],
+                  ].map(([label, index]) => (
+                    <SliderControl
+                      key={label}
+                      label={label}
+                      max={maxRoundedRadius}
+                      min={0}
+                      onChange={(value) => setOpeningCornerRadius(index as number, value)}
+                      onCommit={(value) => setOpeningCornerRadius(index as number, value, true)}
+                      onCancel={() => preview?.cancel()}
+                      previewWhileTyping
+                      restoreOnCommit={false}
+                      precision={2}
+                      step={0.05}
+                      unit="m"
+                      value={openingCornerRadii[index as number] ?? 0}
+                    />
+                  ))}
+                </>
+              )}
+              <SliderControl
+                label="Reveal Radius"
+                max={0.08}
+                min={0}
+                onChange={(value) => previewWindowUpdate('openingRevealRadius', value)}
+                onCommit={(value) => commitWindowPreview('openingRevealRadius', value)}
+                onCancel={() => preview?.cancel()}
+                previewWhileTyping
+                restoreOnCommit={false}
+                precision={3}
+                step={0.005}
+                unit="m"
+                value={openingRevealRadius}
+              />
+            </div>
+          )}
+          {openingShape === 'arch' && (
+            <div className="mt-2 flex flex-col gap-1">
+              <SliderControl
+                label="Arch Height"
+                max={Math.max(0.05, node.height)}
+                min={0.05}
+                onChange={(value) => previewWindowUpdate('archHeight', value)}
+                onCommit={(value) => commitWindowPreview('archHeight', value)}
+                onCancel={() => preview?.cancel()}
+                previewWhileTyping
+                precision={2}
+                restoreOnCommit={false}
+                step={0.05}
+                unit="m"
+                value={archHeight}
+              />
+            </div>
+          )}
+        </PanelSection>
+      )}
+
+      {!isOpening && !scripted && (
+        <>
+          {showFrameSection && (
+            <PanelSection title="Frame">
+              <SliderControl
+                label="Thickness"
+                min={0}
+                onChange={(v) => previewWindowUpdate('frameThickness', v)}
+                onCommit={(v) => commitWindowPreview('frameThickness', v)}
+                onCancel={() => preview?.cancel()}
+                previewWhileTyping
+                restoreOnCommit={false}
+                precision={3}
+                step={0.01}
+                unit="m"
+                value={node.frameThickness}
+              />
+              <SliderControl
+                label="Depth"
+                min={0}
+                onChange={(v) => previewWindowUpdate('frameDepth', v)}
+                onCommit={(v) => commitWindowPreview('frameDepth', v)}
+                onCancel={() => preview?.cancel()}
+                previewWhileTyping
+                restoreOnCommit={false}
+                precision={3}
+                step={0.01}
+                unit="m"
+                value={node.frameDepth}
+              />
+            </PanelSection>
+          )}
+
+          {showGridSection && (
+            <PanelSection title="Grid">
+              <SliderControl
+                label="Columns"
+                max={8}
+                min={1}
+                onChange={(v) => {
+                  const n = Math.max(1, Math.min(8, Math.round(v)))
+                  handleUpdate({ columnRatios: Array(n).fill(1 / n) })
+                }}
+                precision={0}
+                step={1}
+                value={numCols}
+              />
+              <SliderControl
+                label="Rows"
+                max={8}
+                min={1}
+                onChange={(v) => {
+                  const n = Math.max(1, Math.min(8, Math.round(v)))
+                  handleUpdate({ rowRatios: Array(n).fill(1 / n) })
+                }}
+                precision={0}
+                step={1}
+                value={numRows}
+              />
+
+              {numCols > 1 && (
+                <div className="mt-2 flex flex-col gap-1">
+                  <div className="mb-1 px-1 font-medium text-[10px] text-muted-foreground/80 uppercase tracking-wider">
+                    Col Widths
+                  </div>
+                  {normCols.map((ratio, i) => (
+                    <SliderControl
+                      key={`c-${i}`}
+                      label={`C${i + 1}`}
+                      max={95}
+                      min={5}
+                      onChange={(v) => setColumnRatio(i, v / 100)}
+                      precision={1}
+                      step={1}
+                      unit="%"
+                      value={Math.round(ratio * 100 * 10) / 10}
+                    />
+                  ))}
+                  <div className="mt-1 border-border/50 border-t pt-1">
+                    <SliderControl
+                      label="Divider"
+                      max={0.1}
+                      min={0.005}
+                      onChange={(v) => handleUpdate({ columnDividerThickness: v })}
+                      precision={3}
+                      step={0.01}
+                      unit="m"
+                      value={node.columnDividerThickness ?? 0.03}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {numRows > 1 && (
+                <div className="mt-2 flex flex-col gap-1">
+                  <div className="mb-1 px-1 font-medium text-[10px] text-muted-foreground/80 uppercase tracking-wider">
+                    Row Heights
+                  </div>
+                  {normRows.map((ratio, i) => (
+                    <SliderControl
+                      key={`r-${i}`}
+                      label={`R${i + 1}`}
+                      max={95}
+                      min={5}
+                      onChange={(v) => setRowRatio(i, v / 100)}
+                      precision={1}
+                      step={1}
+                      unit="%"
+                      value={Math.round(ratio * 100 * 10) / 10}
+                    />
+                  ))}
+                  <div className="mt-1 border-border/50 border-t pt-1">
+                    <SliderControl
+                      label="Divider"
+                      max={0.1}
+                      min={0.005}
+                      onChange={(v) => handleUpdate({ rowDividerThickness: v })}
+                      precision={3}
+                      step={0.01}
+                      unit="m"
+                      value={node.rowDividerThickness ?? 0.03}
+                    />
+                  </div>
+                </div>
+              )}
+            </PanelSection>
+          )}
+
+          {showSillSection && (
+            <PanelSection title="Sill">
+              <ToggleControl
+                checked={node.sill}
+                label="Enable Sill"
+                onChange={(checked) => handleUpdate({ sill: checked })}
+              />
+              {node.sill && (
+                <div className="mt-1 flex flex-col gap-1">
+                  <SliderControl
+                    label="Depth"
+                    min={0}
+                    onChange={(v) => handleUpdate({ sillDepth: v })}
+                    precision={3}
+                    step={0.01}
+                    unit="m"
+                    value={node.sillDepth}
+                  />
+                  <SliderControl
+                    label="Thickness"
+                    min={0}
+                    onChange={(v) => handleUpdate({ sillThickness: v })}
+                    precision={3}
+                    step={0.01}
+                    unit="m"
+                    value={node.sillThickness}
+                  />
+                </div>
+              )}
+            </PanelSection>
+          )}
+        </>
+      )}
+
+      <PanelSection title="Actions">
+        <ActionGroup>
+          <ActionButton icon={<Move className="h-3.5 w-3.5" />} label="Move" onClick={handleMove} />
+          <ActionButton
+            icon={<Copy className="h-3.5 w-3.5" />}
+            label="Duplicate"
+            onClick={handleDuplicate}
+          />
+          <ActionButton
+            className="hover:bg-red-500/20"
+            icon={<Trash2 className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />}
+            label="Delete"
+            onClick={handleDelete}
+          />
+        </ActionGroup>
+      </PanelSection>
+    </PanelWrapper>
+  )
+}

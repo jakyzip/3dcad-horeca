@@ -1,0 +1,249 @@
+categoria,percorso,byte,note,stato_licenza,azione
+modello 3D,apps/editor/public/items/ac-block/model.glb,31960,generator=glTF-Transform; nodi=AC.001,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/air-conditioner-block/model.glb,8304,"generator=Khronos glTF Blender I/O; nodi=AC,RootNode",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/air-conditioner/model.glb,30712,generator=Khronos glTF Blender I/O; nodi=Air_Conditioner1,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/air-conditioning/model.glb,4956,generator=glTF-Transform; nodi=electronics.038,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/alarm-keypad/model.glb,10284,generator=glTF-Transform; nodi=Alarm keypad,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/ball/model.glb,17408,generator=Khronos glTF Blender I/O; nodi=toy_003,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/barbell-stand/model.glb,22740,generator=glTF-Transform; nodi=BarbellStand_01.001,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/barbell/model.glb,12780,generator=glTF-Transform; nodi=Barbell,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/basket-hoop/model.glb,5452,generator=glTF-Transform; nodi=toy_010,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/bathroom-sink/model.glb,34652,generator=Khronos glTF Blender I/O; nodi=bathroom_item_010,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/bathtub/model.glb,6008,generator=glTF-Transform; nodi=bathroom_item_023,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/bean-bag/model.glb,8732,generator=Khronos glTF Blender I/O; nodi=chair.049,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/bedside-table/model.glb,4524,generator=glTF-Transform; nodi=shelf_051,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/books/model.glb,18212,generator=Khronos glTF Blender I/O; nodi=prop_079,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/bookshelf/model.glb,3524,generator=glTF-Transform; nodi=shelf_048,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/bunkbed/model.glb,37528,generator=Khronos glTF Blender I/O; nodi=bed_004,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/bush/model.glb,2968,generator=glTF-Transform; nodi=bush_001,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/cactus/model.glb,7464,generator=glTF-Transform; nodi=flower.044,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/car-toy/model.glb,20108,generator=glTF-Transform; nodi=toy_038,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/ceiling-fan/model.glb,13472,"generator=Khronos glTF Blender I/O; nodi=lamp,base",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/ceiling-lamp/model.glb,9136,generator=Khronos glTF Blender I/O; nodi=lamp_026,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/ceiling-light/model.glb,8840,"generator=FBX2glTF; nodi=RootNode,Light_Ceiling2; probabile conversione da modello scaricato",licenza non documentata,sostituire o ottenere prova della licenza
+modello 3D,apps/editor/public/items/circular-ceiling-light/model.glb,21640,generator=obj2gltf; nodi=Node; probabile conversione da modello scaricato,licenza non documentata,sostituire o ottenere prova della licenza
+modello 3D,apps/editor/public/items/closet/model.glb,1784,generator=glTF-Transform; nodi=closet_016,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/coat-rack/model.glb,4120,generator=glTF-Transform; nodi=prop_013,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/coffee-machine/model.glb,6604,generator=glTF-Transform; nodi=electronics_004,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/coffee-table/model.glb,4296,generator=glTF-Transform; nodi=coffee_table_012,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/column/model.glb,4548,generator=glTF-Transform; nodi=Cylinder,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/computer/model.glb,3220,generator=glTF-Transform; nodi=electronics_024,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/couch-medium/model.glb,6112,"generator=Khronos glTF Blender I/O; nodi=Couch_Medium1,RootNode",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/couch-small/model.glb,5420,"generator=Khronos glTF Blender I/O; nodi=Couch_Small1,RootNode",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/cutting-board/model.glb,2408,generator=glTF-Transform; nodi=prop.097,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/desk/model.glb,22492,"generator=Khronos glTF Blender I/O; nodi=Desk,Desk_Drawer1",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/dining-chair/model.glb,5176,generator=glTF-Transform; nodi=kitchen_chair_030,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/dining-table/model.glb,3424,generator=glTF-Transform; nodi=kitchen_table_001,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/door-bar/model.glb,14212,"generator=Khronos glTF Blender I/O; nodi=door.030,cutout",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/door-with-bar/model.glb,26088,"generator=Khronos glTF Blender I/O; nodi=door_B,RootNode",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/door/model.glb,16756,"generator=Khronos glTF Blender I/O; nodi=cutout,door_018",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/doorway-front/model.glb,5936,"generator=Khronos glTF Blender I/O; nodi=door,cutout",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/double-bed/model.glb,22324,generator=Khronos glTF Blender I/O; nodi=bed_015,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/dresser/model.glb,4348,generator=glTF-Transform; nodi=shelf_001,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/drying-rack/model.glb,10068,generator=glTF-Transform; nodi=bathroom.015,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/easel/model.glb,5700,generator=glTF-Transform; nodi=entertainment.042,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/electric-panel/model.glb,2748,generator=glTF-Transform; nodi=Electrical panel,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/ev-wall-charger/model.glb,68948,generator=glTF-Transform; nodi=Plane,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/exercise-bike/model.glb,117332,generator=Khronos glTF Blender I/O; nodi=ExerciseBike_01,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/exit-sign/model.glb,6148,generator=glTF-Transform; nodi=Exit sign,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/fence/model.glb,9056,generator=Khronos glTF Blender I/O; nodi=Partitions_114,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/fir-tree/model.glb,3700,generator=glTF-Transform; nodi=fir_056,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/fire-alarm/model.glb,146804,generator=obj2gltf; nodi=Node; probabile conversione da modello scaricato,licenza non documentata,sostituire o ottenere prova della licenza
+modello 3D,apps/editor/public/items/fire-detector/model.glb,20960,generator=glTF-Transform; nodi=Detector,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/fire-extinguisher/model.glb,61168,generator=obj2gltf; nodi=Node; probabile conversione da modello scaricato,licenza non documentata,sostituire o ottenere prova della licenza
+modello 3D,apps/editor/public/items/flat-screen-tv/model.glb,31692,"generator=obj2gltf; nodi=group1257628551,group1454904968; probabile conversione da modello scaricato",licenza non documentata,sostituire o ottenere prova della licenza
+modello 3D,apps/editor/public/items/floor-lamp/model.glb,3836,generator=glTF-Transform; nodi=lamp_011,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/freezer/model.glb,26260,"generator=obj2gltf; nodi=kitchenFridge,kitchenFridge_1; probabile conversione da modello scaricato",licenza non documentata,sostituire o ottenere prova della licenza
+modello 3D,apps/editor/public/items/fridge/model.glb,5544,generator=Khronos glTF Blender I/O; nodi=kitchen_item_019,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/fruits/model.glb,16008,generator=glTF-Transform; nodi=prop_039,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/frying-pan/model.glb,4472,generator=glTF-Transform; nodi=prop.083,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/glass-door/model.glb,23444,"generator=Khronos glTF Blender I/O; nodi=cutout,door_024",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/guitar/model.glb,8832,generator=glTF-Transform; nodi=musical_instrument_017,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/hedge/model.glb,2648,"generator=Khronos glTF Blender I/O; nodi=hedge_straight,RootNode",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/high-fence/model.glb,15200,generator=Khronos glTF Blender I/O; nodi=Partitions_113,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/hood/model.glb,3312,generator=Khronos glTF Blender I/O; nodi=kitchen_item_006,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/hydrant/model.glb,3144,generator=glTF-Transform; nodi=hydrant_001,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/indoor-plant/model.glb,40700,generator=glTF-Transform; nodi=flower_010,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/iron/model.glb,9780,generator=glTF-Transform; nodi=Iron_01,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/ironing-board/model.glb,7268,generator=glTF-Transform; nodi=IroningBoard_01,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/kettle/model.glb,15612,generator=glTF-Transform; nodi=electronics_015,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/kitchen-cabinet/model.glb,6488,generator=glTF-Transform; nodi=kitchen.004,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/kitchen-counter/model.glb,2580,generator=glTF-Transform; nodi=kitchen_item_038,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/kitchen-fridge/model.glb,17360,"generator=FBX2glTF; nodi=RootNode,Kitchen_Fridge; probabile conversione da modello scaricato",licenza non documentata,sostituire o ottenere prova della licenza
+modello 3D,apps/editor/public/items/kitchen-shelf/model.glb,3400,generator=glTF-Transform; nodi=kitchen_item_025,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/kitchen-utensils/model.glb,6524,generator=glTF-Transform; nodi=prop.082,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/kitchen/model.glb,14020,generator=Khronos glTF Blender I/O; nodi=kitchen_item_018,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/laundry-bag/model.glb,4312,generator=glTF-Transform; nodi=bathroom_item_002,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/livingroom-chair/model.glb,5924,generator=glTF-Transform; nodi=armchair_002,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/lounge-chair/model.glb,5256,generator=glTF-Transform; nodi=lounge_chair_014,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/low-fence/model.glb,9056,generator=Khronos glTF Blender I/O; nodi=Partitions_114,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/medium-fence/model.glb,15200,generator=Khronos glTF Blender I/O; nodi=Partitions_113,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/microwave/model.glb,5884,generator=glTF-Transform; nodi=kitchen_item_007,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/office-chair/model.glb,11500,generator=glTF-Transform; nodi=office_chair_017,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/office-table/model.glb,3780,generator=glTF-Transform; nodi=office_table_030,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/outdoor-playhouse/model.glb,18740,generator=glTF-Transform; nodi=toy_002,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/palm/model.glb,14868,generator=glTF-Transform; nodi=palm_001,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/parking-spot/model.glb,2624,generator=glTF-Transform; nodi=Parking Spot,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/patio-umbrella/model.glb,3924,generator=glTF-Transform; nodi=umbrella_005,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/piano/Fireplace_13.glb,19588,generator=Khronos glTF Blender I/O; nodi=Fireplace_13,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/piano/model.glb,432080,generator=glTF-Transform; nodi=Piano_01,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/picture/model.glb,3544,generator=glTF-Transform; nodi=picture_057,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/pillar/model.glb,2488,generator=glTF-Transform; nodi=pillar_003,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/pool-table/model.glb,66096,generator=Khronos glTF Blender I/O; nodi=entertainment_001,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/recessed-light/model.glb,24604,generator=glTF-Transform; nodi=Spot Lamp,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/rectangular-carpet/model.glb,7976,generator=glTF-Transform; nodi=Carpet_06,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/rectangular-ceiling-light/model.glb,586164,"generator=obj2gltf; nodi=Mesh1 Group1 Model,Mesh2 Group1 Model; probabile conversione da modello scaricato",licenza non documentata,sostituire o ottenere prova della licenza
+modello 3D,apps/editor/public/items/rectangular-mirror/model.glb,7136,generator=Khronos glTF Blender I/O; nodi=Mirror_03,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/round-carpet/model.glb,7228,generator=glTF-Transform; nodi=Carpet_11,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/round-mirror/model.glb,3240,generator=glTF-Transform; nodi=prop_025,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/scooter/model.glb,10304,generator=glTF-Transform; nodi=toy_009,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/sewing-machine/model.glb,9212,generator=glTF-Transform; nodi=electronics.037,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/shelf/model.glb,1512,generator=glTF-Transform; nodi=shelf_003,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/shower-angle/model.glb,15876,generator=glTF-Transform; nodi=Shower_01,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/shower-rug/model.glb,4180,generator=glTF-Transform; nodi=Bath_Prop_26,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/shower-square/model.glb,12608,generator=glTF-Transform; nodi=Shower_02,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/shower/model.glb,12236,generator=Khronos glTF Blender I/O; nodi=bathroom_item_012,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/single-bed/model.glb,6180,generator=glTF-Transform; nodi=bed_003,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/sink-cabinet/model.glb,68404,"generator=FBX2glTF; nodi=RootNode,MarbleSinkKitchenCabinet1; probabile conversione da modello scaricato",licenza non documentata,sostituire o ottenere prova della licenza
+modello 3D,apps/editor/public/items/skate/model.glb,10648,generator=Khronos glTF Blender I/O; nodi=toy_019,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/small-indoor-plant/model.glb,9680,generator=glTF-Transform; nodi=flower.043,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/smoke-detector/model.glb,16396,generator=glTF-Transform; nodi=Smoke detector,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/sofa/model.glb,7908,generator=glTF-Transform; nodi=sofa_005,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/sprinkler/model.glb,52920,generator=glTF-Transform; nodi=Sprinkler,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/stairs/model.glb,7616,generator=Khronos glTF Blender I/O; nodi=Stairs_101,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/stereo-speaker/model.glb,4552,generator=glTF-Transform; nodi=musical_instrument_016,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/stool/model.glb,5036,generator=glTF-Transform; nodi=chair.022,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/stove/model.glb,10668,generator=glTF-Transform; nodi=kitchen_item_030,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/sunbed/model.glb,3912,generator=glTF-Transform; nodi=sunbed_006,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/suspended-fireplace/model.glb,24768,generator=Khronos glTF Blender I/O; nodi=tv_wall_011,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/table-lamp/model.glb,38180,generator=Khronos glTF Blender I/O; nodi=electronics.040,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/table/model.glb,11532,"generator=Khronos glTF Blender I/O; nodi=Table2,RootNode",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/television/model.glb,3332,generator=glTF-Transform; nodi=wall cabinet.015,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/tesla/model.glb,100340,generator=glTF-Transform; nodi=Retopo_Mesh_0.004,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/thermostat/model.glb,13784,"generator=Khronos glTF Blender I/O; nodi=Cube.001,Thermostat.001",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/threadmill/model.glb,64432,generator=Khronos glTF Blender I/O; nodi=Treadmill_01,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/toaster/model.glb,3624,generator=glTF-Transform; nodi=electronics_026,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/toilet-brush/model.glb,5368,generator=Khronos glTF Blender I/O; nodi=bathroom.010,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/toilet-paper/model.glb,5468,generator=glTF-Transform; nodi=bathroom.012,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/toilet/model.glb,4192,generator=glTF-Transform; nodi=bathroom_item_022,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/toy/model.glb,18884,generator=Khronos glTF Blender I/O; nodi=toy_032,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/trash-bin/model.glb,4020,generator=glTF-Transform; nodi=bathroom.002,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/tree/model.glb,6496,generator=glTF-Transform; nodi=tree_013,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/tub/model.glb,20032,generator=Khronos glTF Blender I/O; nodi=bathroom_item_023,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/tv-stand/model.glb,1664,generator=glTF-Transform; nodi=tv_wall_016,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/wall-art-06/model.glb,14132,generator=obj2gltf; nodi=Node; probabile conversione da modello scaricato,licenza non documentata,sostituire o ottenere prova della licenza
+modello 3D,apps/editor/public/items/wall-sink/model.glb,12708,"generator=FBX2glTF; nodi=RootNode,Bathroom_Sink; probabile conversione da modello scaricato",licenza non documentata,sostituire o ottenere prova della licenza
+modello 3D,apps/editor/public/items/washing-machine/model.glb,5356,generator=glTF-Transform; nodi=bathroom_item_011,licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/window-double/model.glb,6708,"generator=Khronos glTF Blender I/O; nodi=window.042,cutout",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/window-large/model.glb,6872,"generator=Khronos glTF Blender I/O; nodi=window_023,cutout",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/window-rectangle/model.glb,6788,"generator=Khronos glTF Blender I/O; nodi=window.041,cutout",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/window-round/model.glb,3988,"generator=Khronos glTF Blender I/O; nodi=Window_Round3,RootNode",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/window-simple/model.glb,5608,"generator=Khronos glTF Blender I/O; nodi=window.036,cutout",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/window-small-2/model.glb,4008,"generator=Khronos glTF Blender I/O; nodi=Window_Small2,RootNode",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/window-small/model.glb,4052,"generator=Khronos glTF Blender I/O; nodi=Window_Small2,RootNode",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/window-square/model.glb,7924,"generator=Khronos glTF Blender I/O; nodi=window_003,cutout",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/window1-black-open-1731/model.glb,75148,"generator=Khronos glTF Blender I/O; nodi=group43405102,group1459984422",licenza non documentata,chiedere agli autori / sostituire
+modello 3D,apps/editor/public/items/wine-bottle/model.glb,5912,generator=glTF-Transform; nodi=prop_030,licenza non documentata,chiedere agli autori / sostituire
+texture PBR,apps/editor/public/material/concrete/concrete_plate/,455507,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/concrete/concrete_polished/,333474,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/concrete/concrete_raw/,448272,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/concrete/plaster_painted/,406378,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/concrete/prepared_drywall/,447122,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/concrete/white_stucco/,438969,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/fabric/blue_cotton/,525146,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/fabric/linen_hikari_fabric/,401094,3 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/fabric/red_velvet/,400181,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/fabric/suede/,419863,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/fabric/white_wool/,415901,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/fabric/wool_boucle/,415670,3 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/brick_wall_aged/,461489,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/brick_wall_rustic/,392488,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/brick_wall_weathered/,209790,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/ceramic_mosaic/,177944,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/dark_ceramic_grunge/,124921,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/garage_panel/,214067,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/green_glass_quartzite/,139264,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/green_labradorite/,139380,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/ground_earth/,1236087,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/light_ceramic_grunge/,217903,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/pool_tiles/,578615,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/statuaretto/,306803,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/stone_wall/,273790,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/terrazzo/,512882,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/tile_mosaic/,27886,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/tile_pattern/,193980,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/tile_quarry/,108046,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/tile_stone/,78448,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/tile_terracotta/,128260,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/tiles_checker/,208787,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/tiles_grid/,134355,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/wooden_ceramic_2/,215554,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/wooden_ceramic_3/,257312,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/flooring/woodparquet/,89984,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/leather/black_leather/,389888,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/leather/calf_leather/,438018,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/metal/copper_metal/,274193,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/metal/polished_metal/,293131,6 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/metal/stainless_steel_brushed/,290543,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/roofing/roof_shingles_classic/,373770,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/roofing/roof_shingles_grey/,38840,3 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/roofing/roof_shingles_weathered/,146758,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/roofing/roof_tiles_clay/,179672,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/roofing/roof_tiles_terracotta/,29468,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/siding/batten_albedo_512.webp,1084,file singolo,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/siding/lap_albedo_512.webp,1374,file singolo,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/finewood_27/,59116,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/floor_plank_1/,177780,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/hungarian_parquet_10/,112282,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/hungarian_parquet_2/,48758,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/square_parquet_21/,77448,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/square_wood_parquet_23/,152026,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/wood_fine/,321724,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/wood_fine_11/,150088,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/wood_fine_13/,213034,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/wood_fine_2/,70948,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/wood_fine_22/,393076,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/wood_fine_24/,201644,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/wood_parquet_14/,87846,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/wooden_parquet_11/,82018,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/woodparquet_121/,160700,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/woodparquet_56/,553848,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/woodparquet_65/,181500,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/woodparquet_99/,452528,5 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/woodplank_19/,75310,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+texture PBR,apps/editor/public/material/wood/woodplank_48/,182644,4 file,licenza non documentata,verificare origine (es. CC0) o rigenerare
+audio,apps/editor/public/audios/sfx/grid_snap.mamd,3604,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/grid_snap.mp3,3456,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/grid_snap_0.mp3,21888,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/grid_snap_1.mp3,21888,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/grid_snap_2.mp3,21888,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/item_delete.mp3,57088,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/item_pick.mp3,33024,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/item_place.mp3,33024,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/item_rotate.mp3,33024,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/menu_click.mp3,64896,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/menu_hover.mp3,21888,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/paint_apply.mp3,68992,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/resize_0.mp3,25984,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/resize_1.mp3,25984,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/resize_2.mp3,25984,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/snapshot_capture.mp3,11910,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/structure_build.mp3,10896,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/structure_build_end.mp3,43776,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/structure_build_start.mp3,43776,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/structure_delete.mp3,57088,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/success.mp3,70843,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/terrain_flatten.mp3,24494,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/terrain_lower.mp3,24494,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/terrain_raise.mp3,24494,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/terrain_smooth.mp3,24494,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/turn_done.mp3,9142,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/turn_failed.mp3,9142,,licenza non documentata,sostituire con suoni CC0 o toglierli
+audio,apps/editor/public/audios/sfx/turn_needs_input.mp3,9142,,licenza non documentata,sostituire con suoni CC0 o toglierli
+HDRI,apps/editor/public/hdri/venice_sunset_1k.hdr,1397783,nome coerente con un HDRI di Poly Haven (CC0): non confermato,da verificare,confermare su polyhaven.com
+font,apps/editor/public/fonts/geist-regular.ttf,0,Geist: SIL OFL (dichiarata nel pacchetto npm),OFL: ok con avviso,includere il testo OFL nei NOTICES
+font,apps/editor/app/fonts/GeistVF.woff,0,Geist: SIL OFL,OFL: ok con avviso,includere il testo OFL nei NOTICES
+font,apps/editor/app/fonts/GeistMonoVF.woff,0,Geist Mono: SIL OFL,OFL: ok con avviso,includere il testo OFL nei NOTICES
+font,apps/editor/public/fonts/PlusJakartaSans-SemiBold.ttf,0,Plus Jakarta Sans: SIL OFL (da verificare nel file),OFL: ok con avviso,includere il testo OFL nei NOTICES
+icone/miniature,apps/editor/public/icons/ (webp) e plugin,0,in parte generate con strumento di immagini AI (icons/fittings/README.md),proprieta e licenza non documentate,rifare le icone che servono
+marchio,"apps/editor/public/pascal*.svg, assets/pascal-mark*",0,logo e nome Pascal,marchio non incluso nella MIT,rimuovere e rinominare

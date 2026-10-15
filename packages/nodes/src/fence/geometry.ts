@@ -1,0 +1,280 @@
+import {
+  type AnyNodeId,
+  FENCE_SLOT_DEFAULTS,
+  type FenceSlotId,
+  type FenceWithFeatures,
+  fenceWithFeatures,
+  floorConstructionLift,
+  type GeometryContext,
+  getMaterialPresetByRef,
+  liftedManualSlab,
+  plateLevelContext,
+} from '@pascal-app/core'
+import {
+  applyMaterialPresetToMaterials,
+  type ColorPreset,
+  createDefaultMaterial,
+  createMaterial,
+  createSurfaceRoleMaterial,
+  type RenderShading,
+  resolveMaterialRef,
+  resolveSlotDefaultMaterial,
+} from '@pascal-app/viewer'
+import { FrontSide, Group, type Material, Mesh, type Texture } from 'three'
+import {
+  type FenceCornerNeighbors,
+  type FenceGateLeafGeometry,
+  generateFenceSlotGeometries,
+} from './geometry-parts'
+import { resolveFenceLiftElevation } from './lift'
+import type { FenceNode } from './schema'
+
+/**
+ * Stage B builder for fence. Splits the geometry into four paintable slots —
+ * `posts`, `infill`, `base`, `rail` (matching the build options in the panel) —
+ * each its own Mesh with a `userData.slotId` so the unified slot paint resolves
+ * and previews per part. Empty groups (no infill / floating base) are skipped.
+ *
+ * Per slot the material resolves: `node.slots[slotId]` (a shared scene material
+ * or `library:` finish) → the legacy inline `node.material` / `materialPreset`
+ * (pre-slot-model scenes, applied to every part) → the declared slot default.
+ * Textures-off collapses every part to the themed joinery role.
+ *
+ */
+type FenceMaterial = Material & {
+  alphaMap?: Texture | null
+  depthWrite: boolean
+  opacity: number
+  transparent: boolean
+}
+
+const FENCE_SLOT_ORDER: FenceSlotId[] = ['posts', 'infill', 'base', 'rail']
+
+const fenceMaterialCache = new Map<string, Material>()
+
+function sharedFenceCorners(
+  node: FenceNode,
+  siblings: GeometryContext['siblings'],
+): { omittedPosts: Set<'start' | 'end'>; neighbors: FenceCornerNeighbors } {
+  const omitted = new Set<'start' | 'end'>()
+  const neighbors: FenceCornerNeighbors = {}
+  for (const sibling of siblings) {
+    if (sibling.type !== 'fence' || sibling.visible === false) continue
+    for (const endpoint of ['start', 'end'] as const) {
+      const point = node[endpoint]
+      if (
+        ![sibling.start, sibling.end].some(
+          (other) => Math.hypot(point[0] - other[0], point[1] - other[1]) < 0.001,
+        )
+      )
+        continue
+      if (sibling.height > node.height || (sibling.height === node.height && sibling.id < node.id))
+        omitted.add(endpoint)
+      if (!neighbors[endpoint]) neighbors[endpoint] = sibling
+    }
+  }
+  return { omittedPosts: omitted, neighbors }
+}
+
+function getFenceSlotMaterial(
+  node: FenceNode,
+  slotId: FenceSlotId,
+  shading: RenderShading,
+  textures: boolean,
+  colorPreset: ColorPreset,
+  sceneTheme: string | undefined,
+  sceneMaterials: GeometryContext['materials'],
+): Material {
+  if (!textures) {
+    return createSurfaceRoleMaterial('joinery', colorPreset, FrontSide, sceneTheme)
+  }
+
+  const slotRef = node.slots?.[slotId]
+  if (slotRef) {
+    const resolved = resolveMaterialRef(slotRef, sceneMaterials, shading)
+    if (resolved) return resolved
+  }
+
+  if (node.materialPreset || node.material) {
+    return getLegacyFenceMaterial(node, shading)
+  }
+
+  return resolveSlotDefaultMaterial(FENCE_SLOT_DEFAULTS[slotId], shading, 0.8)
+}
+
+function getLegacyFenceMaterial(node: FenceNode, shading: RenderShading): Material {
+  const cacheKey = JSON.stringify({
+    shading,
+    material: node.material ?? null,
+    materialPreset: node.materialPreset ?? null,
+  })
+  const cached = fenceMaterialCache.get(cacheKey)
+  if (cached) return cached
+
+  const preset = getMaterialPresetByRef(node.materialPreset)
+  const material = preset
+    ? createDefaultMaterial('#ffffff', 0.5, shading)
+    : node.material
+      ? createMaterial(node.material, shading).clone()
+      : createDefaultMaterial('#ffffff', 0.9, shading)
+
+  if (preset) {
+    applyMaterialPresetToMaterials(material, preset)
+  }
+
+  const fenceMaterial = material as FenceMaterial
+  fenceMaterial.transparent = false
+  fenceMaterial.opacity = 1
+  fenceMaterial.alphaMap = null
+  fenceMaterial.side = FrontSide
+  fenceMaterial.depthWrite = true
+  fenceMaterial.needsUpdate = true
+
+  fenceMaterialCache.set(cacheKey, material)
+  return material
+}
+
+export function buildFenceGeometry(
+  node: FenceWithFeatures,
+  ctx?: GeometryContext,
+  shading: RenderShading = 'rendered',
+  textures = true,
+  colorPreset: ColorPreset = 'clay',
+  sceneTheme?: string,
+  mode: 'body' | 'features' = 'body',
+): Group {
+  const previewFeatures = node.features ?? []
+  if (mode === 'body') node = fenceWithFeatures(node, ctx?.children ?? [])
+  const group = new Group()
+  const nodes = ctx ? (plateLevelContext(ctx.parent, ctx.resolve).nodes ?? {}) : {}
+  const constructionLift = floorConstructionLift(nodes, node)
+  const startGround = (ctx?.levelBaseAt?.(node.start[0], node.start[1]) ?? 0) + constructionLift
+  const surfaceId = node.supportSurfaceNodeId as AnyNodeId | undefined
+  const surfaceAt = surfaceId
+    ? (x: number, z: number) => ctx?.surfaceHeightAt?.(surfaceId, x, z) ?? null
+    : undefined
+  const startSurface = surfaceAt?.(node.start[0], node.start[1]) ?? null
+  const startBase = startSurface ?? startGround
+  const followsTerrain = (node.path?.length ?? 0) >= 2 || Math.abs(node.curveOffset ?? 0) > 1e-4
+  const chosenHost =
+    node.surfaceMode === 'selected'
+      ? (node.supportSurfaceNodeId as AnyNodeId | undefined)
+      : undefined
+  const sampledSupport =
+    followsTerrain && !node.supportSlabId && ctx?.supportHeightAt
+      ? (x: number, z: number) =>
+          Math.max(
+            ctx.supportHeightAt!(x, z, chosenHost),
+            (ctx.levelBaseAt?.(x, z) ?? 0) + constructionLift,
+          )
+      : undefined
+  const levelHeight =
+    node.surfaceMode === 'level' ? sampledSupport?.(node.start[0], node.start[1]) : undefined
+  const supportAt = levelHeight !== undefined ? () => levelHeight : sampledSupport
+  const sampledStart = supportAt?.(node.start[0], node.start[1]) ?? startBase
+  const sampledGround = new Map<string, number>()
+  const corners = mode === 'body' && ctx ? sharedFenceCorners(node, ctx.siblings) : undefined
+  const gateLeaves: FenceGateLeafGeometry[] = []
+  const geometries = generateFenceSlotGeometries(
+    node,
+    supportAt
+      ? (x, z) => {
+          const key = `${x},${z}`
+          const cached = sampledGround.get(key)
+          if (cached !== undefined) return cached
+          const height = supportAt(x, z) - sampledStart
+          sampledGround.set(key, height)
+          return height
+        }
+      : undefined,
+    mode,
+    corners?.omittedPosts,
+    corners?.neighbors,
+    mode === 'features' ? gateLeaves : undefined,
+  )
+
+  // A hosted railing (`supportSlabId`) stands on its slab's walking surface;
+  // an unhosted one stands on the ground, which `ctx.levelBaseAt` resolves at
+  // the fence's own start point — the anchor its plan geometry is measured
+  // from, so the resolver and the mesh cannot disagree about where the ground
+  // is under this fence. The builder emits local-space children, so the lift
+  // lives on an inner group rather than the registered (React-transformed)
+  // root.
+  const baseLift = ctx
+    ? resolveFenceLiftElevation(
+        node,
+        (id) => {
+          const host = ctx.resolve(id as AnyNodeId)
+          return host?.type === 'slab' ? liftedManualSlab(nodes, host) : host
+        },
+        startGround,
+      )
+    : 0
+  const lift = supportAt
+    ? sampledStart + (node.supportOffset ?? 0)
+    : startSurface !== null && !node.supportSlabId
+      ? startSurface + (node.supportOffset ?? 0)
+      : baseLift
+  const meshParent = new Group()
+  meshParent.position.y = lift
+  group.add(meshParent)
+
+  for (const slotId of FENCE_SLOT_ORDER) {
+    const geometry = geometries[slotId]
+    if (geometry.getAttribute('position') === undefined) continue
+    const material = getFenceSlotMaterial(
+      node,
+      slotId,
+      shading,
+      textures,
+      colorPreset,
+      sceneTheme,
+      ctx?.materials,
+    )
+    const mesh = new Mesh(geometry, material)
+    mesh.castShadow = true
+    mesh.receiveShadow = true
+    mesh.userData.slotId = slotId
+    meshParent.add(mesh)
+  }
+
+  for (const leaf of gateLeaves) {
+    const pivot = new Group()
+    pivot.position.set(leaf.hinge.x, 0, leaf.hinge.z)
+    pivot.rotation.y = leaf.rotationY
+    pivot.userData.pascalFenceGateLeaf = { openRotationY: leaf.openRotationY }
+    const mesh = new Mesh(
+      leaf.geometry,
+      getFenceSlotMaterial(
+        node,
+        'infill',
+        shading,
+        textures,
+        colorPreset,
+        sceneTheme,
+        ctx?.materials,
+      ),
+    )
+    mesh.position.set(-leaf.hinge.x, 0, -leaf.hinge.z)
+    mesh.castShadow = true
+    mesh.receiveShadow = true
+    mesh.userData.slotId = 'infill'
+    pivot.add(mesh)
+    meshParent.add(pivot)
+  }
+
+  if (mode === 'body' && previewFeatures.length > 0) {
+    group.add(
+      buildFenceGeometry(
+        { ...node, features: previewFeatures },
+        ctx,
+        shading,
+        textures,
+        colorPreset,
+        sceneTheme,
+        'features',
+      ),
+    )
+  }
+  return group
+}
