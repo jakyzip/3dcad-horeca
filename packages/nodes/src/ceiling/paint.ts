@@ -134,7 +134,7 @@ const base = createSlotPaintCapability({
 
 export const ceilingPaint: PaintCapability = {
   ...base,
-  roleLabel: (_node, role) => (parseCeilingRegionRole(role) ? 'Painted part' : null),
+  roleLabel: (_node, role) => (parseCeilingRegionRole(role) ? 'Parte dipinta' : null),
   buildPatch: (args: PaintPatchArgs) =>
     parseCeilingRegionRole(args.role) ? {} : base.buildPatch(args),
   commit: (args: PaintPatchArgs) => {

@@ -14,7 +14,7 @@ import type { SlabNode } from './schema'
 export const slabParametrics: ParametricDescriptor<SlabNode> = {
   groups: [
     {
-      label: 'Elevation',
+      label: 'Quota',
       fields: [
         { key: 'elevation', kind: 'number', unit: 'm', min: -1, max: 1, step: 0.01 },
         {

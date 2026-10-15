@@ -154,9 +154,13 @@ describe('reference control', () => {
 
   test('a room on exactly one side reads outside / inside; otherwise left / right', () => {
     const walls = room()
-    expect(labels([walls[0]!], asNodes(walls))).toEqual(['Outside face', 'Center', 'Inside face'])
+    expect(labels([walls[0]!], asNodes(walls))).toEqual([
+      'Faccia esterna',
+      'Centro',
+      'Faccia interna',
+    ])
     const lone = makeWall()
-    expect(labels([lone])).toEqual(['Left', 'Center', 'Right'])
+    expect(labels([lone])).toEqual(['Sinistra', 'Centro', 'Destra'])
     // justification a puts the body on the left, so face b (right) sits on the line.
     expect(wallReferenceModel([lone], asNodes([lone])).value).toBe('right')
     const inside = { ...walls[0]!, justification: 'b' as const }
@@ -189,7 +193,7 @@ describe('reference control', () => {
       throw Error('Reference must not patch through the single-node update')
     }).find((entry) => entry.id === 'wall-reference')!
     if (row.kind !== 'cycle') throw Error('Expected reference cycle')
-    expect(row.value).toBe('Center')
+    expect(row.value).toBe('Centro')
     row.next()
     expect((useScene.getState().nodes[walls[0]!.id] as WallNode).justification).toBe('b')
     expect(useScene.temporal.getState().pastStates).toHaveLength(1)
@@ -206,9 +210,9 @@ describe('reference control', () => {
     useScene.temporal.getState().resume()
     const model = wallReferenceModel([walls[0]!, reversed], nodes)
     expect(model.options.map((option) => option.label)).toEqual([
-      'Outside face',
-      'Center',
-      'Inside face',
+      'Faccia esterna',
+      'Centro',
+      'Faccia interna',
     ])
     model.apply('outside')
     const after = useScene.getState().nodes
@@ -234,9 +238,9 @@ describe('reference control', () => {
     const walls = room()
     const lone = WallNode.parse({ start: [10, 0], end: [14, 0], thickness: 0.2 })
     expect(labels([walls[0]!, lone], asNodes([...walls, lone]))).toEqual([
-      'Left',
-      'Center',
-      'Right',
+      'Sinistra',
+      'Centro',
+      'Destra',
     ])
   })
 

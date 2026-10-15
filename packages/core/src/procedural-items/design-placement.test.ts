@@ -120,7 +120,7 @@ describe('planDesignPlacement', () => {
     })
     expect(code).toBe('does_not_fit')
     expect(message).toBe(
-      'does_not_fit: The mounted item must fit on the wall; the reference fits along 0.317–3.683 m and at height 0.47–2.23 m on this wall',
+      'does_not_fit: L’oggetto appeso deve stare sul muro; the reference fits along 0.317–3.683 m and at height 0.47–2.23 m on this wall',
     )
   })
 

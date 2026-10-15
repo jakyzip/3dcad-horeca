@@ -115,12 +115,12 @@ export const ductSegmentParametrics: ParametricDescriptor<DuctSegmentNode> = {
   trailingSection: () => import('../shared/run-hanger-inspector'),
   groups: [
     {
-      label: 'Hangers',
+      label: 'Staffe',
       fields: [
-        { key: 'autoHangers', label: 'Auto hangers', kind: 'boolean' },
+        { key: 'autoHangers', label: 'Staffe automatiche', kind: 'boolean' },
         {
           key: 'hangerStyle',
-          label: 'Hanger lines',
+          label: 'File di staffe',
           kind: 'enum',
           options: ['single', 'double'],
           display: 'segmented',
@@ -128,7 +128,7 @@ export const ductSegmentParametrics: ParametricDescriptor<DuctSegmentNode> = {
         },
         {
           key: 'hangerSpacing',
-          label: 'Spacing',
+          label: 'Interasse',
           kind: 'number',
           unit: 'm',
           min: 0.05,
@@ -138,7 +138,7 @@ export const ductSegmentParametrics: ParametricDescriptor<DuctSegmentNode> = {
         },
         {
           key: 'hangerMaxReach',
-          label: 'Maximum reach',
+          label: 'Distanza massima',
           kind: 'number',
           unit: 'm',
           min: 0.01,
@@ -149,7 +149,7 @@ export const ductSegmentParametrics: ParametricDescriptor<DuctSegmentNode> = {
       ],
     },
     {
-      label: 'Air',
+      label: 'Aria',
       fields: [
         {
           key: 'system',
@@ -193,7 +193,7 @@ export const ductSegmentParametrics: ParametricDescriptor<DuctSegmentNode> = {
       ],
     },
     {
-      label: 'Construction',
+      label: 'Costruzione',
       fields: [
         {
           key: 'ductMaterial',

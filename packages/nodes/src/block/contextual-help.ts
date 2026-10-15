@@ -3,20 +3,20 @@ import useBlockEditSession from './edit-session'
 import type { BlockComponentMode } from './selection-model'
 
 const MODE_LABELS: Record<BlockComponentMode, string> = {
-  vertex: 'Vertex',
-  edge: 'Edge',
-  face: 'Face',
+  vertex: 'Vertice',
+  edge: 'Spigolo',
+  face: 'Faccia',
 }
 
 const MODE_OPERATIONS: Record<BlockComponentMode, ContextualShortcutHint[]> = {
-  vertex: [{ keys: ['M'], label: 'Merge selected vertices' }],
+  vertex: [{ keys: ['M'], label: 'Unisci i vertici selezionati' }],
   edge: [
-    { keys: ['Cmd/Ctrl', 'B'], label: 'Bevel selected edges' },
-    { keys: ['D'], label: 'Dissolve selected edges' },
+    { keys: ['Cmd/Ctrl', 'B'], label: 'Smussa gli spigoli selezionati' },
+    { keys: ['D'], label: 'Dissolvi gli spigoli selezionati' },
   ],
   face: [
-    { keys: ['E'], label: 'Extrude selected faces' },
-    { keys: ['I'], label: 'Inset selected faces' },
+    { keys: ['E'], label: 'Estrudi le facce selezionate' },
+    { keys: ['I'], label: 'Fai rientrare le facce selezionate' },
   ],
 }
 
@@ -26,12 +26,12 @@ const HINTS_BY_MODE = Object.fromEntries(
     [
       {
         keys: [['1', '2', '3']],
-        label: `${MODE_LABELS[mode]} mode`,
-        subtitle: 'Vertex / Edge / Face',
+        label: `Modalità ${MODE_LABELS[mode]}`,
+        subtitle: 'Vertice / Spigolo / Faccia',
       },
-      { keys: [['G', 'R', 'S']], label: 'Move / Rotate / Scale selection' },
+      { keys: [['G', 'R', 'S']], label: 'Sposta / Ruota / Ridimensiona la selezione' },
       ...MODE_OPERATIONS[mode],
-      { keys: ['Tab'], label: 'Exit mesh editing' },
+      { keys: ['Tab'], label: 'Esci dalla modifica della mesh' },
     ],
   ]),
 ) as Record<BlockComponentMode, ContextualShortcutHint[]>

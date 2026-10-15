@@ -246,39 +246,39 @@ export function CeilingPanel() {
   const heightPresets =
     unit === 'imperial'
       ? [
-          { label: 'Low (8\'0")', height: 2.4384 },
+          { label: 'Basso (8\'0")', height: 2.4384 },
           { label: 'Standard (8\'6")', height: 2.5908 },
-          { label: 'High (9\'0")', height: 2.7432 },
+          { label: 'Alto (9\'0")', height: 2.7432 },
         ]
       : [
-          { label: 'Low (2.4m)', height: 2.4 },
-          { label: 'Standard (2.5m)', height: 2.5 },
-          { label: 'High (3.0m)', height: 3.0 },
+          { label: 'Basso (2,4 m)', height: 2.4 },
+          { label: 'Standard (2,5 m)', height: 2.5 },
+          { label: 'Alto (3,0 m)', height: 3.0 },
         ]
 
   return (
     <PanelWrapper
       icon="/icons/ceiling.webp"
       onClose={handleClose}
-      title={node.name || 'Ceiling'}
+      title={node.name || 'Soffitto'}
       width={320}
     >
-      <PanelSection title="Height">
+      <PanelSection title="Altezza">
         <SegmentedControl
           onChange={handleTopModeChange}
           options={[
-            { label: 'Follows level', value: 'storey' },
-            { label: 'Custom height', value: 'custom' },
+            { label: 'Segue il piano', value: 'storey' },
+            { label: 'Personalizzata', value: 'custom' },
           ]}
           value={isFollows ? 'storey' : 'custom'}
         />
         {isFollows ? (
           <div className="px-1 text-[11px] text-muted-foreground">
-            Currently {formatLinearMeasurement(resolvedHeight, unit, metricNotation)}
+            Attuale: {formatLinearMeasurement(resolvedHeight, unit, metricNotation)}
           </div>
         ) : (
           <SliderControl
-            label="Height"
+            label="Altezza"
             max={Math.min(1000, maxHeight)}
             min={minHeight}
             onChange={handleHeightChange}
@@ -306,7 +306,7 @@ export function CeilingPanel() {
                 title={
                   fits
                     ? undefined
-                    : `Taller than this level (${formatLinearMeasurement(maxHeight, unit, metricNotation)} available). Raise the level height first.`
+                    : `Più alto del piano (disponibili ${formatLinearMeasurement(maxHeight, unit, metricNotation)}). Alza prima l’altezza del piano.`
                 }
               />
             )
@@ -314,20 +314,22 @@ export function CeilingPanel() {
         </div>
         {Number.isFinite(maxHeight) && (
           <div className="px-1 pb-1 text-[11px] text-muted-foreground">
-            Limited by the level to {formatLinearMeasurement(maxHeight, unit, metricNotation)} —
-            raise the level height for a taller ceiling.
+            Limitato dal piano a {formatLinearMeasurement(maxHeight, unit, metricNotation)}: alza
+            l’altezza del piano per un soffitto più alto.
           </div>
         )}
       </PanelSection>
 
-      <PanelSection title="Info">
+      <PanelSection title="Informazioni">
         <div className="flex items-center justify-between px-2 py-1 text-muted-foreground text-sm">
-          <span>Area</span>
-          <span className="font-mono text-foreground dark:text-white">{area.toFixed(2)} m²</span>
+          <span>Superficie</span>
+          <span className="font-mono text-foreground dark:text-white">
+            {area.toFixed(2).replace('.', ',')} m²
+          </span>
         </div>
       </PanelSection>
 
-      <PanelSection title="Holes">
+      <PanelSection title="Fori">
         {node.holes && node.holes.length > 0 ? (
           <div className="flex flex-col gap-1 pb-2">
             {node.holes.map((hole, index) => {
@@ -336,7 +338,10 @@ export function CeilingPanel() {
                 editingHole?.nodeId === selectedId && editingHole?.holeIndex === index
               const source = node.holeMetadata?.[index]?.source ?? 'manual'
               const isAutoHole = source !== 'manual'
-              const autoLabel = source === 'elevator' ? 'Auto elevator cutout' : 'Auto stair cutout'
+              const autoLabel =
+                source === 'elevator'
+                  ? 'Foro automatico per ascensore'
+                  : 'Foro automatico per scala'
               return (
                 <div
                   className={`flex items-center justify-between rounded-lg border p-2 transition-colors ${
@@ -350,18 +355,18 @@ export function CeilingPanel() {
                     <p
                       className={`font-medium text-xs ${isEditing ? 'text-primary' : 'text-foreground dark:text-white'}`}
                     >
-                      Hole {index + 1} {isEditing && '(Editing)'}
+                      Foro {index + 1} {isEditing && '(in modifica)'}
                     </p>
                     <p className="text-[10px] text-muted-foreground">
-                      {holeArea.toFixed(2)} m² · {hole.length} pts ·{' '}
-                      {isAutoHole ? autoLabel : 'Manual'}
+                      {holeArea.toFixed(2).replace('.', ',')} m² · {hole.length} punti ·{' '}
+                      {isAutoHole ? autoLabel : 'Manuale'}
                     </p>
                   </div>
                   <div className="flex items-center gap-1">
                     {isEditing ? (
                       <ActionButton
                         className="h-7 bg-primary text-primary-foreground hover:bg-primary/90"
-                        label="Done"
+                        label="Fatto"
                         onClick={() => {
                           useInteractionScope
                             .getState()
@@ -374,7 +379,7 @@ export function CeilingPanel() {
                       />
                     ) : isAutoHole ? (
                       <div className="rounded-md bg-black/4 dark:bg-[#2C2C2E] px-2 py-1 text-[10px] text-muted-foreground">
-                        Auto
+                        Automatico
                       </div>
                     ) : canEditHoles ? (
                       <>
@@ -400,7 +405,7 @@ export function CeilingPanel() {
             })}
           </div>
         ) : (
-          <div className="px-2 py-3 text-center text-muted-foreground text-xs">No holes</div>
+          <div className="px-2 py-3 text-center text-muted-foreground text-xs">Nessun foro</div>
         )}
 
         <div className="px-1 pt-1 pb-1">
@@ -409,7 +414,7 @@ export function CeilingPanel() {
             <ShapeChoice
               className="px-1 text-muted-foreground text-xs"
               disabled={!canEditHoles}
-              label="Cut opening"
+              label="Ritaglia apertura"
               onPick={(shape) => startOpeningDraft(roomZoneId, 'ceiling', shape)}
             />
           ) : (
@@ -417,7 +422,7 @@ export function CeilingPanel() {
               className="w-full"
               disabled={!canEditHoles || editingHole?.nodeId === selectedId}
               icon={<Plus className="h-3.5 w-3.5" />}
-              label="Add Hole"
+              label="Aggiungi foro"
               onClick={handleAddHole}
             />
           )}
@@ -425,7 +430,7 @@ export function CeilingPanel() {
       </PanelSection>
 
       <ActionGroup>
-        <ActionButton icon={<Move className="h-3.5 w-3.5" />} label="Move" onClick={handleMove} />
+        <ActionButton icon={<Move className="h-3.5 w-3.5" />} label="Sposta" onClick={handleMove} />
       </ActionGroup>
     </PanelWrapper>
   )

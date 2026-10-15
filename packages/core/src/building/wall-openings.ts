@@ -349,7 +349,7 @@ export function planWallOpening(nodes: Nodes, input: WallOpeningInput) {
   }).length
   const base = {
     ...(compiled?.nodeId ? { id: compiled.nodeId } : {}),
-    name: input.name ?? `${kind === 'door' ? 'Door' : 'Window'} ${siblings + 1}`,
+    name: input.name ?? `${kind === 'door' ? 'Porta' : 'Finestra'} ${siblings + 1}`,
     position: [clampedX, clampedY, 0] as [number, number, number],
     rotation: [0, 0, 0] as [number, number, number],
     wallId,

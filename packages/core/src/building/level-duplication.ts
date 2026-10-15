@@ -1,7 +1,7 @@
 import { floorPlateAtGroundContact, supportDerivedFloorHeight } from '../lib/floor-foundation-datum'
 import { expandFloorIntentChanges } from '../lib/floor-intent-changes'
 import { footprintIoU } from '../lib/floor-plates'
-import { getDefaultLevelName } from '../lib/level-name'
+import { isDefaultLevelName } from '../lib/level-name'
 import { reconcileSceneStructure } from '../lib/structure-reconcile'
 import {
   type AnyNode,
@@ -160,7 +160,7 @@ export function buildLevelDuplicateCreateOps({
       id: entry.id,
       level: entry.level + 1,
       // A stored placeholder would pin the old floor's name; cleared, it reads by its new place.
-      ...(entry.name === getDefaultLevelName(entry.level) || entry.name === `Level ${entry.level}`
+      ...(entry.name !== undefined && isDefaultLevelName(entry.name, entry.level)
         ? { name: undefined }
         : {}),
     })
@@ -207,7 +207,7 @@ export function buildLevelDuplicateCreateOps({
           ...unit,
           id: undefined,
           parentId: parentBuildingId,
-          name: `${unit.name} copy`,
+          name: `${unit.name} (copia)`,
           members: unit.members.map((id) => idMap.get(id)),
         }),
       )

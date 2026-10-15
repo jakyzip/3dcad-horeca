@@ -30,7 +30,7 @@ export function planMezzanineStair(
     conflict(
       'no-room-for-stair',
       [zone.id],
-      'No mezzanine edge has enough free host floor for a straight stair.',
+      'Nessun lato del soppalco ha abbastanza pavimento libero per una scala dritta.',
     )
   const slabs = Object.values(nodes).filter((node) => node.type === 'slab')
   const deck = slabs.find((node) => node.zoneIds?.includes(zone.id))
@@ -116,7 +116,7 @@ export function planMezzanineStair(
   const run = Math.min(preferredRun, best.freeRun)
   const stair = StairNode.parse({
     parentId: zone.parentId,
-    name: 'Mezzanine stair',
+    name: 'Scala del soppalco',
     uniformRisers: true,
     fromLevelId: zone.parentId,
     supportSlabId: floor.id,

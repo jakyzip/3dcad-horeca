@@ -10,7 +10,7 @@ export const cupolaParametrics: ParametricDescriptor<CupolaNode> = {
   customPanel: () => import('./panel'),
   groups: [
     {
-      label: 'Style',
+      label: 'Stile',
       fields: [
         {
           key: 'roofStyle',
@@ -22,7 +22,7 @@ export const cupolaParametrics: ParametricDescriptor<CupolaNode> = {
       ],
     },
     {
-      label: 'Dimensions',
+      label: 'Dimensioni',
       fields: [
         { key: 'width', kind: 'number', unit: 'm', min: 0.3, max: 1000, step: 0.05 },
         { key: 'depth', kind: 'number', unit: 'm', min: 0.3, max: 1000, step: 0.05 },

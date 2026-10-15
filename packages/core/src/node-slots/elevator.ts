@@ -14,9 +14,9 @@ export const ELEVATOR_GLASS_SLOT_DEFAULT = 'library:preset-glass'
 
 export function elevatorSlots(node: ElevatorNode): SlotDeclaration[] {
   const slots: SlotDeclaration[] = [
-    { slotId: 'cab', label: 'Cab', default: ELEVATOR_CAB_SLOT_DEFAULT },
-    { slotId: 'doors', label: 'Doors', default: ELEVATOR_DOORS_SLOT_DEFAULT },
-    { slotId: 'shaft', label: 'Shaft', default: ELEVATOR_SHAFT_SLOT_DEFAULT },
+    { slotId: 'cab', label: 'Cabina', default: ELEVATOR_CAB_SLOT_DEFAULT },
+    { slotId: 'doors', label: 'Porte', default: ELEVATOR_DOORS_SLOT_DEFAULT },
+    { slotId: 'shaft', label: 'Vano', default: ELEVATOR_SHAFT_SLOT_DEFAULT },
   ]
 
   const hasGlass =
@@ -24,7 +24,7 @@ export function elevatorSlots(node: ElevatorNode): SlotDeclaration[] {
     getResolvedElevatorDoorPanelStyle(node.doorPanelStyle) === 'glass-frame'
 
   if (hasGlass)
-    slots.push({ slotId: 'glass', label: 'Glass', default: ELEVATOR_GLASS_SLOT_DEFAULT })
+    slots.push({ slotId: 'glass', label: 'Vetro', default: ELEVATOR_GLASS_SLOT_DEFAULT })
 
   return slots
 }

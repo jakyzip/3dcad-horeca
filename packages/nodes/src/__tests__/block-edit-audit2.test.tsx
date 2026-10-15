@@ -267,7 +267,7 @@ for (const operation of ['rotate', 'translate', 'scale'])
         expect(ui(renderer).includes(BLOCK_SUPPORT_REFUSAL)).toBe(false)
         if (accepted) {
           const label =
-            operation === 'rotate' ? 'Angle' : operation === 'translate' ? 'X distance' : 'X scale'
+            operation === 'rotate' ? 'Angolo' : operation === 'translate' ? 'Distanza X' : 'Scala X'
           expect(ui(renderer)).toContain(`aria-label="${label}"`)
           expect(ui(renderer)).toContain(`value="${acceptedValue}"`)
         }

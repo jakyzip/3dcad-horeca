@@ -33,7 +33,7 @@ export function FenceFeatureEditor({
         : []
     }),
   )
-  if (parent?.type !== 'fence') return <p>Fence unavailable.</p>
+  if (parent?.type !== 'fence') return <p>Recinzione non disponibile.</p>
   const node = fenceWithFeatures(parent, siblings)
   const features = [fenceFeatureData(child)]
   const length = getFenceCenterlineLength(node)
@@ -45,7 +45,7 @@ export function FenceFeatureEditor({
       (patch.width !== undefined || patch.center !== undefined) &&
       !canPlaceFenceFeature(node, next)
     ) {
-      setError('Keep the opening inside the fence and clear of other gates or passages.')
+      setError('Tieni l’apertura dentro la recinzione e lontana da altri cancelli o passaggi.')
       return
     }
     setError('')
@@ -66,39 +66,39 @@ export function FenceFeatureEditor({
             ? [
                 {
                   key: 'leafType',
-                  label: 'Leaves',
+                  label: 'Ante',
                   value: feature.leafType ?? 'single',
                   options: [
-                    ['single', 'Single gate'],
-                    ['double', 'Double gate'],
+                    ['single', 'Cancello a un’anta'],
+                    ['double', 'Cancello a due ante'],
                   ],
                 },
                 {
                   key: 'hinge',
-                  label: 'Hinge side',
+                  label: 'Lato cerniere',
                   value: feature.hinge ?? 'left',
                   options: [
-                    ['left', 'Left'],
-                    ['right', 'Right'],
+                    ['left', 'Sinistra'],
+                    ['right', 'Destra'],
                   ],
                 },
                 {
                   key: 'swing',
-                  label: 'Swing direction',
+                  label: 'Verso di apertura',
                   value: feature.swing ?? 'inward',
                   options: [
-                    ['inward', 'Inward'],
-                    ['outward', 'Outward'],
+                    ['inward', 'Verso l’interno'],
+                    ['outward', 'Verso l’esterno'],
                   ],
                 },
                 {
                   key: 'brace',
-                  label: 'Bracing',
+                  label: 'Rinforzo',
                   value: feature.brace ?? 'none',
                   options: [
-                    ['none', 'None'],
-                    ['diagonal', 'Diagonal'],
-                    ['cross', 'Cross'],
+                    ['none', 'Nessuno'],
+                    ['diagonal', 'Diagonale'],
+                    ['cross', 'A croce'],
                   ],
                 },
               ]
@@ -107,7 +107,7 @@ export function FenceFeatureEditor({
         const numbers = [
           {
             key: 'center',
-            label: 'Distance from start',
+            label: 'Distanza dall’inizio',
             value: feature.center,
             min: 0,
             max: length,
@@ -116,7 +116,7 @@ export function FenceFeatureEditor({
           },
           {
             key: 'width',
-            label: 'Opening width',
+            label: 'Larghezza dell’apertura',
             value: feature.width,
             min: 0.35,
             max: length,
@@ -125,7 +125,7 @@ export function FenceFeatureEditor({
           },
           {
             key: 'height',
-            label: gate ? 'Gate height' : 'Post height',
+            label: gate ? 'Altezza del cancello' : 'Altezza dei pali',
             value: height,
             min: 0.3,
             max: 1000,
@@ -136,7 +136,7 @@ export function FenceFeatureEditor({
             ? [
                 {
                   key: 'clearance',
-                  label: 'Ground clearance',
+                  label: 'Distanza da terra',
                   value: bottom,
                   min: 0,
                   max: 1000,
@@ -145,7 +145,7 @@ export function FenceFeatureEditor({
                 },
                 {
                   key: 'openAngle',
-                  label: 'Opening angle',
+                  label: 'Angolo di apertura',
                   value: feature.openAngle ?? 0,
                   min: 0,
                   max: 170,
@@ -154,7 +154,7 @@ export function FenceFeatureEditor({
                 },
                 {
                   key: 'thickness',
-                  label: 'Leaf thickness',
+                  label: 'Spessore dell’anta',
                   value: feature.thickness ?? 0.06,
                   min: 0.02,
                   max: 0.3,
@@ -163,7 +163,7 @@ export function FenceFeatureEditor({
                 },
                 {
                   key: 'frameWidth',
-                  label: 'Frame width',
+                  label: 'Larghezza del telaio',
                   value: feature.frameWidth ?? 0.055,
                   min: 0.025,
                   max: 0.2,
@@ -172,7 +172,7 @@ export function FenceFeatureEditor({
                 },
                 {
                   key: 'spacing',
-                  label: 'Infill spacing',
+                  label: 'Interasse del tamponamento',
                   value: feature.spacing ?? 0.15,
                   min: 0.04,
                   max: 1000,
@@ -181,7 +181,7 @@ export function FenceFeatureEditor({
                 },
                 {
                   key: 'boardWidth',
-                  label: 'Board width',
+                  label: 'Larghezza delle assi',
                   value: feature.boardWidth ?? 0.055,
                   min: 0.02,
                   max: 0.3,
@@ -192,7 +192,7 @@ export function FenceFeatureEditor({
                   ? [
                       {
                         key: 'leafSplit',
-                        label: 'Left leaf proportion',
+                        label: 'Proporzione dell’anta sinistra',
                         value: feature.leafSplit ?? 0.5,
                         min: 0.2,
                         max: 0.8,
@@ -208,7 +208,7 @@ export function FenceFeatureEditor({
           <div key={feature.id}>
             <div className="mt-2 space-y-2">
               <ToggleControl
-                label="Match fence style"
+                label="Usa lo stile della recinzione"
                 checked={feature.matchFenceStyle !== false}
                 onChange={(checked) =>
                   update(feature.id, {
@@ -220,7 +220,7 @@ export function FenceFeatureEditor({
                 }
               />
               <ToggleControl
-                label="Match fence height"
+                label="Usa l’altezza della recinzione"
                 checked={feature.matchFenceHeight ?? feature.matchFenceStyle !== false}
                 onChange={(checked) =>
                   update(feature.id, {
@@ -232,7 +232,7 @@ export function FenceFeatureEditor({
               />
               {gate && feature.matchFenceStyle === false && (
                 <label className="flex min-h-9 items-center justify-between gap-3 text-xs text-muted-foreground">
-                  Gate style
+                  Stile del cancello
                   <select
                     className="h-8 min-w-0 max-w-40 rounded-lg border border-border/50 bg-black/4 dark:bg-[#2C2C2E] px-2 text-xs text-foreground outline-none transition-colors hover:bg-black/8 dark:hover:bg-[#3e3e3e] focus-visible:ring-2 focus-visible:ring-ring"
                     value={feature.style && feature.style !== 'match' ? feature.style : 'picket'}
@@ -241,11 +241,11 @@ export function FenceFeatureEditor({
                       if (style.success) update(feature.id, { style: style.data })
                     }}
                   >
-                    <option value="picket">Picket</option>
-                    <option value="slat">Vertical slats</option>
-                    <option value="horizontal">Horizontal boards</option>
-                    <option value="privacy">Solid privacy</option>
-                    <option value="rail">Open rails</option>
+                    <option value="picket">Doghe</option>
+                    <option value="slat">Listelli verticali</option>
+                    <option value="horizontal">Assi orizzontali</option>
+                    <option value="privacy">Pieno (frangivista)</option>
+                    <option value="rail">Traverse aperte</option>
                   </select>
                 </label>
               )}
@@ -304,20 +304,20 @@ export function FenceFeatureEditor({
                   />
                 ))}
               <ToggleControl
-                label="Jamb posts"
+                label="Pali laterali"
                 checked={feature.showPosts !== false}
                 onChange={(checked) => update(feature.id, { showPosts: checked })}
               />
               {gate && (
                 <ToggleControl
-                  label="Hinges and latch"
+                  label="Cerniere e chiavistello"
                   checked={feature.showHardware !== false}
                   onChange={(checked) => update(feature.id, { showHardware: checked })}
                 />
               )}
               <ActionButton
                 type="button"
-                label={gate ? 'Remove gate' : 'Remove opening'}
+                label={gate ? 'Rimuovi il cancello' : 'Rimuovi il passaggio'}
                 className="w-full text-destructive hover:text-destructive"
                 onClick={() => useScene.getState().deleteNode(child.id)}
               />

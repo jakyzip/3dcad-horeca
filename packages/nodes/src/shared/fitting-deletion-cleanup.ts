@@ -124,7 +124,7 @@ function fittingPatchForTee(
     const run = ductProfile(fitting, runConnection.portId)
     const branch = ductProfile(fitting, branchConnection.portId)
     return {
-      name: 'Tee',
+      name: 'Raccordo a T',
       fittingType: 'tee',
       rotation,
       branchAngle: 90,
@@ -147,7 +147,7 @@ function fittingPatchForTee(
       ? fitting.diameter2
       : fitting.diameter
   return {
-    name: 'Sanitary tee',
+    name: 'Braga a 87°',
     fittingType: 'sanitary-tee',
     rotation,
     diameter: runDiameter,
@@ -164,7 +164,7 @@ function fittingPatchForElbow(
   if (fitting.type === 'duct-fitting') {
     const profile = ductProfile(fitting, connection.portId)
     return {
-      name: 'Elbow',
+      name: 'Curva',
       fittingType: 'elbow',
       rotation,
       angle,
@@ -180,7 +180,7 @@ function fittingPatchForElbow(
       ? fitting.diameter2
       : fitting.diameter
   return {
-    name: 'Elbow',
+    name: 'Curva',
     fittingType: 'elbow',
     rotation,
     angle,

@@ -12,14 +12,14 @@ import type { DoorNode } from './schema'
 export const doorParametrics: ParametricDescriptor<DoorNode> = {
   groups: [
     {
-      label: 'Dimensions',
+      label: 'Dimensioni',
       fields: [
         { key: 'width', kind: 'number', unit: 'm', min: 0.5, max: 1000, step: 0.05 },
         { key: 'height', kind: 'number', unit: 'm', min: 1.0, max: 1000, step: 0.05 },
       ],
     },
     {
-      label: 'Frame',
+      label: 'Telaio',
       fields: [
         { key: 'frameThickness', kind: 'number', unit: 'm', min: 0.01, max: 0.2, step: 0.005 },
         { key: 'frameDepth', kind: 'number', unit: 'm', min: 0.01, max: 0.3, step: 0.005 },

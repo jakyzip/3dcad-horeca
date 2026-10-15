@@ -140,7 +140,7 @@ export function resolveSlotPaintMaterialRef(
     ref: toSceneMaterialRef(id),
     newSceneMaterial: {
       id,
-      name: `Material ${Object.keys(materials).length + 1}`,
+      name: `Materiale ${Object.keys(materials).length + 1}`,
       material,
     },
   }

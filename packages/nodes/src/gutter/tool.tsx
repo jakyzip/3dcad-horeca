@@ -61,7 +61,7 @@ const GutterTool = () => {
     () =>
       GutterNode.parse({
         ...gutterDefinition.defaults(),
-        name: 'Gutter',
+        name: 'Grondaia',
         position: [0, 0, 0],
         rotation: 0,
       }),
@@ -128,7 +128,7 @@ const GutterTool = () => {
 
       const gutter = GutterNode.parse({
         ...gutterDefinition.defaults(),
-        name: 'Gutter',
+        name: 'Grondaia',
         roofSegmentId: hit.segment.id,
         // (X, Y, Z) all come from the eave snap — on ±Z eaves X stays
         // free along the cursor; on ±X eaves Z stays free instead.

@@ -81,7 +81,7 @@ test('room creation on the top floor puts the roof on a new Roof level, on the w
   commitRoofFootprint(sceneApi, level.id as LevelNode['id'], target, false)
   const roofLevel = created.find(({ node }) => node.type === 'level')?.node as LevelNode
   const roof = created.find(({ node }) => node.type === 'roof')!
-  expect(roofLevel).toMatchObject({ name: 'Roof', level: 1, metadata: { role: 'roof' } })
+  expect(roofLevel).toMatchObject({ name: 'Tetto', level: 1, metadata: { role: 'roof' } })
   expect(roof.parentId).toBe(roofLevel.id)
   // 2.5 m walls under a 3 m storey: the eave 0.5 m below the roof level's floor.
   expect(roof.node).toMatchObject({ support: { kind: 'walls' }, position: [2, -0.5, 1.5] })
@@ -96,7 +96,7 @@ test('a rectangle drawn on a walled storey goes on its roof level, standing on i
   expect(roof.parentId).toBe(upper.id)
   // 2.5 m walls under a 3 m storey: the eave 0.5 m below the roof level's floor.
   expect(roof.node).toMatchObject({ support: { kind: 'walls' }, position: [2, -0.5, 1.5] })
-  expect(updated).toEqual([{ id: upper.id, data: { metadata: { role: 'roof' }, name: 'Roof' } }])
+  expect(updated).toEqual([{ id: upper.id, data: { metadata: { role: 'roof' }, name: 'Tetto' } }])
 })
 
 // The owner's porch clause: a porch or portico on posts stays on its storey. Drawn by hand, any

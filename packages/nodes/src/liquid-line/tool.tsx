@@ -310,7 +310,7 @@ const LiquidLineTool = () => {
       const line = LiquidLineNode.parse({
         ...liquidLineDefinition.defaults(),
         ...useEditor.getState().toolDefaults['liquid-line'],
-        name: 'Liquid Line',
+        name: 'Linea del liquido',
         path: [start, end],
       })
       useScene.getState().createNode(line, activeLevelId)
@@ -336,7 +336,7 @@ const LiquidLineTool = () => {
         const a = traced[i]!
         const b = traced[i + 1]!
         if (samePt(a, b)) continue
-        const node = LiquidLineNode.parse({ ...defaults, name: 'Liquid Line', path: [a, b] })
+        const node = LiquidLineNode.parse({ ...defaults, name: 'Linea del liquido', path: [a, b] })
         create.push({ node, parentId: activeLevelId })
       }
       if (create.length === 0) return
@@ -574,8 +574,8 @@ const LiquidLineTool = () => {
                   }}
                 >
                   {followTargetRef.current
-                    ? 'Click to trace this lineset run'
-                    : 'Follow: hover a lineset'}
+                    ? 'Fai clic per ricalcare questa linea frigorifera'
+                    : 'Segui: passa sopra una linea frigorifera'}
                 </div>
               </Html>
             </group>

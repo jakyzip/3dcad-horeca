@@ -117,11 +117,12 @@ test('set_floor_foundation sets one footprint in one call and one undo; raw upda
     })
     expect(conflict.conflicts?.[0]).toMatchObject({
       code: 'floor-foundation-shared-storey',
-      message: 'The upper floor also sits over Shed floor; raise both or neither.',
+      message:
+        'Il piano superiore poggia anche su Pavimento Shed: alzali entrambi o nessuno dei due.',
     })
     expect(bridge.getNodes()).toEqual(unchanged)
     expect(() => bridge.updateNode(house.id, { floorHeight: 0.55 })).toThrow(
-      'raise both or neither',
+      'alzali entrambi o nessuno dei due',
     )
     bridge.clearHistory()
     const both = await call('set_floor_foundation', {
@@ -211,7 +212,7 @@ test('set_floor_foundation and raw thickness edits lift a supported upper plate 
     expect(bridge.getNode(groundPlate.id)).toEqual(groundPlate)
     expect(getLevelElevations(bridge.getNodes()).get(upper.id)!.baseY).toBe(before)
     expect(() => bridge.updateNode(plate.id, { foundation: { type: 'solid' } })).toThrow(
-      'Only a plate at ground contact can have a solid foundation',
+      'Solo un solaio a contatto con il terreno può avere una fondazione piena',
     )
     bridge.updateNode(plate.id, { thickness: 0.4 })
     expect(bridge.getNode(plate.id)).toMatchObject({ thickness: 0.4, elevation: 0.4 })

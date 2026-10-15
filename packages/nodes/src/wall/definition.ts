@@ -82,8 +82,8 @@ export const wallDefinition: NodeDefinition<typeof WallNode> = {
           {
             id: 'wall-reference',
             kind: 'segmented',
-            section: 'Dimensions',
-            label: 'Reference',
+            section: 'Dimensioni',
+            label: 'Riferimento',
             options: reference.options,
             value: reference.value,
             onChange: (value) => reference.apply(value as WallReferenceValue),
@@ -240,25 +240,25 @@ export const wallDefinition: NodeDefinition<typeof WallNode> = {
   toolHints: [
     {
       key: 'Left click',
-      label: 'Set one corner, then the opposite',
+      label: 'Fissa un vertice, poi quello opposto',
       visible: whenWallVariant('rectangle'),
     },
     {
       key: 'Left click',
-      label: 'Add a corner · click the first to close',
+      label: 'Aggiungi un vertice · fai clic sul primo per chiudere',
       visible: whenWallVariant('polygon'),
     },
-    { key: 'Left click', label: 'Set wall start / end', visible: whenWallVariant('walls') },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Left click', label: 'Fissa inizio / fine del muro', visible: whenWallVariant('walls') },
+    { key: 'Esc', label: 'Annulla' },
   ],
   // The split session (`split-session.ts`) is the wall's own reshape; the HUD
   // shows these while it runs. The snapping chip comes from the scope.
   affordanceHints: {
     split: [
-      { key: 'Left click', label: 'Split at the marks' },
+      { key: 'Left click', label: 'Dividi nei punti segnati' },
       {
         key: 'Scroll',
-        label: 'Cuts',
+        label: 'Tagli',
         chip: {
           subscribe: (onChange) => useWallSplit.subscribe(onChange),
           value: () => String(useWallSplit.getState().draft?.cuts ?? 1),
@@ -269,28 +269,28 @@ export const wallDefinition: NodeDefinition<typeof WallNode> = {
           labels: Object.fromEntries(
             SPLIT_CUT_COUNTS.map((count) => [
               count,
-              count === '1' ? 'Cuts: 1' : `Cuts: ${count}, even`,
+              count === '1' ? 'Tagli: 1' : `Tagli: ${count}, equidistanti`,
             ]),
           ),
           icons: Object.fromEntries(SPLIT_CUT_COUNTS.map((count) => [count, 'lucide:scissors'])),
-          tooltip: 'Number of cuts — scroll or click to change',
+          tooltip: 'Numero di tagli: usa la rotella o fai clic per cambiarlo',
         },
       },
       {
         key: 'Alt',
-        label: 'Free placement',
+        label: 'Posizionamento libero',
         // Several cuts are evenly spaced, so there is nothing to place freely.
         visible: {
           subscribe: (onChange) => useWallSplit.subscribe(onChange),
           value: () => (useWallSplit.getState().draft?.cuts ?? 1) === 1,
         },
       },
-      { key: 'Esc', label: 'Cancel' },
+      { key: 'Esc', label: 'Annulla' },
     ],
   },
 
   presentation: {
-    label: 'Wall',
+    label: 'Muro',
     description:
       'A straight or curved wall segment. Hosts doors, windows, lean-to extensions, and wall-mounted items.',
     icon: { kind: 'url', src: '/icons/wall.webp' },

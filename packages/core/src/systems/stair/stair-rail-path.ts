@@ -34,7 +34,7 @@ export function resolveStairRailPaths(
     .filter((node): node is StairSegmentNode => node?.type === 'stair-segment')
   if (stairRailPathVertexBound(stair, segments) * (mode === 'both' ? 2 : 1) > 10_000)
     throw new RangeError(
-      'Continuous stair paths exceed the 10,000-point computation budget. The authored dimensions are preserved.',
+      'I percorsi continui della scala superano il limite di calcolo di 10.000 punti. Le misure inserite restano invariate.',
     )
   const allowed = (side: 'left' | 'right') => mode === 'both' || mode === side
   if (stair.stairType !== 'straight') {
@@ -578,7 +578,7 @@ export function resolveStairHandrailPaths(
       const sourceY = stair.stairType === 'straight' ? transforms[0]!.position[1] : 0
       if (end === 'bottom' && extended[1] + config.height < sourceY)
         throw new RangeError(
-          'The bottom handrail extension crosses below the source floor. Reduce its length or increase the handrail height.',
+          'Il prolungamento inferiore del corrimano scende sotto il pavimento di partenza. Riducine la lunghezza o alza il corrimano.',
         )
       const additions: StairRailPath['points'] = detail.extension ? [extended] : []
       if (detail.return !== 'none') {
@@ -626,7 +626,7 @@ export function resolveStairHandrailPaths(
   })
   if (result.reduce((sum, path) => sum + path.points.length, 0) > 10_000)
     throw new RangeError(
-      'Handrail ends exceed the 10,000-point computation budget. The authored dimensions are preserved.',
+      'Le estremità del corrimano superano il limite di calcolo di 10.000 punti. Le misure inserite restano invariate.',
     )
   return result
 }

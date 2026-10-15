@@ -113,7 +113,7 @@ export default function ItemPanel() {
       )}
       <AuthoredParams node={node} />
 
-      <PanelSection title="Position">
+      <PanelSection title="Posizione">
         <SliderControl
           label={
             <>
@@ -164,7 +164,7 @@ export default function ItemPanel() {
         />
       </PanelSection>
 
-      <PanelSection title="Rotation">
+      <PanelSection title="Rotazione">
         <TiltSlider axis={0} label="X" node={node} onUpdate={handleUpdate} />
         <SliderControl
           label={
@@ -206,10 +206,10 @@ export default function ItemPanel() {
         </div>
       </PanelSection>
 
-      <PanelSection title="Scale">
+      <PanelSection title="Scala">
         <div className="flex items-center justify-between px-2 pb-2">
           <span className="font-medium text-[10px] text-muted-foreground/80 uppercase tracking-wider">
-            Uniform Scale
+            Scala uniforme
           </span>
           <button
             className={
@@ -228,7 +228,7 @@ export default function ItemPanel() {
           <SliderControl
             label={
               <>
-                XYZ<sub className="ml-[1px] text-[11px] opacity-70">scale</sub>
+                XYZ<sub className="ml-[1px] text-[11px] opacity-70">scala</sub>
               </>
             }
             max={10}
@@ -246,7 +246,7 @@ export default function ItemPanel() {
             <SliderControl
               label={
                 <>
-                  X<sub className="ml-[1px] text-[11px] opacity-70">scale</sub>
+                  X<sub className="ml-[1px] text-[11px] opacity-70">scala</sub>
                 </>
               }
               max={10}
@@ -261,7 +261,7 @@ export default function ItemPanel() {
             <SliderControl
               label={
                 <>
-                  Y<sub className="ml-[1px] text-[11px] opacity-70">scale</sub>
+                  Y<sub className="ml-[1px] text-[11px] opacity-70">scala</sub>
                 </>
               }
               max={10}
@@ -276,7 +276,7 @@ export default function ItemPanel() {
             <SliderControl
               label={
                 <>
-                  Z<sub className="ml-[1px] text-[11px] opacity-70">scale</sub>
+                  Z<sub className="ml-[1px] text-[11px] opacity-70">scala</sub>
                 </>
               }
               max={10}
@@ -292,32 +292,38 @@ export default function ItemPanel() {
         )}
       </PanelSection>
 
-      <PanelSection title="Info">
+      <PanelSection title="Informazioni">
         <div className="flex items-center justify-between px-2 py-1 text-muted-foreground text-sm">
-          <span>Dimensions</span>
+          <span>Dimensioni</span>
           {(() => {
             const [w, h, d] = getScaledDimensions(node)
             return (
               <span className="font-mono text-foreground dark:text-white">
-                {Math.round(w * 100) / 100}×{Math.round(h * 100) / 100}×{Math.round(d * 100) / 100}
+                {[w, h, d]
+                  .map((v) => String(Math.round(v * 100) / 100).replace('.', ','))
+                  .join('×')}
               </span>
             )
           })()}
         </div>
       </PanelSection>
 
-      <PanelSection title="Actions">
+      <PanelSection title="Azioni">
         <ActionGroup>
-          <ActionButton icon={<Move className="h-3.5 w-3.5" />} label="Move" onClick={handleMove} />
+          <ActionButton
+            icon={<Move className="h-3.5 w-3.5" />}
+            label="Sposta"
+            onClick={handleMove}
+          />
           <ActionButton
             icon={<Copy className="h-3.5 w-3.5" />}
-            label="Duplicate"
+            label="Duplica"
             onClick={handleDuplicate}
           />
           <ActionButton
             className="hover:bg-red-500/20"
             icon={<Trash2 className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />}
-            label="Delete"
+            label="Elimina"
             onClick={handleDelete}
           />
         </ActionGroup>

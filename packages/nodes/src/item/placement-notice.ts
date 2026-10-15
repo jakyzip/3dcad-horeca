@@ -7,7 +7,7 @@ import {
 } from '@pascal-app/core'
 import { type FloorItemMisfit, floorItemFit } from '@pascal-app/core/building'
 
-const round = (value: number) => Math.round(value * 100) / 100
+const round = (value: number) => String(Math.round(value * 100) / 100).replace('.', ',')
 
 /** What a person reads for a floor item that does not fit: in a door's way, or too large for its room. */
 export function floorItemMisfitNotice(
@@ -16,10 +16,10 @@ export function floorItemMisfitNotice(
 ): PlacementNotice {
   const name = misfit.room?.name.trim()
   if (misfit.code === 'blocks_door')
-    return { line: name ? `Blocks the door to ${name}` : 'Blocks a door' }
+    return { line: name ? `Blocca la porta di ${name}` : 'Blocca una porta' }
   return {
-    line: name ? `Too large for ${name}` : 'Too large for its room',
-    detail: `${round(dimensions[0] ?? 0)} × ${round(dimensions[2] ?? 0)} m in a ${round(misfit.room.width)} × ${round(misfit.room.depth)} m room`,
+    line: name ? `Troppo grande per ${name}` : 'Troppo grande per la sua stanza',
+    detail: `${round(dimensions[0] ?? 0)} × ${round(dimensions[2] ?? 0)} m in una stanza di ${round(misfit.room.width)} × ${round(misfit.room.depth)} m`,
   }
 }
 

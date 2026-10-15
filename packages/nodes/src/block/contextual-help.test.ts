@@ -19,26 +19,26 @@ describe('block contextual help', () => {
     useBlockEditSession.getState().begin('block_1', createBlockSelection('face', ['f-top']))
     expect(extension?.getHints('block_1')).toContainEqual({
       keys: [['1', '2', '3']],
-      label: 'Face mode',
-      subtitle: 'Vertex / Edge / Face',
+      label: 'Modalità Faccia',
+      subtitle: 'Vertice / Spigolo / Faccia',
     })
     expect(extension?.getHints('block_1')).toContainEqual({
       keys: ['E'],
-      label: 'Extrude selected faces',
+      label: 'Estrudi le facce selezionate',
     })
     expect(extension?.getHints('block_1')).toContainEqual({
       keys: ['I'],
-      label: 'Inset selected faces',
+      label: 'Fai rientrare le facce selezionate',
     })
     expect(extension?.getHints('block_1')).not.toContainEqual({
       keys: ['T'],
-      label: 'Inset selected faces',
+      label: 'Fai rientrare le facce selezionate',
     })
 
     useBlockEditSession.getState().setSelection('block_1', createBlockSelection('edge', ['e0']))
     expect(extension?.getHints('block_1')).toContainEqual({
       keys: ['Cmd/Ctrl', 'B'],
-      label: 'Bevel selected edges',
+      label: 'Smussa gli spigoli selezionati',
     })
     expect(extension?.getHints('another-node')).toEqual([])
   })

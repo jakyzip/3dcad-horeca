@@ -21,7 +21,7 @@ export default function FenceGateActions() {
   return (
     <ActionMenuButton
       keys={['E']}
-      label={open ? 'Close' : 'Open'}
+      label={open ? 'Chiudi' : 'Apri'}
       onClick={(event) => {
         event.stopPropagation()
         toggleFenceGate(gate.id as AnyNodeId)

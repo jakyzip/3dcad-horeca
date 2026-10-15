@@ -220,7 +220,7 @@ describe('design-level datum (recipe version 2)', () => {
     const nodes = { [level.id]: level, [ceiling.id]: ceiling, [node.id]: node }
     expect(() => validateProceduralRelations(node, nodes)).not.toThrow()
     const low = { ...nodes, [ceiling.id]: { ...ceiling, height: 1 } }
-    expect(() => validateProceduralRelations(node, low)).toThrow('level height')
+    expect(() => validateProceduralRelations(node, low)).toThrow('altezza del piano')
   })
 
   test('a declared base lets the E8 guard rest on its lowest point across the sweep', () => {

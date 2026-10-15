@@ -49,7 +49,7 @@ const ShelfTool = () => {
     () =>
       ShelfNode.parse({
         ...shelfDefinition.defaults(),
-        name: 'Shelf',
+        name: 'Scaffale',
         position: [0, 0, 0],
         rotation: [0, 0, 0],
       }),
@@ -130,7 +130,7 @@ const ShelfTool = () => {
         )
       const shelf = ShelfNode.parse({
         ...shelfDefinition.defaults(),
-        name: 'Shelf',
+        name: 'Scaffale',
         position,
         rotation: [0, 0, 0],
         parentId: activeLevelId,

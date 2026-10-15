@@ -53,7 +53,7 @@ function heightHandle(): LinearResizeHandle<LeanToExtensionNode> {
 function circularRadiusHandles(): LinearResizeHandle<LeanToExtensionNode>[] {
   return handles().filter(
     (handle): handle is LinearResizeHandle<LeanToExtensionNode> =>
-      handle.kind === 'linear-resize' && handle.measureLabel === 'Host radius',
+      handle.kind === 'linear-resize' && handle.measureLabel === 'Raggio del supporto',
   )
 }
 

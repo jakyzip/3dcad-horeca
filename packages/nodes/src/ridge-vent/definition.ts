@@ -199,12 +199,12 @@ export const ridgeVentDefinition: NodeDefinition<typeof RidgeVentNode> = {
     move: () => import('./move-tool'),
   },
   toolHints: [
-    { key: 'Left click', label: 'Place ridge vent on roof' },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Left click', label: 'Posiziona l’aeratore di colmo sul tetto' },
+    { key: 'Esc', label: 'Annulla' },
   ],
 
   presentation: {
-    label: 'Ridge Vent',
+    label: 'Aeratore di colmo',
     description: 'Ventilation strip running along the ridge of a roof segment.',
     icon: { kind: 'url', src: '/icons/ridge-vent.webp' },
     paletteSection: 'structure',

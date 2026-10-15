@@ -810,7 +810,7 @@ export function evaluateRecipe(recipe: Recipe, values: Record<string, number> = 
       v > p.max ||
       ((p.unit === 'count' || p.unit === 'bool' || p.unit === 'choice') && !Number.isInteger(v))
     )
-      throw new Error(`${p.label} must be between ${p.min} and ${p.max}`)
+      throw new Error(`${p.label} deve essere tra ${p.min} e ${p.max}`)
     parameters[p.id] = v
   }
   let work = 0

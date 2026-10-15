@@ -393,7 +393,8 @@ export function planDuctDraw(
     if (source && !ductProfilesMatch(source, profile) && !adapter) {
       return {
         ...invalidPlan(),
-        validationMessage: 'Align the connection or draw a 15–90° bend to fit the profile change.',
+        validationMessage:
+          'Allinea il collegamento o disegna una curva da 15–90° per adattare il cambio di sezione.',
       }
     }
   }
@@ -455,7 +456,7 @@ export function planDuctDraw(
       ...toolDefaults,
       autoHangers,
       hangerStyle,
-      name: profile.shape === 'rect' ? 'Trunk' : 'Duct run',
+      name: profile.shape === 'rect' ? 'Canale principale' : 'Canale',
       path: [from, to],
       shape: profile.shape,
       diameter: profile.diameter,

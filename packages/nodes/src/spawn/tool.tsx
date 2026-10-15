@@ -56,7 +56,7 @@ const SpawnTool = () => {
 
   // Default spawn for the footprint anchors the alignment solver reads.
   const previewNode = useMemo(
-    () => SpawnNode.parse({ name: 'Spawn Point', position: [0, 0, 0], rotation: 0 }),
+    () => SpawnNode.parse({ name: 'Punto di partenza', position: [0, 0, 0], rotation: 0 }),
     [],
   )
 
@@ -146,7 +146,7 @@ const SpawnTool = () => {
         placedId = existingSpawnId
       } else {
         const spawn = SpawnNode.parse({
-          name: 'Spawn Point',
+          name: 'Punto di partenza',
           position: next,
           rotation: rotationRef.current,
           parentId: activeLevelId,

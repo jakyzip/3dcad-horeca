@@ -956,7 +956,7 @@ function refreshDefaultDownspoutsForRoof(
           lengthMode: existing.lengthMode === 'manual' ? 'manual' : 'to-ground',
         } as DownspoutNode)
       : DownspoutNodeSchema.parse({
-          name: 'Downspout',
+          name: 'Pluviale',
           parentId: segment.id,
           gutterId: gutter.id,
           outletId,

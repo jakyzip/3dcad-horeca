@@ -124,7 +124,7 @@ export const CREATE_ROOF_CASES: AgentToolCase[] = [
       check: (result, nodes) => [
         ...onRoofLevel('level_g', 0)(result, nodes),
         ...(result.createdRoofLevelId === result.roofLevelId ? [] : ['no Roof level was made']),
-        ...((nodes[result.roofLevelId as string] as LevelNode | undefined)?.name === 'Roof'
+        ...((nodes[result.roofLevelId as string] as LevelNode | undefined)?.name === 'Tetto'
           ? []
           : ['the roof level is not named Roof']),
       ],
@@ -200,7 +200,7 @@ export const CREATE_ROOF_CASES: AgentToolCase[] = [
     input: { levelId: 'level_g' },
     expect: {
       result: { roofLevelId: 'level_e', createdRoofLevelId: null },
-      after: { level_e: { metadata: { role: 'roof' }, name: 'Roof' } },
+      after: { level_e: { metadata: { role: 'roof' }, name: 'Tetto' } },
       check: onRoofLevel('level_g', 0),
     },
   },

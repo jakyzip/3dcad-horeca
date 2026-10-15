@@ -144,8 +144,8 @@ export function clearOpeningCuts(
     code: 'occupied-split',
     nodeIds: [wall.id, ...occupied.map((node) => node.id)],
     message: force
-      ? 'No space on the wall fits the opening clear of every crossing.'
-      : 'A crossing falls inside a door or window. Force moves the opening along its wall if it fits.',
+      ? 'Sul muro non c’è spazio per l’apertura lontano da ogni attraversamento.'
+      : 'Un attraversamento cade dentro una porta o una finestra. Forzando, l’apertura si sposta lungo il muro se c’è spazio.',
   })
   if (!force) return refused()
   const fixed = openings

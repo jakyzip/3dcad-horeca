@@ -49,7 +49,7 @@ export function legacySpecToMaterialRef(
   // One shared datablock per custom colour (mirrors `commitSlotPaint`'s dedupe-on-match).
   minted[id] ??= {
     id,
-    name: `Material ${Object.keys(minted).length + 1}`,
+    name: `Materiale ${Object.keys(minted).length + 1}`,
     material: spec.material as SceneMaterial['material'],
   }
   return toSceneMaterialRef(id)

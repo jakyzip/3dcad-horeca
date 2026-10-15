@@ -84,7 +84,7 @@ test('a hit resolves to the region under it, else the ceiling surface', () => {
   expect(ceilingPaint.resolveRole({ node: auto, materialIndex: null, hitObject: hit() })).toBe(
     'surface',
   )
-  expect(ceilingPaint.roleLabel?.(auto, 'region:patch')).toBe('Painted part')
+  expect(ceilingPaint.roleLabel?.(auto, 'region:patch')).toBe('Parte dipinta')
 })
 
 test('an automatic ceiling repaints and erases its room region, one undo step each', () => {

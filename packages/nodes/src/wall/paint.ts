@@ -464,8 +464,8 @@ export const wallPaint: PaintCapability = {
   ...base,
   roleLabel: (_node, role) => {
     const parsed = parseWallPaintRole(role)
-    if (parsed?.kind === 'region' || parsed?.kind === 'room-face') return 'Face'
-    if (parsed?.kind === 'room') return 'Room'
+    if (parsed?.kind === 'region' || parsed?.kind === 'room-face') return 'Faccia'
+    if (parsed?.kind === 'room') return 'Stanza'
     return null
   },
   buildPatch: (args: PaintPatchArgs) =>

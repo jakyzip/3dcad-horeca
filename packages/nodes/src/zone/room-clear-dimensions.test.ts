@@ -212,8 +212,8 @@ describe('buildRoomClearDimensions', () => {
 
     const result = dimensions(buildRoomClearDimensions(zoneA, context))
 
-    expect(result.map((entry) => entry.text).sort()).toEqual(['2.76m', '3.76m', 'R-R 0.24m'])
-    expect(result.find((entry) => entry.text.startsWith('R-R'))?.text).toBe('R-R 0.24m')
+    expect(result.map((entry) => entry.text).sort()).toEqual(['2.76m', '3.76m', 'S-S 0.24m'])
+    expect(result.find((entry) => entry.text.startsWith('S-S'))?.text).toBe('S-S 0.24m')
   })
 
   test('dimensions proven rectilinear room bays beyond simple rectangles', () => {

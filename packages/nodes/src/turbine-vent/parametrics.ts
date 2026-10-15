@@ -10,7 +10,7 @@ export const turbineVentParametrics: ParametricDescriptor<TurbineVentNode> = {
   customPanel: () => import('./panel'),
   groups: [
     {
-      label: 'Style',
+      label: 'Stile',
       fields: [
         {
           key: 'style',
@@ -21,7 +21,7 @@ export const turbineVentParametrics: ParametricDescriptor<TurbineVentNode> = {
       ],
     },
     {
-      label: 'Dimensions',
+      label: 'Dimensioni',
       fields: [
         { key: 'diameter', kind: 'number', unit: 'm', min: 0.15, max: 1000, step: 0.01 },
         { key: 'height', kind: 'number', unit: 'm', min: 0.2, max: 1000, step: 0.01 },
@@ -30,7 +30,7 @@ export const turbineVentParametrics: ParametricDescriptor<TurbineVentNode> = {
       ],
     },
     {
-      label: 'Motion',
+      label: 'Movimento',
       fields: [{ key: 'spinSpeed', kind: 'number', unit: 'rad/s', min: 0, max: 4, step: 0.1 }],
     },
   ],

@@ -143,7 +143,7 @@ function roofLevelPlan(nodes: Nodes, storeyId: string, level: LevelNode): RoofLe
               // A name a person gave stays; an unnamed level would read as a floor.
               name:
                 getLevelDisplayName(level) === getDefaultLevelName(level.level)
-                  ? 'Roof'
+                  ? 'Tetto'
                   : level.name,
             },
           },
@@ -197,7 +197,7 @@ export function planRoofLevel(nodes: Nodes, storeyId: string, roofHeight: number
     .filter((level) => !servesAsRoofLevel(nodes, level))
     .at(-1)
   const level = LevelNode.parse({
-    name: 'Roof',
+    name: 'Tetto',
     parentId: storey.parentId,
     level: (top ?? storey).level + 1,
     height: Math.max(roofHeight, 0.2),

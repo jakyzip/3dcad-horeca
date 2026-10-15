@@ -58,7 +58,7 @@ export function buildMeasurementFloorplan(
     Boolean(selected),
   )
   const style = lineStyle(stroke)
-  const statusPrefix = resolved.dangling.length > 0 ? 'Unlinked · ' : ''
+  const statusPrefix = resolved.dangling.length > 0 ? 'Scollegata · ' : ''
   const editHandles: FloorplanGeometry[] = editable
     ? measurementResolvedEditPoints(measurement).map((point, vertexIndex) => ({
         kind: 'endpoint-handle',

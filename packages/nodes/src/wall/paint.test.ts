@@ -308,6 +308,6 @@ describe('wall paint roles', () => {
       })
     expect(effective('b')).toEqual({ material: undefined, materialPreset: 'library:legacy-b' })
     expect(effective('a')).toEqual({ material: undefined, materialPreset: 'library:legacy-wall' })
-    expect(wallPaint.roleLabel?.(wall, wallRoomFinishRole('zone_room'))).toBe('Room')
+    expect(wallPaint.roleLabel?.(wall, wallRoomFinishRole('zone_room'))).toBe('Stanza')
   })
 })

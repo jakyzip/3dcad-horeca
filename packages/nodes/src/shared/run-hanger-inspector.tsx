@@ -28,10 +28,10 @@ export default function RunHangerInspector({ node }: { node: SupportedRun }) {
     <>
       <SystemCheckPanel nodeId={node.id} nodes={nodes} />
       <section className="space-y-2 border-t pt-3">
-        <h3 className="text-sm font-medium">Individual hangers</h3>
+        <h3 className="text-sm font-medium">Staffe singole</h3>
         <p className="text-xs text-muted-foreground">
-          Positions are measured along each path segment. Changing spacing regenerates the numbered
-          slots.
+          Le posizioni si misurano lungo ogni tratto del percorso. Se cambi l’interasse, le staffe
+          numerate vengono ricreate.
         </p>
         <div className="max-h-72 space-y-3 overflow-y-auto">
           {slots.map((slot, index) => {
@@ -43,7 +43,7 @@ export default function RunHangerInspector({ node }: { node: SupportedRun }) {
               <div key={slot.id} className="space-y-1 rounded border p-2 text-xs">
                 <div className="flex justify-between">
                   <span>
-                    Hanger {index + 1} · segment {slot.segmentIndex + 1}
+                    Staffa {index + 1} · tratto {slot.segmentIndex + 1}
                   </span>
                   <label>
                     <input
@@ -51,19 +51,19 @@ export default function RunHangerInspector({ node }: { node: SupportedRun }) {
                       checked={slot.skipped}
                       onChange={(event) => update(slot.id, { skipped: event.target.checked })}
                     />{' '}
-                    Skip
+                    Salta
                   </label>
                 </div>
                 {!slot.skipped && !slot.hanger && (
                   <p role="status" className="text-amber-600 dark:text-amber-400">
-                    No support within reach. Move the hanger or choose another host.
+                    Nessun supporto a portata. Sposta la staffa o scegli un altro supporto.
                   </p>
                 )}
                 <label className="flex justify-between">
-                  Position (m)
+                  Posizione (m)
                   <input
                     key={`${slot.id}:${slot.fraction}`}
-                    aria-label={`Hanger ${index + 1} position in metres`}
+                    aria-label={`Posizione della staffa ${index + 1} in metri`}
                     type="number"
                     min={0}
                     max={length}
@@ -84,14 +84,14 @@ export default function RunHangerInspector({ node }: { node: SupportedRun }) {
                   />
                 </label>
                 <select
-                  aria-label={`Hanger ${index + 1} support`}
+                  aria-label={`Supporto della staffa ${index + 1}`}
                   value={hostId}
                   className="w-full bg-background"
                   onChange={(event) => update(slot.id, { hostId: event.target.value })}
                 >
-                  <option value="">Automatic support</option>
+                  <option value="">Supporto automatico</option>
                   {hostId && !hosts.some((host) => host.id === hostId) && (
-                    <option value={hostId}>Missing support</option>
+                    <option value={hostId}>Supporto mancante</option>
                   )}
                   {hosts.map((host) => (
                     <option key={host.id} value={host.id}>
@@ -109,7 +109,7 @@ export default function RunHangerInspector({ node }: { node: SupportedRun }) {
                       })
                     }
                   >
-                    Reveal support
+                    Mostra il supporto
                   </button>
                 )}
               </div>

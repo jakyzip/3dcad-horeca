@@ -7,7 +7,8 @@ export function planStairRiseEdit(
   totalRise: number,
   nodes: Readonly<Record<string, AnyNode | undefined>>,
 ): StairUpdate[] {
-  if (!Number.isFinite(totalRise) || totalRise <= 0) throw new RangeError('Rise must be positive')
+  if (!Number.isFinite(totalRise) || totalRise <= 0)
+    throw new RangeError('Il dislivello deve essere positivo')
   const updates: StairUpdate[] = [{ id: stair.id, data: { totalRise } }]
   if (stair.stairType !== 'straight') return updates
   const segments = stair.children

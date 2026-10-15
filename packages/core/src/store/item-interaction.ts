@@ -27,7 +27,7 @@ export function itemInteraction(interactive: Interactive): ItemInteraction {
   return { kind: 'switch' }
 }
 
-/** The walkthrough prompt for an item: "open Garage door", "play Princess twirl", "turn on Lamp". */
+/** The walkthrough prompt for an item, as Italian infinitives: "aprire Porta del garage", "avviare Piroetta", "accendere Lampada". */
 export function itemPrompt(
   itemId: AnyNodeId,
   name: string,
@@ -39,12 +39,12 @@ export function itemPrompt(
     const isOn = interactive.controls.some(
       (control, index) => control.kind === 'toggle' && Boolean(values?.[index]),
     )
-    return { label: name, verb: isOn ? 'turn off' : 'turn on', isOn }
+    return { label: name, verb: isOn ? 'spegnere' : 'accendere', isOn }
   }
   const isOn = Boolean(values?.[interaction.control])
   return interaction.kind === 'open'
-    ? { label: name, verb: isOn ? 'close' : 'open', isOn }
-    : { label: interaction.clip, verb: isOn ? 'pause' : 'play', isOn }
+    ? { label: name, verb: isOn ? 'chiudere' : 'aprire', isOn }
+    : { label: interaction.clip, verb: isOn ? 'fermare' : 'avviare', isOn }
 }
 
 /** E on an item, by the same rule as its prompt. */

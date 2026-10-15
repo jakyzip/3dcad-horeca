@@ -267,7 +267,7 @@ describe('viewer breadcrumb', () => {
     )
     expect(crumbs.map((crumb) => [crumb.kind, crumb.label])).toEqual([
       ['building', 'House'],
-      ['level', 'Ground floor'],
+      ['level', 'Piano terra'],
       ['room', 'Kitchen'],
       ['node', 'Sofa'],
     ])
@@ -279,13 +279,13 @@ describe('viewer breadcrumb', () => {
     const room = { buildingId, levelId, zoneId: living, selectedIds: [] } as ViewerSelection
     expect(viewerBreadcrumb(room, null, nodes).map((crumb) => crumb.label)).toEqual([
       'House',
-      'Ground floor',
+      'Piano terra',
       'Living',
     ])
     const floor = { ...room, zoneId: null }
     expect(viewerBreadcrumb(floor, 'unit_a', nodes).map((crumb) => crumb.label)).toEqual([
       'House',
-      'Ground floor',
+      'Piano terra',
       'Apartment A',
     ])
     expect(viewerBreadcrumb(nothing, null, nodes).map((crumb) => crumb.kind)).toEqual(['building'])

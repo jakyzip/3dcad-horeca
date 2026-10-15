@@ -9,22 +9,25 @@ describe('the warning a person reads for a floor item that does not fit', () => 
   test("in a door's way, naming the room", () => {
     expect(
       floorItemMisfitNotice({ code: 'blocks_door', room: bath, doorId: 'door_a' }, [1.6, 0.6, 0.8]),
-    ).toEqual({ line: 'Blocks the door to Bath' })
+    ).toEqual({ line: 'Blocca la porta di Bath' })
   })
 
   test('too large for its room, with both sizes', () => {
     expect(
       floorItemMisfitNotice({ code: 'too_large_for_room', room: bath }, [2.34, 0.6, 1.11]),
-    ).toEqual({ line: 'Too large for Bath', detail: '2.34 × 1.11 m in a 2.2 × 1.9 m room' })
+    ).toEqual({
+      line: 'Troppo grande per Bath',
+      detail: '2,34 × 1,11 m in una stanza di 2,2 × 1,9 m',
+    })
   })
 
   test('a room without a name still reads', () => {
     expect(
       floorItemMisfitNotice({ code: 'blocks_door', room: unnamed, doorId: 'door_a' }, [1, 1, 1]),
-    ).toEqual({ line: 'Blocks a door' })
+    ).toEqual({ line: 'Blocca una porta' })
     expect(
       floorItemMisfitNotice({ code: 'too_large_for_room', room: unnamed }, [3, 1, 1]).line,
-    ).toBe('Too large for its room')
+    ).toBe('Troppo grande per la sua stanza')
   })
 })
 
@@ -57,7 +60,7 @@ describe("the item's placement notice", () => {
   test('reads the item where it is held, not where it was stored', () => {
     expect(itemPlacementNotice(tub, { nodes })).toBeNull()
     expect(itemPlacementNotice(tub, { nodes, live: { position: [1, 0, 1], rotation: 0 } })).toEqual(
-      { line: 'Too large for Bath', detail: '3 × 1 m in a 2 × 2 m room' },
+      { line: 'Troppo grande per Bath', detail: '3 × 1 m in una stanza di 2 × 2 m' },
     )
   })
 

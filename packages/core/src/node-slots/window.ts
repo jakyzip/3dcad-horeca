@@ -10,7 +10,7 @@ const GLASS_DEFAULT = 'library:preset-glass'
 /** A window exposes two paintable slots: the joinery frame and the glass. */
 export function windowSlots(): SlotDeclaration[] {
   return [
-    { slotId: 'frame', label: 'Frame', default: FRAME_DEFAULT },
-    { slotId: 'glass', label: 'Glass', default: GLASS_DEFAULT },
+    { slotId: 'frame', label: 'Telaio', default: FRAME_DEFAULT },
+    { slotId: 'glass', label: 'Vetro', default: GLASS_DEFAULT },
   ]
 }

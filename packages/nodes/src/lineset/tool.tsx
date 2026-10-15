@@ -122,7 +122,7 @@ const LinesetTool = () => {
       const lineset = LinesetNode.parse({
         ...linesetDefinition.defaults(),
         ...useEditor.getState().toolDefaults.lineset,
-        name: 'Lineset',
+        name: 'Linea frigorifera',
         path: [start, end],
       })
       useScene.getState().createNode(lineset, activeLevelId)

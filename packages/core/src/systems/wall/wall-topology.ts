@@ -555,7 +555,7 @@ export function planWallInsertion(
     WallSchema.parse({
       ...wallProperties,
       id: args.mintId?.(),
-      name: `Wall ${existingWallCount + index + 1}`,
+      name: `Muro ${existingWallCount + index + 1}`,
       start,
       end: vertices[index + 1]!,
     }),

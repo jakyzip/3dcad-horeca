@@ -14,6 +14,8 @@ import {
 } from '@pascal-app/editor'
 import { useViewer } from '@pascal-app/viewer'
 
+const lowerFirst = (text: string) => text.charAt(0).toLowerCase() + text.slice(1)
+
 export const roofPanelModel: NodePanelModel<RoofNode> = {
   rows({ node, nodes, update }) {
     const select = (id: AnyNodeId) => useViewer.getState().setSelection({ selectedIds: [id] })
@@ -30,16 +32,16 @@ export const roofPanelModel: NodePanelModel<RoofNode> = {
     const rows: PanelRow[] = segments.map((segment, index) => ({
       id: segment.id,
       kind: 'choice',
-      section: 'Segments',
-      label: segment.name || `Segment ${index + 1}`,
+      section: 'Falde',
+      label: segment.name || `Falda ${index + 1}`,
       value: segment.roofType,
       onSelect: () => select(segment.id),
     }))
     rows.push({
       id: 'add-segment',
       kind: 'action',
-      section: 'Segments',
-      label: 'Draw Segment',
+      section: 'Falde',
+      label: 'Disegna falda',
       // Arming a tool ends the selection; the roof tool draws into the roof
       // selected while it is armed, so hand it this one explicitly.
       onSelect: () => {
@@ -51,7 +53,7 @@ export const roofPanelModel: NodePanelModel<RoofNode> = {
       rows.push({
         id: `position-${axis}`,
         kind: 'stepper',
-        section: 'Position',
+        section: 'Posizione',
         label: 'XYZ'[axis]!,
         value: node.position[axis],
         unit: 'm',
@@ -69,8 +71,8 @@ export const roofPanelModel: NodePanelModel<RoofNode> = {
       {
         id: 'rotation',
         kind: 'stepper',
-        section: 'Position',
-        label: 'Rotation',
+        section: 'Posizione',
+        label: 'Rotazione',
         value: Math.round((node.rotation * 180) / Math.PI),
         unit: '°',
         step: 1,
@@ -81,7 +83,7 @@ export const roofPanelModel: NodePanelModel<RoofNode> = {
       {
         id: 'rotate',
         kind: 'actions',
-        section: 'Position',
+        section: 'Posizione',
         actions: [-1, 1].map((direction) => ({
           id: `rotate-${direction}`,
           label: direction < 0 ? '-45°' : '+45°',
@@ -104,7 +106,7 @@ export const roofPanelModel: NodePanelModel<RoofNode> = {
       rows.push({
         id: child.id,
         kind: 'action',
-        section: 'Elements',
+        section: 'Elementi',
         label: child.name || nodeRegistry.get(child.type)?.presentation?.label || child.type,
         onSelect: () => select(child.id),
       })
@@ -121,8 +123,8 @@ export const roofPanelModel: NodePanelModel<RoofNode> = {
       rows.push({
         id: `add-${kind}`,
         kind: 'action',
-        section: 'Features & extensions',
-        label: `Add ${definition.presentation?.label ?? kind}`,
+        section: 'Elementi e ampliamenti',
+        label: `Aggiungi ${lowerFirst(definition.presentation?.label ?? kind)}`,
         icon: icon?.kind === 'url' ? { src: icon.src } : undefined,
         onSelect: () => activate(kind),
       })
@@ -130,11 +132,11 @@ export const roofPanelModel: NodePanelModel<RoofNode> = {
     rows.push({
       id: 'roof-actions',
       kind: 'actions',
-      section: 'Actions',
+      section: 'Azioni',
       actions: [
         {
           id: 'move',
-          label: 'Move',
+          label: 'Sposta',
           onSelect: () => {
             const live = useScene.getState().nodes[node.id]
             if (!live) return
@@ -145,7 +147,7 @@ export const roofPanelModel: NodePanelModel<RoofNode> = {
         },
         {
           id: 'duplicate',
-          label: 'Duplicate',
+          label: 'Duplica',
           onSelect: () => {
             const live = useScene.getState().nodes[node.id]
             if (live) duplicateNodeAndPickUp(live)
@@ -153,7 +155,7 @@ export const roofPanelModel: NodePanelModel<RoofNode> = {
         },
         {
           id: 'delete',
-          label: 'Delete',
+          label: 'Elimina',
           onSelect: () => {
             const live: AnyNode | undefined = useScene.getState().nodes[node.id]
             if (!live) return

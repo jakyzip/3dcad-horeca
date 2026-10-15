@@ -36,9 +36,9 @@ describe('block toolbar state', () => {
   })
 
   test('formats compact singular and plural selection labels', () => {
-    expect(formatBlockSelectionStatus('face', 1)).toBe('1 FACE')
-    expect(formatBlockSelectionStatus('edge', 2)).toBe('2 EDGES')
-    expect(formatBlockSelectionStatus('vertex', 3)).toBe('3 VERTICES')
+    expect(formatBlockSelectionStatus('face', 1)).toBe('1 FACCIA')
+    expect(formatBlockSelectionStatus('edge', 2)).toBe('2 SPIGOLI')
+    expect(formatBlockSelectionStatus('vertex', 3)).toBe('3 VERTICI')
   })
 
   test('does not show a secondary help strip for a selected transform', () => {
@@ -66,7 +66,9 @@ describe('block toolbar state', () => {
         bevelSegments: 6,
         bevelWidth: 0.2,
       }),
-    ).toBe('Bevel · width 0.2 m · 6 segments · drag changes width · wheel changes segments')
+    ).toBe(
+      'Smusso · larghezza 0,2 m · 6 segmenti · trascina per la larghezza · la rotella cambia i segmenti',
+    )
   })
 
   test('builds uniform and axis-specific scale factors', () => {

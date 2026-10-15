@@ -21,16 +21,16 @@ const APPLIANCE_INTERIOR_DEFAULT = 'library:preset-charcoal'
 
 export function cabinetSlots(): SlotDeclaration[] {
   return [
-    { slotId: 'front', label: 'Front', default: FRONT_DEFAULT },
-    { slotId: 'carcass', label: 'Carcass', default: CARCASS_DEFAULT },
-    { slotId: 'countertop', label: 'Countertop', default: COUNTERTOP_DEFAULT },
-    { slotId: 'plinth', label: 'Plinth', default: PLINTH_DEFAULT },
-    { slotId: 'hardware', label: 'Hardware', default: HARDWARE_DEFAULT },
-    { slotId: 'glass', label: 'Glass', default: GLASS_DEFAULT },
-    { slotId: 'appliance', label: 'Appliance', default: APPLIANCE_DEFAULT },
+    { slotId: 'front', label: 'Frontale', default: FRONT_DEFAULT },
+    { slotId: 'carcass', label: 'Struttura', default: CARCASS_DEFAULT },
+    { slotId: 'countertop', label: 'Piano di lavoro', default: COUNTERTOP_DEFAULT },
+    { slotId: 'plinth', label: 'Zoccolo', default: PLINTH_DEFAULT },
+    { slotId: 'hardware', label: 'Ferramenta', default: HARDWARE_DEFAULT },
+    { slotId: 'glass', label: 'Vetro', default: GLASS_DEFAULT },
+    { slotId: 'appliance', label: 'Elettrodomestico', default: APPLIANCE_DEFAULT },
     {
       slotId: 'applianceInterior',
-      label: 'Appliance Interior',
+      label: 'Interno elettrodomestico',
       default: APPLIANCE_INTERIOR_DEFAULT,
     },
   ]

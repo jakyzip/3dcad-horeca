@@ -195,6 +195,9 @@ L'utente è iscritto all'Apple Developer Program, ma nel Portachiavi ci sono sol
 
 ### Traduzione in italiano (scelta dell'utente, 2026-10-15: solo italiano, direttamente nel codice)
 Blocco 1 (fatto): pagine dell'app, barre, menu, tavolozza dei comandi, suggerimenti a schermo, strumenti, nomi dei tasti; circa 1.100 testi in ~175 file, glossario in `docs/progetto/GLOSSARIO.md`. Nuovi progetti "Progetto #n", nuove zone "Zona n" (i vecchi nomi inglesi continuano a contare). Restano in inglese: pannelli laterali e proprietà (blocco 2), nomi predefiniti e definizioni degli oggetti in `packages/nodes` e `core` (blocco 3), messaggi tecnici della stampa 3D, la tavola americana `lib/floorplan/site-plan` (in piedi e pollici: decidere se serve).
+Blocco 2 (fatto): barra laterale, impostazioni, scorciatoie, pannelli delle proprietà, materiali, terreno, temi della vista 3D.
+Blocco 3 (fatto): definizioni dei tipi di oggetto (`packages/nodes`) e testi del nucleo (`packages/core`): nomi dei tipi, campi, preset, nomi predefiniti ("Piano terra", "Muro N", "Stanza N", "Porta N"…), messaggi dei comandi, abachi nel PDF, verbi della visita. Dizionario `packages/editor/src/lib/field-labels-it.ts` per le etichette dei campi generate dai nomi interni. I nomi predefiniti inglesi dei progetti vecchi continuano a essere riconosciuti (numerazione, "Ground floor" mostrato come "Piano terra").
+Restano in inglese: testi per l'assistente AI (MCP), nomi dei moduli dei mobili che il codice confronta ("Base Cabinet"…), materiali degli strati dei muri (americani), diagnostica della stampa 3D, la tavola `site-plan` americana, alcune quote scritte col punto da `formatConstructionLength` ("Ora 2.45m").
 Circa 2.700 testi in inglese nell'editor ereditato. A blocchi con un commit ciascuno: menu e barre, pannelli, proprietà degli oggetti. Le descrizioni per l'assistente AI (MCP) restano in inglese. Più lingue: forse in futuro.
 
 ## Fase 7: rilascio

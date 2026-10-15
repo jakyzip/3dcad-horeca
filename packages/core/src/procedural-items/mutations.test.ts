@@ -67,7 +67,7 @@ test('occupied surfaces are protected through direct store updates', () => {
   useScene.setState({ nodes: { [node.id]: node, [book.id]: book } as never, readOnly: false })
   expect(() =>
     useScene.getState().updateNode(node.id as never, { parameters: { rows: 2 } } as never),
-  ).toThrow('hosted item')
+  ).toThrow('oggetto appoggiato')
   useScene.getState().updateNode(node.id as never, { parameters: { height: 2 } } as never)
   expect(
     (useScene.getState().nodes[node.id as never] as unknown as ProceduralItemNode).parameters

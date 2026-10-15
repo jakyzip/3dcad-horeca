@@ -25,17 +25,17 @@ export function buildRoomFloorplanSchedule(args: {
 
   return {
     id: 'rooms',
-    title: 'ROOM SCHEDULE',
+    title: 'ABACO DELLE STANZE',
     columns: [
-      { key: 'number', label: 'NO.', weight: 0.7 },
-      { key: 'name', label: 'ROOM NAME', weight: 1.35 },
-      { key: 'area', label: 'AREA', weight: 0.9 },
-      { key: 'floorFinish', label: 'FLOOR FINISH', weight: 1.15 },
-      { key: 'wallFinish', label: 'WALL FINISH', weight: 1.15 },
-      { key: 'ceilingFinish', label: 'CEILING FINISH', weight: 1.15 },
-      { key: 'ceilingHeight', label: 'CLG. HT.', weight: 0.9 },
-      { key: 'occupancy', label: 'OCCUPANCY / USE', weight: 1.25 },
-      { key: 'enclosure', label: 'ENCLOSURE', weight: 0.9 },
+      { key: 'number', label: 'N.', weight: 0.7 },
+      { key: 'name', label: 'NOME STANZA', weight: 1.35 },
+      { key: 'area', label: 'SUPERFICIE', weight: 0.9 },
+      { key: 'floorFinish', label: 'FINITURA PAVIMENTO', weight: 1.15 },
+      { key: 'wallFinish', label: 'FINITURA MURI', weight: 1.15 },
+      { key: 'ceilingFinish', label: 'FINITURA SOFFITTO', weight: 1.15 },
+      { key: 'ceilingHeight', label: 'H SOFFITTO', weight: 0.9 },
+      { key: 'occupancy', label: 'DESTINAZIONE D’USO', weight: 1.25 },
+      { key: 'enclosure', label: 'CHIUSURA', weight: 0.9 },
     ],
     rows: rooms.map(({ zone, report }) => ({
       id: zone.id,
@@ -72,14 +72,14 @@ function valueOrDash(value: string): string {
 
 function formatRoomArea(squareMeters: number, unit: ConstructionLinearUnit): string {
   if (!Number.isFinite(squareMeters)) return '—'
-  if (unit === 'metric') return `${squareMeters.toFixed(2)} m²`
-  return `${(squareMeters * SQUARE_FEET_PER_SQUARE_METER).toFixed(1)} ft²`
+  if (unit === 'metric') return `${squareMeters.toFixed(2).replace('.', ',')} m²`
+  return `${(squareMeters * SQUARE_FEET_PER_SQUARE_METER).toFixed(1).replace('.', ',')} ft²`
 }
 
 function resolveEnclosure(zone: ZoneNode, classification: 'footprint' | 'enclosed-room'): string {
-  if (zone.enclosureStatus === 'enclosed') return 'Enclosed'
-  if (zone.enclosureStatus === 'open') return 'Open'
-  return classification === 'enclosed-room' ? 'Enclosed' : 'Open'
+  if (zone.enclosureStatus === 'enclosed') return 'Chiusa'
+  if (zone.enclosureStatus === 'open') return 'Aperta'
+  return classification === 'enclosed-room' ? 'Chiusa' : 'Aperta'
 }
 
 function collectRoomScheduleIssues(
@@ -94,7 +94,7 @@ function collectRoomScheduleIssues(
   for (const { zone, report } of rooms) {
     const number = zone.roomNumber.trim()
     if (!number) {
-      issues.push(`Room ${zone.name.trim() || zone.id} has no room number`)
+      issues.push(`La stanza ${zone.name.trim() || zone.id} non ha un numero`)
     } else {
       const normalized = number.toLocaleUpperCase()
       const duplicates = numberedRooms.get(normalized)
@@ -103,13 +103,15 @@ function collectRoomScheduleIssues(
     }
 
     if (zone.enclosureStatus === 'enclosed' && report.classification !== 'enclosed-room') {
-      issues.push(`Room ${number || zone.name.trim() || zone.id} is marked enclosed but not proven`)
+      issues.push(
+        `La stanza ${number || zone.name.trim() || zone.id} è indicata come chiusa ma non è verificata`,
+      )
     }
   }
 
   for (const [normalizedNumber, duplicateRooms] of numberedRooms) {
     if (duplicateRooms.length < 2) continue
-    issues.push(`Duplicate room number ${normalizedNumber} (${duplicateRooms.length} rooms)`)
+    issues.push(`Numero di stanza ${normalizedNumber} duplicato (${duplicateRooms.length} stanze)`)
   }
 
   return issues

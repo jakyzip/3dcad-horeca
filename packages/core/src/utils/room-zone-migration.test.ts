@@ -74,7 +74,7 @@ describe('M3 room zones', () => {
     const room = zones(first.nodes)[0]!
     expect(ZoneNode.parse(room)).toEqual(room)
     expect(room).toMatchObject({
-      name: 'Room 1',
+      name: 'Stanza 1',
       color: '#3b82f6',
       parentId: 'level_main',
       seed: [5, 5],
@@ -540,7 +540,7 @@ describe('M3 adoption of hand-drawn zones', () => {
     const bedroom = migrated.nodes.zone_bedroom as ZoneNode
     expect(bedroom.name).toBe('Bedroom')
     expect(area([{ outer: bedroom.polygon, holes: bedroom.holes }])).toBeCloseTo(20)
-    expect((migrated.nodes[migrated.createdZoneIds[0]!] as ZoneNode).name).toBe('Room 1')
+    expect((migrated.nodes[migrated.createdZoneIds[0]!] as ZoneNode).name).toBe('Stanza 1')
   })
 
   test('an aggregate zone over several rooms stays a zone; its rooms are numbered past existing ones', () => {
@@ -576,7 +576,7 @@ describe('M3 adoption of hand-drawn zones', () => {
     expect(migrated.createdZoneIds).toHaveLength(3)
     expect(
       migrated.createdZoneIds.map((id) => (migrated.nodes[id] as ZoneNode).name).sort(),
-    ).toEqual(['Room 1', 'Room 3', 'Room 4'])
+    ).toEqual(['Stanza 1', 'Stanza 3', 'Stanza 4'])
     expect((migrated.nodes.zone_cleared as ZoneNode).name).toBe('')
   })
 
@@ -692,13 +692,13 @@ describe('hand-drawn zones in a production house', () => {
   test('unnamed rooms are numbered, never "Room", and no face holds two rooms', () => {
     const rooms = zones(first).filter((zone) => zone.spaceRole === 'room' && zone.autoFromWalls)
     expect(rooms).toHaveLength(17)
-    expect(rooms.filter((zone) => zone.name === 'Room')).toEqual([])
+    expect(rooms.filter((zone) => zone.name === 'Room' || zone.name === 'Stanza')).toEqual([])
     expect(
       rooms
         .filter((zone) => !source[zone.id])
         .map((zone) => zone.name)
         .sort(),
-    ).toEqual(['Room 1', 'Room 2', 'Room 3', 'Room 4', 'Room 5', 'Room 6'])
+    ).toEqual(['Stanza 1', 'Stanza 2', 'Stanza 3', 'Stanza 4', 'Stanza 5', 'Stanza 6'])
     const keys = rooms.map((zone) => [...zone.boundaryWallIds].sort().join('|'))
     expect(new Set(keys).size).toBe(keys.length)
   })

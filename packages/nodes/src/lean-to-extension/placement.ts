@@ -137,10 +137,10 @@ export function resolveLeanToFreestandingPlacement(
   const parsed = LeanToExtensionNode.parse({
     name:
       canopyForm === 'gable'
-        ? 'Freestanding Gable Canopy'
+        ? 'Tettoia isolata a capanna'
         : canopyForm === 'butterfly'
-          ? 'Freestanding Butterfly Canopy'
-          : 'Freestanding Lean-to Canopy',
+          ? 'Tettoia isolata a farfalla'
+          : 'Tettoia isolata a una falda',
     parentId: levelId,
     canopyForm,
     hostKind: 'freestanding',
@@ -380,7 +380,7 @@ export function resolveLeanToSlabEdgePlacement({
   if (highEdgeHeight < 0.8 || highEdgeHeight > 10) return null
 
   const parsed = LeanToExtensionNode.parse({
-    name: 'Slab-attached Lean-to Canopy',
+    name: 'Tettoia a una falda su solaio',
     parentId: activeLevelId,
     hostKind: 'slab-edge',
     hostSlabId: slab.id,

@@ -69,7 +69,7 @@ test('partition: shared rooms and own singletons have stable IDs and independent
   expect(own.id).toBe(keyedFloorPlateId(s.level.id, zone(nodes, id).floor!.footprint!, 0))
   expect(own.elevation).toBe(-0.4)
   expect(zone(nodes, id).floor?.elevation).toBeUndefined()
-  expect(floorFootprintName(nodes, own)).toBe('Lanai floor')
+  expect(floorFootprintName(nodes, own)).toBe('Pavimento Lanai')
   expect(area([shape(bases(nodes).find((p) => p.id !== own.id)!)])).toBeLessThan(
     area([shape(bases(s.nodes)[0]!)]),
   )
@@ -239,7 +239,7 @@ test('split and merge carry the own flag and height; duplicated room carries its
   for (const room of children) expect(room.floor?.footprint).toBe(zone(nodes, id).floor?.footprint)
   expect(
     floorFootprintName(split, bases(split).find((plate) => plate.zoneIds?.includes(id))!),
-  ).toBe('Lanai floor')
+  ).toBe('Pavimento Lanai')
   for (const room of children) expect(getRoomBaseElevation(split, room.id)).toBeCloseTo(-0.4)
   delete split[divider.id]
   const merged = reconcile(split)
@@ -257,7 +257,7 @@ test('split and merge carry the own flag and height; duplicated room carries its
       merged,
       bases(merged).find((plate) => plate.zoneIds?.includes(survivor.id))!,
     ),
-  ).toBe('Merged room floor')
+  ).toBe('Pavimento Merged room')
   let counter = 0
   const plan = duplicateZone(nodes, {
     zoneId: id,
@@ -277,7 +277,7 @@ test('infeasible relative height on an own floor refuses clearly; in-app writes 
   const patch = { floor: { ...zone(nodes, id).floor, elevation: 4 } }
   expect(setZoneIntent(nodes, { zoneId: id, patch }).changes).toEqual([])
   expect(() => assertDerivedNodeWrites(nodes, { update: [{ id, data: patch }] })).toThrow(
-    'does not fit',
+    'non ci sta',
   )
   expect(filterDerivedNodeWrites(nodes, { update: [{ id, data: patch }] }).update).toEqual([])
 })
@@ -351,7 +351,7 @@ test('upper own plates classify support independently, preserve the soffit and h
     patch: { floor: { footprint: 'new' } },
   })
   expect(plan.changes).toEqual([])
-  expect(plan.conflicts?.[0]?.message).toContain('Level the floors first')
+  expect(plan.conflicts?.[0]?.message).toContain('Prima porta i pavimenti alla stessa quota')
   expect(
     filterDerivedNodeWrites(bad, {
       update: [{ id: s.zones[1]!.id, data: { floor: { elevation: -0.2, footprint: 'new' } } }],
@@ -452,7 +452,7 @@ test('an upper storey spanning shared and own footprints still requires raising 
     patch: { floorHeight: 0.3 },
   })
   expect(plan.changes).toEqual([])
-  expect(plan.conflicts?.[0]?.message).toContain('raise both or neither')
+  expect(plan.conflicts?.[0]?.message).toContain('alzali entrambi o nessuno dei due')
 })
 
 test('partition retains a multi-room shared set alongside an own singleton and existing platforms', async () => {
@@ -471,7 +471,7 @@ test('partition retains a multi-room shared set alongside an own singleton and e
   expect(platform.elevation).toBe(0.3)
   expect(
     floorFootprintName(nodes, bases(nodes).find((plate) => plate.zoneIds!.length === 2)!),
-  ).toBe('Shared floor')
+  ).toBe('Pavimento comune')
 })
 
 test('conversion preserves explicit wall tops as their plate support changes', async () => {
@@ -510,7 +510,7 @@ test('touching rooms join a key into one named plate and retain raised and sunke
   expect(bases(joined)[0]!.zoneIds?.slice().sort()).toEqual(s.zones.map((room) => room.id).sort())
   expect(bases(joined)[0]!.elevation).toBeCloseTo(-0.2)
   expect(zone(joined, s.zones[0]!.id).floor?.elevation).toBeCloseTo(0.05)
-  expect(floorFootprintName(joined, bases(joined)[0]!)).not.toBe('Shared floor')
+  expect(floorFootprintName(joined, bases(joined)[0]!)).not.toBe('Pavimento comune')
   for (const elevation of [0.3, -0.3]) {
     const raised = setZoneIntent(joined, { zoneId: id, patch: { floor: { elevation } } })
     expect(raised.conflicts ?? []).toEqual([])
@@ -572,7 +572,7 @@ test('floor choices expose current and touching keys, exclude distant floors, an
   expect(choices[0]).toMatchObject({
     key: zone(nodes, id).floor!.footprint,
     current: true,
-    name: 'Lanai floor',
+    name: 'Pavimento Lanai',
   })
   expect(choices[1]).toMatchObject({ key: null, current: false })
   const slab = SlabNode.parse({ parentId: s.level.id, polygon: zone(nodes, id).polygon })
@@ -767,7 +767,7 @@ test.each([
     { ...nodes, [ceiling.id]: spanning },
     { zoneId: id, patch: { floorHeight: -0.05 } },
   )
-  expect(refused.conflicts?.[0]?.message).toContain('raise both or neither')
+  expect(refused.conflicts?.[0]?.message).toContain('alzali entrambi o nessuno dei due')
 })
 
 test('keyed plates stay ground-bearing on their foundation; solid only while raised', () => {

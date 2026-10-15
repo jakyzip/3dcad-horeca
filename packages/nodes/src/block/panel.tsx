@@ -59,7 +59,7 @@ function materialRefLabel(
   const color = parseMaterialColor(ref)
   if (color) return color.toUpperCase()
   const parsed = parseMaterialRef(ref)
-  if (!parsed) return 'Default material'
+  if (!parsed) return 'Materiale predefinito'
   if (parsed.kind === 'scene')
     return sceneMaterials[parsed.id as keyof typeof sceneMaterials]?.name ?? ref ?? parsed.id
   return getCatalogMaterialById(parsed.id)?.label ?? ref ?? parsed.id
@@ -155,9 +155,9 @@ export default function BlockPanel() {
   const slotDeclarations = blockSlots(node)
   const canOperateOnFaces = editing && selection.mode === 'face'
   const slotEditTitle = !editing
-    ? 'Enter Edit Mode to use slot actions'
+    ? 'Entra in modalità modifica per usare le azioni sugli slot'
     : readOnly
-      ? 'Scene is read-only'
+      ? 'La scena è di sola lettura'
       : undefined
   const faceCountBySlot = new Map<string, number>()
   for (const face of node.topology.faces) {
@@ -190,7 +190,7 @@ export default function BlockPanel() {
               ...current.materials,
               [resolution.newSceneMaterial.id as SceneMaterialId]: {
                 ...resolution.newSceneMaterial,
-                name: 'Block Accent',
+                name: 'Accento del blocco',
               },
             }
           : current.materials,
@@ -207,10 +207,10 @@ export default function BlockPanel() {
     })
     if (!committed) return
     useScene.getState().markDirty(node.id)
-    const faceLabel = selectedFaceIds.length === 1 ? 'face' : 'faces'
+    const faceLabel = selectedFaceIds.length === 1 ? 'faccia' : 'facce'
     setSlotNotice({
       nodeId: node.id,
-      text: `${result.slotNames[result.slotId] ?? result.slotId} applied to ${selectedFaceIds.length} ${faceLabel} with an accent material. Use Paint (P) to replace it.`,
+      text: `${result.slotNames[result.slotId] ?? result.slotId} applicato a ${selectedFaceIds.length} ${faceLabel} con un materiale di accento. Usa Dipingi (P) per sostituirlo.`,
     })
     triggerSFX('sfx:menu-click')
   }
@@ -260,18 +260,18 @@ export default function BlockPanel() {
   }
 
   const selectionLabel = !editing
-    ? 'Enter Edit Mode to assign faces'
+    ? 'Entra in modalità modifica per assegnare le facce'
     : selection.mode !== 'face'
-      ? 'Switch to Face Select (3)'
+      ? 'Passa a Selezione facce (3)'
       : materialSelection.kind === 'empty'
-        ? 'No faces selected'
+        ? 'Nessuna faccia selezionata'
         : materialSelection.kind === 'mixed'
-          ? `${selectedFaceIds.length} faces · Mixed slots`
-          : `${selectedFaceIds.length} ${selectedFaceIds.length === 1 ? 'face' : 'faces'} · ${slotDeclarations.find((slot) => slot.slotId === materialSelection.slotId)?.label ?? materialSelection.slotId}`
+          ? `${selectedFaceIds.length} facce · Slot vari`
+          : `${selectedFaceIds.length} ${selectedFaceIds.length === 1 ? 'faccia' : 'facce'} · ${slotDeclarations.find((slot) => slot.slotId === materialSelection.slotId)?.label ?? materialSelection.slotId}`
 
   return (
-    <PanelWrapper icon="/icons/cube.webp" onClose={close} title={node.name || 'Block'} width={340}>
-      <PanelSection title="Position">
+    <PanelWrapper icon="/icons/cube.webp" onClose={close} title={node.name || 'Blocco'} width={340}>
+      <PanelSection title="Posizione">
         {(
           [
             { axis: 0, label: 'X', onChange: updatePositionX },
@@ -291,7 +291,7 @@ export default function BlockPanel() {
         ))}
       </PanelSection>
 
-      <PanelSection title="Slots">
+      <PanelSection title="Slot materiale">
         <div className="rounded-md border border-border/50 bg-background/40 px-2.5 py-2 text-muted-foreground text-xs">
           {selectionLabel}
         </div>
@@ -301,11 +301,11 @@ export default function BlockPanel() {
             className={SLOT_DISABLED_ACTION_CLASS}
             disabled={!canOperateOnFaces || selectedFaceIds.length === 0 || readOnly}
             icon={<Plus className="h-3.5 w-3.5" />}
-            label="Add slot"
+            label="Aggiungi slot"
             onClick={addMaterialSlot}
             title={
               slotEditTitle ??
-              (selectedFaceIds.length === 0 ? 'Select one or more faces first' : undefined)
+              (selectedFaceIds.length === 0 ? 'Prima seleziona una o più facce' : undefined)
             }
           />
         </div>
@@ -329,7 +329,7 @@ export default function BlockPanel() {
             const materialLabel =
               ref || slot.slotId === BLOCK_BODY_SLOT_ID
                 ? materialRefLabel(ref, sceneMaterials)
-                : 'Unpainted'
+                : 'Non dipinto'
             return (
               <div
                 className={`group relative flex min-h-11 items-stretch border-border/50 ${
@@ -339,7 +339,7 @@ export default function BlockPanel() {
               >
                 <button
                   className="absolute inset-0 z-0 rounded-none disabled:cursor-not-allowed disabled:opacity-50"
-                  aria-label={`Apply ${slot.label} to selected faces`}
+                  aria-label={`Applica ${slot.label} alle facce selezionate`}
                   aria-pressed={active}
                   disabled={!canOperateOnFaces || selectedFaceIds.length === 0 || readOnly}
                   onClick={() => assignSlot(slot.slotId)}
@@ -358,7 +358,7 @@ export default function BlockPanel() {
 
                 <span className="pointer-events-none relative z-10 flex min-w-0 flex-1 flex-col justify-center py-1.5">
                   <input
-                    aria-label={`Rename ${slot.label} slot`}
+                    aria-label={`Rinomina lo slot ${slot.label}`}
                     className="pointer-events-auto h-5 min-w-0 rounded bg-transparent px-1 font-medium text-foreground text-xs outline-none focus:bg-background/70 focus:ring-1 focus:ring-primary/50 disabled:cursor-not-allowed"
                     defaultValue={slot.label}
                     disabled={!editing || readOnly}
@@ -376,7 +376,7 @@ export default function BlockPanel() {
                     }}
                   />
                   <span className="truncate px-1 text-[10px] text-muted-foreground">
-                    {materialLabel} · {faceCount} {faceCount === 1 ? 'face' : 'faces'}
+                    {materialLabel} · {faceCount} {faceCount === 1 ? 'faccia' : 'facce'}
                   </span>
                 </span>
 
@@ -389,10 +389,10 @@ export default function BlockPanel() {
                 ) : (
                   <button
                     className={`${SLOT_TRAILING_ACTION_CLASS} relative z-10 text-muted-foreground transition-colors hover:bg-red-500/15 hover:text-red-700 dark:hover:text-red-300 focus-visible:bg-red-500/15 focus-visible:text-red-700 dark:focus-visible:text-red-300 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-muted-foreground dark:disabled:hover:text-muted-foreground`}
-                    aria-label={`Delete ${slot.label} slot`}
+                    aria-label={`Elimina lo slot ${slot.label}`}
                     disabled={!editing || readOnly}
                     onClick={() => removeMaterialSlot(slot.slotId)}
-                    title={slotEditTitle ?? 'Delete material slot and use Body on its faces'}
+                    title={slotEditTitle ?? 'Elimina lo slot materiale e usa Corpo sulle sue facce'}
                     type="button"
                   >
                     <Trash2 aria-hidden="true" className="h-3.5 w-3.5" />
@@ -404,13 +404,13 @@ export default function BlockPanel() {
         </div>
       </PanelSection>
 
-      <PanelSection title="Actions">
+      <PanelSection title="Azioni">
         <ActionGroup>
-          <ActionButton icon={<Move className="h-4 w-4" />} label="Move" onClick={move} />
+          <ActionButton icon={<Move className="h-4 w-4" />} label="Sposta" onClick={move} />
           <ActionButton
             className="border-red-500/40 text-red-700 dark:text-red-200 hover:bg-red-500/15"
             icon={<Trash2 className="h-4 w-4" />}
-            label="Delete"
+            label="Elimina"
             onClick={() => {
               useScene.getState().deleteNode(node.id)
               setViewerSelection({ selectedIds: [] })

@@ -99,7 +99,7 @@ test('the walkthrough opens an open clip, plays a named clip by its name, and sw
 
   expect(itemPrompt(ids[0]!, 'Garage door', garage)).toEqual({
     label: 'Garage door',
-    verb: 'open',
+    verb: 'aprire',
     isOn: false,
   })
   operateItem(ids[0]!, garage)
@@ -109,12 +109,12 @@ test('the walkthrough opens an open clip, plays a named clip by its name, and sw
   operateItem(ids[1]!, box)
   expect(itemPrompt(ids[1]!, 'Music box', box)).toEqual({
     label: 'Princess twirl',
-    verb: 'pause',
+    verb: 'fermare',
     isOn: true,
   })
   expect(useInteractive.getState().items.box!.controlValues).toEqual([true, false])
 
   operateItem(ids[2]!, lamp)
-  expect(itemPrompt(ids[2]!, 'Lamp', lamp).verb).toBe('turn off')
+  expect(itemPrompt(ids[2]!, 'Lamp', lamp).verb).toBe('spegnere')
   for (const id of ids) store.removeItem(id)
 })

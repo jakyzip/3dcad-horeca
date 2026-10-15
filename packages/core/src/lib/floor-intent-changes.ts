@@ -236,7 +236,7 @@ export function floorIntentConflicts(
           code: 'floor-foundation-level',
           severity: 'error',
           nodeIds: [id],
-          message: 'Only a plate at ground contact can have a solid foundation.',
+          message: 'Solo un solaio a contatto con il terreno può avere una fondazione piena.',
         },
       ]
     return []
@@ -534,7 +534,7 @@ export function floorIntentConflicts(
         severity: 'error',
         nodeIds: [node.id],
         excess: after,
-        message: `The ${node.type} does not fit: it exceeds its wall top by ${roundFloorElevation(after)} m.`,
+        message: `${node.type === 'door' ? 'La porta' : 'La finestra'} non ci sta: supera la sommità del muro di ${roundFloorElevation(after)} m.`,
       })
   }
   for (const node of Object.values(draft)) {
@@ -557,7 +557,7 @@ export function floorIntentConflicts(
         severity: 'error',
         nodeIds: [node.id],
         excess: after,
-        message: `The wall top exceeds the floor above by ${roundFloorElevation(after)} m.`,
+        message: `La sommità del muro supera il pavimento soprastante di ${roundFloorElevation(after)} m.`,
       })
   }
   return conflicts

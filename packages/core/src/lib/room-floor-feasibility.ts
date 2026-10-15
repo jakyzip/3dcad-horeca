@@ -239,7 +239,7 @@ function computeRoomFloor(
         excess: minElevation - proposedElevation,
         nodeIds: [zoneId, ...(base ? [base.id] : [])],
         severity: 'error',
-        message: `Floor must be at least ${roundFloorElevation(minElevation)} m to retain the level soffit.`,
+        message: `Il pavimento deve essere ad almeno ${roundFloorElevation(minElevation)} m per mantenere l’intradosso del piano.`,
       })
   }
   for (const wall of walls) {
@@ -293,7 +293,7 @@ function computeRoomFloor(
               code: 'floor-door-step',
               nodeIds: [zoneId, id],
               severity: 'warning',
-              message: 'The doorway step exceeds 20 cm and needs steps.',
+              message: 'Il gradino sulla porta supera 20 cm: servono dei gradini.',
             })
           const swingsToA =
             (opening.swingDirection === 'inward') === Math.cos(opening.rotation[1]) >= 0
@@ -305,7 +305,7 @@ function computeRoomFloor(
               code: 'floor-door-swing',
               nodeIds: [zoneId, id],
               severity: 'warning',
-              message: 'The door swings toward the lower floor across a step.',
+              message: 'La porta si apre verso il pavimento più basso, sopra un gradino.',
             })
         }
         const limit = top - opening.position[1] - opening.height / 2
@@ -316,14 +316,14 @@ function computeRoomFloor(
             excess: datum + opening.position[1] + opening.height / 2 - top,
             nodeIds: [zoneId, id],
             severity: 'error',
-            message: `Floor must be at most ${roundFloorElevation(limit)} m for ${opening.name || opening.type} to fit.`,
+            message: `Il pavimento deve essere al massimo a ${roundFloorElevation(limit)} m perché ${opening.name || (opening.type === 'door' ? 'la porta' : 'la finestra')} ci stia.`,
           })
       } else if (datum + bottom < proposedElevation - FLOOR_ELEVATION_EPSILON)
         conflicts.push({
           code: 'floor-window-sill',
           nodeIds: [zoneId, id],
           severity: 'warning',
-          message: 'The opening sill is below the room floor.',
+          message: 'Il davanzale dell’apertura è sotto il pavimento della stanza.',
         })
     }
   }
@@ -336,14 +336,14 @@ function computeRoomFloor(
       excess: proposedElevation - maxElevation,
       nodeIds: [zoneId],
       severity: 'error',
-      message: `Floor must be at most ${roundFloorElevation(maxElevation)} m to retain minimum headroom.`,
+      message: `Il pavimento deve essere al massimo a ${roundFloorElevation(maxElevation)} m per mantenere l’altezza libera minima.`,
     })
   if (ceiling - proposedElevation < 2.1 - 1e-9)
     hints.push({
       code: 'floor-low-headroom',
       nodeIds: [zoneId],
       severity: 'warning',
-      message: 'Headroom is below 2.10 m.',
+      message: 'L’altezza libera è sotto 2,10 m.',
     })
   conflicts.push(...hints)
   const elevation = Math.max(minElevation, Math.min(maxElevation, proposedElevation))

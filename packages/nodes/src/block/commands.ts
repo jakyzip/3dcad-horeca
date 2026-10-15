@@ -303,13 +303,13 @@ function loopCut(
   if (!fractions)
     return {
       ok: false,
-      error: 'Loop cut requires 1–32 cuts and a factor between 0 and 1',
+      error: 'Il taglio ad anello richiede da 1 a 32 tagli e un fattore tra 0 e 1',
     }
   const ring = resolveLoopCutRing(topology, command.edgeId)
   if (!ring)
     return {
       ok: false,
-      error: 'Loop cut requires a connected ring of quad faces',
+      error: 'Il taglio ad anello richiede un anello continuo di facce a quattro lati',
     }
   const vertexById = new Map(topology.vertices.map((vertex) => [vertex.id, vertex]))
   const edgeById = new Map(topology.edges.map((edge) => [edge.id, edge]))
@@ -333,7 +333,8 @@ function loopCut(
     const from = vertexById.get(fromId)
     const to = vertexById.get(toId)
     const edge = edgeById.get(ringEdgeId)
-    if (!(from && to && edge)) return { ok: false, error: 'Loop cut references missing topology' }
+    if (!(from && to && edge))
+      return { ok: false, error: 'Il taglio ad anello fa riferimento a una topologia mancante' }
     const ids = fractions.map(() => allocateVertexId())
     cutVerticesByEdgeId.set(ringEdgeId, ids)
     const edgeOrderIds = edge.vertexIds[0] === fromId ? ids : [...ids].reverse()
@@ -372,14 +373,15 @@ function loopCut(
     const fromCutIds = cutVerticesByEdgeId.get(step.fromEdgeId)
     const toCutIds = cutVerticesByEdgeId.get(step.toEdgeId)
     if (!(fromCutIds && toCutIds))
-      return { ok: false, error: 'Loop cut references missing topology' }
+      return { ok: false, error: 'Il taglio ad anello fa riferimento a una topologia mancante' }
     let remaining = augmentFaceLoop(face, cutVerticesByEdgeKey)
     const splitLoops: string[][] = []
     for (let index = 0; index < fromCutIds.length; index += 1) {
       const fromCutId = fromCutIds[index]!
       const toCutId = toCutIds[index]!
       const pair = splitLoopByChord(remaining, fromCutId, toCutId)
-      if (!pair) return { ok: false, error: `Could not split quad face: ${face.id}` }
+      if (!pair)
+        return { ok: false, error: `Impossibile dividere la faccia a quattro lati: ${face.id}` }
       const cutEdgeId = allocateEdgeId()
       cutEdgeIds.push(cutEdgeId)
       cutEdges.push({ id: cutEdgeId, vertexIds: [fromCutId, toCutId] })
@@ -394,7 +396,7 @@ function loopCut(
         if (remainingIndex < 0)
           return {
             ok: false,
-            error: `Could not order cuts on quad face: ${face.id}`,
+            error: `Impossibile ordinare i tagli sulla faccia a quattro lati: ${face.id}`,
           }
         splitLoops.push(pair[1 - remainingIndex]!)
         remaining = pair[remainingIndex]!
@@ -519,21 +521,21 @@ function bevelOneEdge(
   command: BevelParameters,
 ): BlockCommandResult {
   const edge = topology.edges.find((entry) => entry.id === edgeId)
-  if (!edge) return { ok: false, error: `Edge not found: ${edgeId}` }
+  if (!edge) return { ok: false, error: `Spigolo non trovato: ${edgeId}` }
   const segments = Math.floor(command.segments)
   if (!Number.isFinite(command.width) || command.width <= 0)
-    return { ok: false, error: 'Bevel width must be positive' }
+    return { ok: false, error: 'La larghezza dello smusso deve essere positiva' }
   if (!Number.isFinite(command.segments) || segments < 1 || segments > 12)
-    return { ok: false, error: 'Bevel segments must be between 1 and 12' }
+    return { ok: false, error: 'I segmenti dello smusso devono essere tra 1 e 12' }
   if (!Number.isFinite(command.profile) || command.profile < 0 || command.profile > 1)
-    return { ok: false, error: 'Bevel profile must be between 0 and 1' }
+    return { ok: false, error: 'Il profilo dello smusso deve essere tra 0 e 1' }
 
   const [aId, bId] = edge.vertexIds
   const adjacentFaces = topology.faces.filter((face) => faceContainsEdge(face, aId, bId))
   if (adjacentFaces.length !== 2)
     return {
       ok: false,
-      error: 'Bevel requires an edge shared by exactly two faces',
+      error: 'Lo smusso richiede uno spigolo condiviso da esattamente due facce',
     }
   const incidentAt = (id: string) => topology.faces.filter((face) => face.vertexIds.includes(id))
   const caps = [aId, bId].map((id) =>
@@ -542,12 +544,13 @@ function bevelOneEdge(
   if (caps.some((faces) => faces.length !== 1))
     return {
       ok: false,
-      error: 'Bevel currently requires three-face corner endpoints',
+      error: 'Per ora lo smusso richiede estremi su vertici comuni a tre facce',
     }
   const vertexById = new Map(topology.vertices.map((vertex) => [vertex.id, vertex]))
   const vertexA = vertexById.get(aId)
   const vertexB = vertexById.get(bId)
-  if (!(vertexA && vertexB)) return { ok: false, error: 'Bevel edge references missing vertices' }
+  if (!(vertexA && vertexB))
+    return { ok: false, error: 'Lo spigolo da smussare fa riferimento a vertici mancanti' }
 
   const neighborInFace = (face: BlockFace, id: string, other: string) => {
     const index = face.vertexIds.indexOf(id)
@@ -560,7 +563,7 @@ function bevelOneEdge(
     b: neighborInFace(face, bId, aId),
   }))
   if (neighbors.some((entry) => !(entry.a && entry.b)))
-    return { ok: false, error: 'Could not resolve bevel corner neighbors' }
+    return { ok: false, error: 'Impossibile trovare i vicini dell’angolo da smussare' }
   const points = neighbors.flatMap((entry, faceIndex) =>
     (
       [
@@ -575,7 +578,7 @@ function bevelOneEdge(
     }),
   )
   if (points.some((point) => !point))
-    return { ok: false, error: 'Bevel references missing vertices' }
+    return { ok: false, error: 'Lo smusso fa riferimento a vertici mancanti' }
   const safeMaximum =
     Math.min(
       ...points.map((point) =>
@@ -590,7 +593,7 @@ function bevelOneEdge(
   if (!command.clampOverlap && width >= safeMaximum * 2)
     return {
       ok: false,
-      error: 'Bevel width overlaps adjacent edges; enable Clamp',
+      error: 'La larghezza dello smusso invade gli spigoli vicini; attiva Limita',
     }
 
   const offset = (origin: Point, neighbor: Point) => {
@@ -724,10 +727,11 @@ function bevelEdges(
   command: Extract<BlockCommand, { type: 'bevel-edges' }>,
 ): BlockCommandResult {
   const edgeIds = [...new Set(command.edgeIds)]
-  if (edgeIds.length === 0) return { ok: false, error: 'Select an edge to bevel' }
+  if (edgeIds.length === 0) return { ok: false, error: 'Seleziona uno spigolo da smussare' }
   const selectedEdges = edgeIds.map((id) => topology.edges.find((edge) => edge.id === id))
   const missingIndex = selectedEdges.findIndex((edge) => !edge)
-  if (missingIndex >= 0) return { ok: false, error: `Edge not found: ${edgeIds[missingIndex]}` }
+  if (missingIndex >= 0)
+    return { ok: false, error: `Spigolo non trovato: ${edgeIds[missingIndex]}` }
   const originalVertexById = new Map(
     topology.vertices.map((vertex) => [vertex.id, vertex.position]),
   )
@@ -759,7 +763,8 @@ function bevelEdges(
         )
         return !best || score < best.score ? { edge, score } : best
       }, null)?.edge
-    if (!remappedEdge) return { ok: false, error: `Could not remap bevel edge: ${edgeId}` }
+    if (!remappedEdge)
+      return { ok: false, error: `Impossibile riassegnare lo spigolo da smussare: ${edgeId}` }
     const result = bevelOneEdge(current, remappedEdge.id, command)
     if (!result.ok) return result
     current = result.topology
@@ -784,12 +789,15 @@ function extrudeFaces(
   const selectedFaces = topology.faces.filter((face) => selectedFaceIds.has(face.id))
   if (selectedFaces.length !== selectedFaceIds.size || selectedFaces.length === 0) {
     const missing = command.faceIds.find((id) => !topology.faces.some((face) => face.id === id))
-    return { ok: false, error: missing ? `Face not found: ${missing}` : 'Select a face to extrude' }
+    return {
+      ok: false,
+      error: missing ? `Faccia non trovata: ${missing}` : 'Seleziona una faccia da estrudere',
+    }
   }
   if (!Number.isFinite(command.distance) || Math.abs(command.distance) < 1e-6) {
     return {
       ok: false,
-      error: 'Extrude distance must be a non-zero finite number',
+      error: 'La distanza di estrusione deve essere un numero finito diverso da zero',
     }
   }
   const edgeKeysByFace = new Map(
@@ -814,12 +822,12 @@ function extrudeFaces(
     }
   }
   if (connected.size !== selectedFaces.length) {
-    return { ok: false, error: 'Extrude Region requires connected faces' }
+    return { ok: false, error: 'L’estrusione di una regione richiede facce collegate' }
   }
   const normals = selectedFaces.map((face) => blockFaceNormal(topology, face))
   if (normals.some((normal) => !normal)) {
     const invalidFace = selectedFaces[normals.findIndex((normal) => !normal)]!
-    return { ok: false, error: `Face has no usable normal: ${invalidFace.id}` }
+    return { ok: false, error: `La faccia non ha una normale utilizzabile: ${invalidFace.id}` }
   }
   const normal = command.axis
     ? ([
@@ -833,7 +841,8 @@ function extrudeFaces(
           [0, 0, 0],
         ),
       )
-  if (!normal) return { ok: false, error: 'Selected face normals cancel each other out' }
+  if (!normal)
+    return { ok: false, error: 'Le normali delle facce selezionate si annullano a vicenda' }
 
   const verticesById = new Map(topology.vertices.map((vertex) => [vertex.id, vertex]))
   const allocateVertexId = nextNumericId(
@@ -857,7 +866,7 @@ function extrudeFaces(
     if (!vertex)
       return {
         ok: false,
-        error: `Selected face references missing vertex: ${vertexId}`,
+        error: `La faccia selezionata fa riferimento a un vertice mancante: ${vertexId}`,
       }
     const id = allocateVertexId()
     duplicateIds.set(vertexId, id)
@@ -957,11 +966,11 @@ function translateComponents(
   if (command.delta.some((value) => !Number.isFinite(value))) {
     return {
       ok: false,
-      error: 'Translation delta must contain finite numbers',
+      error: 'Lo spostamento deve contenere numeri finiti',
     }
   }
   const vertexIds = blockSelectionVertexIds(topology, command.selection)
-  if (vertexIds.size === 0) return { ok: false, error: 'Select a component to move' }
+  if (vertexIds.size === 0) return { ok: false, error: 'Seleziona un componente da spostare' }
 
   const nextTopology: BlockTopology = {
     ...topology,
@@ -989,7 +998,7 @@ function transformComponents(
   transform: (position: Point) => Point,
 ): BlockCommandResult {
   const vertexIds = blockSelectionVertexIds(topology, selection)
-  if (vertexIds.size === 0) return { ok: false, error: 'Select a component to transform' }
+  if (vertexIds.size === 0) return { ok: false, error: 'Seleziona un componente da trasformare' }
   const nextTopology: BlockTopology = {
     ...topology,
     vertices: topology.vertices.map((vertex) =>
@@ -1006,10 +1015,10 @@ function rotateComponents(
   command: Extract<BlockCommand, { type: 'rotate-components' }>,
 ): BlockCommandResult {
   if (!Number.isFinite(command.angle) || command.pivot.some((value) => !Number.isFinite(value))) {
-    return { ok: false, error: 'Rotation requires a finite angle and pivot' }
+    return { ok: false, error: 'La rotazione richiede un angolo e un perno finiti' }
   }
   const axis = normalize(command.axis)
-  if (!axis) return { ok: false, error: 'Rotation axis must be non-zero' }
+  if (!axis) return { ok: false, error: 'L’asse di rotazione non può essere nullo' }
   const cosine = Math.cos(command.angle)
   const sine = Math.sin(command.angle)
   return transformComponents(topology, command.selection, (position) => {
@@ -1040,7 +1049,7 @@ function scaleComponents(
   ) {
     return {
       ok: false,
-      error: 'Scale requires finite, non-zero factors and a finite pivot',
+      error: 'Il ridimensionamento richiede fattori finiti diversi da zero e un perno finito',
     }
   }
   return transformComponents(topology, command.selection, (position) => [
@@ -1058,17 +1067,18 @@ function insetOneFace(
 ): BlockCommandResult {
   const faceIndex = topology.faces.findIndex((face) => face.id === faceId)
   const face = topology.faces[faceIndex]
-  if (!face) return { ok: false, error: `Face not found: ${faceId}` }
+  if (!face) return { ok: false, error: `Faccia non trovata: ${faceId}` }
   if (!Number.isFinite(amount) || amount <= 0 || amount >= 1) {
     return {
       ok: false,
-      error: 'Inset amount must be greater than 0 and less than 1',
+      error: 'Il rientro deve essere maggiore di 0 e minore di 1',
     }
   }
-  if (!Number.isFinite(depth)) return { ok: false, error: 'Inset depth must be finite' }
+  if (!Number.isFinite(depth))
+    return { ok: false, error: 'La profondità del rientro deve essere finita' }
   const centroid = blockFaceCentroid(topology, face)
   const normal = blockFaceNormal(topology, face)
-  if (!(centroid && normal)) return { ok: false, error: `Face cannot be inset: ${face.id}` }
+  if (!(centroid && normal)) return { ok: false, error: `La faccia non può rientrare: ${face.id}` }
 
   const verticesById = new Map(topology.vertices.map((vertex) => [vertex.id, vertex]))
   const allocateVertexId = nextNumericId(
@@ -1090,7 +1100,7 @@ function insetOneFace(
     if (!vertex)
       return {
         ok: false,
-        error: `Face references missing vertex: ${vertexId}`,
+        error: `La faccia fa riferimento a un vertice mancante: ${vertexId}`,
       }
     const id = allocateVertexId()
     insetIds.push(id)
@@ -1140,9 +1150,9 @@ function insetFaces(
   command: Extract<BlockCommand, { type: 'inset-faces' }>,
 ): BlockCommandResult {
   const faceIds = [...new Set(command.faceIds)]
-  if (faceIds.length === 0) return { ok: false, error: 'Select a face to inset' }
+  if (faceIds.length === 0) return { ok: false, error: 'Seleziona una faccia da far rientrare' }
   const missing = faceIds.find((id) => !topology.faces.some((face) => face.id === id))
-  if (missing) return { ok: false, error: `Face not found: ${missing}` }
+  if (missing) return { ok: false, error: `Faccia non trovata: ${missing}` }
 
   let current = topology
   for (const faceId of faceIds) {
@@ -1158,7 +1168,7 @@ function deleteComponents(
   command: Extract<BlockCommand, { type: 'delete-components' }>,
 ): BlockCommandResult {
   const selected = new Set(command.selection.ids)
-  if (selected.size === 0) return { ok: false, error: 'Select a component to delete' }
+  if (selected.size === 0) return { ok: false, error: 'Seleziona un componente da eliminare' }
   let vertices = topology.vertices
   let edges = topology.edges
   let faces = topology.faces
@@ -1204,7 +1214,7 @@ function mergeVertices(
   const selected = new Set(command.vertexIds)
   const selectedVertices = topology.vertices.filter((vertex) => selected.has(vertex.id))
   if (selectedVertices.length < 2)
-    return { ok: false, error: 'Select at least two vertices to merge' }
+    return { ok: false, error: 'Seleziona almeno due vertici da unire' }
   const keepId = [...command.vertexIds]
     .reverse()
     .find((id) => selectedVertices.some((v) => v.id === id))!
@@ -1244,7 +1254,7 @@ function mergeVertices(
     if (new Set(loop).size !== loop.length) {
       return {
         ok: false,
-        error: 'The selected vertices would create a repeated face vertex',
+        error: 'I vertici selezionati creerebbero un vertice ripetuto in una faccia',
       }
     }
     faces.push({ ...face, vertexIds: loop })
@@ -1297,24 +1307,24 @@ function longFacePath(face: BlockFace, start: string, end: string): string[] | n
 
 function dissolveOneEdge(topology: BlockTopology, edgeId: string): BlockCommandResult {
   const edge = topology.edges.find((entry) => entry.id === edgeId)
-  if (!edge) return { ok: false, error: `Edge not found: ${edgeId}` }
+  if (!edge) return { ok: false, error: `Spigolo non trovato: ${edgeId}` }
   const [a, b] = edge.vertexIds
   const adjacentFaces = topology.faces.filter((face) => faceContainsEdge(face, a, b))
   if (adjacentFaces.length !== 2) {
     return {
       ok: false,
-      error: 'Dissolve requires an edge shared by exactly two faces',
+      error: 'Dissolvi richiede uno spigolo condiviso da esattamente due facce',
     }
   }
   const firstPath = longFacePath(adjacentFaces[0]!, a, b)
   const secondPath = longFacePath(adjacentFaces[1]!, b, a)
   if (!(firstPath && secondPath))
-    return { ok: false, error: 'Could not resolve adjacent face loops' }
+    return { ok: false, error: 'Impossibile ricostruire i contorni delle facce adiacenti' }
   const mergedLoop = [...firstPath, ...secondPath.slice(1, -1)]
   if (new Set(mergedLoop).size !== mergedLoop.length) {
     return {
       ok: false,
-      error: 'Dissolving this edge would create a repeated face vertex',
+      error: 'Dissolvendo questo spigolo si creerebbe un vertice ripetuto in una faccia',
     }
   }
   const removedFaceId = adjacentFaces[1]!.id
@@ -1341,9 +1351,9 @@ function dissolveEdges(
   command: Extract<BlockCommand, { type: 'dissolve-edges' }>,
 ): BlockCommandResult {
   const edgeIds = [...new Set(command.edgeIds)]
-  if (edgeIds.length === 0) return { ok: false, error: 'Select an edge to dissolve' }
+  if (edgeIds.length === 0) return { ok: false, error: 'Seleziona uno spigolo da dissolvere' }
   const missing = edgeIds.find((id) => !topology.edges.some((edge) => edge.id === id))
-  if (missing) return { ok: false, error: `Edge not found: ${missing}` }
+  if (missing) return { ok: false, error: `Spigolo non trovato: ${missing}` }
 
   let current = topology
   const resultFaceIds: string[] = []
@@ -1369,9 +1379,9 @@ function dissolveFaces(
   command: Extract<BlockCommand, { type: 'dissolve-faces' }>,
 ): BlockCommandResult {
   const faceIds = new Set(command.faceIds)
-  if (faceIds.size < 2) return { ok: false, error: 'Select at least two faces to dissolve' }
+  if (faceIds.size < 2) return { ok: false, error: 'Seleziona almeno due facce da dissolvere' }
   const missing = [...faceIds].find((id) => !topology.faces.some((face) => face.id === id))
-  if (missing) return { ok: false, error: `Face not found: ${missing}` }
+  if (missing) return { ok: false, error: `Faccia non trovata: ${missing}` }
   const internalEdgeIds = topology.edges
     .filter((edge) => {
       const incidentSelectedFaces = topology.faces.filter(
@@ -1381,7 +1391,7 @@ function dissolveFaces(
     })
     .map((edge) => edge.id)
   if (internalEdgeIds.length === 0) {
-    return { ok: false, error: 'Selected faces do not share a dissolvable boundary' }
+    return { ok: false, error: 'Le facce selezionate non hanno un bordo comune da dissolvere' }
   }
   const result = dissolveEdges(topology, { type: 'dissolve-edges', edgeIds: internalEdgeIds })
   if (!result.ok) return result

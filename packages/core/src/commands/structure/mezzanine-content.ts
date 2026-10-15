@@ -82,7 +82,7 @@ export function mezzanineElevationConflict(nodes: StructureNodes, zone: ZoneNode
     ? {
         code: 'mezzanine-elevation',
         nodeIds: [zone.id],
-        message: `Mezzanine elevation must be greater than thickness (${thickness} m) and at most ${maximum} m.`,
+        message: `La quota del soppalco deve superare lo spessore (${thickness} m) e non oltre ${maximum} m.`,
       }
     : undefined
 }

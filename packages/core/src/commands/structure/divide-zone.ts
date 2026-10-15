@@ -37,7 +37,7 @@ export function snapZoneBoundary(
 ) {
   const face = context.face
   if (!point.every(Number.isFinite)) throw Error('Invalid cut coordinates.')
-  if (!face) throw Error('The room must be enclosed.')
+  if (!face) throw Error('La stanza deve essere chiusa.')
   const named = boundaryId ? face.spans.filter((span) => span.boundaryId === boundaryId) : []
   const candidates = (named.length ? named : face.spans).flatMap((span) => {
     const node = nodes[span.boundaryId]
@@ -128,7 +128,7 @@ export function divideZone(
   if (source.some((p) => p.length !== 2 || !p.every(Number.isFinite)))
     throw Error('Invalid cut coordinates.')
   const face = context.face
-  if (!face) return reject('open-room', 'The room must be enclosed.')
+  if (!face) return reject('open-room', 'La stanza deve essere chiusa.')
   const rings = [face.referencePolygon, ...face.holes].map((ring) => [...ring])
   const points: Point[] = source.map(([x, z]) => [x, z])
   if (!closed) {
@@ -159,25 +159,31 @@ export function divideZone(
     .slice(0, closed ? points.length : -1)
     .map((start, i) => [start, points[(i + 1) % points.length]!])
   if (segments.some(([a, b]) => Math.hypot(b[0] - a[0], b[1] - a[1]) < 0.05 - 1e-9))
-    return reject('short-cut', 'Each segment must be at least 5 cm long.')
+    return reject('short-cut', 'Ogni tratto deve essere lungo almeno 5 cm.')
   for (let i = 0; i < segments.length; i++) {
     const [a, b] = segments[i]!
     for (let j = i + 1; j < segments.length; j++) {
       const [c, d] = segments[j]!
       const adjacent = j === i + 1 || (closed && i === 0 && j === segments.length - 1)
       if (overlapsSegment(a, b, c, d) || (!adjacent && segmentsIntersect(a, b, c, d)))
-        return reject('self-intersection', 'The path must not cross or retrace itself.')
+        return reject(
+          'self-intersection',
+          'Il tracciato non deve incrociarsi né ripassare su se stesso.',
+        )
     }
   }
   if (closed && area([{ outer: points, holes: [] }]) < 0.25 - 1e-9)
-    return reject('small-island', 'An island must cover at least 0.25 m².')
+    return reject('small-island', 'Un’isola deve coprire almeno 0,25 m².')
   const footprint = { outer: rings[0]!, holes: rings.slice(1) }
   const boundarySegments: [Point, Point][] = [footprint.outer, ...footprint.holes].flatMap((ring) =>
     ring.map((a, i): [Point, Point] => [a, ring[(i + 1) % ring.length]!]),
   )
   for (const [index, [start, end]] of segments.entries()) {
     if (boundarySegments.some(([a, b]) => overlapsSegment(start, end, a, b)))
-      return reject('boundary-overlap', 'The path must not run along an existing boundary.')
+      return reject(
+        'boundary-overlap',
+        'Il tracciato non deve correre lungo un contorno esistente.',
+      )
     for (const [a, b] of boundarySegments) {
       if (!segmentsIntersect(start, end, a, b)) continue
       const dx = end[0] - start[0],
@@ -194,10 +200,16 @@ export function divideZone(
         ((index === 0 && Math.abs(t) < 1e-6) ||
           (index === segments.length - 1 && Math.abs(t - 1) < 1e-6))
       if (!endpoint)
-        return reject('outside-room', 'Only the ends of an open path may touch the room boundary.')
+        return reject(
+          'outside-room',
+          'Solo le estremità di un tracciato aperto possono toccare il contorno della stanza.',
+        )
     }
     if (!containsPoint([footprint], at(start, end, 0.5)))
-      return reject('outside-room', 'The entire path must stay inside the room, outside its holes.')
+      return reject(
+        'outside-room',
+        'Tutto il tracciato deve restare dentro la stanza, fuori dai suoi fori.',
+      )
   }
   if (closed) {
     const walls = context.boundaryNodes.filter((node): node is WallNode => node.type === 'wall')
@@ -207,7 +219,10 @@ export function divideZone(
     )
     const clear = difference(footprint, union(wallPolygons))
     if (area(difference(points, clear)) > 1e-8)
-      return reject('outside-room', 'The island must fit entirely inside the clear room polygon.')
+      return reject(
+        'outside-room',
+        'L’isola deve stare tutta dentro lo spazio libero della stanza.',
+      )
     const wallSegments = wallPolygons.flatMap((ring) =>
       ring.map((a, i): [Point, Point] => [a, ring[(i + 1) % ring.length]!]),
     )
@@ -216,7 +231,7 @@ export function divideZone(
         wallSegments.some(([c, d]) => segmentDistance(a, b, c, d) < 0.05 - 1e-8),
       )
     )
-      return reject('wall-clearance', 'Keep the island at least 5 cm from wall faces.')
+      return reject('wall-clearance', 'Tieni l’isola ad almeno 5 cm dalle facce dei muri.')
   }
   const ids = new Set<string>()
   const separators = segments.map(([start, end]) => {
@@ -232,7 +247,10 @@ export function divideZone(
     return separator
   })
   if (extractRooms([...context.boundaryNodes, ...separators]).length !== context.roomCount + 1)
-    return reject('invalid-cut', 'The path must divide this room into exactly two rooms.')
+    return reject(
+      'invalid-cut',
+      'Il tracciato deve dividere questa stanza in esattamente due stanze.',
+    )
   return {
     changes: separators.map((node) => ({ op: 'create', node })),
     separatorIds: separators.map((node) => node.id),

@@ -41,7 +41,9 @@ export const ProceduralItemNode = BaseNode.extend({
         if (!node.recipe.slots.some((s) => s.id === slot)) throw new Error(`Unknown slot ${slot}`)
       for (const [childId, surfaceId] of Object.entries(node.attachments)) {
         if (node.children.includes(childId) && !result.surfaces.some((s) => s.id === surfaceId))
-          throw new Error('Remove the hosted item before removing its support surface')
+          throw new Error(
+            'Rimuovi l’oggetto appoggiato prima di eliminare la superficie che lo sostiene',
+          )
       }
     } catch (error) {
       ctx.addIssue({

@@ -64,11 +64,11 @@ export function blockModalFaceOperationStatus(
   feedbackMode: BlockModalFeedbackMode = 'free',
   extrudeAxis: BlockExtrudeAxis = 'normal',
 ): string {
-  const label = operation === 'extrude' ? 'Extrude' : 'Inset'
-  const unit = operation === 'extrude' ? 'm' : 'ratio'
+  const label = operation === 'extrude' ? 'Estrudi' : 'Rientra'
+  const unit = operation === 'extrude' ? 'm' : 'rapporto'
   const axis =
     operation === 'extrude' && extrudeAxis !== 'normal'
-      ? ` · ${extrudeAxis.toUpperCase()} axis`
+      ? ` · asse ${extrudeAxis.toUpperCase()}`
       : ''
-  return `${label} · ${value} ${unit} · ${blockModalFeedbackLabel(feedbackMode)}${axis} · type value · click applies · Esc cancels`
+  return `${label} · ${value} ${unit} · ${blockModalFeedbackLabel(feedbackMode)}${axis} · digita il valore · clic applica · Esc annulla`
 }

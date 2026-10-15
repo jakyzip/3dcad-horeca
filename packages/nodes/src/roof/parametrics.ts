@@ -3,13 +3,13 @@ import type { ParametricDescriptor, RoofNode } from '@pascal-app/core'
 export const roofParametrics: ParametricDescriptor<RoofNode> = {
   groups: [
     {
-      label: 'Position',
+      label: 'Posizione',
       fields: [
         { key: 'position', kind: 'vec3' },
         {
           key: 'rotation',
           kind: 'number',
-          label: 'Rotation (rad)',
+          label: 'Rotazione (rad)',
           min: -Math.PI,
           max: Math.PI,
           step: Math.PI / 36,

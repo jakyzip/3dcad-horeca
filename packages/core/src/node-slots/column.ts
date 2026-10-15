@@ -15,7 +15,7 @@ export function columnSlots(node: ColumnNode): SlotDeclaration[] {
       label: slot.label ?? slot.id,
     }))
   const slots: SlotDeclaration[] = [
-    { slotId: 'shaft', label: 'Shaft', default: COLUMN_SHAFT_DEFAULT },
+    { slotId: 'shaft', label: 'Fusto', default: COLUMN_SHAFT_DEFAULT },
   ]
 
   if (node.baseStyle !== 'none') {
@@ -23,11 +23,11 @@ export function columnSlots(node: ColumnNode): SlotDeclaration[] {
   }
 
   if (node.capitalStyle !== 'none') {
-    slots.push({ slotId: 'capital', label: 'Capital', default: COLUMN_CAPITAL_DEFAULT })
+    slots.push({ slotId: 'capital', label: 'Capitello', default: COLUMN_CAPITAL_DEFAULT })
   }
 
   if (node.supportStyle !== 'vertical') {
-    slots.push({ slotId: 'frame', label: 'Frame', default: COLUMN_FRAME_DEFAULT })
+    slots.push({ slotId: 'frame', label: 'Telaio', default: COLUMN_FRAME_DEFAULT })
   }
 
   return slots

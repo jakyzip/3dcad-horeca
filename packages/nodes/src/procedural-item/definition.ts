@@ -385,7 +385,7 @@ export const proceduralItemDefinition: NodeDefinition<typeof ProceduralItemNode>
     }
   },
   presentation: {
-    label: 'Procedural item',
+    label: 'Oggetto procedurale',
     description: 'Experimental editable recipe',
     icon: { kind: 'iconify', name: 'lucide:boxes' },
   },

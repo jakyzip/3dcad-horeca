@@ -590,7 +590,7 @@ function planLevelStructure({
       CeilingNode.parse({
         id: mintId('ceiling'),
         parentId: levelId,
-        name: `${zone.name || 'Room'} Ceiling`,
+        name: `Soffitto ${zone.name || 'stanza'}`,
         polygon: [],
         material: template?.material,
         materialPreset: template?.materialPreset,

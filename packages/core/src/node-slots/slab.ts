@@ -17,11 +17,11 @@ export const FOUNDATION_SLOT_DEFAULT = 'library:concrete-raw'
 
 export function slabSlots(): SlotDeclaration[] {
   return [
-    { slotId: 'foundation', label: 'Foundation', default: FOUNDATION_SLOT_DEFAULT },
-    { slotId: 'surface', label: 'Top', default: SLAB_TOP_SLOT_DEFAULT },
-    { slotId: 'side', label: 'Sides', default: SLAB_SIDE_SLOT_DEFAULT },
-    { slotId: 'edge', label: 'Floor edge', default: SLAB_SIDE_SLOT_DEFAULT },
-    { slotId: 'riser', label: 'Riser', default: SLAB_SIDE_SLOT_DEFAULT },
-    { slotId: 'underside', label: 'Underside', default: SLAB_SIDE_SLOT_DEFAULT },
+    { slotId: 'foundation', label: 'Fondazione', default: FOUNDATION_SLOT_DEFAULT },
+    { slotId: 'surface', label: 'Estradosso', default: SLAB_TOP_SLOT_DEFAULT },
+    { slotId: 'side', label: 'Lati', default: SLAB_SIDE_SLOT_DEFAULT },
+    { slotId: 'edge', label: 'Bordo del pavimento', default: SLAB_SIDE_SLOT_DEFAULT },
+    { slotId: 'riser', label: 'Alzata', default: SLAB_SIDE_SLOT_DEFAULT },
+    { slotId: 'underside', label: 'Intradosso', default: SLAB_SIDE_SLOT_DEFAULT },
   ]
 }

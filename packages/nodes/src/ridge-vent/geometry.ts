@@ -142,15 +142,21 @@ function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value))
 }
 
+// Support-line names are stored on the node: scenes saved before the Italian
+// translation carry the English names.
+const TAPERED_SUPPORT_LINE_NAMES = new Set([
+  'Aeratore di displuvio',
+  'Aeratore di colmo inclinato',
+  'Hip Ridge Vent',
+  'Slope Ridge Vent',
+])
+
 function getRidgeVentEndTaper(
   supportLine: RidgeVentSupportLine | null,
   width: number,
   height: number,
 ): RidgeVentEndTaper | null {
-  if (
-    !supportLine ||
-    (supportLine.name !== 'Hip Ridge Vent' && supportLine.name !== 'Slope Ridge Vent')
-  ) {
+  if (!supportLine || !TAPERED_SUPPORT_LINE_NAMES.has(supportLine.name)) {
     return null
   }
 

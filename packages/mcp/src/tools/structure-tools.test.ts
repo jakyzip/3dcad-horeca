@@ -238,7 +238,7 @@ describe('MCP structure adapters', () => {
       expect(refused.conflicts).toEqual([
         expect.objectContaining({
           code: 'shared-walls',
-          message: 'To remove this room, delete one of its walls.',
+          message: 'Per rimuovere questa stanza, elimina uno dei suoi muri.',
         }),
       ])
       expect(bridge.getNode(survivor.id)).toEqual(before)

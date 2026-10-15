@@ -25,10 +25,10 @@ import { useCallback, useMemo } from 'react'
 import { PanelSelect, PanelTextField } from '../shared/panel-fields'
 
 const UNIT_KIND_LABELS: Record<UnitKind, string> = {
-  apartment: 'Apartment',
-  'hotel-room': 'Hotel room',
-  commercial: 'Commercial',
-  common: 'Common',
+  apartment: 'Appartamento',
+  'hotel-room': 'Camera d’albergo',
+  commercial: 'Commerciale',
+  common: 'Parti comuni',
 }
 
 const UNIT_KIND_OPTIONS = UNIT_KINDS.map((value) => ({ label: UNIT_KIND_LABELS[value], value }))
@@ -98,28 +98,28 @@ export default function UnitPanel({ node }: { node: UnitNode }) {
 
   const warningMessages = warnings.map((warning) => {
     if (warning.code === 'non-adjacent-levels') {
-      return 'Members sit on levels that are not adjacent.'
+      return 'Le zone stanno su piani non adiacenti.'
     }
-    return 'No zones assigned yet.'
+    return 'Ancora nessuna zona assegnata.'
   })
 
   return (
     <PanelWrapper
       icon="/icons/zone.webp"
       onClose={handleClose}
-      title={node.name || 'Unit'}
+      title={node.name || 'Unità'}
       width={320}
     >
-      <PanelSection title="Unit">
-        <PanelTextField label="Name" onCommit={(name) => update({ name })} value={node.name} />
+      <PanelSection title="Unità">
+        <PanelTextField label="Nome" onCommit={(name) => update({ name })} value={node.name} />
         <PanelSelect
-          label="Kind"
+          label="Tipo"
           onChange={(kind) => update({ kind: kind as UnitKind })}
           options={UNIT_KIND_OPTIONS}
           value={node.kind}
         />
         <label className="flex h-10 items-center justify-between gap-3 rounded-lg border border-border/50 bg-black/4 dark:bg-[#2C2C2E] px-3 text-sm">
-          <span className="text-muted-foreground">Color</span>
+          <span className="text-muted-foreground">Colore</span>
           <span className="flex items-center gap-2">
             <span className="font-mono text-muted-foreground text-xs">{node.color}</span>
             <input
@@ -132,10 +132,11 @@ export default function UnitPanel({ node }: { node: UnitNode }) {
         </label>
       </PanelSection>
 
-      <PanelSection title="Members">
+      <PanelSection title="Zone">
         {report.members.length === 0 ? (
           <p className="text-muted-foreground text-xs leading-snug">
-            No rooms yet. Pick this unit from a room's panel, or draw zones while it is focused.
+            Ancora nessuna stanza. Scegli questa unità dal pannello di una stanza, oppure disegna
+            zone mentre l’unità è isolata.
           </p>
         ) : (
           report.members.map((member) => (
@@ -153,7 +154,7 @@ export default function UnitPanel({ node }: { node: UnitNode }) {
                 {formatAreaLabel(member.areaM2, areaUnit, 1)}
               </span>
               <button
-                aria-label={`Remove ${member.name || 'zone'} from unit`}
+                aria-label={`Togli ${member.name || 'la zona'} dall’unità`}
                 className="shrink-0 rounded-full p-1 text-muted-foreground transition-colors hover:bg-black/8 dark:hover:bg-[#3e3e3e] hover:text-foreground"
                 onClick={() => removeMember(member.zoneId)}
                 type="button"
@@ -172,25 +173,28 @@ export default function UnitPanel({ node }: { node: UnitNode }) {
         ) : null}
       </PanelSection>
 
-      <PanelSection title="Report">
-        <ReportRow label="Members" value={String(report.memberCount)} />
-        <ReportRow label="Levels" value={levelSpanLabel} />
-        <ReportRow label="Gross area" value={formatAreaLabel(report.grossAreaM2, areaUnit, 2)} />
+      <PanelSection title="Riepilogo">
+        <ReportRow label="Zone" value={String(report.memberCount)} />
+        <ReportRow label="Piani" value={levelSpanLabel} />
+        <ReportRow
+          label="Superficie lorda"
+          value={formatAreaLabel(report.grossAreaM2, areaUnit, 2)}
+        />
       </PanelSection>
 
-      <PanelSection title="Actions">
+      <PanelSection title="Azioni">
         <ActionGroup>
           {focusedUnitId !== node.id && (
             <ActionButton
               className="rounded-full"
-              label="Focus"
+              label="Isola l’unità"
               onClick={() => useViewer.getState().setFocusedUnit(node.id)}
             />
           )}
           <ActionButton
             className="text-destructive hover:text-destructive"
             icon={<Trash2 className="h-3.5 w-3.5" />}
-            label="Delete"
+            label="Elimina"
             onClick={handleDelete}
           />
         </ActionGroup>
@@ -202,5 +206,5 @@ export default function UnitPanel({ node }: { node: UnitNode }) {
 /** An unnamed member reads as what it is: a room, or another zone. */
 function memberFallbackName(nodes: Record<string, AnyNode>, zoneId: string) {
   const zone = nodes[zoneId]
-  return zone?.type === 'zone' && zone.spaceRole === 'room' ? 'Room' : 'Zone'
+  return zone?.type === 'zone' && zone.spaceRole === 'room' ? 'Stanza' : 'Zona'
 }

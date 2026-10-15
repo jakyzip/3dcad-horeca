@@ -386,7 +386,7 @@ describe('structure kernel', () => {
   test('rooms the kernel creates are numbered; existing and cleared names are never touched', () => {
     const closed = run(fixture()).nodes
     const first = zones(closed)[0]!
-    expect(first.name).toBe('Room 1')
+    expect(first.name).toBe('Stanza 1')
     const cleared = { ...closed, [first.id]: { ...first, name: '' } } as SceneNodes
     assertIdempotent(cleared)
     const divided = split(cleared, 4)
@@ -394,13 +394,13 @@ describe('structure kernel', () => {
       .map((zone) => zone.name)
       .sort()
     // The seed side keeps its cleared name; the new side takes the lowest free number.
-    expect(names).toEqual(['', 'Room 1'])
+    expect(names).toEqual(['', 'Stanza 1'])
     const kitchen = split({ ...closed, [first.id]: { ...first, name: 'Kitchen' } } as SceneNodes, 4)
     expect(
       zones(kitchen.nodes)
         .map((zone) => zone.name)
         .sort(),
-    ).toEqual(['Kitchen', 'Room 1'])
+    ).toEqual(['Kitchen', 'Stanza 1'])
   })
   test('generic auto zones still need the adoption threshold', () => {
     const generic = ZoneNode.parse({

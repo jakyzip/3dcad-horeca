@@ -213,10 +213,10 @@ describe('per-level print STL export', () => {
     const bundle = await exportSceneLevelsForPrint(prepared.scene, fixture.nodes, { scale: 100 })
     const files = unzipSync(bundle.data)
 
-    expect(Object.keys(files)).toEqual(['01_basement.stl', '02_ground.stl'])
+    expect(Object.keys(files)).toEqual(['01_interrato.stl', '02_ground.stl'])
     expect(bundle.report.parts.map((part) => part.levelId)).toEqual(['level_ground', 'level_upper'])
     expect(bundle.report.parts.map((part) => part.sourceBaseMeters)).toEqual([-0.4, 2.6])
-    expect(binaryStlBounds(files['01_basement.stl']!).min.z).toBeCloseTo(0, 6)
+    expect(binaryStlBounds(files['01_interrato.stl']!).min.z).toBeCloseTo(0, 6)
     expect(binaryStlBounds(files['02_ground.stl']!).min.z).toBeCloseTo(0, 6)
   })
 

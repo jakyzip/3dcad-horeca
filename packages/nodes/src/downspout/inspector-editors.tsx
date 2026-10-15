@@ -84,7 +84,7 @@ export function DownspoutPositionEditor({ node }: { node: DownspoutNode }) {
 
   return (
     <SliderControl
-      label="Position"
+      label="Posizione"
       max={bound}
       min={-bound}
       onChange={handleChange}

@@ -175,17 +175,17 @@ export const ductSegmentDefinition: NodeDefinition<typeof DuctSegmentNode> = {
 
   tool: () => import('./tool'),
   toolHints: [
-    { key: 'Click', label: 'Start segment' },
-    { key: 'Click again', label: 'Place and continue' },
-    { key: 'Alt + drag', label: 'Go vertical ↕, click to place' },
-    { key: '[ / ]', label: 'Duct diameter down / up' },
-    { key: 'Q', label: 'Round / rectangular / oval' },
+    { key: 'Click', label: 'Inizia il tratto' },
+    { key: 'Click again', label: 'Posiziona e continua' },
+    { key: 'Alt + drag', label: 'Sali o scendi ↕, fai clic per posizionare' },
+    { key: '[ / ]', label: 'Riduci / aumenta il diametro del canale' },
+    { key: 'Q', label: 'Tondo / rettangolare / ovale' },
     createRunHangerToolHint('duct-segment'),
-    { key: 'Esc', label: 'Exit drawing' },
+    { key: 'Esc', label: 'Termina il disegno' },
   ],
 
   presentation: {
-    label: 'Duct',
+    label: 'Canale',
     description: 'HVAC duct run — polyline of round, rect, or flat-oval sections.',
     icon: { kind: 'url', src: '/icons/duct.webp' },
     paletteSection: 'structure',

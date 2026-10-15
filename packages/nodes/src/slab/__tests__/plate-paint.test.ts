@@ -127,9 +127,9 @@ describe('slab paint role resolution', () => {
   })
 
   test('labels a room role by the room it belongs to, never by the zone id', () => {
-    expect(slabPaint.roleLabel?.(plate, 'room:zone_a')).toBe('Floor · Kitchen')
-    expect(slabPaint.roleLabel?.(plate, 'step:zone_a')).toBe('Steps · Kitchen')
-    expect(slabPaint.roleLabel?.(plate, 'edge:zone_a')).toBe('Floor edge · Kitchen')
+    expect(slabPaint.roleLabel?.(plate, 'room:zone_a')).toBe('Pavimento · Kitchen')
+    expect(slabPaint.roleLabel?.(plate, 'step:zone_a')).toBe('Gradini · Kitchen')
+    expect(slabPaint.roleLabel?.(plate, 'edge:zone_a')).toBe('Bordo del pavimento · Kitchen')
     expect(slabPaint.roleLabel?.(plate, 'surface')).toBeNull()
   })
 })

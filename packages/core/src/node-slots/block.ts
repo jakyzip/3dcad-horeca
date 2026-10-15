@@ -18,7 +18,7 @@ export function blockMaterialSlotIds(
 export const BLOCK_SLOT_ID = BLOCK_BODY_SLOT_ID
 
 function slotLabel(slotId: string): string {
-  if (slotId === BLOCK_SLOT_ID) return 'Body'
+  if (slotId === BLOCK_SLOT_ID) return 'Corpo'
   return slotId
     .split('-')
     .filter(Boolean)

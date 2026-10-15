@@ -10,11 +10,11 @@ export const LEAN_TO_SLOT_DEFAULTS: Partial<Record<LeanToSlotId, string>> = {
 
 export function leanToSlots(): SlotDeclaration[] {
   return [
-    { slotId: 'flashing', label: 'Flashing', default: LEAN_TO_SLOT_DEFAULTS.flashing },
-    { slotId: 'ledger', label: 'Ledger / high beam', default: LEAN_TO_SLOT_DEFAULTS.ledger },
-    { slotId: 'beam', label: 'Low beam', default: LEAN_TO_SLOT_DEFAULTS.beam },
-    { slotId: 'framing', label: 'Framing', default: LEAN_TO_SLOT_DEFAULTS.framing },
-    { slotId: 'posts', label: 'Posts', default: LEAN_TO_SLOT_DEFAULTS.posts },
-    { slotId: 'footings', label: 'Footings', default: LEAN_TO_SLOT_DEFAULTS.footings },
+    { slotId: 'flashing', label: 'Scossalina', default: LEAN_TO_SLOT_DEFAULTS.flashing },
+    { slotId: 'ledger', label: 'Trave di banchina / alta', default: LEAN_TO_SLOT_DEFAULTS.ledger },
+    { slotId: 'beam', label: 'Trave bassa', default: LEAN_TO_SLOT_DEFAULTS.beam },
+    { slotId: 'framing', label: 'Orditura', default: LEAN_TO_SLOT_DEFAULTS.framing },
+    { slotId: 'posts', label: 'Montanti', default: LEAN_TO_SLOT_DEFAULTS.posts },
+    { slotId: 'footings', label: 'Plinti', default: LEAN_TO_SLOT_DEFAULTS.footings },
   ]
 }

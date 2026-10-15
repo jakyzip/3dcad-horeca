@@ -599,7 +599,7 @@ export function buildFenceFloorplan(
         kind: 'dimension-label',
         cx: midX,
         cy: midZ,
-        text: `${Number.parseFloat(length.toFixed(2))}m`,
+        text: `${String(Number.parseFloat(length.toFixed(2))).replace('.', ',')} m`,
         angle,
       })
     }

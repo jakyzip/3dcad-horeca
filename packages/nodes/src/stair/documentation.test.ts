@@ -73,9 +73,9 @@ describe('stair construction documentation', () => {
     const geometry = buildStairDocumentation(stair, entry, context())
 
     expect(annotationTexts(geometry)).toEqual([
-      'UP',
-      '10 R @ 0.25m · T 0.3m · CLR W 1.2m',
-      'RAIL BOTH @ 0.92m',
+      'SALE',
+      '10 A @ 0.25m · P 0.3m · LARGH. NETTA 1.2m',
+      'RINGHIERA ENTRAMBI I LATI @ 0.92m',
     ])
     expect(
       geometry.some(
@@ -93,7 +93,7 @@ describe('stair construction documentation', () => {
     expect(resolveStairPlanDirection(stair, 'level_ground')).toBe('up')
     expect(resolveStairPlanDirection(stair, 'level_upper')).toBe('down')
     expect(annotationTexts(buildStairDocumentation(stair, entry, context('level_upper')))[0]).toBe(
-      'DN',
+      'SCENDE',
     )
     expect(downArrow?.polyline.at(-1)).toEqual(entry.arrow?.polyline[0])
     expect(downArrow?.head[0]).toEqual(entry.arrow?.polyline[0])
@@ -115,9 +115,9 @@ describe('stair construction documentation', () => {
     const entry = buildFloorplanStairEntry(stair, [])!
 
     expect(annotationTexts(buildStairDocumentation(stair, entry, context()))).toEqual([
-      '12 R @ 0.25m · T(CL) 0.2m · CLR W 1.2m',
-      'UP',
-      'RAIL LEFT @ 1m',
+      '12 A @ 0.25m · P(ASSE) 0.2m · LARGH. NETTA 1.2m',
+      'SALE',
+      'RINGHIERA SINISTRA @ 1m',
     ])
   })
 
@@ -127,8 +127,8 @@ describe('stair construction documentation', () => {
       buildStairDocumentation(stair, entry, context('level_ground', 'imperial')),
     )
 
-    expect(texts[1]).toContain(`10 R @ 9 13/16"`)
-    expect(texts[1]).toContain(`CLR W 3'-11 1/4"`)
+    expect(texts[1]).toContain(`10 A @ 9 13/16"`)
+    expect(texts[1]).toContain(`LARGH. NETTA 3'-11 1/4"`)
   })
 
   test('aligns tread visibility with the documented break position', () => {

@@ -53,7 +53,7 @@ const BlockTool = () => {
     () =>
       BlockNode.parse({
         ...blockDefinition.defaults(),
-        name: 'Block',
+        name: 'Blocco',
         position: [0, 0, 0],
       }),
     [],
@@ -92,7 +92,7 @@ const BlockTool = () => {
     ) => {
       const draftNode = BlockNode.parse({
         ...blockDefinition.defaults(),
-        name: 'Block',
+        name: 'Blocco',
         parentId: activeLevelId,
         position,
       })

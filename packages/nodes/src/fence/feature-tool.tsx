@@ -49,7 +49,7 @@ export default function FenceFeatureTool({ kind }: { kind: 'gate' | 'opening' })
     ) => {
       const nodes = sceneApi.nodes()
       const best = pickFenceTarget(point, host, ray, sceneApi, activeLevelId)
-      if (!best) return { issue: 'Click on a fence to place the feature.' }
+      if (!best) return { issue: 'Fai clic su una recinzione per posizionare l’elemento.' }
       const defaults = useEditor.getState().toolDefaults.fence
       const selectedStyle = FenceStyle.safeParse(defaults?.featureStyle)
       const feature: FenceFeatureData = {
@@ -90,10 +90,10 @@ export default function FenceFeatureTool({ kind }: { kind: 'gate' | 'opening' })
         ? {
             issue:
               issue === 'overlap'
-                ? 'That spot overlaps another gate or passage. Choose a clear section.'
+                ? 'Qui si sovrappone a un altro cancello o passaggio. Scegli un tratto libero.'
                 : issue === 'end'
-                  ? 'Move farther from the fence end or reduce the opening width.'
-                  : 'Opening width must be at least 0.35 m.',
+                  ? 'Allontanati dall’estremità della recinzione o riduci la larghezza dell’apertura.'
+                  : 'L’apertura deve essere larga almeno 0,35 m.',
           }
         : { hit: { fence: best.fence, feature } }
     }
@@ -130,7 +130,7 @@ export default function FenceFeatureTool({ kind }: { kind: 'gate' | 'opening' })
       const child = schema.parse({
         ...data,
         parentId: hit.fence.id,
-        name: kind === 'gate' ? 'Gate' : 'Open passage',
+        name: kind === 'gate' ? 'Cancello' : 'Passaggio',
       })
       sceneApi.upsert(child, hit.fence.id)
       triggerSFX('sfx:item-place')

@@ -252,7 +252,7 @@ const PipeSegmentTool = () => {
         ...useEditor.getState().toolDefaults['pipe-segment'],
         autoHangers: autoHangersRef.current,
         hangerStyle: hangerStyleRef.current,
-        name: systemRef.current === 'vent' ? 'Vent' : 'Drain',
+        name: systemRef.current === 'vent' ? 'Ventilazione' : 'Scarico',
         path: [from, to],
         diameter: diameterRef.current,
         pipeMaterial: pipeMaterialRef.current,

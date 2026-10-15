@@ -29,7 +29,7 @@ const TYPE_LABELS: Record<string, readonly [string, string]> = {
   lineset: ['linea frigorifera', 'linee frigorifere'],
   'liquid-line': ['linea del liquido', 'linee del liquido'],
   skylight: ['lucernario', 'lucernari'],
-  chimney: ['camino', 'camini'],
+  chimney: ['comignolo', 'comignoli'],
   gutter: ['grondaia', 'grondaie'],
   downspout: ['pluviale', 'pluviali'],
   'solar-panel': ['pannello solare', 'pannelli solari'],

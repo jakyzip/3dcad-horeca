@@ -32,7 +32,7 @@ export function planDuctAdapter(
   const fittingType = source.shape === target.shape ? 'reducer' : 'transition'
   const fitting = DuctFittingNode.parse({
     fittingType,
-    name: fittingType === 'reducer' ? 'Reducer' : 'Transition',
+    name: fittingType === 'reducer' ? 'Riduzione' : 'Raccordo di transizione',
     position: position.toArray(),
     rotation: [rotation.x, rotation.y, rotation.z],
     inletShape: source.shape,

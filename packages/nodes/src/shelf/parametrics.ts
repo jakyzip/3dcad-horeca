@@ -14,7 +14,7 @@ import type { ShelfNode } from './schema'
 export const shelfParametrics: ParametricDescriptor<ShelfNode> = {
   groups: [
     {
-      label: 'Style',
+      label: 'Stile',
       fields: [
         {
           key: 'style',
@@ -24,7 +24,7 @@ export const shelfParametrics: ParametricDescriptor<ShelfNode> = {
       ],
     },
     {
-      label: 'Topology',
+      label: 'Struttura',
       fields: [
         { key: 'rows', kind: 'number', min: 1, max: 8, step: 1 },
         // Columns only meaningful for kinds with vertical dividers.
@@ -68,7 +68,7 @@ export const shelfParametrics: ParametricDescriptor<ShelfNode> = {
       ],
     },
     {
-      label: 'Dimensions',
+      label: 'Dimensioni',
       fields: [
         { key: 'width', kind: 'number', unit: 'm', min: 0.3, max: 1000, step: 0.05 },
         { key: 'depth', kind: 'number', unit: 'm', min: 0.1, max: 1000, step: 0.05 },
@@ -77,7 +77,7 @@ export const shelfParametrics: ParametricDescriptor<ShelfNode> = {
       ],
     },
     {
-      label: 'Position',
+      label: 'Posizione',
       fields: [{ key: 'position', kind: 'vec3' }],
     },
   ],

@@ -32,28 +32,28 @@ export function wallMeasurementFeatures(wall: WallNode): MeasurementFeature[] {
   return [
     {
       id: 'wall:start',
-      label: 'Wall start',
+      label: 'Inizio del muro',
       snapKind: 'endpoint',
       priority: 100,
       geometry: { kind: 'point', point: point(wall.start[0], 0, wall.start[1]) },
     },
     {
       id: 'wall:end',
-      label: 'Wall end',
+      label: 'Fine del muro',
       snapKind: 'endpoint',
       priority: 100,
       geometry: { kind: 'point', point: point(wall.end[0], 0, wall.end[1]) },
     },
     {
       id: 'wall:centerline',
-      label: 'Wall centerline',
+      label: 'Asse del muro',
       snapKind: 'edge',
       priority: 80,
       geometry: { kind: 'path', points: centerline },
     },
     {
       id: 'wall:midpoint',
-      label: 'Wall midpoint',
+      label: 'Punto medio del muro',
       snapKind: 'midpoint',
       priority: 90,
       geometry: { kind: 'point', point: point(midpoint.x, 0, midpoint.y) },
@@ -62,7 +62,7 @@ export function wallMeasurementFeatures(wall: WallNode): MeasurementFeature[] {
       ? [
           {
             id: 'wall:curve:center',
-            label: 'Wall arc center',
+            label: 'Centro dell’arco del muro',
             snapKind: 'center' as const,
             priority: 90,
             geometry: { kind: 'point' as const, point: point(arc.center.x, 0, arc.center.y) },
@@ -71,21 +71,21 @@ export function wallMeasurementFeatures(wall: WallNode): MeasurementFeature[] {
       : []),
     {
       id: 'wall:face:left',
-      label: 'Wall face',
+      label: 'Faccia del muro',
       snapKind: 'face',
       priority: 95,
       geometry: { kind: 'path', points: leftFace },
     },
     {
       id: 'wall:face:right',
-      label: 'Wall face',
+      label: 'Faccia del muro',
       snapKind: 'face',
       priority: 95,
       geometry: { kind: 'path', points: rightFace },
     },
     {
       id: 'wall:height',
-      label: 'Wall height',
+      label: 'Altezza del muro',
       snapKind: 'height',
       priority: 85,
       geometry: {
@@ -96,7 +96,7 @@ export function wallMeasurementFeatures(wall: WallNode): MeasurementFeature[] {
     },
     {
       id: 'wall:top-centerline',
-      label: 'Wall top',
+      label: 'Sommità muro',
       snapKind: 'edge',
       priority: 75,
       geometry: {

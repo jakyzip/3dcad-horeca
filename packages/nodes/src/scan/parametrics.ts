@@ -3,14 +3,14 @@ import type { ParametricDescriptor, ScanNode } from '@pascal-app/core'
 export const scanParametrics: ParametricDescriptor<ScanNode> = {
   groups: [
     {
-      label: 'Transform',
+      label: 'Trasformazione',
       fields: [
         { key: 'position', kind: 'vec3' },
         { key: 'scale', kind: 'number', min: 0.01, max: 1000, step: 0.1 },
       ],
     },
     {
-      label: 'Appearance',
+      label: 'Aspetto',
       fields: [{ key: 'opacity', kind: 'number', unit: '%', min: 0, max: 100, step: 1 }],
     },
   ],

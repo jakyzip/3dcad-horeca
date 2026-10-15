@@ -11,7 +11,7 @@ describe('cupola paint', () => {
     expect(node.slots?.louvers).toBe('library:preset-metal')
     expect(cupolaDefinition.capabilities.slots?.(node)).toContainEqual({
       slotId: 'louvers',
-      label: 'Louvers',
+      label: 'Lamelle',
       default: 'library:preset-metal',
     })
   })

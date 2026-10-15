@@ -51,7 +51,7 @@ const BoxVentTool = () => {
     () =>
       BoxVentNode.parse({
         ...boxVentDefinition.defaults(),
-        name: 'Box Vent',
+        name: 'Aeratore a cassetta',
         position: [0, 0, 0],
         rotation: previewRotation,
       }),
@@ -114,7 +114,7 @@ const BoxVentTool = () => {
 
       const vent = BoxVentNode.parse({
         ...boxVentDefinition.defaults(),
-        name: 'Box Vent',
+        name: 'Aeratore a cassetta',
         roofSegmentId: hit.segment.id,
         position: [hit.localX, hit.localY, hit.localZ],
         rotation: getDownSlopeYaw(hit.localX, hit.localZ, hit.segment),

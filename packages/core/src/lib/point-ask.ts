@@ -32,7 +32,7 @@ export async function submitPointAsk(submit: PointAskSubmit): Promise<PointAskSu
     return {
       ok: false,
       code: 'unavailable',
-      message: 'Point and ask needs the chat, which is not available here.',
+      message: 'Indica e chiedi richiede la chat, che qui non è disponibile.',
     }
   try {
     return await handler(submit)
@@ -40,7 +40,7 @@ export async function submitPointAsk(submit: PointAskSubmit): Promise<PointAskSu
     return {
       ok: false,
       code: 'error',
-      message: error instanceof Error ? error.message : 'Pascal could not take this ask.',
+      message: error instanceof Error ? error.message : 'Impossibile inviare la richiesta.',
     }
   }
 }

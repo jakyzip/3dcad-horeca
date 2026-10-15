@@ -70,15 +70,15 @@ export const constructionDimensionDefinition: NodeDefinition<typeof Construction
     'move-construction-dimension-witness': moveConstructionDimensionWitnessAffordance,
   },
   toolHints: [
-    { key: 'Left click', label: 'Pick witness point' },
-    { key: 'Enter', label: 'Finish multi-point witnesses' },
-    { key: 'Left click', label: 'Place dimension line when needed' },
-    { key: 'Backspace', label: 'Remove last witness' },
-    { key: 'Esc', label: 'Step back or cancel' },
+    { key: 'Left click', label: 'Scegli un punto di riferimento' },
+    { key: 'Enter', label: 'Termina i punti di riferimento multipli' },
+    { key: 'Left click', label: 'Posiziona la linea di quota, se serve' },
+    { key: 'Backspace', label: 'Rimuovi l’ultimo punto di riferimento' },
+    { key: 'Esc', label: 'Torna indietro o annulla' },
   ],
 
   presentation: {
-    label: 'Construction Dimension',
+    label: 'Quota',
     description: 'Associative linear, curved, circular, angular, or coordinate plan dimension.',
     icon: { kind: 'iconify', name: 'lucide:ruler-dimension-line' },
     hidden: true,

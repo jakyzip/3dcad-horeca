@@ -46,7 +46,7 @@ const EyebrowVentTool = () => {
     () =>
       EyebrowVentNode.parse({
         ...eyebrowVentDefinition.defaults(),
-        name: 'Eyebrow Vent',
+        name: 'Aeratore a palpebra',
         position: [0, 0, 0],
         rotation: previewRotation,
       }),
@@ -109,7 +109,7 @@ const EyebrowVentTool = () => {
 
       const vent = EyebrowVentNode.parse({
         ...eyebrowVentDefinition.defaults(),
-        name: 'Eyebrow Vent',
+        name: 'Aeratore a palpebra',
         roofSegmentId: hit.segment.id,
         position: [hit.localX, hit.localY, hit.localZ],
         rotation: getDownSlopeYaw(hit.localX, hit.localZ, hit.segment),

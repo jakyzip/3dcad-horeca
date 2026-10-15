@@ -25,7 +25,7 @@ export function polygonMeasurementFeatures({
       (point, index) =>
         ({
           id: `${featurePrefix}:vertex:${index}`,
-          label: `${label} corner`,
+          label: `Vertice ${label.toLowerCase()}`,
           snapKind: 'endpoint',
           priority: 110,
           normal: [0, 1, 0],
@@ -34,7 +34,7 @@ export function polygonMeasurementFeatures({
     ),
     {
       id: `${featurePrefix}:boundary`,
-      label: `${label} boundary`,
+      label: `Contorno ${label.toLowerCase()}`,
       snapKind: 'edge',
       priority: 90,
       normal: [0, 1, 0],
@@ -42,7 +42,7 @@ export function polygonMeasurementFeatures({
     },
     {
       id: `${featurePrefix}:center`,
-      label: `${label} center`,
+      label: `Centro ${label.toLowerCase()}`,
       snapKind: 'center',
       priority: 70,
       normal: [0, 1, 0],

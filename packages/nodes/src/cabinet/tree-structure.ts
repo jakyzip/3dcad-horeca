@@ -112,10 +112,10 @@ export function cabinetTreeLabel(
       const child = nodes[childId]
       return child?.type === 'cabinet-module'
     }).length
-    return `Modular Cabinet (${moduleCount} module${moduleCount === 1 ? '' : 's'})`
+    return `Mobile modulare (${moduleCount} ${moduleCount === 1 ? 'modulo' : 'moduli'})`
   }
-  if (isCabinetModule(node)) return 'Cabinet Module'
-  return 'Node'
+  if (isCabinetModule(node)) return 'Modulo del mobile'
+  return 'Elemento'
 }
 
 /** `def.tree.childIds` for both cabinet kinds. */

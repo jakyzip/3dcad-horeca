@@ -85,7 +85,7 @@ function levelPose(nodes: StructureNodes, item: PositionedIntent, levelId: strin
     : null
 }
 
-export const SHARED_WALLS_DELETE_MESSAGE = 'To remove this room, delete one of its walls.'
+export const SHARED_WALLS_DELETE_MESSAGE = 'Per rimuovere questa stanza, elimina uno dei suoi muri.'
 
 type ZoneInput = { zoneId: string; contents: 'delete' | 'keep' }
 type DeleteZonePlan = StructurePlan & { payload: DeleteZonePayload }

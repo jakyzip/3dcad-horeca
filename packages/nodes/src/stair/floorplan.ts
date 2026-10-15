@@ -70,7 +70,7 @@ export function buildStairFloorplan(
           kind: 'text',
           x: stair.position[0],
           y: stair.position[2],
-          text: 'Stair detail unavailable — inspect dimensions',
+          text: 'Dettaglio della scala non disponibile: controlla le misure',
           fontSize: 0.15,
           fill: '#b45309',
         },

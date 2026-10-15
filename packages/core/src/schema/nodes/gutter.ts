@@ -424,7 +424,7 @@ export function createDefaultGuttersForSegment(
 ): GutterNode[] {
   return getGutterRunsForSegment(segment, roofSegments, exclusions).map((run) =>
     GutterNode.parse({
-      name: 'Gutter',
+      name: 'Grondaia',
       roofSegmentId: segment.id,
       position: run.position,
       rotation: run.rotation,

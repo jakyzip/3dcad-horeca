@@ -363,16 +363,20 @@ export const windowDefinition: NodeDefinition<typeof WindowNode> = {
   },
 
   toolHints: [
-    { key: 'Left click', label: 'Place window on wall', visible: WINDOW_PLAIN_PLACE_VISIBLE },
+    {
+      key: 'Left click',
+      label: 'Posiziona la finestra sul muro',
+      visible: WINDOW_PLAIN_PLACE_VISIBLE,
+    },
     ...WINDOW_CORNER_HINTS,
     ...WINDOW_PLACEMENT_HINTS,
-    { key: 'R', label: 'Flip side' },
-    { key: 'Alt', label: 'Force place' },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'R', label: 'Inverti il lato' },
+    { key: 'Alt', label: 'Forza il posizionamento' },
+    { key: 'Esc', label: 'Annulla' },
   ],
 
   presentation: {
-    label: 'Window',
+    label: 'Finestra',
     description: 'A window cut into a wall. Animated open/close for opening windows.',
     icon: { kind: 'url', src: '/icons/window.webp' },
     paletteSection: 'structure',

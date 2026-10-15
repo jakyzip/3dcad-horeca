@@ -89,7 +89,7 @@ it('keeps continuous guards around turning landing edges and handrails independe
   })
   expect(measureStairDetail(tooLarge, []).status).toBe('unresolved')
   expect(() => resolveStairRailPaths(tooLarge, { [tooLarge.id]: tooLarge })).toThrow(
-    'computation budget',
+    'limite di calcolo',
   )
 })
 
@@ -216,7 +216,7 @@ it('keeps handrail ends off closed and hidden portals and refuses a floor-crossi
       },
       { [flight.id]: flight },
     ),
-  ).toThrow('source floor')
+  ).toThrow('pavimento di partenza')
 })
 
 it('keeps zero-gap L/U guards and inset handrails continuous and restores replacement winder visibility', () => {

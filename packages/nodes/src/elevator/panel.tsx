@@ -101,26 +101,26 @@ const DOOR_STYLE_OPTIONS: Array<{
   label: string
   value: ElevatorNode['doorStyle']
 }> = [
-  { label: 'Center opening', value: 'center-opening' },
-  { label: 'Single left', value: 'single-left' },
-  { label: 'Single right', value: 'single-right' },
+  { label: 'Apertura centrale', value: 'center-opening' },
+  { label: 'Singola a sinistra', value: 'single-left' },
+  { label: 'Singola a destra', value: 'single-right' },
 ]
 
 const DOOR_PANEL_STYLE_OPTIONS: Array<{
   label: string
   value: ElevatorNode['doorPanelStyle']
 }> = [
-  { label: 'Glass frame', value: 'glass-frame' },
-  { label: 'Solid panel', value: 'solid-panel' },
-  { label: 'Segmented panel', value: 'segmented-panel' },
+  { label: 'Telaio in vetro', value: 'glass-frame' },
+  { label: 'Pannello pieno', value: 'solid-panel' },
+  { label: 'Pannello a riquadri', value: 'segmented-panel' },
 ]
 
 const SHAFT_STYLE_OPTIONS: Array<{
   label: string
   value: ElevatorNode['shaftStyle']
 }> = [
-  { label: 'Solid', value: 'solid' },
-  { label: 'Glass', value: 'glass' },
+  { label: 'Pieno', value: 'solid' },
+  { label: 'Vetro', value: 'glass' },
 ]
 
 function roundMeters(value: number) {
@@ -448,27 +448,31 @@ export default function ElevatorPanel() {
     <PanelWrapper
       icon="/icons/elevator.webp"
       onClose={handleClose}
-      title={node.name || 'Elevator'}
+      title={node.name || 'Ascensore'}
       width={300}
     >
-      <PanelSection title="Actions">
+      <PanelSection title="Azioni">
         <ActionGroup>
-          <ActionButton icon={<Move className="h-3.5 w-3.5" />} label="Move" onClick={handleMove} />
+          <ActionButton
+            icon={<Move className="h-3.5 w-3.5" />}
+            label="Sposta"
+            onClick={handleMove}
+          />
           <ActionButton
             icon={<Copy className="h-3.5 w-3.5" />}
-            label="Duplicate"
+            label="Duplica"
             onClick={handleDuplicate}
           />
           <ActionButton
             className="text-destructive hover:text-destructive"
             icon={<Trash2 className="h-3.5 w-3.5" />}
-            label="Delete"
+            label="Elimina"
             onClick={handleDelete}
           />
         </ActionGroup>
       </PanelSection>
 
-      <PanelSection title="Position">
+      <PanelSection title="Posizione">
         <SliderControl
           label="X"
           onChange={(value) => {
@@ -527,9 +531,9 @@ export default function ElevatorPanel() {
         />
       </PanelSection>
 
-      <PanelSection title="Rotation">
+      <PanelSection title="Rotazione">
         <SliderControl
-          label="Yaw"
+          label="Angolo"
           max={180}
           min={-180}
           onChange={(degrees) => previewTransform(displayPosition, degreesToRadians(degrees))}
@@ -558,11 +562,11 @@ export default function ElevatorPanel() {
         </div>
       </PanelSection>
 
-      <PanelSection title="Service">
+      <PanelSection title="Corsa">
         <div className="grid grid-cols-2 gap-2">
           <div className="space-y-1.5">
             <div className="px-1 text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-              From
+              Da
             </div>
             <select
               className="h-9 w-full rounded-lg border border-border/50 bg-black/4 dark:bg-[#2C2C2E] px-2 text-sm text-foreground"
@@ -579,7 +583,7 @@ export default function ElevatorPanel() {
 
           <div className="space-y-1.5">
             <div className="px-1 text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-              To
+              A
             </div>
             <select
               className="h-9 w-full rounded-lg border border-border/50 bg-black/4 dark:bg-[#2C2C2E] px-2 text-sm text-foreground"
@@ -597,7 +601,7 @@ export default function ElevatorPanel() {
 
         <div className="space-y-1.5">
           <div className="px-1 text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-            Default Floor
+            Piano predefinito
           </div>
           <select
             className="h-9 w-full rounded-lg border border-border/50 bg-black/4 dark:bg-[#2C2C2E] px-3 text-sm text-foreground"
@@ -613,9 +617,9 @@ export default function ElevatorPanel() {
         </div>
       </PanelSection>
 
-      <PanelSection title="Cab">
+      <PanelSection title="Cabina">
         <MetricControl
-          label="Width"
+          label="Larghezza"
           max={4}
           min={0.8}
           onChange={(value) => previewMetric('width', value)}
@@ -627,7 +631,7 @@ export default function ElevatorPanel() {
           value={displayNode.width}
         />
         <MetricControl
-          label="Depth"
+          label="Profondità"
           max={4}
           min={0.8}
           onChange={(value) => previewMetric('depth', value)}
@@ -639,7 +643,7 @@ export default function ElevatorPanel() {
           value={displayNode.depth}
         />
         <MetricControl
-          label="Cab Height"
+          label="Altezza della cabina"
           max={4}
           min={1.8}
           onChange={(value) => previewMetric('cabHeight', value)}
@@ -652,10 +656,10 @@ export default function ElevatorPanel() {
         />
       </PanelSection>
 
-      <PanelSection title="Shaft">
+      <PanelSection title="Vano">
         <div className="space-y-1.5">
           <div className="px-1 text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-            Shaft Style
+            Stile del vano
           </div>
           <select
             className="h-9 w-full rounded-lg border border-border/50 bg-black/4 dark:bg-[#2C2C2E] px-3 text-sm text-foreground"
@@ -672,7 +676,7 @@ export default function ElevatorPanel() {
           </select>
         </div>
         <MetricControl
-          label="Shaft Width"
+          label="Larghezza del vano"
           max={5}
           min={displayNode.width}
           onChange={(value) => previewMetric('shaftWidth', Math.max(value, displayNode.width))}
@@ -684,7 +688,7 @@ export default function ElevatorPanel() {
           value={displayShaftWidth}
         />
         <MetricControl
-          label="Shaft Depth"
+          label="Profondità del vano"
           max={5}
           min={displayNode.depth}
           onChange={(value) => previewMetric('shaftDepth', Math.max(value, displayNode.depth))}
@@ -696,7 +700,7 @@ export default function ElevatorPanel() {
           value={displayShaftDepth}
         />
         <MetricControl
-          label="Wall Thickness"
+          label="Spessore delle pareti"
           max={0.4}
           min={0.04}
           onChange={(value) => previewMetric('shaftWallThickness', value)}
@@ -709,10 +713,10 @@ export default function ElevatorPanel() {
         />
       </PanelSection>
 
-      <PanelSection title="Doors">
+      <PanelSection title="Porte">
         <div className="space-y-1.5">
           <div className="px-1 text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-            Opening Style
+            Tipo di apertura
           </div>
           <select
             className="h-9 w-full rounded-lg border border-border/50 bg-black/4 dark:bg-[#2C2C2E] px-3 text-sm text-foreground"
@@ -730,7 +734,7 @@ export default function ElevatorPanel() {
         </div>
         <div className="space-y-1.5">
           <div className="px-1 text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-            Door Type
+            Tipo di porta
           </div>
           <select
             className="h-9 w-full rounded-lg border border-border/50 bg-black/4 dark:bg-[#2C2C2E] px-3 text-sm text-foreground"
@@ -749,7 +753,7 @@ export default function ElevatorPanel() {
           </select>
         </div>
         <MetricControl
-          label="Door Width"
+          label="Larghezza della porta"
           max={Math.max(displayNode.width - 0.1, 0.5)}
           min={0.45}
           onChange={(value) => previewMetric('doorWidth', value)}
@@ -761,7 +765,7 @@ export default function ElevatorPanel() {
           value={displayNode.doorWidth}
         />
         <MetricControl
-          label="Door Height"
+          label="Altezza della porta"
           max={Math.max(displayNode.cabHeight - 0.1, 1.3)}
           min={1.2}
           onChange={(value) => previewMetric('doorHeight', value)}
@@ -774,7 +778,7 @@ export default function ElevatorPanel() {
         />
       </PanelSection>
 
-      <PanelSection title="Access">
+      <PanelSection title="Accesso">
         <div className="space-y-2">
           {servedLevels.map((level) => {
             const isDisabled = disabledLevelIds.has(level.id)
@@ -797,7 +801,7 @@ export default function ElevatorPanel() {
                     onClick={() => toggleLevelAccess('serviceOnlyLevelIds', level.id)}
                     type="button"
                   >
-                    Service
+                    Servizio
                   </button>
                   <button
                     className={`rounded-md border px-2 py-1 text-[11px] transition-colors ${
@@ -808,7 +812,7 @@ export default function ElevatorPanel() {
                     onClick={() => toggleLevelAccess('disabledLevelIds', level.id)}
                     type="button"
                   >
-                    Disabled
+                    Disattivato
                   </button>
                 </div>
               </div>
@@ -817,7 +821,7 @@ export default function ElevatorPanel() {
         </div>
       </PanelSection>
 
-      <PanelSection title="Destination">
+      <PanelSection title="Destinazione">
         <div className="grid grid-cols-2 gap-1.5">
           {servedLevels.map((level) => {
             const isActive = activeLevelId === level.id
@@ -842,16 +846,16 @@ export default function ElevatorPanel() {
                   <span className="truncate text-xs">{getLevelDisplayName(level)}</span>
                   {isDisabled ? (
                     <span className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.12em] text-current/65">
-                      Disabled
+                      Disattivato
                     </span>
                   ) : isServiceOnly ? (
                     <span className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.12em] text-current/65">
-                      Service
+                      Servizio
                     </span>
                   ) : (
                     stopOrder && (
                       <span className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.12em] text-current/65">
-                        Stop {stopOrder}
+                        Fermata {stopOrder}
                       </span>
                     )
                   )}
@@ -869,9 +873,9 @@ export default function ElevatorPanel() {
         </div>
       </PanelSection>
 
-      <PanelSection title="Motion">
+      <PanelSection title="Movimento">
         <SliderControl
-          label="Speed"
+          label="Velocità"
           max={8}
           min={0.5}
           onChange={(value) => handleUpdate({ speed: value })}
@@ -881,7 +885,7 @@ export default function ElevatorPanel() {
           value={node.speed}
         />
         <SliderControl
-          label="Door Time"
+          label="Tempo delle porte"
           max={2200}
           min={300}
           onChange={(value) => handleUpdate({ doorDurationMs: value })}
@@ -890,7 +894,7 @@ export default function ElevatorPanel() {
           value={node.doorDurationMs}
         />
         <SliderControl
-          label="Dwell"
+          label="Sosta"
           max={5000}
           min={300}
           onChange={(value) => handleUpdate({ dwellMs: value })}

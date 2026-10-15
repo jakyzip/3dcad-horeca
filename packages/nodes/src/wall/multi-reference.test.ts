@@ -35,13 +35,13 @@ test('multi-select Reference: room labels, mixed shows no option, one step for e
   const [reference] = controls(walls)
   expect(reference).toMatchObject({
     id: 'wall-reference',
-    section: 'Dimensions',
-    label: 'Reference',
+    section: 'Dimensioni',
+    label: 'Riferimento',
   })
   expect(reference!.options.map((option) => option.label)).toEqual([
-    'Outside face',
-    'Center',
-    'Inside face',
+    'Faccia esterna',
+    'Centro',
+    'Faccia interna',
   ])
   expect(reference!.value).toBe('center')
   reference!.onChange('outside')

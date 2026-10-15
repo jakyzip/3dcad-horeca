@@ -2,6 +2,24 @@ export type BlockToolbarMode = 'vertex' | 'edge' | 'face'
 export type BlockScaleAxis = 'uniform' | 'x' | 'y' | 'z'
 export type BlockTransformTool = 'transform' | 'loop-cut' | 'bevel'
 
+const COMPONENT_NAMES: Record<BlockToolbarMode, string> = {
+  vertex: 'Vertice',
+  edge: 'Spigolo',
+  face: 'Faccia',
+}
+
+const COMPONENT_PLURALS: Record<BlockToolbarMode, string> = {
+  vertex: 'Vertici',
+  edge: 'Spigoli',
+  face: 'Facce',
+}
+
+const CLICK_TO_SELECT: Record<BlockToolbarMode, string> = {
+  vertex: 'Fai clic su un vertice per selezionarlo',
+  edge: 'Fai clic su uno spigolo per selezionarlo',
+  face: 'Fai clic su una faccia per selezionarla',
+}
+
 export type BlockOperationAvailability = {
   extrude: boolean
   inset: boolean
@@ -49,7 +67,9 @@ export function blockOperationAvailability(
 }
 
 export function formatBlockSelectionStatus(mode: BlockToolbarMode, selectedCount: number): string {
-  const label = selectedCount === 1 ? mode : mode === 'vertex' ? 'vertices' : `${mode}s`
+  const label = (
+    selectedCount === 1 ? COMPONENT_NAMES[mode] : COMPONENT_PLURALS[mode]
+  ).toLowerCase()
   return `${selectedCount} ${label}`.toUpperCase()
 }
 
@@ -71,13 +91,13 @@ export function blockComponentStatus({
   bevelWidth: number
 }): string | null {
   if (tool === 'loop-cut') {
-    return `Loop Cut · ${loopCutCount} cut${loopCutCount === 1 ? '' : 's'} · factor ${loopCutFactor.toFixed(2)} · click or drag an edge · release applies · wheel changes count`
+    return `Taglio ad anello · ${loopCutCount} ${loopCutCount === 1 ? 'taglio' : 'tagli'} · fattore ${loopCutFactor.toFixed(2).replace('.', ',')} · fai clic o trascina uno spigolo · rilascia per applicare · la rotella cambia il numero`
   }
   if (tool === 'bevel') {
-    const width = String(Math.round(bevelWidth * 1000) / 1000)
-    return `Bevel · width ${width} m · ${bevelSegments} segments · drag changes width · wheel changes segments`
+    const width = String(Math.round(bevelWidth * 1000) / 1000).replace('.', ',')
+    return `Smusso · larghezza ${width} m · ${bevelSegments} ${bevelSegments === 1 ? 'segmento' : 'segmenti'} · trascina per la larghezza · la rotella cambia i segmenti`
   }
-  return selectedCount === 0 ? `Click a ${mode} to select it` : null
+  return selectedCount === 0 ? CLICK_TO_SELECT[mode] : null
 }
 
 export function blockScaleFactors(axis: BlockScaleAxis, factor: number): [number, number, number] {

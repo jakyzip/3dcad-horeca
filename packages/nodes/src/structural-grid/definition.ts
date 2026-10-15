@@ -39,14 +39,14 @@ export const structuralGridDefinition: NodeDefinition<typeof StructuralGridNode>
   dirtyTracking: false,
   floorplan: buildStructuralGridFloorplan,
   toolHints: [
-    { key: 'Left click', label: 'Start grid axis' },
-    { key: 'Left click', label: 'Finish grid axis' },
-    { key: 'Alt', label: 'Bypass snapping' },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Left click', label: 'Inizia l’asse della griglia' },
+    { key: 'Left click', label: 'Termina l’asse della griglia' },
+    { key: 'Alt', label: 'Ignora l’aggancio' },
+    { key: 'Esc', label: 'Annulla' },
   ],
 
   presentation: {
-    label: 'Structural Grid',
+    label: 'Griglia strutturale',
     description: 'Persistent construction grid axis with identification bubbles.',
     icon: { kind: 'url', src: '/icons/structural-grid.webp' },
     paletteSection: 'structure',

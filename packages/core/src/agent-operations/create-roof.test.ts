@@ -84,7 +84,7 @@ describe('create_roof: the level above the covered storey', () => {
     expect(created(outcome).filter((node) => node.type === 'level')).toHaveLength(0)
     expect(created(outcome).find((node) => node.type === 'roof')?.parentId).toBe(empty.id)
     expect(outcome.changes?.update).toEqual([
-      { id: empty.id, data: { metadata: { role: 'roof' }, name: 'Roof' } },
+      { id: empty.id, data: { metadata: { role: 'roof' }, name: 'Tetto' } },
     ])
   })
 

@@ -4,7 +4,7 @@ import type { DuctTerminalNode } from './schema'
 export const ductTerminalParametrics: ParametricDescriptor<DuctTerminalNode> = {
   groups: [
     {
-      label: 'Terminal',
+      label: 'Bocchetta',
       fields: [
         {
           key: 'terminalType',
@@ -20,14 +20,14 @@ export const ductTerminalParametrics: ParametricDescriptor<DuctTerminalNode> = {
       ],
     },
     {
-      label: 'Face',
+      label: 'Griglia',
       fields: [
         { key: 'width', kind: 'number', unit: 'm', min: 0.1, max: 1000, step: 0.05 },
         { key: 'depth', kind: 'number', unit: 'm', min: 0.05, max: 1000, step: 0.05 },
       ],
     },
     {
-      label: 'Collar',
+      label: 'Collare',
       fields: [
         {
           key: 'collarShape',
@@ -65,7 +65,7 @@ export const ductTerminalParametrics: ParametricDescriptor<DuctTerminalNode> = {
       ],
     },
     {
-      label: 'Placement',
+      label: 'Posizionamento',
       fields: [{ key: 'position', kind: 'vec3' }],
     },
   ],

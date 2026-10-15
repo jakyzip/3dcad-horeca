@@ -101,7 +101,7 @@ export function setZoneIntent(
           {
             code: 'mezzanine-intent',
             nodeIds: [zone.id],
-            message: 'A mezzanine must retain its open support and explicit elevation.',
+            message: 'Un soppalco deve mantenere l’appoggio aperto e una quota esplicita.',
           },
         ],
       }

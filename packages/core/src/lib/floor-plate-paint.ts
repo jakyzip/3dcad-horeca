@@ -20,6 +20,7 @@ export function floorPlatePaintRefusal(
     return {
       status: 'refused',
       code: 'floor-surface-without-room',
-      message: 'This structural floor band has no room finish to paint. Paint its edge instead.',
+      message:
+        'Questa fascia strutturale del solaio non ha una finitura da dipingere: dipingi il bordo.',
     }
 }

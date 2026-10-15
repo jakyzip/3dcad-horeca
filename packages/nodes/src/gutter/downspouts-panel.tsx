@@ -101,7 +101,7 @@ export default function DownspoutsPanel() {
     const dropLength = Math.max(0.1, computeEaveY(segment) + (outlet?.y ?? -gutter.size))
 
     const downspout = DownspoutNode.parse({
-      name: 'Downspout',
+      name: 'Pluviale',
       gutterId: gutter.id,
       outletId,
       length: dropLength,
@@ -128,7 +128,7 @@ export default function DownspoutsPanel() {
   }
 
   return (
-    <PanelSection title="Downspouts">
+    <PanelSection title="Pluviali">
       <div className="flex flex-col gap-1">
         {downspouts.map((d, i) => (
           <div
@@ -140,10 +140,10 @@ export default function DownspoutsPanel() {
               onClick={() => handleSelectDownspout(d.id as AnyNodeId)}
               type="button"
             >
-              {d.name || `Downspout ${i + 1}`}
+              {d.name || `Pluviale ${i + 1}`}
             </button>
             <button
-              aria-label="Remove downspout"
+              aria-label="Rimuovi il pluviale"
               className="ml-2 text-muted-foreground text-xs transition-colors hover:text-red-600 dark:hover:text-red-400"
               onClick={() => handleRemove(d)}
               type="button"
@@ -153,7 +153,7 @@ export default function DownspoutsPanel() {
           </div>
         ))}
         <ActionGroup>
-          <ActionButton label="Add Downspout" onClick={handleAddDownspout} />
+          <ActionButton label="Aggiungi pluviale" onClick={handleAddDownspout} />
         </ActionGroup>
       </div>
     </PanelSection>

@@ -463,7 +463,7 @@ function makePipeRiser(from: Point, to: Point, pipe: PipeSegmentNode): PipeSegme
     parentId: null,
     visible: true,
     metadata: {},
-    name: pipe.name ?? 'Pipe run',
+    name: pipe.name ?? 'Tubazione',
     path: [from, to],
     diameter: pipe.diameter,
     pipeMaterial: pipe.pipeMaterial,

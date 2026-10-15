@@ -33,9 +33,12 @@ export function planStairPreset(
 ) {
   const width = options.width ?? original.width
   const landingDepth = options.landingDepth ?? width
-  if (!(Number.isFinite(width) && width > 0)) throw new RangeError('Width must be positive')
+  if (!(Number.isFinite(width) && width > 0))
+    throw new RangeError('La larghezza deve essere positiva')
   if (!(Number.isFinite(landingDepth) && landingDepth >= width))
-    throw new RangeError('A turning landing must be at least as deep as the stair is wide')
+    throw new RangeError(
+      'Un pianerottolo di svolta deve essere profondo almeno quanto è larga la scala',
+    )
   const old = original.children
     .map((id) => nodes[id])
     .filter((node): node is Segment => node?.type === 'stair-segment')
@@ -58,11 +61,13 @@ export function planStairPreset(
     const innerGap = options.innerGap ?? 0
     if (!(walkingLineOffset > 0 && walkingLineOffset <= width && innerGap >= 0))
       throw new RangeError(
-        'The walking line must lie within the winder width and gap must be nonnegative',
+        'La linea di passo deve stare entro la larghezza dei gradini a ventaglio e lo spazio centrale non può essere negativo',
       )
     const winderCount = Math.max(1, Math.round((2 * (innerGap + walkingLineOffset)) / sizing.going))
     if (winding && quarterCount * winderCount > count - 2)
-      throw new RangeError('The selected winder gap needs more risers than this stair permits')
+      throw new RangeError(
+        'Lo spazio centrale scelto richiede più alzate di quante ne consenta questa scala',
+      )
     const flightRisers = count - (winding ? quarterCount * winderCount : 0)
     const lower = options.lowerStepCount ?? Math.ceil(flightRisers / 2)
     if (options.layout !== 'straight' && !(lower >= 1 && lower < flightRisers))
@@ -149,7 +154,7 @@ export function planStairPreset(
     }
     rise = nextRise
   }
-  throw new RangeError('Stair support and arrival do not converge for this layout')
+  throw new RangeError('Con questa disposizione appoggio e arrivo della scala non coincidono')
 }
 
 /** Footprints in the stair's local axes; no scene writes and no automatic replacement. */
@@ -159,7 +164,7 @@ export function proposeStairLayouts(
   available?: { width: number; length: number },
 ) {
   if (available && (!(available.width > 0) || !(available.length > 0)))
-    throw new RangeError('Available footprint must be positive')
+    throw new RangeError('L’ingombro disponibile deve essere positivo')
   return (
     [
       { layout: 'straight', turn: 'left' },

@@ -15,7 +15,7 @@ export const boxVentParametrics: ParametricDescriptor<BoxVentNode> = {
   customPanel: () => import('./panel'),
   groups: [
     {
-      label: 'Style',
+      label: 'Stile',
       fields: [
         {
           key: 'style',
@@ -26,7 +26,7 @@ export const boxVentParametrics: ParametricDescriptor<BoxVentNode> = {
       ],
     },
     {
-      label: 'Dimensions',
+      label: 'Dimensioni',
       fields: [
         { key: 'width', kind: 'number', unit: 'm', min: 0.15, max: 1000, step: 0.01 },
         { key: 'depth', kind: 'number', unit: 'm', min: 0.15, max: 1000, step: 0.01 },

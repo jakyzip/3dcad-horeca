@@ -36,9 +36,9 @@ export function stairConstructionError(
   if (stair.stairType !== 'straight') {
     if (!stair.construction) return null
     const dimensions = resolveStairArcDimensions(stair, 0)
-    if (!(dimensions.going > 0)) return 'Explicit arc construction requires a positive going.'
+    if (!(dimensions.going > 0)) return 'Una scala curva richiede una pedata positiva.'
     if (Math.abs(dimensions.stepSweep) > Math.PI * 2)
-      return 'One tread spans more than one turn; add risers or reduce the sweep.'
+      return 'Un gradino copre più di un giro: aggiungi alzate o riduci l’arco.'
     return stairSegmentConstructionError({
       segmentType: 'stair',
       construction: stair.construction,
@@ -84,7 +84,7 @@ export function stairSegmentConstructionError(
     winder &&
     2 * straightStairConstructionDetailCost(segment, parent) > STAIR_DETAIL_SURFACE_BUDGET
   )
-    return 'Detailed winder construction exceeds the 10,000-surface computation budget. The authored values are preserved.'
+    return 'I gradini a ventaglio superano il limite di calcolo di 10.000 superfici. I valori inseriti restano invariati.'
   if (!construction || segment.segmentType === 'landing') return null
   if (
     construction.mode !== 'solid' &&
@@ -92,21 +92,21 @@ export function stairSegmentConstructionError(
     construction.closedRisers &&
     construction.riserThickness > (winder?.going ?? segment.length / segment.stepCount)
   )
-    return 'Riser panels must fit within their treads.'
+    return 'I pannelli delle alzate devono stare dentro le pedate.'
   if (
     (construction.mode === 'side-stringers' && construction.stringerWidth * 2 > segment.width) ||
     (construction.mode === 'center-stringer' && construction.stringerWidth > segment.width)
   )
-    return 'Stringers must fit within the flight width.'
+    return 'I cosciali devono stare dentro la larghezza della rampa.'
   if (
     winder &&
     construction.mode === 'center-stringer' &&
     (segment.winder!.walkingLineOffset < construction.stringerWidth / 2 ||
       segment.winder!.walkingLineOffset + construction.stringerWidth / 2 > segment.width)
   )
-    return 'The center stringer must fit around the walking line within the winder width.'
+    return 'Il cosciale centrale deve stare attorno alla linea di passo, entro la larghezza dei gradini a ventaglio.'
   if (winder && construction.nosing >= segment.winder!.innerGap + segment.winder!.walkingLineOffset)
-    return 'Winder nosing must be smaller than the walking-line radius.'
+    return 'Il naso dei gradini a ventaglio deve essere minore del raggio della linea di passo.'
   return null
 }
 
@@ -122,7 +122,7 @@ export function resolveStraightStairConstruction(
   if (error) throw new RangeError(error)
   if (straightStairConstructionDetailCost(segment, parent) > STAIR_DETAIL_SURFACE_BUDGET)
     throw new RangeError(
-      'Detailed stair construction exceeds the 10,000-surface computation budget. The authored values are preserved.',
+      'La scala supera il limite di calcolo di 10.000 superfici. I valori inseriti restano invariati.',
     )
   const { mode, treadThickness, finishThickness, nosing, riserThickness, closedRisers } =
     construction

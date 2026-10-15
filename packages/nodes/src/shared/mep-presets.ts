@@ -12,7 +12,7 @@ export type PipePreset = {
 export const PIPE_PRESETS: readonly PipePreset[] = [
   {
     id: 'pvc-waste',
-    label: 'Waste · PVC · sloped',
+    label: 'Scarico · PVC · in pendenza',
     system: 'waste',
     pipeMaterial: 'pvc',
     diameter: 2,
@@ -20,7 +20,7 @@ export const PIPE_PRESETS: readonly PipePreset[] = [
   },
   {
     id: 'abs-waste',
-    label: 'Waste · ABS · sloped',
+    label: 'Scarico · ABS · in pendenza',
     system: 'waste',
     pipeMaterial: 'abs',
     diameter: 2,
@@ -28,7 +28,7 @@ export const PIPE_PRESETS: readonly PipePreset[] = [
   },
   {
     id: 'cast-iron-waste',
-    label: 'Waste · cast iron · sloped',
+    label: 'Scarico · ghisa · in pendenza',
     system: 'waste',
     pipeMaterial: 'cast-iron',
     diameter: 3,
@@ -36,7 +36,7 @@ export const PIPE_PRESETS: readonly PipePreset[] = [
   },
   {
     id: 'pvc-vent',
-    label: 'Vent · PVC · level',
+    label: 'Ventilazione · PVC · in piano',
     system: 'vent',
     pipeMaterial: 'pvc',
     diameter: 2,

@@ -41,8 +41,8 @@ function SplitWallAction() {
   return (
     <button
       type="button"
-      aria-label="Split wall"
-      title="Split wall"
+      aria-label="Dividi il muro"
+      title="Dividi il muro"
       disabled={readOnly}
       className={BUTTON}
       onClick={(event) => {
@@ -67,7 +67,9 @@ function MergeWallsAction() {
       planWallMerge(nodes, selected)
       return { reason: null }
     } catch (error) {
-      return { reason: error instanceof Error ? error.message : 'These walls cannot be merged.' }
+      return {
+        reason: error instanceof Error ? error.message : 'Questi muri non si possono unire.',
+      }
     }
   }, [nodes, selected])
   if (!merge) return null
@@ -75,8 +77,8 @@ function MergeWallsAction() {
   const button = (
     <button
       type="button"
-      aria-label="Merge walls"
-      title={reason ? undefined : 'Merge walls'}
+      aria-label="Unisci i muri"
+      title={reason ? undefined : 'Unisci i muri'}
       disabled={readOnly || reason !== null}
       className={BUTTON}
       onClick={(event) => {

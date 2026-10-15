@@ -301,13 +301,13 @@ export default function WindowPanel() {
   const showFlipSide = !isOpening
   const operationLabel = isTrackSashWindow
     ? windowType === 'sliding'
-      ? 'Slide'
-      : 'Raise'
+      ? 'Scorrimento'
+      : 'Sollevamento'
     : windowType === 'casement'
-      ? 'Swing'
+      ? 'Apertura'
       : windowType === 'louvered'
-        ? 'Slats'
-        : 'Tilt'
+        ? 'Lamelle'
+        : 'Inclinazione'
 
   const setOperationState = (value: number) => {
     useInteractive.getState().cancelWindowAnimation(node.id)
@@ -385,11 +385,11 @@ export default function WindowPanel() {
     <PanelWrapper
       icon={scriptImages(node)?.thumbnail ?? '/icons/window.webp'}
       onClose={handleClose}
-      title={node.name || 'Window'}
+      title={node.name || 'Finestra'}
       width={320}
     >
       {!scripted && (
-        <PanelSection title="Type">
+        <PanelSection title="Tipo">
           <SegmentedControl
             onChange={(value) =>
               handleUpdate({
@@ -407,8 +407,8 @@ export default function WindowPanel() {
               })
             }
             options={[
-              { value: 'window', label: 'Window' },
-              { value: 'opening', label: 'Opening' },
+              { value: 'window', label: 'Finestra' },
+              { value: 'opening', label: 'Apertura' },
             ]}
             value={node.openingKind ?? 'window'}
           />
@@ -416,7 +416,7 @@ export default function WindowPanel() {
       )}
 
       {showWindowTypeSection && (
-        <PanelSection title="Window Type">
+        <PanelSection title="Tipo di finestra">
           <div className="grid grid-cols-2 gap-2 px-1 pt-1">
             {windowTypeOptions.map((option) => {
               const isSelected = displayedWindowType === option.value
@@ -452,8 +452,8 @@ export default function WindowPanel() {
                   })
                 }
                 options={[
-                  { value: 'up', label: 'Up' },
-                  { value: 'down', label: 'Down' },
+                  { value: 'up', label: 'Verso l’alto' },
+                  { value: 'down', label: 'Verso il basso' },
                 ]}
                 value={awningDirection}
               />
@@ -466,8 +466,8 @@ export default function WindowPanel() {
                   handleUpdate({ casementStyle: value as WindowNode['casementStyle'] })
                 }
                 options={[
-                  { value: 'single', label: 'Single' },
-                  { value: 'french', label: 'French' },
+                  { value: 'single', label: 'Singola' },
+                  { value: 'french', label: 'A due ante' },
                 ]}
                 value={node.casementStyle ?? 'single'}
               />
@@ -477,8 +477,8 @@ export default function WindowPanel() {
                     handleUpdate({ hingesSide: value as WindowNode['hingesSide'] })
                   }
                   options={[
-                    { value: 'left', label: 'Left' },
-                    { value: 'right', label: 'Right' },
+                    { value: 'left', label: 'Sinistra' },
+                    { value: 'right', label: 'Destra' },
                   ]}
                   value={node.hingesSide ?? 'left'}
                 />
@@ -503,7 +503,7 @@ export default function WindowPanel() {
       )}
 
       {showStyleSection && (
-        <PanelSection title="Style">
+        <PanelSection title="Stile">
           <div className="grid grid-cols-2 gap-2 px-1 pt-1">
             {WINDOW_STYLE_CHOICES.map((style) => (
               <button
@@ -524,19 +524,19 @@ export default function WindowPanel() {
           </div>
           {!windowStyles.length && (
             <p className="px-1 pt-2 text-muted-foreground text-xs">
-              Custom: the panes match no style.
+              Personalizzato: i riquadri non corrispondono a nessuno stile.
             </p>
           )}
         </PanelSection>
       )}
 
       {corner && (
-        <PanelSection title="Corner">
+        <PanelSection title="Angolo">
           {corner.paired ? (
             <div className="flex flex-col gap-2 px-1 pb-1">
               <div className="flex items-center justify-between gap-2 text-xs">
                 <span className="text-muted-foreground">
-                  Wraps the corner with {corner.partner.name || 'its partner'}
+                  Gira l’angolo con {corner.partner.name || 'la finestra abbinata'}
                 </span>
                 <button
                   className={cn(
@@ -548,11 +548,11 @@ export default function WindowPanel() {
                   }
                   type="button"
                 >
-                  Unwrap
+                  Separa
                 </button>
               </div>
               <SliderControl
-                label="This side"
+                label="Questo lato"
                 min={0.1}
                 onChange={(v) => selectedId && setCornerWidth(selectedId, v)}
                 precision={2}
@@ -561,7 +561,7 @@ export default function WindowPanel() {
                 value={node.width}
               />
               <SliderControl
-                label="Other side"
+                label="Altro lato"
                 min={0.1}
                 onChange={(v) => setCornerWidth(corner.partner.id, v)}
                 precision={2}
@@ -574,8 +574,8 @@ export default function WindowPanel() {
                 <SegmentedControl
                   onChange={setCornerPost}
                   options={[
-                    { label: 'Fused glass', value: 'none' },
-                    { label: 'Corner post', value: 'post' },
+                    { label: 'Vetro unito', value: 'none' },
+                    { label: 'Montante d’angolo', value: 'post' },
                   ]}
                   value={node.corner?.post ?? 'none'}
                 />
@@ -591,14 +591,14 @@ export default function WindowPanel() {
                 onClick={wrapTheCorner}
                 type="button"
               >
-                Wrap the corner
+                Gira l’angolo
               </button>
             </div>
           )}
         </PanelSection>
       )}
 
-      <PanelSection title="Position">
+      <PanelSection title="Posizione">
         {!corner?.paired && (
           <SliderControl
             label={
@@ -630,7 +630,7 @@ export default function WindowPanel() {
             <ActionButton
               className="w-full"
               icon={<FlipHorizontal2 className="h-4 w-4" />}
-              label="Flip Side"
+              label="Inverti il lato"
               onClick={handleFlip}
             />
           </div>
@@ -640,15 +640,15 @@ export default function WindowPanel() {
       {scripted && <AuthoredParams node={node} />}
 
       {!scripted && (
-        <PanelSection title="Dimensions">
+        <PanelSection title="Dimensioni">
           {limits && (
             <p className="text-[11px] text-muted-foreground">
-              Size is limited to the wall, including clearance for the opening frame.
+              La dimensione è limitata dal muro, compreso lo spazio per il telaio dell’apertura.
             </p>
           )}
           {!corner?.paired && (
             <SliderControl
-              label="Width"
+              label="Larghezza"
               max={limits?.width}
               min={0.01}
               onChange={(v) => preview?.preview(getDimensionUpdates({ width: v }))}
@@ -663,7 +663,7 @@ export default function WindowPanel() {
             />
           )}
           <SliderControl
-            label="Height"
+            label="Altezza"
             max={limits?.height}
             min={0.01}
             onChange={(v) => preview?.preview(getDimensionUpdates({ height: v }))}
@@ -680,7 +680,7 @@ export default function WindowPanel() {
       )}
 
       {showWindowShapeSection && (
-        <PanelSection title="Top Shape">
+        <PanelSection title="Forma superiore">
           <SegmentedControl
             onChange={(value) =>
               handleUpdate({
@@ -698,9 +698,9 @@ export default function WindowPanel() {
               })
             }
             options={[
-              { value: 'rectangle', label: 'Rect' },
-              { value: 'rounded', label: 'Rounded' },
-              { value: 'arch', label: 'Arch' },
+              { value: 'rectangle', label: 'Rettangolare' },
+              { value: 'rounded', label: 'Arrotondata' },
+              { value: 'arch', label: 'Ad arco' },
             ]}
             value={windowShape}
           />
@@ -711,14 +711,14 @@ export default function WindowPanel() {
                   handleUpdate({ openingRadiusMode: value as WindowNode['openingRadiusMode'] })
                 }
                 options={[
-                  { value: 'all', label: 'All' },
-                  { value: 'individual', label: 'Individual' },
+                  { value: 'all', label: 'Tutti' },
+                  { value: 'individual', label: 'Singoli' },
                 ]}
                 value={openingRadiusMode}
               />
               {openingRadiusMode === 'all' ? (
                 <SliderControl
-                  label="Corner Radius"
+                  label="Raggio degli angoli"
                   max={maxRoundedRadius}
                   min={0}
                   onChange={(value) => previewWindowUpdate('cornerRadius', value)}
@@ -734,10 +734,10 @@ export default function WindowPanel() {
               ) : (
                 <>
                   {[
-                    ['Top Left', 0],
-                    ['Top Right', 1],
-                    ['Bottom Right', 2],
-                    ['Bottom Left', 3],
+                    ['In alto a sinistra', 0],
+                    ['In alto a destra', 1],
+                    ['In basso a destra', 2],
+                    ['In basso a sinistra', 3],
                   ].map(([label, index]) => (
                     <SliderControl
                       key={label}
@@ -758,7 +758,7 @@ export default function WindowPanel() {
                 </>
               )}
               <SliderControl
-                label="Reveal Radius"
+                label="Raggio della mazzetta"
                 max={0.08}
                 min={0}
                 onChange={(value) => previewWindowUpdate('openingRevealRadius', value)}
@@ -776,7 +776,7 @@ export default function WindowPanel() {
           {windowShape === 'arch' && (
             <div className="mt-2 flex flex-col gap-1">
               <SliderControl
-                label="Arch Height"
+                label="Altezza dell’arco"
                 max={Math.max(0.05, node.height)}
                 min={0.05}
                 onChange={(value) => previewWindowUpdate('archHeight', value)}
@@ -795,15 +795,15 @@ export default function WindowPanel() {
       )}
 
       {showOpeningShapeSection && (
-        <PanelSection title="Opening Shape">
+        <PanelSection title="Forma dell’apertura">
           <SegmentedControl
             onChange={(value) =>
               handleUpdate({ openingShape: value as WindowNode['openingShape'] })
             }
             options={[
-              { value: 'rectangle', label: 'Rect' },
-              { value: 'rounded', label: 'Rounded' },
-              { value: 'arch', label: 'Arch' },
+              { value: 'rectangle', label: 'Rettangolare' },
+              { value: 'rounded', label: 'Arrotondata' },
+              { value: 'arch', label: 'Ad arco' },
             ]}
             value={openingShape}
           />
@@ -814,14 +814,14 @@ export default function WindowPanel() {
                   handleUpdate({ openingRadiusMode: value as WindowNode['openingRadiusMode'] })
                 }
                 options={[
-                  { value: 'all', label: 'All' },
-                  { value: 'individual', label: 'Individual' },
+                  { value: 'all', label: 'Tutti' },
+                  { value: 'individual', label: 'Singoli' },
                 ]}
                 value={openingRadiusMode}
               />
               {openingRadiusMode === 'all' ? (
                 <SliderControl
-                  label="Corner Radius"
+                  label="Raggio degli angoli"
                   max={maxRoundedRadius}
                   min={0}
                   onChange={(value) => previewWindowUpdate('cornerRadius', value)}
@@ -837,10 +837,10 @@ export default function WindowPanel() {
               ) : (
                 <>
                   {[
-                    ['Top Left', 0],
-                    ['Top Right', 1],
-                    ['Bottom Right', 2],
-                    ['Bottom Left', 3],
+                    ['In alto a sinistra', 0],
+                    ['In alto a destra', 1],
+                    ['In basso a destra', 2],
+                    ['In basso a sinistra', 3],
                   ].map(([label, index]) => (
                     <SliderControl
                       key={label}
@@ -861,7 +861,7 @@ export default function WindowPanel() {
                 </>
               )}
               <SliderControl
-                label="Reveal Radius"
+                label="Raggio della mazzetta"
                 max={0.08}
                 min={0}
                 onChange={(value) => previewWindowUpdate('openingRevealRadius', value)}
@@ -879,7 +879,7 @@ export default function WindowPanel() {
           {openingShape === 'arch' && (
             <div className="mt-2 flex flex-col gap-1">
               <SliderControl
-                label="Arch Height"
+                label="Altezza dell’arco"
                 max={Math.max(0.05, node.height)}
                 min={0.05}
                 onChange={(value) => previewWindowUpdate('archHeight', value)}
@@ -900,9 +900,9 @@ export default function WindowPanel() {
       {!isOpening && !scripted && (
         <>
           {showFrameSection && (
-            <PanelSection title="Frame">
+            <PanelSection title="Telaio">
               <SliderControl
-                label="Thickness"
+                label="Spessore"
                 min={0}
                 onChange={(v) => previewWindowUpdate('frameThickness', v)}
                 onCommit={(v) => commitWindowPreview('frameThickness', v)}
@@ -915,7 +915,7 @@ export default function WindowPanel() {
                 value={node.frameThickness}
               />
               <SliderControl
-                label="Depth"
+                label="Profondità"
                 min={0}
                 onChange={(v) => previewWindowUpdate('frameDepth', v)}
                 onCommit={(v) => commitWindowPreview('frameDepth', v)}
@@ -931,9 +931,9 @@ export default function WindowPanel() {
           )}
 
           {showGridSection && (
-            <PanelSection title="Grid">
+            <PanelSection title="Griglia">
               <SliderControl
-                label="Columns"
+                label="Colonne"
                 max={8}
                 min={1}
                 onChange={(v) => {
@@ -945,7 +945,7 @@ export default function WindowPanel() {
                 value={numCols}
               />
               <SliderControl
-                label="Rows"
+                label="Righe"
                 max={8}
                 min={1}
                 onChange={(v) => {
@@ -960,7 +960,7 @@ export default function WindowPanel() {
               {numCols > 1 && (
                 <div className="mt-2 flex flex-col gap-1">
                   <div className="mb-1 px-1 font-medium text-[10px] text-muted-foreground/80 uppercase tracking-wider">
-                    Col Widths
+                    Larghezze delle colonne
                   </div>
                   {normCols.map((ratio, i) => (
                     <SliderControl
@@ -977,7 +977,7 @@ export default function WindowPanel() {
                   ))}
                   <div className="mt-1 border-border/50 border-t pt-1">
                     <SliderControl
-                      label="Divider"
+                      label="Divisorio"
                       max={0.1}
                       min={0.005}
                       onChange={(v) => handleUpdate({ columnDividerThickness: v })}
@@ -993,7 +993,7 @@ export default function WindowPanel() {
               {numRows > 1 && (
                 <div className="mt-2 flex flex-col gap-1">
                   <div className="mb-1 px-1 font-medium text-[10px] text-muted-foreground/80 uppercase tracking-wider">
-                    Row Heights
+                    Altezze delle righe
                   </div>
                   {normRows.map((ratio, i) => (
                     <SliderControl
@@ -1010,7 +1010,7 @@ export default function WindowPanel() {
                   ))}
                   <div className="mt-1 border-border/50 border-t pt-1">
                     <SliderControl
-                      label="Divider"
+                      label="Divisorio"
                       max={0.1}
                       min={0.005}
                       onChange={(v) => handleUpdate({ rowDividerThickness: v })}
@@ -1026,16 +1026,16 @@ export default function WindowPanel() {
           )}
 
           {showSillSection && (
-            <PanelSection title="Sill">
+            <PanelSection title="Davanzale">
               <ToggleControl
                 checked={node.sill}
-                label="Enable Sill"
+                label="Davanzale"
                 onChange={(checked) => handleUpdate({ sill: checked })}
               />
               {node.sill && (
                 <div className="mt-1 flex flex-col gap-1">
                   <SliderControl
-                    label="Depth"
+                    label="Profondità"
                     min={0}
                     onChange={(v) => handleUpdate({ sillDepth: v })}
                     precision={3}
@@ -1044,7 +1044,7 @@ export default function WindowPanel() {
                     value={node.sillDepth}
                   />
                   <SliderControl
-                    label="Thickness"
+                    label="Spessore"
                     min={0}
                     onChange={(v) => handleUpdate({ sillThickness: v })}
                     precision={3}
@@ -1059,18 +1059,22 @@ export default function WindowPanel() {
         </>
       )}
 
-      <PanelSection title="Actions">
+      <PanelSection title="Azioni">
         <ActionGroup>
-          <ActionButton icon={<Move className="h-3.5 w-3.5" />} label="Move" onClick={handleMove} />
+          <ActionButton
+            icon={<Move className="h-3.5 w-3.5" />}
+            label="Sposta"
+            onClick={handleMove}
+          />
           <ActionButton
             icon={<Copy className="h-3.5 w-3.5" />}
-            label="Duplicate"
+            label="Duplica"
             onClick={handleDuplicate}
           />
           <ActionButton
             className="hover:bg-red-500/20"
             icon={<Trash2 className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />}
-            label="Delete"
+            label="Elimina"
             onClick={handleDelete}
           />
         </ActionGroup>

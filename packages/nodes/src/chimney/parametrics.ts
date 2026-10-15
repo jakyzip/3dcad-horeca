@@ -10,7 +10,7 @@ export const chimneyParametrics: ParametricDescriptor<ChimneyNode> = {
   customPanel: () => import('./panel'),
   groups: [
     {
-      label: 'Body',
+      label: 'Corpo',
       fields: [
         {
           key: 'bodyShape',
@@ -41,7 +41,7 @@ export const chimneyParametrics: ParametricDescriptor<ChimneyNode> = {
       ],
     },
     {
-      label: 'Shoulder',
+      label: 'Spalla',
       fields: [
         {
           key: 'shoulderStyle',
@@ -70,7 +70,7 @@ export const chimneyParametrics: ParametricDescriptor<ChimneyNode> = {
       ],
     },
     {
-      label: 'Cap',
+      label: 'Cappello',
       fields: [
         { key: 'cap', kind: 'boolean' },
         {
@@ -101,7 +101,7 @@ export const chimneyParametrics: ParametricDescriptor<ChimneyNode> = {
       ],
     },
     {
-      label: 'Flues',
+      label: 'Canne fumarie',
       fields: [
         { key: 'flueCount', kind: 'number', min: 0, max: 4, step: 1 },
         {
@@ -140,7 +140,7 @@ export const chimneyParametrics: ParametricDescriptor<ChimneyNode> = {
       ],
     },
     {
-      label: 'Cricket',
+      label: 'Deviatore',
       fields: [
         {
           key: 'cricketStyle',

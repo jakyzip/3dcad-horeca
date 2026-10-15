@@ -4,7 +4,7 @@ import type { LiquidLineNode } from './schema'
 export const liquidLineParametrics: ParametricDescriptor<LiquidLineNode> = {
   groups: [
     {
-      label: 'Line',
+      label: 'Linea',
       fields: [
         {
           key: 'diameter',

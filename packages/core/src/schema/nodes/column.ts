@@ -188,7 +188,7 @@ export const ColumnNode = BaseNode.extend({
 
 export const COLUMN_PRESETS = {
   basicPillar: {
-    label: 'Straight Round',
+    label: 'Tonda dritta',
     style: 'plain',
     crossSection: 'round',
     height: 2.5,
@@ -238,7 +238,7 @@ export const COLUMN_PRESETS = {
     beadCount: 0,
   },
   squarePillar: {
-    label: 'Square Block',
+    label: 'Quadrata',
     style: 'faceted',
     crossSection: 'square',
     height: 2.5,
@@ -288,7 +288,7 @@ export const COLUMN_PRESETS = {
     beadCount: 0,
   },
   taperedPillar: {
-    label: 'Tapered Round',
+    label: 'Tonda rastremata',
     style: 'plain',
     crossSection: 'round',
     height: 2.5,
@@ -338,7 +338,7 @@ export const COLUMN_PRESETS = {
     beadCount: 0,
   },
   bulgedPillar: {
-    label: 'Soft Bulged',
+    label: 'Bombata',
     style: 'plain',
     crossSection: 'round',
     height: 2.5,
@@ -388,7 +388,7 @@ export const COLUMN_PRESETS = {
     beadCount: 0,
   },
   hourglassPillar: {
-    label: 'Hourglass',
+    label: 'A clessidra',
     style: 'plain',
     crossSection: 'round',
     height: 2.5,
@@ -438,7 +438,7 @@ export const COLUMN_PRESETS = {
     beadCount: 0,
   },
   aFrameSupport: {
-    label: 'A-Frame Support',
+    label: 'Supporto ad A',
     supportStyle: 'a-frame',
     style: 'faceted',
     crossSection: 'rectangular',
@@ -494,7 +494,7 @@ export const COLUMN_PRESETS = {
     bracePlateEnabled: false,
   },
   yFrameSupport: {
-    label: 'Y Support',
+    label: 'Supporto a Y',
     supportStyle: 'y-frame',
     style: 'faceted',
     crossSection: 'rectangular',
@@ -550,7 +550,7 @@ export const COLUMN_PRESETS = {
     bracePlateEnabled: false,
   },
   vFrameSupport: {
-    label: 'V Support',
+    label: 'Supporto a V',
     supportStyle: 'v-frame',
     style: 'faceted',
     crossSection: 'rectangular',
@@ -606,7 +606,7 @@ export const COLUMN_PRESETS = {
     bracePlateEnabled: false,
   },
   xBraceSupport: {
-    label: 'X Brace',
+    label: 'Controvento a X',
     supportStyle: 'x-brace',
     style: 'faceted',
     crossSection: 'rectangular',
@@ -662,7 +662,7 @@ export const COLUMN_PRESETS = {
     bracePlateEnabled: false,
   },
   kBraceSupport: {
-    label: 'K Brace',
+    label: 'Controvento a K',
     supportStyle: 'k-brace',
     style: 'faceted',
     crossSection: 'rectangular',
@@ -718,7 +718,7 @@ export const COLUMN_PRESETS = {
     bracePlateEnabled: false,
   },
   singleStrutSupport: {
-    label: 'Single Strut',
+    label: 'Puntone singolo',
     supportStyle: 'single-strut',
     style: 'faceted',
     crossSection: 'rectangular',
@@ -774,7 +774,7 @@ export const COLUMN_PRESETS = {
     bracePlateEnabled: false,
   },
   tripodSupport: {
-    label: 'Tripod Support',
+    label: 'Treppiede',
     supportStyle: 'tripod',
     style: 'faceted',
     crossSection: 'rectangular',
@@ -830,7 +830,7 @@ export const COLUMN_PRESETS = {
     bracePlateEnabled: false,
   },
   trestleSupport: {
-    label: 'Trestle Frame',
+    label: 'Cavalletto',
     supportStyle: 'trestle',
     style: 'faceted',
     crossSection: 'rectangular',
@@ -886,7 +886,7 @@ export const COLUMN_PRESETS = {
     bracePlateEnabled: false,
   },
   portalFrameSupport: {
-    label: 'Portal Frame',
+    label: 'Portale',
     supportStyle: 'portal-frame',
     style: 'faceted',
     crossSection: 'rectangular',
@@ -942,7 +942,7 @@ export const COLUMN_PRESETS = {
     bracePlateEnabled: false,
   },
   boxFrameSupport: {
-    label: 'Box Frame',
+    label: 'Telaio a scatola',
     supportStyle: 'box-frame',
     style: 'faceted',
     crossSection: 'rectangular',

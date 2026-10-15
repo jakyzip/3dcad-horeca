@@ -439,8 +439,8 @@ export const columnDefinition: NodeDefinition<typeof ColumnNode> = {
   // registry-first path mounts this and skips the legacy `<ColumnTool>`.
   tool: () => import('./tool'),
   toolHints: [
-    { key: 'Left click', label: 'Place column' },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Left click', label: 'Posiziona il pilastro' },
+    { key: 'Esc', label: 'Annulla' },
   ],
   computeFloorplanLevelData: computeColumnFloorplanLevelData,
   floorplanDependsOnSiblings: true,
@@ -462,7 +462,7 @@ export const columnDefinition: NodeDefinition<typeof ColumnNode> = {
   },
 
   presentation: {
-    label: 'Column',
+    label: 'Pilastro',
     description: 'A parametric column with configurable cross-section, base, and capital.',
     icon: { kind: 'url', src: '/icons/column.webp' },
     paletteSection: 'structure',

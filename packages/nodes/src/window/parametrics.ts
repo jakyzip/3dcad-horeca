@@ -18,7 +18,7 @@ export const windowParametrics: ParametricDescriptor<WindowNode> = {
     })),
   groups: [
     {
-      label: 'Dimensions',
+      label: 'Dimensioni',
       fields: [
         { key: 'width', kind: 'number', unit: 'm', min: 0.3, max: 1000, step: 0.05 },
         { key: 'height', kind: 'number', unit: 'm', min: 0.3, max: 1000, step: 0.05 },

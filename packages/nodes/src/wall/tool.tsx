@@ -167,7 +167,7 @@ function buildDraftWall(start: WallPlanPoint, end: WallPlanPoint): WallNode {
     object: 'node',
     id: 'wall_draft' as WallNode['id'],
     type: 'wall',
-    name: 'Draft wall',
+    name: 'Muro in bozza',
     parentId: null,
     visible: true,
     metadata: {},

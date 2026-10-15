@@ -267,12 +267,12 @@ export const solarPanelDefinition: NodeDefinition<typeof SolarPanelNode> = {
     move: () => import('./move-tool'),
   },
   toolHints: [
-    { key: 'Left click', label: 'Place solar panel array on roof' },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Left click', label: 'Posiziona la schiera di pannelli solari sul tetto' },
+    { key: 'Esc', label: 'Annulla' },
   ],
 
   presentation: {
-    label: 'Solar Panel',
+    label: 'Pannello solare',
     description: 'Grid of photovoltaic panels mounted on a roof segment.',
     icon: { kind: 'url', src: '/icons/solar-panel.webp' },
     paletteSection: 'structure',

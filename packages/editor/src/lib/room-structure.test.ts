@@ -787,7 +787,7 @@ describe('room structure controls', () => {
     )
     expect(content.title).toBe(`Eliminare ${payload.name.trim() || 'questa stanza'}?`)
     expect(content.description).toContain('Rimuove 4 muri')
-    expect(content.description).toContain('Si apre su Room.')
+    expect(content.description).toContain('Si apre su Stanza.')
     expect(content.description).not.toContain(zoneId)
     for (const id of payload.wallIds) expect(content.description).not.toContain(id)
     const merge = deleteConfirmationContent(

@@ -88,7 +88,7 @@ export const blockDefinition: NodeDefinition<typeof BlockNode> = {
     rotation: 0,
     topology: createBoxBlockTopology(),
     slots: {},
-    slotNames: { body: 'Body' },
+    slotNames: { body: 'Corpo' },
   }),
 
   capabilities: {
@@ -142,11 +142,11 @@ export const blockDefinition: NodeDefinition<typeof BlockNode> = {
   preview: () => import('./preview'),
   tool: () => import('./tool'),
   toolHints: [
-    { key: 'Left click', label: 'Place block' },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Left click', label: 'Posiziona il blocco' },
+    { key: 'Esc', label: 'Annulla' },
   ],
   presentation: {
-    label: 'Block',
+    label: 'Blocco',
     description: 'A topology-backed solid edited directly in the canvas.',
     icon: { kind: 'url', src: '/icons/cube.webp' },
     paletteSection: 'structure',

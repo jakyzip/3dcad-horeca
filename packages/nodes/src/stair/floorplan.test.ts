@@ -71,8 +71,8 @@ describe('buildStairFloorplan documentation', () => {
       parent: LevelNode.parse({ id: 'level_ground' }),
     } satisfies GeometryContext)
 
-    expect(textValues(geometry)[0]).toBe('UP')
-    expect(textValues(geometry)).toContain('10 R @ 0.25m · T 0.3m · CLR W 1.2m')
+    expect(textValues(geometry)[0]).toBe('SALE')
+    expect(textValues(geometry)).toContain('10 A @ 0.25m · P 0.3m · LARGH. NETTA 1.2m')
     expect(geometry?.kind).toBe('group')
     if (geometry?.kind !== 'group') return
     expect(
@@ -107,7 +107,7 @@ test('arc plans use the rendered two-step layout and preserve signed multi-turn 
     } satisfies GeometryContext)
     expect(geometry?.kind).toBe('group')
     if (geometry?.kind !== 'group') continue
-    expect(textValues(geometry).some((text) => text.startsWith('2 R @ 1.5m'))).toBe(true)
+    expect(textValues(geometry).some((text) => text.startsWith('2 A @ 1.5m'))).toBe(true)
     const spokes = geometry.children.filter((child) => child.kind === 'line')
     const end = spokes.at(-1)!
     if (end.kind !== 'line') continue
@@ -242,7 +242,7 @@ test('oversized stair counts produce a bounded plan and visible detail refusal',
     if (geometry?.kind !== 'group') throw new Error('Missing stair plan')
     expect(
       geometry.children.some(
-        (child) => child.kind === 'text' && child.text.includes('detail unavailable'),
+        (child) => child.kind === 'text' && child.text.includes('non disponibile'),
       ),
     ).toBe(true)
     expect(stair.stepCount).toBe(4294967296)
@@ -274,7 +274,9 @@ test('whole-chain plan budgets retain footprints without allocating any flight t
   })
   if (geometry?.kind !== 'group') throw new Error('Missing stair plan')
   expect(
-    geometry.children.some((child) => child.kind === 'text' && child.text.includes('unavailable')),
+    geometry.children.some(
+      (child) => child.kind === 'text' && child.text.includes('non disponibile'),
+    ),
   ).toBe(true)
 })
 

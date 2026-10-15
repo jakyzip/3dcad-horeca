@@ -25,14 +25,14 @@ import { SliderControl } from '@pascal-app/editor'
 export function FencePatternInfo({ node }: { node: FenceNode }) {
   const subject =
     node.style === 'picket'
-      ? 'pickets in each bay between posts'
+      ? 'le doghe di ogni campata tra i pali'
       : node.style === 'horizontal'
-        ? 'posts along the full fence'
-        : 'infill pieces between the two end posts'
+        ? 'i pali lungo tutta la recinzione'
+        : 'i pezzi di tamponamento tra i due pali di estremità'
   return (
     <p className="text-xs text-muted-foreground">
-      Distribution controls {subject}. Spacing is measured between centers. The available width
-      limits the count so pieces do not overlap.
+      La distribuzione regola {subject}. L’interasse si misura tra i centri. La larghezza
+      disponibile limita il numero dei pezzi, così non si sovrappongono.
     </p>
   )
 }
@@ -47,7 +47,7 @@ export function FencePicketRailProjectionEditor({
   const max = maxFencePicketRailProjection(node.postSize)
   return (
     <SliderControl
-      label="Picket rail projection"
+      label="Sporgenza della traversa"
       max={max}
       min={0.001}
       onChange={(value) =>
@@ -83,7 +83,7 @@ export function FenceSurfaceEditor({
   return (
     <div className="space-y-2 text-xs">
       <label className="flex items-center justify-between gap-2">
-        Surface behavior
+        Comportamento sulla superficie
         <select
           className="rounded border bg-background p-1"
           value={node.surfaceMode}
@@ -101,16 +101,16 @@ export function FenceSurfaceEditor({
             }
           }}
         >
-          <option value="auto">Follow highest surface</option>
+          <option value="auto">Segui la superficie più alta</option>
           <option disabled={hosts.length === 0} value="selected">
-            Follow selected surface
+            Segui la superficie scelta
           </option>
-          <option value="level">Hold starting height</option>
+          <option value="level">Mantieni l’altezza iniziale</option>
         </select>
       </label>
       {node.surfaceMode === 'selected' && (
         <label className="flex items-center justify-between gap-2">
-          Surface
+          Superficie
           <select
             className="min-w-0 max-w-40 rounded border bg-background p-1"
             value={selectedId}
@@ -122,7 +122,7 @@ export function FenceSurfaceEditor({
               })
             }}
           >
-            <option value="">Choose a surface</option>
+            <option value="">Scegli una superficie</option>
             {hosts.map((host) => (
               <option key={host.id} value={host.id}>
                 {host.name || host.type} ({host.type})
@@ -132,7 +132,9 @@ export function FenceSurfaceEditor({
         </label>
       )}
       {node.surfaceMode === 'selected' && !selectedId && (
-        <p className="text-muted-foreground">Choose a slab or shaped surface on this level.</p>
+        <p className="text-muted-foreground">
+          Scegli un solaio o una superficie sagomata su questo piano.
+        </p>
       )}
     </div>
   )
@@ -178,7 +180,7 @@ export function FenceLengthEditor({
 
   return (
     <SliderControl
-      label="Length"
+      label="Lunghezza"
       max={50}
       min={0.1}
       onChange={handleChange}
@@ -203,7 +205,7 @@ export function FenceCurveEditor({
   return (
     <div className="space-y-2">
       <SliderControl
-        label="Curve"
+        label="Curvatura"
         max={Math.max(0.01, maxCurveOffset)}
         min={-Math.max(0.01, maxCurveOffset)}
         onChange={(value) => onUpdate({ curveOffset: normalizeWallCurveOffset(node, value) })}
@@ -237,7 +239,7 @@ export function FenceCurveEditor({
           })
         }}
       >
-        Edit path
+        Modifica il percorso
       </button>
     </div>
   )
@@ -268,14 +270,15 @@ export function FencePathEditor({
   return (
     <div className="space-y-2 text-xs">
       <p>
-        {path.length} points · {getFenceCenterlineLength(node).toFixed(2)} m
+        {path.length} punti · {getFenceCenterlineLength(node).toFixed(2).replace('.', ',')} m
       </p>
       <p className="text-muted-foreground">
-        Set each span to straight or curved, then drag its points and curve handles in either view.
+        Imposta ogni campata come dritta o curva, poi trascina i punti e le maniglie della curva in
+        una delle due viste.
       </p>
       {path.map((point, index) => (
         <details key={`curve-editor-${index}`} className="rounded border p-2">
-          <summary className="cursor-pointer">Point {index + 1}</summary>
+          <summary className="cursor-pointer">Punto {index + 1}</summary>
           <div className="mt-2 flex gap-2">
             {(['X', 'Z'] as const).map((axis, coordinate) => (
               <label key={axis} className="min-w-0 flex-1">
@@ -301,7 +304,7 @@ export function FencePathEditor({
           </div>
           {index < path.length - 1 && (
             <label className="mt-2 flex items-center justify-between">
-              Span to point {index + 2}
+              Campata fino al punto {index + 2}
               <select
                 className="rounded border bg-background p-1"
                 value={spanModes[index]}
@@ -315,14 +318,14 @@ export function FencePathEditor({
                   update(path, handles, modes)
                 }}
               >
-                <option value="straight">Straight</option>
-                <option value="curve">Curved</option>
+                <option value="straight">Dritta</option>
+                <option value="curve">Curva</option>
               </select>
             </label>
           )}
           {(spanModes[index - 1] === 'curve' || spanModes[index] === 'curve') && (
             <label className="mt-2 flex items-center justify-between">
-              Join
+              Raccordo
               <select
                 className="rounded border bg-background p-1"
                 value={
@@ -334,8 +337,8 @@ export function FencePathEditor({
                   update(path, handles)
                 }}
               >
-                <option value="smooth">Smooth</option>
-                <option value="corner">Corner</option>
+                <option value="smooth">Morbido</option>
+                <option value="corner">Spigolo</option>
               </select>
             </label>
           )}
@@ -366,7 +369,7 @@ export function FencePathEditor({
                   update(points, handles, modes)
                 }}
               >
-                Add point after
+                Aggiungi un punto dopo
               </button>
             )}
             {index === path.length - 1 && (
@@ -385,7 +388,7 @@ export function FencePathEditor({
                   )
                 }}
               >
-                Extend path
+                Allunga il percorso
               </button>
             )}
             <button
@@ -411,7 +414,7 @@ export function FencePathEditor({
                 )
               }}
             >
-              Remove point
+              Rimuovi il punto
             </button>
           </div>
         </details>

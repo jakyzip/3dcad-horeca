@@ -15,7 +15,8 @@ import { type HostedUpdate, hostedChildUpdates } from '../shared/hosted-resize'
 import { blockFaceHost } from './face-host'
 import { blockSurfaceProvider, blockTopSurfaces } from './surface'
 
-export const BLOCK_SUPPORT_REFUSAL = 'This edit would remove support for an item on the block'
+export const BLOCK_SUPPORT_REFUSAL =
+  'Questa modifica toglierebbe l’appoggio a un oggetto sul blocco'
 type EditScene = Pick<SceneApi, 'get' | 'update' | 'applyChanges'>
 
 function faceMatrix(host: BlockNode, faceId: string) {

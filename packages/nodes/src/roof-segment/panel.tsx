@@ -36,20 +36,20 @@ import { useCallback } from 'react'
 import { commitSeatedRoofEdit } from '../roof/roof-level-target'
 
 const ROOF_TYPE_OPTIONS: { label: string; value: RoofType }[] = [
-  { label: 'Hip', value: 'hip' },
-  { label: 'Gable', value: 'gable' },
-  { label: 'Shed', value: 'shed' },
+  { label: 'A padiglione', value: 'hip' },
+  { label: 'A capanna', value: 'gable' },
+  { label: 'A una falda', value: 'shed' },
 ]
 
 const ROOF_TYPE_OPTIONS_2: { label: string; value: RoofType }[] = [
-  { label: 'Flat', value: 'flat' },
-  { label: 'Gambrel', value: 'gambrel' },
-  { label: 'Dutch', value: 'dutch' },
-  { label: 'Mansard', value: 'mansard' },
+  { label: 'Piano', value: 'flat' },
+  { label: 'A capanna spezzata', value: 'gambrel' },
+  { label: 'A padiglione con frontone', value: 'dutch' },
+  { label: 'A mansarda', value: 'mansard' },
 ]
 
 const ROOF_TYPE_OPTIONS_3: { label: string; value: RoofType }[] = [
-  { label: 'Conical', value: 'conical' },
+  { label: 'Conico', value: 'conical' },
 ]
 
 // Carpenter / roofer convention: rise over a 12" run, converted to degrees.
@@ -313,10 +313,10 @@ export default function RoofSegmentPanel() {
       icon="/icons/roof.webp"
       onBack={handleBack}
       onClose={handleClose}
-      title={node.name || 'Roof Segment'}
+      title={node.name || 'Falda'}
       width={300}
     >
-      <PanelSection title="Roof Type">
+      <PanelSection title="Tipo di tetto">
         <SegmentedControl
           onChange={(v) => handleRoofTypeChange(v)}
           options={ROOF_TYPE_OPTIONS}
@@ -338,7 +338,7 @@ export default function RoofSegmentPanel() {
       </PanelSection>
 
       {node.roofType !== 'conical' && (
-        <PanelSection title="Trim">
+        <PanelSection title="Taglio">
           <ActionGroup>
             <ActionButton
               icon={
@@ -348,21 +348,21 @@ export default function RoofSegmentPanel() {
                   <Pencil className="h-3.5 w-3.5" />
                 )
               }
-              label={showTrimPlanes ? 'Done editing' : 'Edit footprint'}
+              label={showTrimPlanes ? 'Fine modifica' : 'Modifica l’ingombro'}
               onClick={() => (showTrimPlanes ? handleBack() : handleTrimEditing(true))}
             />
             <ActionButton
               className="disabled:cursor-not-allowed disabled:opacity-40"
               disabled={!hasSegmentTrim(node)}
               icon={<RotateCcw className="h-3.5 w-3.5" />}
-              label="Reset"
+              label="Ripristina"
               onClick={handleResetTrim}
             />
           </ActionGroup>
           {node.roofType !== 'shed' && node.roofType !== 'flat' && (
             <ToggleControl
               checked={autoRidgeVentEnabled}
-              label="Auto ridge vent"
+              label="Aeratore di colmo automatico"
               onChange={handleAutoRidgeVentToggle}
             />
           )}
@@ -370,19 +370,19 @@ export default function RoofSegmentPanel() {
       )}
 
       {node.roofType !== 'conical' && (
-        <PanelSection title="Drainage">
+        <PanelSection title="Smaltimento acque">
           <ToggleControl
             checked={autoGutterEnabled}
-            label="Auto gutters"
+            label="Grondaie automatiche"
             onChange={handleAutoGutterToggle}
           />
         </PanelSection>
       )}
 
-      <PanelSection title="Footprint">
+      <PanelSection title="Ingombro">
         {node.roofType === 'conical' ? (
           <SliderControl
-            label="Diameter"
+            label="Diametro"
             max={1000}
             min={0.5}
             onChange={(v) => handleUpdate({ width: v, depth: v })}
@@ -394,7 +394,7 @@ export default function RoofSegmentPanel() {
         ) : (
           <>
             <SliderControl
-              label="Width"
+              label="Larghezza"
               max={1000}
               min={0.5}
               onChange={(v) => handleUpdate({ width: v })}
@@ -404,7 +404,7 @@ export default function RoofSegmentPanel() {
               value={node.width}
             />
             <SliderControl
-              label="Depth"
+              label="Profondità"
               max={1000}
               min={0.5}
               onChange={(v) => handleUpdate({ depth: v })}
@@ -418,16 +418,16 @@ export default function RoofSegmentPanel() {
       </PanelSection>
 
       {node.roofType === 'conical' && (
-        <PanelSection title="Conical Shape">
+        <PanelSection title="Forma conica">
           <ToggleControl
             checked={!conicalCoverage.fullCircle}
-            label="Clipped version"
+            label="Versione troncata"
             onChange={(checked) => handleUpdate({ conicalFullCircle: !checked })}
           />
           {!conicalCoverage.fullCircle && (
             <>
               <SliderControl
-                label="Start Angle"
+                label="Angolo iniziale"
                 max={180}
                 min={-180}
                 onChange={(degrees) =>
@@ -439,7 +439,7 @@ export default function RoofSegmentPanel() {
                 value={Math.round((conicalCoverage.startAngle * 180) / Math.PI)}
               />
               <SliderControl
-                label="Arc"
+                label="Arco"
                 max={345}
                 min={15}
                 onChange={(degrees) =>
@@ -458,9 +458,9 @@ export default function RoofSegmentPanel() {
         </PanelSection>
       )}
 
-      <PanelSection title="Wall Height">
+      <PanelSection title="Altezza delle pareti">
         <SliderControl
-          label="Wall"
+          label="Parete"
           max={1000}
           min={0}
           onChange={(v) => handleUpdate({ wallHeight: v })}
@@ -471,9 +471,9 @@ export default function RoofSegmentPanel() {
         />
       </PanelSection>
 
-      <PanelSection title="Pitch">
+      <PanelSection title="Pendenza">
         <SliderControl
-          label="Angle"
+          label="Angolo"
           max={60}
           min={0}
           onChange={(v) => handleUpdate({ pitch: v })}
@@ -494,9 +494,9 @@ export default function RoofSegmentPanel() {
       </PanelSection>
 
       {node.roofType === 'gambrel' && (
-        <PanelSection title="Shape">
+        <PanelSection title="Forma">
           <SliderControl
-            label="Kink Depth"
+            label="Profondità della piega"
             max={0.9}
             min={0.1}
             onChange={(v) => handleUpdate({ gambrelLowerWidthRatio: v })}
@@ -506,7 +506,7 @@ export default function RoofSegmentPanel() {
             value={Math.round(node.gambrelLowerWidthRatio * 100) / 100}
           />
           <SliderControl
-            label="Kink Height"
+            label="Altezza della piega"
             max={0.9}
             min={0.1}
             onChange={(v) => handleUpdate({ gambrelLowerHeightRatio: v })}
@@ -519,9 +519,9 @@ export default function RoofSegmentPanel() {
       )}
 
       {node.roofType === 'mansard' && (
-        <PanelSection title="Shape">
+        <PanelSection title="Forma">
           <SliderControl
-            label="Waist Width"
+            label="Larghezza del cambio pendenza"
             max={0.45}
             min={0.05}
             onChange={(v) => handleUpdate({ mansardSteepWidthRatio: v })}
@@ -531,7 +531,7 @@ export default function RoofSegmentPanel() {
             value={Math.round(node.mansardSteepWidthRatio * 100) / 100}
           />
           <SliderControl
-            label="Waist Height"
+            label="Altezza del cambio pendenza"
             max={0.9}
             min={0.1}
             onChange={(v) => handleUpdate({ mansardSteepHeightRatio: v })}
@@ -544,9 +544,9 @@ export default function RoofSegmentPanel() {
       )}
 
       {node.roofType === 'dutch' && (
-        <PanelSection title="Shape">
+        <PanelSection title="Forma">
           <SliderControl
-            label="Waist Width"
+            label="Larghezza del cambio pendenza"
             max={0.45}
             min={0.05}
             onChange={(v) => handleUpdate({ dutchHipWidthRatio: v })}
@@ -556,7 +556,7 @@ export default function RoofSegmentPanel() {
             value={Math.round(node.dutchHipWidthRatio * 100) / 100}
           />
           <SliderControl
-            label="Waist Height"
+            label="Altezza del cambio pendenza"
             max={0.9}
             min={0.1}
             onChange={(v) => handleUpdate({ dutchHipHeightRatio: v })}
@@ -566,7 +566,7 @@ export default function RoofSegmentPanel() {
             value={Math.round(node.dutchHipHeightRatio * 100) / 100}
           />
           <SliderControl
-            label="Waist Length"
+            label="Lunghezza del cambio pendenza"
             max={1}
             min={0.1}
             onChange={(v) => handleUpdate({ dutchWaistLengthRatio: v })}
@@ -580,7 +580,7 @@ export default function RoofSegmentPanel() {
             }
           />
           <SliderControl
-            label="Top Rake Thick."
+            label="Spess. timpano superiore"
             max={0.5}
             min={0.01}
             onChange={(v) => handleUpdate({ dutchTopRakeThickness: v })}
@@ -590,7 +590,7 @@ export default function RoofSegmentPanel() {
             value={node.dutchTopRakeThickness ?? ROOF_SHAPE_DEFAULTS.dutchTopRakeThickness}
           />
           <SliderControl
-            label="Top Rake Length"
+            label="Lungh. timpano superiore"
             max={3}
             min={0}
             onChange={(v) => handleUpdate({ dutchGabletRake: v })}
@@ -602,9 +602,9 @@ export default function RoofSegmentPanel() {
         </PanelSection>
       )}
 
-      <PanelSection title="Structure">
+      <PanelSection title="Struttura">
         <SliderControl
-          label="Wall Thick."
+          label="Spess. pareti"
           max={1}
           min={0.05}
           onChange={(v) => handleUpdate({ wallThickness: v })}
@@ -614,7 +614,7 @@ export default function RoofSegmentPanel() {
           value={node.wallThickness}
         />
         <SliderControl
-          label="Deck Thick."
+          label="Spess. tavolato"
           max={0.3}
           min={0.04}
           onChange={(v) => handleUpdate({ deckThickness: v })}
@@ -624,7 +624,7 @@ export default function RoofSegmentPanel() {
           value={node.deckThickness}
         />
         <SliderControl
-          label="Eave overhang"
+          label="Sporgenza di gronda"
           max={1}
           min={0}
           onChange={(v) => handleUpdate({ overhang: v / cosTheta })}
@@ -635,7 +635,7 @@ export default function RoofSegmentPanel() {
         />
         {roofTypeHasRakes(node.roofType) && (
           <SliderControl
-            label="Gable overhang"
+            label="Sporgenza del timpano"
             max={3}
             min={0}
             onChange={(v) => handleUpdate({ gableOverhang: v })}
@@ -646,7 +646,7 @@ export default function RoofSegmentPanel() {
           />
         )}
         <SliderControl
-          label="Shingle Thick."
+          label="Spess. tegole"
           max={0.3}
           min={0.02}
           onChange={(v) => handleUpdate({ shingleThickness: v })}
@@ -657,12 +657,12 @@ export default function RoofSegmentPanel() {
         />
         <ToggleControl
           checked={node.fascia ?? false}
-          label="Fascia"
+          label="Frontalino"
           onChange={(checked) => handleUpdate({ fascia: checked })}
         />
         {node.fascia && (
           <SliderControl
-            label="Fascia height"
+            label="Altezza del frontalino"
             max={0.6}
             min={0.1}
             onChange={(v) => handleUpdate({ fasciaHeight: v })}
@@ -674,7 +674,7 @@ export default function RoofSegmentPanel() {
         )}
       </PanelSection>
 
-      <PanelSection title="Position">
+      <PanelSection title="Posizione">
         <SliderControl
           label="X"
           onChange={(v) => {
@@ -714,7 +714,7 @@ export default function RoofSegmentPanel() {
         {(node.roofType !== 'conical' || !conicalCoverage.fullCircle) && (
           <>
             <SliderControl
-              label="Rotation"
+              label="Rotazione"
               max={180}
               min={-180}
               onChange={(degrees) => {
@@ -745,18 +745,22 @@ export default function RoofSegmentPanel() {
         )}
       </PanelSection>
 
-      <PanelSection title="Actions">
+      <PanelSection title="Azioni">
         <ActionGroup>
-          <ActionButton icon={<Move className="h-3.5 w-3.5" />} label="Move" onClick={handleMove} />
+          <ActionButton
+            icon={<Move className="h-3.5 w-3.5" />}
+            label="Sposta"
+            onClick={handleMove}
+          />
           <ActionButton
             icon={<Copy className="h-3.5 w-3.5" />}
-            label="Duplicate"
+            label="Duplica"
             onClick={handleDuplicate}
           />
           <ActionButton
             className="hover:bg-red-500/20"
             icon={<Trash2 className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />}
-            label="Delete"
+            label="Elimina"
             onClick={handleDelete}
           />
         </ActionGroup>

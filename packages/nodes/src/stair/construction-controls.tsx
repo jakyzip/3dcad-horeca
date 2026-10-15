@@ -10,12 +10,12 @@ import {
 import { MetricControl, SelectControl, ToggleControl } from '@pascal-app/editor'
 
 const OPTIONS = [
-  { label: 'Original', value: 'original' },
-  { label: 'Solid', value: 'solid' },
-  { label: 'Waist', value: 'waist' },
-  { label: 'Open', value: 'open' },
-  { label: 'Side stringers', value: 'side-stringers' },
-  { label: 'Center stringer', value: 'center-stringer' },
+  { label: 'Originale', value: 'original' },
+  { label: 'Piena', value: 'solid' },
+  { label: 'Soletta', value: 'waist' },
+  { label: 'Aperta', value: 'open' },
+  { label: 'Cosciali laterali', value: 'side-stringers' },
+  { label: 'Cosciale centrale', value: 'center-stringer' },
 ]
 
 export function StairConstructionControls({
@@ -33,10 +33,10 @@ export function StairConstructionControls({
   return (
     <div className="space-y-3">
       <SelectControl
-        label="Body"
+        label="Struttura"
         value={node.construction?.mode ?? 'original'}
         options={OPTIONS.map((option) =>
-          option.value === 'original' && inherited ? { ...option, label: 'Inherit' } : option,
+          option.value === 'original' && inherited ? { ...option, label: 'Ereditata' } : option,
         )}
         onChange={(mode) =>
           mode === 'original'
@@ -48,7 +48,7 @@ export function StairConstructionControls({
         <>
           {effective.mode === 'waist' ? (
             <MetricControl
-              label="Waist thickness"
+              label="Spessore della soletta"
               min={0.001}
               value={effective.waistThickness}
               onChange={(waistThickness) => update({ waistThickness })}
@@ -58,7 +58,7 @@ export function StairConstructionControls({
             />
           ) : null}
           <MetricControl
-            label="Tread thickness"
+            label="Spessore delle pedate"
             min={0.001}
             value={effective.treadThickness}
             onChange={(treadThickness) => update({ treadThickness })}
@@ -67,7 +67,7 @@ export function StairConstructionControls({
             precision={3}
           />
           <MetricControl
-            label="Nosing"
+            label="Sporgenza del gradino"
             min={0}
             value={effective.nosing}
             onChange={(nosing) => update({ nosing })}
@@ -76,7 +76,7 @@ export function StairConstructionControls({
             precision={3}
           />
           <MetricControl
-            label="Tread finish"
+            label="Finitura delle pedate"
             min={0}
             value={effective.finishThickness}
             onChange={(finishThickness) => update({ finishThickness })}
@@ -87,13 +87,13 @@ export function StairConstructionControls({
           {effective.mode === 'solid' || effective.mode === 'waist' ? null : (
             <>
               <ToggleControl
-                label="Closed risers"
+                label="Alzate chiuse"
                 checked={effective.closedRisers}
                 onChange={(closedRisers) => update({ closedRisers })}
               />
               {effective.closedRisers ? (
                 <MetricControl
-                  label="Riser thickness"
+                  label="Spessore delle alzate"
                   min={0.001}
                   value={effective.riserThickness}
                   onChange={(riserThickness) => update({ riserThickness })}
@@ -107,7 +107,7 @@ export function StairConstructionControls({
           {effective.mode === 'side-stringers' || effective.mode === 'center-stringer' ? (
             <>
               <MetricControl
-                label="Stringer width"
+                label="Larghezza dei cosciali"
                 min={0.001}
                 value={effective.stringerWidth}
                 onChange={(stringerWidth) => update({ stringerWidth })}
@@ -116,7 +116,7 @@ export function StairConstructionControls({
                 precision={3}
               />
               <MetricControl
-                label="Stringer depth"
+                label="Altezza dei cosciali"
                 min={0.001}
                 value={effective.stringerDepth}
                 onChange={(stringerDepth) => update({ stringerDepth })}

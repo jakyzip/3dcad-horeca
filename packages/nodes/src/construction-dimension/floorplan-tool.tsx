@@ -45,6 +45,17 @@ const SEMANTIC_BYPASS_DISTANCE = 0.012
 const MIN_DIMENSION_LENGTH = 0.001
 const MIN_ARC_SWEEP = 1e-6
 
+const DIMENSION_NAMES: Record<ConstructionDimensionMode, string> = {
+  linear: 'Quota lineare',
+  radius: 'Quota del raggio',
+  diameter: 'Quota del diametro',
+  'center-mark': 'Segno di centro',
+  chord: 'Quota della corda',
+  'arc-length': 'Quota della lunghezza d’arco',
+  angular: 'Quota angolare',
+  coordinate: 'Quota per coordinate',
+}
+
 type Draft = {
   anchors: MeasurementAnchor[]
   points: MeasurementPoint[]
@@ -278,7 +289,7 @@ export function buildConstructionDimensionPreviewGeometries(
             kind: 'dimension-label',
             cx: baselinePoint[0],
             cy: baselinePoint[2],
-            text: `ARC ${formatLinearMeasurement(layout.arcLength, unit, metricNotation)}`,
+            text: `ARCO ${formatLinearMeasurement(layout.arcLength, unit, metricNotation)}`,
             angle: 0,
             screenUpright: true,
             appearance: 'outlined',
@@ -313,7 +324,7 @@ export function buildConstructionDimensionPreviewGeometries(
         : mode === 'diameter'
           ? `Ø ${rawText}`
           : mode === 'chord'
-            ? `CH ${rawText}`
+            ? `CORDA ${rawText}`
             : rawText
     return {
       kind: 'dimension',
@@ -493,8 +504,8 @@ export function FloorplanConstructionDimensionToolLayer({
       const node = ConstructionDimensionNode.parse({
         name:
           dimensionMode === 'linear' && chainMode === 'continuous'
-            ? 'Continuous Dimension'
-            : `${dimensionMode.replaceAll('-', ' ')} Dimension`,
+            ? 'Quota continua'
+            : DIMENSION_NAMES[dimensionMode],
         anchors: current.anchors,
         baseline: {
           origin: [originPoint[0], originPoint[2]],

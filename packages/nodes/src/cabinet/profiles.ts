@@ -15,7 +15,7 @@ export type CabinetDimensionProfile = {
 export const CABINET_DIMENSION_PROFILES: CabinetDimensionProfile[] = [
   {
     id: 'metric-base',
-    label: 'Metric · 600 mm',
+    label: 'Metrico · 600 mm',
     depth: CABINET_METRIC_DEFAULTS.depth,
     carcassHeight: CABINET_METRIC_DEFAULTS.carcassHeight,
     plinthHeight: CABINET_METRIC_DEFAULTS.plinthHeight,
@@ -23,7 +23,7 @@ export const CABINET_DIMENSION_PROFILES: CabinetDimensionProfile[] = [
   },
   {
     id: 'us-base',
-    label: 'US · 24 in',
+    label: 'USA · 24 in',
     depth: 0.6096,
     carcassHeight: 0.762,
     plinthHeight: 0.1016,

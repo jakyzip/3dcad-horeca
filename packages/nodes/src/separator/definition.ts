@@ -33,7 +33,7 @@ export const separatorDefinition: NodeDefinition<typeof SeparatorNode> = {
   }),
   presentation: {
     icon: { kind: 'iconify', name: 'lucide:split' },
-    label: 'Separator',
+    label: 'Separatore',
     hidden: true,
     actionMenu: false,
   },

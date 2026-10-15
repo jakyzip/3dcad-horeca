@@ -35,7 +35,7 @@ test('legacy documentation-only zones retain metadata without inventing a room b
   }
   const normalized = normalizeLegacyStructure(source)
   expect(normalized.zone_docs).toEqual({ ...source.zone_docs, polygon: [] })
-  expect(normalized.zone_room).toEqual({ ...source.zone_room, name: 'Room' })
+  expect(normalized.zone_room).toEqual({ ...source.zone_room, name: 'Stanza' })
   expect(source.zone_docs).not.toHaveProperty('polygon')
   expect(normalizeLegacyStructure(normalized)).toBe(normalized)
 })

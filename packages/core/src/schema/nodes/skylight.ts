@@ -41,7 +41,7 @@ export type SkylightTypePreset = {
 
 export const SKYLIGHT_TYPE_PRESETS = {
   flat: {
-    label: 'Flat roof skylight',
+    label: 'Lucernario per tetto piano',
     width: 0.9,
     height: 1.2,
     frameThickness: 0.055,
@@ -62,7 +62,7 @@ export const SKYLIGHT_TYPE_PRESETS = {
     motorHousingSize: 0.08,
   },
   'walk-on': {
-    label: 'Walk-on rooflight',
+    label: 'Lucernario calpestabile',
     width: 1.2,
     height: 1.8,
     frameThickness: 0.035,
@@ -83,7 +83,7 @@ export const SKYLIGHT_TYPE_PRESETS = {
     motorHousingSize: 0.08,
   },
   lantern: {
-    label: 'Roof lantern',
+    label: 'Lanterna',
     width: 1.4,
     height: 1.4,
     frameThickness: 0.06,
@@ -104,7 +104,7 @@ export const SKYLIGHT_TYPE_PRESETS = {
     motorHousingSize: 0.08,
   },
   opening: {
-    label: 'Opening skylight',
+    label: 'Lucernario apribile',
     width: 0.9,
     height: 1.2,
     frameThickness: 0.06,
@@ -125,7 +125,7 @@ export const SKYLIGHT_TYPE_PRESETS = {
     motorHousingSize: 0.08,
   },
   sliding: {
-    label: 'Sliding skylight',
+    label: 'Lucernario scorrevole',
     width: 1.4,
     height: 1.1,
     frameThickness: 0.055,

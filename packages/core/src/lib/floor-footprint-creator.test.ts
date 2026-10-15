@@ -56,15 +56,15 @@ test('a larger joining room keeps the creator name in plate and room floor choic
   const { nodes, creatorId, largerId, key } = fixture()
   expect(floorFootprintCreatorId(key)).toBe(creatorId)
   expect(base(nodes, largerId).zoneIds).toContain(creatorId)
-  expect(floorFootprintName(nodes, base(nodes, largerId))).toBe('Lanai floor')
+  expect(floorFootprintName(nodes, base(nodes, largerId))).toBe('Pavimento Lanai')
   for (const id of [creatorId, largerId])
     expect(roomFloorChoices(nodes, id)[0]).toMatchObject({
       key,
-      name: 'Lanai floor',
+      name: 'Pavimento Lanai',
       current: true,
     })
   const renamed = intent(nodes, creatorId, { name: 'Porch' })
-  expect(floorFootprintName(renamed, base(renamed, largerId))).toBe('Porch floor')
+  expect(floorFootprintName(renamed, base(renamed, largerId))).toBe('Pavimento Porch')
   const plate = { ...base(nodes, largerId), name: 'Garden foundation' }
   expect(floorFootprintName({ ...nodes, [plate.id]: plate }, plate)).toBe('Garden foundation')
   expect(roomFloorChoices({ ...nodes, [plate.id]: plate }, largerId)[0]!.name).toBe(
@@ -75,14 +75,14 @@ test('a larger joining room keeps the creator name in plate and room floor choic
 test('the creator leaving falls back; creating another floor never rejoins the old key', () => {
   const { nodes, creatorId, largerId, key } = fixture()
   const left = intent(nodes, creatorId, { floor: { footprint: null } })
-  expect(floorFootprintName(left, base(left, largerId))).toBe('Living room floor')
+  expect(floorFootprintName(left, base(left, largerId))).toBe('Pavimento Living room')
   for (const before of [nodes, left]) {
     const fresh = intent(before, creatorId, { floor: { footprint: 'new' } })
     expect(room(fresh, creatorId).floor!.footprint).not.toBe(key)
     expect(floorFootprintCreatorId(room(fresh, creatorId).floor!.footprint!)).toBe(creatorId)
     expect(room(fresh, largerId).floor!.footprint).toBe(key)
-    expect(floorFootprintName(fresh, base(fresh, largerId))).toBe('Living room floor')
-    expect(floorFootprintName(fresh, base(fresh, creatorId))).toBe('Lanai floor')
+    expect(floorFootprintName(fresh, base(fresh, largerId))).toBe('Pavimento Living room')
+    expect(floorFootprintName(fresh, base(fresh, creatorId))).toBe('Pavimento Lanai')
   }
 })
 
@@ -102,7 +102,7 @@ test.each([
       ...(state === 'no floor' ? { hasFloor: false as const } : {}),
       ...(state === 'unnamed' ? { name: '' } : {}),
     }
-  expect(floorFootprintName(nodes, base(nodes, largerId))).toBe('Living room floor')
+  expect(floorFootprintName(nodes, base(nodes, largerId))).toBe('Pavimento Living room')
 })
 
 test('literal own has no creator and retains the largest-room fallback', () => {
@@ -111,8 +111,8 @@ test('literal own has no creator and retains the largest-room fallback', () => {
     nodes[id] = { ...room(nodes, id), floor: { footprint: 'own' } }
   const loaded = reconcile(nodes)
   expect(floorFootprintCreatorId('own')).toBeUndefined()
-  expect(floorFootprintName(loaded, base(loaded, largerId))).toBe('Living room floor')
-  expect(roomFloorChoices(loaded, creatorId)[0]!.name).toBe('Living room floor')
+  expect(floorFootprintName(loaded, base(loaded, largerId))).toBe('Pavimento Living room')
+  expect(roomFloorChoices(loaded, creatorId)[0]!.name).toBe('Pavimento Living room')
 })
 
 test('a disconnected room duplicate keeps the original creator rather than its own name', () => {
@@ -128,8 +128,8 @@ test('a disconnected room duplicate keeps the original creator rather than its o
   copied = intent(copied, plan.zoneId, { name: 'Guest room' })
   expect(room(copied, plan.zoneId).floor!.footprint).toBe(key)
   expect(base(copied, plan.zoneId).zoneIds).not.toContain(creatorId)
-  expect(floorFootprintName(copied, base(copied, plan.zoneId))).toBe('Lanai floor')
-  expect(roomFloorChoices(copied, plan.zoneId)[0]!.name).toBe('Lanai floor')
+  expect(floorFootprintName(copied, base(copied, plan.zoneId))).toBe('Pavimento Lanai')
+  expect(roomFloorChoices(copied, plan.zoneId)[0]!.name).toBe('Pavimento Lanai')
 })
 
 test.each([
@@ -157,10 +157,10 @@ test.each([
   expect(cloned[plateId]?.type).toBe('slab')
   cloned = reconcile(cloned)
   expect(base(cloned, creator.id).id).toBe(plateId)
-  expect(floorFootprintName(cloned, base(cloned, larger.id))).toBe('Lanai floor')
+  expect(floorFootprintName(cloned, base(cloned, larger.id))).toBe('Pavimento Lanai')
   cloned = intent(cloned, creator.id, { name: 'Cloned porch' })
-  expect(floorFootprintName(cloned, base(cloned, larger.id))).toBe('Cloned porch floor')
-  expect(floorFootprintName(nodes, base(nodes, largerId))).toBe('Lanai floor')
+  expect(floorFootprintName(cloned, base(cloned, larger.id))).toBe('Pavimento Cloned porch')
+  expect(floorFootprintName(nodes, base(nodes, largerId))).toBe('Pavimento Lanai')
 })
 
 test.each([
@@ -180,7 +180,7 @@ test.each([
   const larger = clonedNodes.find(
     (node) => node.type === 'zone' && node.name === 'Living room',
   ) as ZoneNode
-  expect(floorFootprintName(cloned, base(cloned, larger.id))).toBe('Living room floor')
+  expect(floorFootprintName(cloned, base(cloned, larger.id))).toBe('Pavimento Living room')
   if (state !== 'departed')
     expect(floorFootprintCreatorId(larger.floor!.footprint!)).toBeUndefined()
 })

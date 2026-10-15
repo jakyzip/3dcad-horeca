@@ -34,14 +34,14 @@ export function normalizeLegacyStructure(source: Record<string, unknown>): Recor
     ) {
       nodes[id] = {
         ...node,
-        name: typeof node.name === 'string' ? node.name : 'Zone',
+        name: typeof node.name === 'string' ? node.name : 'Zona',
         polygon: [],
       }
       changed = true
       continue
     }
     if (node?.type === 'zone' && typeof node.name !== 'string') {
-      nodes[id] = { ...node, name: node.spaceRole === 'room' ? 'Room' : 'Zone' }
+      nodes[id] = { ...node, name: node.spaceRole === 'room' ? 'Stanza' : 'Zona' }
       changed = true
       continue
     }

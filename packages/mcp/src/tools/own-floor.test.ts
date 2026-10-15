@@ -78,7 +78,7 @@ test('set_zone_intent exposes own floors, construction edits, and a clear conver
     for (const tool of ['get_zones', 'get_level_summary']) {
       const result = await call(tool, { levelId })
       for (const room of result.zones as Array<{ floor_choices: unknown[] }>)
-        expect(room.floor_choices[0]).toMatchObject({ key, name: 'Lanai floor', current: true })
+        expect(room.floor_choices[0]).toMatchObject({ key, name: 'Pavimento Lanai', current: true })
     }
   } finally {
     await client.close()

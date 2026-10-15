@@ -66,7 +66,7 @@ function ZonePlanSketch({
 
   return (
     <svg
-      aria-label="Top view with zone edge dimensions"
+      aria-label="Vista dall’alto con le misure dei lati della zona"
       className="h-auto w-full rounded-md border border-cyan-950/20 bg-[#f8faf7]"
       role="img"
       viewBox={`0 0 ${viewWidth} ${viewHeight}`}
@@ -146,7 +146,7 @@ function QuantityRow({
         <span className="font-mono font-semibold text-cyan-600 text-[10px]">{abbreviation}</span>
         <span className="text-muted-foreground text-xs">{label}</span>
         <span className="ml-auto font-mono font-medium text-foreground text-xs tabular-nums">
-          {quantity.status === 'available' ? format(quantity.value) : 'Not proven'}
+          {quantity.status === 'available' ? format(quantity.value) : 'Non verificato'}
         </span>
       </div>
       <div className="mt-1 text-[10px] text-muted-foreground leading-snug">
@@ -181,13 +181,13 @@ function ZoneUnitPanel({ zone }: { zone: ZoneNode }) {
   }
 
   return (
-    <PanelSection title="Unit">
+    <PanelSection title="Unità">
       <PanelSelect
-        label="Unit"
+        label="Unità"
         onChange={handleChange}
         options={[
-          { label: 'None', value: '' },
-          ...units.map((unit) => ({ label: unit.name || 'Unit', value: unit.id })),
+          { label: 'Nessuna', value: '' },
+          ...units.map((unit) => ({ label: unit.name || 'Unità', value: unit.id })),
         ]}
         value={current?.id ?? ''}
       />
@@ -230,13 +230,13 @@ export default function ZoneQuantitiesPanel() {
     <>
       <ZoneUnitPanel zone={effectiveZone} />
       <PanelSection
-        title={effectiveZone.spaceRole === 'room' ? 'Room quantities' : 'Zone quantities'}
+        title={effectiveZone.spaceRole === 'room' ? 'Quantità della stanza' : 'Quantità della zona'}
       >
         <div className="overflow-hidden rounded-md border border-cyan-950/20 bg-[#f8faf7] text-slate-950">
           <div className="flex items-center border-cyan-950/15 border-b px-2.5 py-2">
             <span className="font-semibold text-[11px]">{effectiveZone.name}</span>
             <span className="ml-auto rounded-full border border-cyan-800/25 bg-cyan-50 px-2 py-0.5 text-cyan-900 text-[9px]">
-              {report.classification === 'enclosed-room' ? 'Enclosed room' : 'Footprint only'}
+              {report.classification === 'enclosed-room' ? 'Stanza chiusa' : 'Solo impronta'}
             </span>
           </div>
           <div className="flex items-baseline gap-2 px-2.5 py-2 font-mono text-[10px]">
@@ -256,15 +256,15 @@ export default function ZoneQuantitiesPanel() {
 
         <div className="flex flex-col gap-1.5">
           <QuantityRow
-            abbreviation="Aw"
+            abbreviation="Am"
             format={(value) => formatAreaLabel(value, unit, 2)}
-            label="Wall surface"
+            label="Superficie dei muri"
             quantity={report.wallSurface}
           />
           <QuantityRow
-            abbreviation="Af"
+            abbreviation="Ap"
             format={(value) => formatAreaLabel(value, unit, 2)}
-            label="Floor surface"
+            label="Superficie del pavimento"
             quantity={report.floorSurface}
           />
           <QuantityRow

@@ -25,12 +25,12 @@ export const pipeSegmentParametrics: ParametricDescriptor<PipeSegmentNode> = {
   trailingSection: () => import('../shared/run-hanger-inspector'),
   groups: [
     {
-      label: 'Hangers',
+      label: 'Staffe',
       fields: [
-        { key: 'autoHangers', label: 'Auto hangers', kind: 'boolean' },
+        { key: 'autoHangers', label: 'Staffe automatiche', kind: 'boolean' },
         {
           key: 'hangerStyle',
-          label: 'Hanger lines',
+          label: 'File di staffe',
           kind: 'enum',
           options: ['single', 'double'],
           display: 'segmented',
@@ -38,7 +38,7 @@ export const pipeSegmentParametrics: ParametricDescriptor<PipeSegmentNode> = {
         },
         {
           key: 'hangerSpacing',
-          label: 'Spacing',
+          label: 'Interasse',
           kind: 'number',
           unit: 'm',
           min: 0.05,
@@ -48,7 +48,7 @@ export const pipeSegmentParametrics: ParametricDescriptor<PipeSegmentNode> = {
         },
         {
           key: 'hangerMaxReach',
-          label: 'Maximum reach',
+          label: 'Distanza massima',
           kind: 'number',
           unit: 'm',
           min: 0.01,
@@ -59,7 +59,7 @@ export const pipeSegmentParametrics: ParametricDescriptor<PipeSegmentNode> = {
       ],
     },
     {
-      label: 'Drainage',
+      label: 'Scarico',
       fields: [
         {
           key: 'system',
@@ -78,7 +78,7 @@ export const pipeSegmentParametrics: ParametricDescriptor<PipeSegmentNode> = {
       ],
     },
     {
-      label: 'Construction',
+      label: 'Costruzione',
       fields: [
         {
           key: 'pipeMaterial',

@@ -145,7 +145,7 @@ function commitItemPaint(
       const id = generateSceneMaterialId()
       newSceneMaterial = {
         id,
-        name: `Material ${Object.keys(state.materials).length + 1}`,
+        name: `Materiale ${Object.keys(state.materials).length + 1}`,
         material,
       }
       ref = toSceneMaterialRef(id)

@@ -29,7 +29,7 @@ export function setRoomFloorConstruction(
       [zone.id, ...options.map((plate) => plate.id)],
       options.length
         ? `This room spans more than one floor construction. Choose slabId from: ${options.map((plate) => plate.id).join(', ')}.`
-        : 'This room has no associated floor construction.',
+        : 'Questa stanza non ha un pavimento associato.',
     )
   const patch = FloorFoundationPatch.parse(input.patch)
   if (selected.plateRole === 'base') {

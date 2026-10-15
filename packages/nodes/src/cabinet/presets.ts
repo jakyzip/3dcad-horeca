@@ -65,10 +65,10 @@ export const CABINET_PRESETS: CabinetPreset[] = [
   },
   {
     id: 'drawer-base',
-    label: 'Drawer Base',
+    label: 'Cassettiera',
     createPatch: (run) => ({
       ...baseShared(run),
-      name: 'Drawer Base',
+      name: 'Cassettiera',
       width: 0.5,
       handleStyle: 'bar',
       handlePosition: 'top',
@@ -78,10 +78,10 @@ export const CABINET_PRESETS: CabinetPreset[] = [
   },
   {
     id: 'dishwasher',
-    label: 'Dishwasher',
+    label: 'Lavastoviglie',
     createPatch: (run) => ({
       ...baseShared(run),
-      name: 'Dishwasher',
+      name: 'Lavastoviglie',
       width: DISHWASHER_STANDARD_WIDTH,
       handleStyle: 'bar',
       handlePosition: 'top',
@@ -91,10 +91,10 @@ export const CABINET_PRESETS: CabinetPreset[] = [
   },
   {
     id: 'cooktop-gas',
-    label: 'Gas Hob',
+    label: 'Piano a gas',
     createPatch: (run) => ({
       ...baseShared(run),
-      name: 'Gas Hob Base',
+      name: 'Base con piano a gas',
       width: COOKTOP_STANDARD_WIDTH,
       handleStyle: 'bar',
       handlePosition: 'top',
@@ -104,10 +104,10 @@ export const CABINET_PRESETS: CabinetPreset[] = [
   },
   {
     id: 'cooktop-induction',
-    label: 'Induction',
+    label: 'Induzione',
     createPatch: (run) => ({
       ...baseShared(run),
-      name: 'Induction Base',
+      name: 'Base con piano a induzione',
       width: COOKTOP_STANDARD_WIDTH,
       handleStyle: 'bar',
       handlePosition: 'top',
@@ -117,10 +117,10 @@ export const CABINET_PRESETS: CabinetPreset[] = [
   },
   {
     id: 'sink-base',
-    label: 'Sink',
+    label: 'Lavello',
     createPatch: (run) => ({
       ...baseShared(run),
-      name: 'Sink Base',
+      name: 'Base lavello',
       width: SINK_STANDARD_WIDTH,
       handleStyle: 'bar',
       handlePosition: 'auto',
@@ -130,10 +130,10 @@ export const CABINET_PRESETS: CabinetPreset[] = [
   },
   {
     id: 'tall-pantry',
-    label: 'Tall Pantry',
+    label: 'Colonna dispensa',
     createPatch: (run) => ({
       cabinetType: 'tall',
-      name: 'Tall Pantry',
+      name: 'Colonna dispensa',
       width: 0.5,
       depth: run?.depth ?? CABINET_METRIC_DEFAULTS.depth,
       carcassHeight: 2.07,
@@ -151,10 +151,10 @@ export const CABINET_PRESETS: CabinetPreset[] = [
   },
   {
     id: 'oven-tower',
-    label: 'Oven Tower',
+    label: 'Colonna forno',
     createPatch: (run) => ({
       cabinetType: 'tall',
-      name: 'Oven Tower',
+      name: 'Colonna forno',
       width: MICROWAVE_STANDARD_WIDTH,
       depth: run?.depth ?? CABINET_METRIC_DEFAULTS.depth,
       carcassHeight: 2.07,
@@ -177,10 +177,10 @@ export const CABINET_PRESETS: CabinetPreset[] = [
   },
   {
     id: 'fridge-single',
-    label: 'Single Fridge',
+    label: 'Frigorifero',
     createPatch: (run) => ({
       cabinetType: 'tall',
-      name: 'Single Door Refrigerator',
+      name: 'Frigorifero a una porta',
       width: FRIDGE_COLUMN_WIDTH,
       depth: runDepth(run),
       carcassHeight: FRIDGE_COLUMN_HEIGHT,

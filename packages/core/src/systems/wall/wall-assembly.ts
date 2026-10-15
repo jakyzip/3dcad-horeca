@@ -482,7 +482,7 @@ type LegacyWallAssemblyPreset = {
 const LEGACY_WALL_ASSEMBLY_PRESETS: readonly LegacyWallAssemblyPreset[] = [
   {
     id: 'exterior-2x4-siding',
-    label: 'Exterior 2x4 — lap siding',
+    label: 'Esterno 2x4 — doghe',
     category: 'exterior',
     assembly: {
       preset: 'exterior-2x4-siding',
@@ -495,7 +495,7 @@ const LEGACY_WALL_ASSEMBLY_PRESETS: readonly LegacyWallAssemblyPreset[] = [
   },
   {
     id: 'exterior-2x6-siding',
-    label: 'Exterior 2x6 — lap siding',
+    label: 'Esterno 2x6 — doghe',
     category: 'exterior',
     assembly: {
       preset: 'exterior-2x6-siding',
@@ -508,7 +508,7 @@ const LEGACY_WALL_ASSEMBLY_PRESETS: readonly LegacyWallAssemblyPreset[] = [
   },
   {
     id: 'exterior-2x6-stucco',
-    label: 'Exterior 2x6 — stucco',
+    label: 'Esterno 2x6 — intonaco',
     category: 'exterior',
     assembly: {
       preset: 'exterior-2x6-stucco',
@@ -523,7 +523,7 @@ const LEGACY_WALL_ASSEMBLY_PRESETS: readonly LegacyWallAssemblyPreset[] = [
   },
   {
     id: 'exterior-2x6-brick',
-    label: 'Exterior 2x6 — brick veneer',
+    label: 'Esterno 2x6 — paramano in mattoni',
     category: 'exterior',
     assembly: {
       preset: 'exterior-2x6-brick',
@@ -537,7 +537,7 @@ const LEGACY_WALL_ASSEMBLY_PRESETS: readonly LegacyWallAssemblyPreset[] = [
   },
   {
     id: 'interior-2x4-drywall',
-    label: 'Interior 2x4 — drywall both sides',
+    label: 'Interno 2x4 — cartongesso sui due lati',
     category: 'interior',
     // 4.5 in total, the typical 2x4 partition.
     assembly: {
@@ -548,7 +548,7 @@ const LEGACY_WALL_ASSEMBLY_PRESETS: readonly LegacyWallAssemblyPreset[] = [
   },
   {
     id: 'interior-2x6-plumbing',
-    label: 'Interior 2x6 — plumbing wall',
+    label: 'Interno 2x6 — parete impianti',
     category: 'interior',
     assembly: {
       preset: 'interior-2x6-plumbing',
@@ -558,7 +558,7 @@ const LEGACY_WALL_ASSEMBLY_PRESETS: readonly LegacyWallAssemblyPreset[] = [
   },
   {
     id: 'exterior-cmu-stucco',
-    label: 'Exterior CMU 8" — stucco',
+    label: 'Esterno blocchi 20 cm — intonaco',
     category: 'masonry',
     assembly: {
       preset: 'exterior-cmu-stucco',
@@ -574,7 +574,7 @@ const LEGACY_WALL_ASSEMBLY_PRESETS: readonly LegacyWallAssemblyPreset[] = [
   },
   {
     id: 'cmu-8-furred-drywall',
-    label: 'CMU 8" — furring + drywall',
+    label: 'Blocchi 20 cm — controparete in cartongesso',
     category: 'masonry',
     assembly: {
       preset: 'cmu-8-furred-drywall',

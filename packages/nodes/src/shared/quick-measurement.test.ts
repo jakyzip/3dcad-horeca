@@ -72,7 +72,7 @@ describe('quick measurement reports', () => {
 
     expect(report?.title).toBe('Kitchen')
     expect(report?.metrics.find((metric) => metric.key === 'area')?.value).toBeCloseTo(20)
-    expect(report?.note).toContain('room envelope not proven')
+    expect(report?.note).toContain('perimetro chiuso della stanza non è verificato')
   })
   test('room quantities subtract holes and disappear while the enclosure is open', () => {
     const room = ZoneNode.parse({

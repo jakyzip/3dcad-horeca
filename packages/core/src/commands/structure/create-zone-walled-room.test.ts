@@ -57,7 +57,7 @@ const zonesAfter = (nodes: Record<string, AnyNode>, plan: ReturnType<typeof crea
 describe('a room drawn over walls that already enclose it', () => {
   test('names the room the reconciler numbered, without a second zone', () => {
     const nodes = walled()
-    expect((nodes.zone_wr as ZoneNode).name).toMatch(/^Room \d+$/)
+    expect((nodes.zone_wr as ZoneNode).name).toMatch(/^Stanza \d+$/)
     const plan = createZone(nodes, {
       levelId: 'level_wr',
       polygon: SQUARE,

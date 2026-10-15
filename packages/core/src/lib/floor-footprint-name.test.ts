@@ -25,10 +25,10 @@ test.each([
   'Floor',
 ])('generated legacy name %s uses the shared footprint name', (name) => {
   const base = plate('slab_base', square(0, 4), [], name)
-  expect(floorFootprintName(scene(base), base)).toBe('Floor area')
+  expect(floorFootprintName(scene(base), base)).toBe('Pavimento')
   const shed = room('zone_shed', base.polygon, 'Shed')
   const withShed = { ...base, zoneIds: [shed.id] }
-  expect(floorFootprintName(scene(withShed, shed), withShed)).toBe('Shed floor')
+  expect(floorFootprintName(scene(withShed, shed), withShed)).toBe('Pavimento Shed')
   expect(floorFootprintName(scene(base), { ...base, name: 'Garden foundation' })).toBe(
     'Garden foundation',
   )
@@ -43,10 +43,10 @@ test('footprints never read as levels: Shared floor, then the largest room, then
   const annex = plate('slab_annex', square(20, 4), [pantry.id, nine.id])
   const pad = plate('slab_pad', square(40, 2))
   const nodes = scene(kitchen, hall, nine, pantry, house, annex, pad)
-  expect(floorFootprintName(nodes, house)).toBe('Shared floor')
-  expect(floorFootprintName(nodes, annex)).toBe('Room 9 floor')
-  expect(floorFootprintName(nodes, pad)).toBe('Floor area')
+  expect(floorFootprintName(nodes, house)).toBe('Pavimento comune')
+  expect(floorFootprintName(nodes, annex)).toBe('Pavimento Room 9')
+  expect(floorFootprintName(nodes, pad)).toBe('Pavimento')
   const blank = room('zone_blank', square(20, 3), '')
   const unnamed = { ...annex, zoneIds: [blank.id] }
-  expect(floorFootprintName({ ...nodes, [blank.id]: blank }, unnamed)).toBe('Floor area')
+  expect(floorFootprintName({ ...nodes, [blank.id]: blank }, unnamed)).toBe('Pavimento')
 })

@@ -188,7 +188,7 @@ export function buildBridgeWallCreates(args: {
     const { id: _id, parentId: _parentId, children: _children, ...sourceWall } = plan.wall
     const bridgeWall = WallSchema.parse({
       ...sourceWall,
-      name: `Wall ${wallCount + creates.length + 1}`,
+      name: `Muro ${wallCount + creates.length + 1}`,
       start: plan.originalPoint,
       end: nextPoint,
       children: [],
@@ -241,7 +241,7 @@ export function buildBridgeWallPreviews(args: {
     const { id: _id, children: _children, ...sourceWall } = plan.wall
     const wall = WallSchema.parse({
       ...sourceWall,
-      name: 'Wall Preview',
+      name: 'Anteprima muro',
       start: plan.originalPoint,
       end: nextPoint,
       children: [],

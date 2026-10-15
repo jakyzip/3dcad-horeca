@@ -114,10 +114,10 @@ export function drawnFloorElevationConflict(nodes: Nodes, zoneId: string) {
   const floor = roomDrawnFloor(nodes, zoneId)
   if (!floor) return null
   const slab = nodes[floor.slabId] as SlabNode
-  const name = slab.name?.trim() || 'a drawn slab'
+  const name = slab.name?.trim()
   return {
     code: 'room-drawn-floor' as const,
     nodeIds: [zoneId, floor.slabId],
-    message: `This room's floor is ${name === 'a drawn slab' ? name : `the drawn slab "${name}"`} (${floor.slabId}). Its height is the slab's: change that slab's elevation instead.`,
+    message: `Il pavimento di questa stanza è ${name ? `il solaio disegnato "${name}"` : 'un solaio disegnato'} (${floor.slabId}). La sua quota è quella del solaio: cambia la quota del solaio.`,
   }
 }

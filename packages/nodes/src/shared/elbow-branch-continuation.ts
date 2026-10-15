@@ -190,7 +190,7 @@ export function planDuctElbowBranchPromotion(
   if (!rotation) return null
   const fitting = DuctFittingNode.parse({
     ...elbow,
-    name: 'Tee',
+    name: 'Raccordo a T',
     fittingType: 'tee',
     rotation,
     branchAngle,
@@ -229,7 +229,7 @@ export function planPipeElbowBranchPromotion(
   if (!rotation) return null
   const fitting = PipeFittingNode.parse({
     ...elbow,
-    name: isWye ? 'Wye' : 'Sanitary Tee',
+    name: isWye ? 'Braga a 45°' : 'Braga a 87°',
     fittingType: isWye ? 'wye' : 'sanitary-tee',
     rotation,
     diameter2: elbow.diameter,
@@ -246,7 +246,7 @@ export function planDuctTeeCrossPromotion(
   tee: DuctFittingNode,
 ): ElbowBranchPromotion<DuctFittingNode> | null {
   if (tee.fittingType !== 'tee' || Math.abs(tee.branchAngle - 90) > 1e-4) return null
-  const fitting = DuctFittingNode.parse({ ...tee, name: 'Cross', fittingType: 'cross' })
+  const fitting = DuctFittingNode.parse({ ...tee, name: 'Raccordo a croce', fittingType: 'cross' })
   const continuation = getDuctFittingPorts(fitting).find((port) => port.id === 'branch2')
   return continuation
     ? {
@@ -260,7 +260,7 @@ export function planPipeTeeCrossPromotion(
   tee: PipeFittingNode,
 ): ElbowBranchPromotion<PipeFittingNode> | null {
   if (tee.fittingType !== 'sanitary-tee') return null
-  const fitting = PipeFittingNode.parse({ ...tee, name: 'Cross', fittingType: 'cross' })
+  const fitting = PipeFittingNode.parse({ ...tee, name: 'Raccordo a croce', fittingType: 'cross' })
   const continuation = getPipeFittingPorts(fitting).find((port) => port.id === 'branch2')
   return continuation
     ? {

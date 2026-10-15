@@ -31,7 +31,7 @@ export const importedMeshDefinition: NodeDefinition<typeof ImportedMeshNode> = {
   geometry: buildImportedMeshGeometry,
   floorplan: buildImportedMeshFloorplan,
   presentation: {
-    label: 'Imported Mesh',
+    label: 'Mesh importata',
     description: 'Geometry preserved from an imported model when no native Pascal shape exists.',
     icon: { kind: 'url', src: '/icons/item.webp' },
     hidden: true,

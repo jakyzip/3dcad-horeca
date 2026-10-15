@@ -106,32 +106,32 @@ export default function RidgeVentPanel() {
       icon="/icons/roof.webp"
       onBack={node.roofSegmentId ? handleBack : undefined}
       onClose={handleClose}
-      title={node.name || 'Ridge Vent'}
+      title={node.name || 'Aeratore di colmo'}
       width={300}
     >
-      <PanelSection title="Style">
+      <PanelSection title="Stile">
         <SegmentedControl
           onChange={(v) => handleUpdate({ style: v as RidgeVentNode['style'] })}
           options={[
             { label: 'Standard', value: 'standard' },
-            { label: 'Shingled', value: 'shingled' },
-            { label: 'Flanged', value: 'metal' },
+            { label: 'Con tegole', value: 'shingled' },
+            { label: 'Con flangia', value: 'metal' },
           ]}
           value={node.style ?? 'standard'}
         />
         <SegmentedControl
           onChange={(v) => handleUpdate({ endCaps: v === 'yes' })}
           options={[
-            { label: 'End Caps', value: 'yes' },
-            { label: 'Open', value: 'no' },
+            { label: 'Testate chiuse', value: 'yes' },
+            { label: 'Aperte', value: 'no' },
           ]}
           value={(node.endCaps ?? true) ? 'yes' : 'no'}
         />
       </PanelSection>
 
-      <PanelSection title="Dimensions">
+      <PanelSection title="Dimensioni">
         <SliderControl
-          label="Length"
+          label="Lunghezza"
           max={1000}
           min={0.5}
           onChange={(v) => handleUpdate({ length: v })}
@@ -143,7 +143,7 @@ export default function RidgeVentPanel() {
           value={node.length}
         />
         <SliderControl
-          label="Width"
+          label="Larghezza"
           max={0.6}
           min={0.1}
           onChange={(v) => handleUpdate({ width: v })}
@@ -155,7 +155,7 @@ export default function RidgeVentPanel() {
           value={node.width}
         />
         <SliderControl
-          label="Height"
+          label="Altezza"
           max={0.2}
           min={0.03}
           onChange={(v) => handleUpdate({ height: v })}
@@ -168,7 +168,7 @@ export default function RidgeVentPanel() {
         />
       </PanelSection>
 
-      <PanelSection title="Position">
+      <PanelSection title="Posizione">
         <SliderControl
           label="X"
           max={halfW}
@@ -228,7 +228,7 @@ export default function RidgeVentPanel() {
           value={node.position[2] ?? 0}
         />
         <SliderControl
-          label="Rotation"
+          label="Rotazione"
           max={180}
           min={-180}
           onChange={(deg) => handleUpdate({ rotation: (deg * Math.PI) / 180 })}
@@ -241,18 +241,22 @@ export default function RidgeVentPanel() {
         />
       </PanelSection>
 
-      <PanelSection title="Actions">
+      <PanelSection title="Azioni">
         <ActionGroup>
-          <ActionButton icon={<Move className="h-3.5 w-3.5" />} label="Move" onClick={handleMove} />
+          <ActionButton
+            icon={<Move className="h-3.5 w-3.5" />}
+            label="Sposta"
+            onClick={handleMove}
+          />
           <ActionButton
             icon={<Copy className="h-3.5 w-3.5" />}
-            label="Duplicate"
+            label="Duplica"
             onClick={handleDuplicate}
           />
           <ActionButton
             className="hover:bg-red-500/20"
             icon={<Trash2 className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />}
-            label="Delete"
+            label="Elimina"
             onClick={handleDelete}
           />
         </ActionGroup>

@@ -31,7 +31,7 @@ export const unitDefinition: NodeDefinition<typeof UnitNode> = {
   dirtyTracking: false,
 
   presentation: {
-    label: 'Unit',
+    label: 'Unità',
     description: 'A named group of zones forming one apartment, hotel room or commercial lot.',
     icon: { kind: 'url', src: '/icons/zone.webp' },
     paletteSection: 'site',

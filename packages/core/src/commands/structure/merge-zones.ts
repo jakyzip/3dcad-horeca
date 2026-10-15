@@ -17,7 +17,7 @@ export function mergeZones(
     return conflict(
       'different-levels',
       input.zoneIds,
-      'Select two different rooms on the same level.',
+      'Seleziona due stanze diverse sullo stesso piano.',
     )
   const left = roomFace(nodes, a!)?.spans ?? []
   const right = roomFace(nodes, b!)?.spans ?? []
@@ -35,8 +35,8 @@ export function mergeZones(
       'wall-boundary',
       common.map((s) => s.boundaryId),
       common.length
-        ? 'These rooms are separated by walls. Merge never removes walls.'
-        : 'These rooms do not share a separator.',
+        ? 'Queste stanze sono separate da muri. L’unione non rimuove mai i muri.'
+        : 'Queste stanze non hanno un separatore in comune.',
     )
   const before = boundaries(nodes, a!.parentId!)
   const after = before.filter((n) => !separators.has(n.id))
@@ -44,7 +44,7 @@ export function mergeZones(
     return conflict(
       'shared-separator',
       [...separators],
-      'Removing these separators would affect additional rooms.',
+      'Rimuovere questi separatori modificherebbe anche altre stanze.',
     )
   return { changes: [...separators].map((id) => ({ op: 'delete', id: nodes[id]!.id })) }
 }

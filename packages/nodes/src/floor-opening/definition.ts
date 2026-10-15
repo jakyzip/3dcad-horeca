@@ -45,7 +45,7 @@ export const floorOpeningDefinition: NodeDefinition<typeof FloorOpeningNode> = {
   rendersChildren: false,
   presentation: {
     icon: { kind: 'iconify', name: 'lucide:square-dashed' },
-    label: 'Floor opening',
+    label: 'Apertura nel pavimento',
     hidden: true,
     actionMenu: false,
   },

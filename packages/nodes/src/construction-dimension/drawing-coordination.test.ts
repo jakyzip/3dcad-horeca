@@ -77,7 +77,7 @@ describe('resolveConstructionDimensionForDrawing', () => {
       prefix: 'TYP · ',
     })
     expect(resolve(floor, { [floor.id]: floor }, 'floor-plan')).toMatchObject({
-      prefix: 'UNLINKED CONTROL · TYP · ',
+      prefix: 'CONTROLLO SCOLLEGATO · TYP · ',
     })
   })
 })

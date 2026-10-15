@@ -2472,26 +2472,26 @@ export const cabinetDefinition: NodeDefinition<typeof CabinetNode> = {
   },
   tool: () => import('./tool'),
   toolHints: [
-    { key: 'Click', label: 'Place cabinet' },
+    { key: 'Click', label: 'Posiziona il mobile' },
     {
       key: 'I',
-      label: 'Placement type',
+      label: 'Tipo di posizionamento',
       chip: {
         subscribe: (onChange) => useCabinetPlacementType.subscribe(onChange),
         value: () => useCabinetPlacementType.getState().type,
         cycle: () => void useCabinetPlacementType.getState().cycleType(),
-        labels: { cabinet: 'Type: Cabinet', island: 'Type: Island' },
+        labels: { cabinet: 'Tipo: mobile', island: 'Tipo: isola' },
         icons: { cabinet: 'lucide:rectangle-horizontal', island: 'lucide:table-2' },
-        tooltip: 'Placement type — click or press I to toggle',
+        tooltip: 'Tipo di posizionamento: fai clic o premi I per cambiare',
       },
     },
-    { key: 'Alt', label: 'Force place' },
-    { key: 'R / T', label: 'Rotate' },
-    { key: 'Esc', label: 'Cancel run / exit' },
+    { key: 'Alt', label: 'Forza il posizionamento' },
+    { key: 'R / T', label: 'Ruota' },
+    { key: 'Esc', label: 'Annulla la composizione / esci' },
   ],
 
   presentation: {
-    label: 'Modular Cabinet',
+    label: 'Mobile modulare',
     description: 'A configurable parametric base cabinet.',
     icon: { kind: 'url', src: '/icons/item.webp' },
     paletteSection: 'furnish',
@@ -2664,7 +2664,7 @@ export const cabinetModuleDefinition: NodeDefinition<typeof CabinetModuleNode> =
   },
 
   presentation: {
-    label: 'Cabinet Module',
+    label: 'Modulo del mobile',
     description: 'An editable module inside a modular cabinet run.',
     icon: { kind: 'url', src: '/icons/item.webp' },
     paletteSection: 'furnish',

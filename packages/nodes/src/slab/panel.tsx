@@ -280,30 +280,30 @@ export function SlabPanel() {
   const elevationPresets =
     unit === 'imperial'
       ? [
-          { label: 'Sunken (6")', elevation: -0.1524 },
-          { label: 'Thin (1")', elevation: 0.0254 },
+          { label: 'Ribassato (6")', elevation: -0.1524 },
+          { label: 'Sottile (1")', elevation: 0.0254 },
           { label: 'Standard (2")', elevation: 0.0508 },
-          { label: 'Thick (6")', elevation: 0.1524 },
+          { label: 'Spesso (6")', elevation: 0.1524 },
         ]
       : [
-          { label: 'Sunken (15cm)', elevation: -0.15 },
-          { label: 'Thin (2cm)', elevation: 0.02 },
-          { label: 'Standard (5cm)', elevation: 0.05 },
-          { label: 'Thick (15cm)', elevation: 0.15 },
+          { label: 'Ribassato (15 cm)', elevation: -0.15 },
+          { label: 'Sottile (2 cm)', elevation: 0.02 },
+          { label: 'Standard (5 cm)', elevation: 0.05 },
+          { label: 'Spesso (15 cm)', elevation: 0.15 },
         ]
 
   return (
     <PanelWrapper
       icon="/icons/floor.webp"
       onClose={handleClose}
-      title={node.name || 'Slab'}
+      title={node.name || 'Solaio'}
       width={320}
     >
-      <PanelSection title="Elevation">
+      <PanelSection title="Quota">
         {/* Range mirrors the 20 m storey cap; `clampSlabElevation` in the
             write path stays the real bound against the level. */}
         <SliderControl
-          label={node.recessed ? 'Floor' : 'Surface'}
+          label={node.recessed ? 'Pavimento' : 'Superficie'}
           max={20}
           min={-3}
           onChange={handleElevationChange}
@@ -314,7 +314,7 @@ export function SlabPanel() {
         />
 
         <SliderControl
-          label={node.recessed ? 'Rim' : 'Base'}
+          label={node.recessed ? 'Bordo' : 'Base'}
           max={20}
           min={-3}
           onChange={handleAnchorChange}
@@ -326,7 +326,7 @@ export function SlabPanel() {
 
         {node.recessed ? (
           <SliderControl
-            label="Depth"
+            label="Profondità"
             max={1000}
             min={MIN_SLAB_THICKNESS}
             onChange={handleRecessDepthChange}
@@ -337,7 +337,7 @@ export function SlabPanel() {
           />
         ) : (
           <SliderControl
-            label="Thickness"
+            label="Spessore"
             max={1000}
             min={MIN_SLAB_THICKNESS}
             onChange={handleThicknessChange}
@@ -351,20 +351,20 @@ export function SlabPanel() {
         {!node.recessed && (
           <>
             <div className="px-1 font-medium text-[10px] text-muted-foreground/80 uppercase tracking-wider">
-              Foundation
+              Fondazione
             </div>
             <SegmentedControl
               onChange={handleTerrainModeChange}
               options={[
-                { label: 'Fixed', value: 'fixed' },
-                { label: 'Follows terrain', value: 'terrain' },
+                { label: 'Fissa', value: 'fixed' },
+                { label: 'Segue il terreno', value: 'terrain' },
               ]}
               value={node.fillToTerrain ? 'terrain' : 'fixed'}
             />
             {node.fillToTerrain && (
               <div className="px-1 text-[11px] text-muted-foreground">
-                Extends the perimeter down to terrain. The flat surface, base, and thickness stay
-                unchanged.
+                Prolunga il perimetro fino al terreno. Superficie, base e spessore restano
+                invariati.
               </div>
             )}
           </>
@@ -381,14 +381,16 @@ export function SlabPanel() {
         </div>
       </PanelSection>
 
-      <PanelSection title="Info">
+      <PanelSection title="Informazioni">
         <div className="flex items-center justify-between px-2 py-1 text-muted-foreground text-sm">
-          <span>Area</span>
-          <span className="font-mono text-foreground dark:text-white">{area.toFixed(2)} m²</span>
+          <span>Superficie</span>
+          <span className="font-mono text-foreground dark:text-white">
+            {area.toFixed(2).replace('.', ',')} m²
+          </span>
         </div>
       </PanelSection>
 
-      <PanelSection title="Holes">
+      <PanelSection title="Fori">
         {node.holes && node.holes.length > 0 ? (
           <div className="flex flex-col gap-1 pb-2">
             {node.holes.map((hole, index) => {
@@ -402,12 +404,12 @@ export function SlabPanel() {
               const isAutoHole = source !== 'manual' || derived
               const autoLabel =
                 source === 'elevator'
-                  ? 'Auto elevator cutout'
+                  ? 'Foro automatico per ascensore'
                   : source === 'stair'
-                    ? 'Auto stair cutout'
+                    ? 'Foro automatico per scala'
                     : source === 'floor-opening'
-                      ? 'Opening'
-                      : 'Room cutout'
+                      ? 'Apertura'
+                      : 'Foro della stanza'
               return (
                 <div
                   className={`flex items-center justify-between rounded-lg border p-2 transition-colors ${
@@ -421,18 +423,18 @@ export function SlabPanel() {
                     <p
                       className={`font-medium text-xs ${isEditing ? 'text-primary' : 'text-foreground dark:text-white'}`}
                     >
-                      Hole {index + 1} {isEditing && '(Editing)'}
+                      Foro {index + 1} {isEditing && '(in modifica)'}
                     </p>
                     <p className="text-[10px] text-muted-foreground">
-                      {holeArea.toFixed(2)} m² · {hole.length} pts ·{' '}
-                      {isAutoHole ? autoLabel : 'Manual'}
+                      {holeArea.toFixed(2).replace('.', ',')} m² · {hole.length} punti ·{' '}
+                      {isAutoHole ? autoLabel : 'Manuale'}
                     </p>
                   </div>
                   <div className="flex items-center gap-1">
                     {isEditing ? (
                       <ActionButton
                         className="h-7 bg-primary text-primary-foreground hover:bg-primary/90"
-                        label="Done"
+                        label="Fatto"
                         onClick={() =>
                           useInteractionScope
                             .getState()
@@ -452,7 +454,7 @@ export function SlabPanel() {
                       </button>
                     ) : isAutoHole ? (
                       <div className="rounded-md bg-black/4 dark:bg-[#2C2C2E] px-2 py-1 text-[10px] text-muted-foreground">
-                        Auto
+                        Automatico
                       </div>
                     ) : (
                       <>
@@ -478,7 +480,7 @@ export function SlabPanel() {
             })}
           </div>
         ) : (
-          <div className="px-2 py-3 text-center text-muted-foreground text-xs">No holes</div>
+          <div className="px-2 py-3 text-center text-muted-foreground text-xs">Nessun foro</div>
         )}
 
         <div className="px-1 pt-1 pb-1">
@@ -488,7 +490,7 @@ export function SlabPanel() {
             <ShapeChoice
               className="px-1 text-muted-foreground text-xs"
               disabled={!openingZoneId}
-              label={node.support === 'open' ? 'Cut hatch' : 'Cut opening'}
+              label={node.support === 'open' ? 'Ritaglia botola' : 'Ritaglia apertura'}
               onPick={(shape) => openingZoneId && startOpeningDraft(openingZoneId, 'floor', shape)}
             />
           ) : (
@@ -496,14 +498,14 @@ export function SlabPanel() {
               className="w-full"
               disabled={editingHole?.nodeId === selectedId}
               icon={<Plus className="h-3.5 w-3.5" />}
-              label="Add Hole"
+              label="Aggiungi foro"
               onClick={handleAddHole}
             />
           )}
         </div>
       </PanelSection>
       <ActionGroup>
-        <ActionButton icon={<Move className="h-3.5 w-3.5" />} label="Move" onClick={handleMove} />
+        <ActionButton icon={<Move className="h-3.5 w-3.5" />} label="Sposta" onClick={handleMove} />
       </ActionGroup>
     </PanelWrapper>
   )

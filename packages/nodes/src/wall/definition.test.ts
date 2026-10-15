@@ -152,7 +152,7 @@ test('curved wall roof builder creates a matching conical sector above it', () =
 
   expect(wallDefinition.quickActions).toBeUndefined()
   // On the top floor, the cone goes on a new Roof level, standing on the 3 m wall's top.
-  expect(roofLevel).toMatchObject({ name: 'Roof', level: 1, metadata: { role: 'roof' } })
+  expect(roofLevel).toMatchObject({ name: 'Tetto', level: 1, metadata: { role: 'roof' } })
   expect(roof?.parentId).toBe(roofLevel?.id)
   expect(roof?.node).toMatchObject({ position: [0, 0, 0], support: { kind: 'walls' } })
   expect(segment).toMatchObject({
@@ -353,11 +353,11 @@ describe('wall tool hints', () => {
   test('describe the gesture of the variant in hand', () => {
     try {
       selectWallDrawVariant('rectangle')
-      expect(visibleClickHints()).toEqual(['Set one corner, then the opposite'])
+      expect(visibleClickHints()).toEqual(['Fissa un vertice, poi quello opposto'])
       selectWallDrawVariant('polygon')
-      expect(visibleClickHints()).toEqual(['Add a corner · click the first to close'])
+      expect(visibleClickHints()).toEqual(['Aggiungi un vertice · fai clic sul primo per chiudere'])
       selectWallDrawVariant('walls')
-      expect(visibleClickHints()).toEqual(['Set wall start / end'])
+      expect(visibleClickHints()).toEqual(['Fissa inizio / fine del muro'])
     } finally {
       selectWallDrawVariant('polygon')
     }

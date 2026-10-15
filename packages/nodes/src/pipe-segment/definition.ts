@@ -123,18 +123,18 @@ export const pipeSegmentDefinition: NodeDefinition<typeof PipeSegmentNode> = {
 
   tool: () => import('./tool'),
   toolHints: [
-    { key: 'Click', label: 'Start run' },
-    { key: 'Click again', label: 'Place and continue' },
-    { key: 'Q', label: 'Waste / vent' },
-    { key: 'S', label: 'Slope / level' },
+    { key: 'Click', label: 'Inizia la tubazione' },
+    { key: 'Click again', label: 'Posiziona e continua' },
+    { key: 'Q', label: 'Scarico / ventilazione' },
+    { key: 'S', label: 'In pendenza / in piano' },
     createRunHangerToolHint('pipe-segment'),
-    { key: '[ / ]', label: 'Pipe size down / up' },
-    { key: 'Alt + drag', label: 'Vertical stack ↕, click to place' },
-    { key: 'Esc', label: 'Exit drawing' },
+    { key: '[ / ]', label: 'Diametro del tubo più piccolo / più grande' },
+    { key: 'Alt + drag', label: 'Colonna verticale ↕, fai clic per posizionare' },
+    { key: 'Esc', label: 'Esci dal disegno' },
   ],
 
   presentation: {
-    label: 'DWV Pipe',
+    label: 'Tubo di scarico',
     description: 'Drain / waste / vent pipe run — draw level or toggle a ¼″ per foot fall with S.',
     icon: { kind: 'url', src: '/icons/dwv-pipes.webp' },
     paletteSection: 'structure',

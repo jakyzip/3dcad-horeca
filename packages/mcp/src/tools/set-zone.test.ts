@@ -69,7 +69,7 @@ describe('set_zone', () => {
         (n): n is ZoneNode => n.type === 'zone' && n.parentId === level.id,
       )
     const [walled] = zonesOnLevel()
-    expect(walled?.name).toMatch(/^Room \d+$/)
+    expect(walled?.name).toMatch(/^Stanza \d+$/)
 
     const result = await client.callTool({
       name: 'set_zone',

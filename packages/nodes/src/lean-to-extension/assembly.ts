@@ -389,11 +389,11 @@ export function createManagedLeanToPost(
 ): ColumnNodeType {
   const { label: _label, ...preset } = COLUMN_PRESETS.squarePillar
   const sideName =
-    side === 'high' ? (isDualSlopeLeanToCanopy(leanTo.canopyForm) ? 'Opposite ' : 'High ') : ''
+    side === 'high' ? (isDualSlopeLeanToCanopy(leanTo.canopyForm) ? 'opposto ' : 'lato alto ') : ''
   return ColumnNode.parse({
     ...preset,
     ...leanToPostLayoutPatch(leanTo, index, 0, 0, side),
-    name: `Lean-to ${sideName}Post ${index + 1}`,
+    name: `Montante tettoia ${sideName}${index + 1}`,
     parentId: leanTo.id,
     style: 'plain',
     edgeSoftness: 0.008,
@@ -418,7 +418,7 @@ export function createManagedLeanToCornerPost(
   return ColumnNode.parse({
     ...preset,
     ...leanToCornerPostLayoutPatch(leanTo, joint),
-    name: `Lean-to ${joint.side === 'left' ? 'Left' : 'Right'} Corner Post`,
+    name: `Montante d’angolo ${joint.side === 'left' ? 'sinistro' : 'destro'}`,
     parentId: leanTo.id,
     style: 'plain',
     edgeSoftness: 0.008,
@@ -441,11 +441,11 @@ export function createManagedLeanToCanopyCornerPost(
   side: LeanToPostSide,
 ): ColumnNodeType {
   const { label: _label, ...preset } = COLUMN_PRESETS.squarePillar
-  const sideName = side === 'high' ? ' Opposite' : ''
+  const sideName = side === 'high' ? ' opposto' : ''
   return ColumnNode.parse({
     ...preset,
     ...leanToCanopyCornerPostLayoutPatch(leanTo, joint, side),
-    name: `Canopy ${joint.side === 'left' ? 'Left' : 'Right'}${sideName} Joint Post`,
+    name: `Montante di giunzione ${joint.side === 'left' ? 'sinistro' : 'destro'}${sideName}`,
     parentId: leanTo.id,
     style: 'plain',
     edgeSoftness: 0.008,
@@ -940,12 +940,12 @@ export function createManagedLeanToRoofSegment(
   const canopyForm = resolveLeanToLayout(leanTo).canopyForm
   const name =
     canopyForm === 'gable'
-      ? 'Canopy Gable Roof'
+      ? 'Tetto della tettoia a capanna'
       : canopyForm === 'butterfly'
         ? plane === 'primary'
-          ? 'Canopy Butterfly Right Roof'
-          : 'Canopy Butterfly Left Roof'
-        : 'Lean-to Shed Roof'
+          ? 'Tetto della tettoia a farfalla, lato destro'
+          : 'Tetto della tettoia a farfalla, lato sinistro'
+        : 'Tetto della tettoia a una falda'
   return RoofSegmentNode.parse({
     ...leanToRoofSegmentLayoutPatch(leanTo, nodes, plane),
     name,
@@ -961,12 +961,12 @@ export function createManagedLeanToDrainagePair(
 ): { gutter: GutterNodeType; downspout: DownspoutNodeType } {
   const gutter = GutterNode.parse({
     ...leanToGutterLayoutPatch(segment, leanTo, undefined, nodes, drainageSide),
-    name: drainageSide === 'opposite' ? 'Canopy Opposite Gutter' : 'Lean-to Gutter',
+    name: drainageSide === 'opposite' ? 'Grondaia opposta della tettoia' : 'Grondaia della tettoia',
     parentId: segment.id,
   })
   const downspout = DownspoutNode.parse({
     ...leanToDownspoutLayoutPatch(segment, gutter, leanTo),
-    name: drainageSide === 'opposite' ? 'Canopy Opposite Downspout' : 'Lean-to Downspout',
+    name: drainageSide === 'opposite' ? 'Pluviale opposto della tettoia' : 'Pluviale della tettoia',
     parentId: segment.id,
     lengthMode: 'to-ground',
     strapStyle: 'none',
@@ -988,7 +988,7 @@ export function createManagedLeanToRoofAssembly(
     ...(hostRoof && leanTo.matchHostRoofMaterial !== false
       ? leanToRoofMaterialPatch(hostRoof)
       : {}),
-    name: 'Lean-to Roof',
+    name: 'Tetto della tettoia',
     parentId: leanTo.id,
     position: [0, 0, 0],
     rotation: 0,

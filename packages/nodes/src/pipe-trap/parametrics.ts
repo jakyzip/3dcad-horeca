@@ -4,7 +4,7 @@ import type { PipeTrapNode } from './schema'
 export const pipeTrapParametrics: ParametricDescriptor<PipeTrapNode> = {
   groups: [
     {
-      label: 'Trap',
+      label: 'Sifone',
       fields: [
         { key: 'diameter', kind: 'number', unit: 'in', min: 1.25, max: 4, step: 0.25 },
         { key: 'pipeMaterial', kind: 'enum', options: ['pvc', 'abs', 'cast-iron'] },
@@ -12,7 +12,7 @@ export const pipeTrapParametrics: ParametricDescriptor<PipeTrapNode> = {
       ],
     },
     {
-      label: 'Placement',
+      label: 'Posizionamento',
       fields: [{ key: 'position', kind: 'vec3' }],
     },
   ],

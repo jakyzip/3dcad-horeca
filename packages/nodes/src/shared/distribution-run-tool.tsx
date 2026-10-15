@@ -857,9 +857,9 @@ export function useDistributionRunTool(config: DistributionRunToolConfig) {
         currentStart &&
           typed &&
           (!Number.isFinite(Number.parseFloat(typed)) || Number.parseFloat(typed) <= 0)
-          ? 'Enter a positive length'
+          ? 'Inserisci una lunghezza positiva'
           : currentStart && length < minimumLength
-            ? `Run must be at least ${minimumLength.toFixed(2)} m`
+            ? `La tubazione deve essere lunga almeno ${minimumLength.toFixed(2).replace('.', ',')} m`
             : null,
       )
       setCursor(resolved.point)
@@ -913,7 +913,7 @@ export function useDistributionRunTool(config: DistributionRunToolConfig) {
         surfaceTarget,
       })
       if (!result) {
-        setValidationMessage('Fitting clearance is too small for this connection')
+        setValidationMessage('Lo spazio per il raccordo è troppo piccolo per questo collegamento')
         return
       }
       const lockedWallTarget = lockedWallTargetRef.current
@@ -1293,7 +1293,7 @@ export function DistributionRunCursor({
             <DimensionPill parts={parts} primary={primary} unit={unit} />
             {start ? (
               <label className="rounded-full border border-border/60 bg-background/90 px-3 py-1 text-[11px] tabular-nums text-muted-foreground shadow-sm backdrop-blur">
-                Length:{' '}
+                Lunghezza:{' '}
                 <input
                   className="w-20 bg-transparent text-center text-foreground outline-none"
                   data-run-length-input
@@ -1310,13 +1310,13 @@ export function DistributionRunCursor({
                   }}
                   onChange={(event) => onLengthInputChange?.(event.target.value)}
                   onPointerDown={(event) => event.stopPropagation()}
-                  placeholder="type a length"
+                  placeholder="scrivi una lunghezza"
                   ref={lengthFieldRef}
                   style={{ pointerEvents: 'auto' }}
                   type="text"
                   value={lengthInput ?? ''}
                 />{' '}
-                m<span className="ml-2">Tab: direction</span>
+                m<span className="ml-2">Tab: direzione</span>
               </label>
             ) : null}
             {validationMessage ? (

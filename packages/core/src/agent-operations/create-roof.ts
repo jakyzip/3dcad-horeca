@@ -345,7 +345,7 @@ export const createRoof: AgentOperation<CreateRoofInput> = (nodes, input, contex
   }
   const [roofX, roofZ] = toWorld([centerX, centerZ])
   const placed = RoofNode.parse({
-    name: input.name ?? 'Roof',
+    name: input.name ?? 'Tetto',
     parentId: plan.levelId,
     position: [roofX, 0, roofZ],
     rotation: angle,

@@ -101,7 +101,7 @@ describe('mezzanine selection', () => {
     expect(host.mezzanine).toBeNull()
     expect(host.area).toBeCloseTo(48, 0)
     expect(mezzanine.mezzanine).toEqual({ hostZoneId: hostId })
-    expect(mezzanine.name).toBe('Mezzanine')
+    expect(mezzanine.name).toBe('Soppalco')
     expect(mezzanine.area).toBeCloseTo(8.75)
     expect(mezzanine.spans).toEqual([])
     expect(mezzanine.boundaryWallIds).toEqual([])
@@ -180,7 +180,7 @@ describe('mezzanine selection', () => {
       onKeepContents: () => {},
     })
     const empty = deleteConfirmationContent(request(), nodes())
-    expect(empty.title).toBe('Eliminare Mezzanine?')
+    expect(empty.title).toBe('Eliminare Soppalco?')
     expect(empty.description).toMatch(/^Rimuove il soppalco/)
     expect(empty.description).not.toContain('oggett')
     expect(empty.keepLabel).toBeNull()

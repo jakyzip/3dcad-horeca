@@ -202,7 +202,7 @@ describe('cabinet quick actions', () => {
 
     expect(actions.some((action) => action.id === 'cabinet:add-right')).toBe(true)
     expect(oppositeCornerAction?.disabled).toBe(true)
-    expect(cornerAction?.label).toBe('L Right')
+    expect(cornerAction?.label).toBe('L des.')
     expect(cornerAction?.disabled).toBeFalsy()
     const result = cornerAction!.run({ sceneApi })
 
@@ -253,7 +253,7 @@ describe('cabinet quick actions', () => {
 
     expect(actions.some((action) => action.id === 'cabinet:add-left')).toBe(true)
     expect(oppositeCornerAction?.disabled).toBe(true)
-    expect(cornerAction?.label).toBe('L Left')
+    expect(cornerAction?.label).toBe('L sin.')
     expect(cornerAction?.disabled).toBeFalsy()
     const result = cornerAction!.run({ sceneApi })
 
@@ -293,7 +293,7 @@ describe('cabinet quick actions', () => {
     })
     const cornerAction = actions.find((action) => action.id === 'cabinet:add-corner-left')
 
-    expect(cornerAction?.label).toBe('L Left')
+    expect(cornerAction?.label).toBe('L sin.')
     const result = cornerAction!.run({ sceneApi })
 
     expect(result?.selectedIds?.length).toBe(1)
@@ -444,7 +444,7 @@ describe('cabinet quick actions', () => {
 
     expect(wallAction?.disabled).toBe(true)
     expect(wallAction?.blockedFeedback).toBe(true)
-    expect(wallAction?.title).toBe('No space above—overlaps an existing wall cabinet')
+    expect(wallAction?.title).toBe('Non c’è spazio sopra: si sovrappone a un pensile esistente')
     expect(wallAction?.run({ sceneApi })).toBeUndefined()
     expect(
       Object.values(sceneApi.nodes()).filter((node) => node?.type === 'cabinet-module'),

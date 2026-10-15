@@ -13,7 +13,7 @@ export type MezzanineEdgeInput = { zoneId: string; edgeIndex: number; distance: 
 export function resizeMezzanine(nodes: StructureNodes, input: MezzanineEdgeInput): StructurePlan {
   const zone = requireZone(nodes, input.zoneId)
   if (zone.floor?.support !== 'open')
-    return conflict('invalid-edge', [zone.id], 'Polygon edge pushes require a mezzanine.')
+    return conflict('invalid-edge', [zone.id], 'Si possono spingere i lati solo di un soppalco.')
   const { edgeIndex, distance } = input
   if (
     !Number.isInteger(edgeIndex) ||
@@ -33,7 +33,7 @@ export function resizeMezzanine(nodes: StructureNodes, input: MezzanineEdgeInput
   const dx = end[0] - start[0],
     dz = end[1] - start[1],
     length = Math.hypot(dx, dz)
-  if (length < 1e-6) return conflict('too-small', [zone.id], 'The edge has no length.')
+  if (length < 1e-6) return conflict('too-small', [zone.id], 'Il lato ha lunghezza nulla.')
   const winding = Math.sign(
     polygon.reduce((sum, p, i) => {
       const q = polygon[(i + 1) % polygon.length]!

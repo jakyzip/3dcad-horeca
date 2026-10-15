@@ -1,11 +1,12 @@
-const NUMBERED_ROOM = /^Room (\d+)$/
+// "Room N" is what an older build allocated; it still counts as allocated.
+const NUMBERED_ROOM = /^(?:Stanza|Room) (\d+)$/
 
 /** A name the allocator gave, which no person has changed. */
 export const isAllocatedRoomName = (name: string | undefined) => NUMBERED_ROOM.test(name ?? '')
 
 /**
- * Names rooms nobody named: "Room N" with the lowest number no zone on the level
- * uses yet. Only exact "Room N" names count. Called once per level, in a
+ * Names rooms nobody named: "Stanza N" with the lowest number no zone on the level
+ * uses yet. Only exact "Stanza N" (or older "Room N") names count. Called once per level, in a
  * deterministic room order, and only when a room zone is created, so an existing
  * room is never renamed and a name the user cleared stays cleared.
  */
@@ -19,6 +20,6 @@ export function roomNameAllocator(levelZones: Iterable<{ name?: string }>) {
   return () => {
     while (used.has(next)) next++
     used.add(next)
-    return `Room ${next}`
+    return `Stanza ${next}`
   }
 }

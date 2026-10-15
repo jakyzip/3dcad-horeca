@@ -4,7 +4,7 @@ import type { GutterNode } from './schema'
 export const gutterParametrics: ParametricDescriptor<GutterNode> = {
   groups: [
     {
-      label: 'Profile',
+      label: 'Profilo',
       fields: [
         {
           key: 'profile',
@@ -15,7 +15,7 @@ export const gutterParametrics: ParametricDescriptor<GutterNode> = {
       ],
     },
     {
-      label: 'Dimensions',
+      label: 'Dimensioni',
       fields: [
         { key: 'length', kind: 'number', unit: 'm', min: 0.2, max: 1000, step: 0.05 },
         { key: 'size', kind: 'number', unit: 'm', min: 0.05, max: 0.3, step: 0.005 },
@@ -30,14 +30,14 @@ export const gutterParametrics: ParametricDescriptor<GutterNode> = {
       ],
     },
     {
-      label: 'End caps',
+      label: 'Testate di chiusura',
       fields: [
         { key: 'endCapLeft', kind: 'boolean' },
         { key: 'endCapRight', kind: 'boolean' },
       ],
     },
     {
-      label: 'Hangers',
+      label: 'Staffe',
       fields: [
         {
           key: 'hangerStyle',

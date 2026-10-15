@@ -71,7 +71,11 @@ export function planZoneTransform(
     idMap: {},
   })
   if (!face)
-    return failed('open-room', [zone.id], 'The room needs an enclosed boundary before it can move.')
+    return failed(
+      'open-room',
+      [zone.id],
+      'Per spostare la stanza, il suo contorno deve essere chiuso.',
+    )
   const angle = input.rotate?.angle ?? 0,
     translate = input.translate ?? [0, 0]
   const pivot =
@@ -465,7 +469,8 @@ export function planZoneTransform(
         conflicts.push({
           code: 'deck-reference',
           nodeIds: [node.id, node.deckSlabId],
-          message: 'A stair on another level uses the moving room’s floor as its destination deck.',
+          message:
+            'Una scala di un altro piano arriva sul pavimento della stanza che stai spostando.',
         })
   }
   if (conflicts.length && !input.force)
@@ -531,7 +536,7 @@ export function planZoneTransform(
 }
 
 function nextRoomName(nodes: StructureNodes, name: string) {
-  const base = name.replace(/ \d+$/, '') || 'Room'
+  const base = name.replace(/ \d+$/, '') || 'Stanza'
   const used = new Set(
     Object.values(nodes)
       .filter((node) => node.type === 'zone')

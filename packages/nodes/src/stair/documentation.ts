@@ -25,6 +25,12 @@ const ANNOTATION_OFFSET = 0.28
 const ANNOTATION_FONT_SIZE = 0.125
 const DIRECTION_FONT_SIZE = 0.16
 const BREAK_POSITION = 0.68
+const RAILING_MODE_TEXT: Record<string, string> = {
+  none: 'NESSUNA',
+  left: 'SINISTRA',
+  right: 'DESTRA',
+  both: 'ENTRAMBI I LATI',
+}
 const BREAK_ZIGZAG = 0.07
 const MIN_ARROW_HEAD = 0.14
 const MAX_ARROW_HEAD = 0.24
@@ -121,7 +127,12 @@ function buildStraightDocumentation(
         }
       : arrowStart
     geometries.push(
-      annotationText(labelPoint, direction === 'up' ? 'UP' : 'DN', DIRECTION_FONT_SIZE, stroke),
+      annotationText(
+        labelPoint,
+        direction === 'up' ? 'SALE' : 'SCENDE',
+        DIRECTION_FONT_SIZE,
+        stroke,
+      ),
     )
   }
 
@@ -135,7 +146,7 @@ function buildStraightDocumentation(
       geometries.push(
         annotationText(
           { x: anchor.x + 0.18, y: anchor.y + 0.18 },
-          `${segment.stepCount} R @ ${formatConstructionLength(segment.height / segment.stepCount, unit, profile, { metricNotation })} · WINDER T ${formatConstructionLength(layout.going, unit, profile, { metricNotation })} · CLR W ${formatConstructionLength(segment.width, unit, profile, { metricNotation })}`,
+          `${segment.stepCount} A @ ${formatConstructionLength(segment.height / segment.stepCount, unit, profile, { metricNotation })} · VENTAGLIO P ${formatConstructionLength(layout.going, unit, profile, { metricNotation })} · LARGH. NETTA ${formatConstructionLength(segment.width, unit, profile, { metricNotation })}`,
           ANNOTATION_FONT_SIZE,
           stroke,
         ),
@@ -155,7 +166,7 @@ function buildStraightDocumentation(
     geometries.push(
       annotationText(
         rightAnchor,
-        `${riserCount} R @ ${formatConstructionLength(riserHeight, unit, profile, { metricNotation })} · T ${formatConstructionLength(treadDepth, unit, profile, { metricNotation })} · CLR W ${formatConstructionLength(segment.width, unit, profile, { metricNotation })}`,
+        `${riserCount} A @ ${formatConstructionLength(riserHeight, unit, profile, { metricNotation })} · P ${formatConstructionLength(treadDepth, unit, profile, { metricNotation })} · LARGH. NETTA ${formatConstructionLength(segment.width, unit, profile, { metricNotation })}`,
         ANNOTATION_FONT_SIZE,
         stroke,
       ),
@@ -170,7 +181,7 @@ function buildStraightDocumentation(
       geometries.push(
         annotationText(
           leftAnchor,
-          `RAIL ${stair.railingMode.toLocaleUpperCase()} @ ${formatConstructionLength(stair.railingHeight, unit, profile, { metricNotation })}`,
+          `RINGHIERA ${RAILING_MODE_TEXT[stair.railingMode] ?? stair.railingMode.toLocaleUpperCase()} @ ${formatConstructionLength(stair.railingHeight, unit, profile, { metricNotation })}`,
           ANNOTATION_FONT_SIZE,
           stroke,
         ),
@@ -213,18 +224,23 @@ function buildCurvedDocumentation(
   const geometries: FloorplanGeometry[] = [
     annotationText(
       notePoint,
-      `${stepCount} R @ ${formatConstructionLength(riserHeight, unit, profile, { metricNotation })} · T(CL) ${formatConstructionLength(treadDepth, unit, profile, { metricNotation })} · CLR W ${formatConstructionLength(layout.width, unit, profile, { metricNotation })}`,
+      `${stepCount} A @ ${formatConstructionLength(riserHeight, unit, profile, { metricNotation })} · P(ASSE) ${formatConstructionLength(treadDepth, unit, profile, { metricNotation })} · LARGH. NETTA ${formatConstructionLength(layout.width, unit, profile, { metricNotation })}`,
       ANNOTATION_FONT_SIZE,
       stroke,
     ),
-    annotationText(directionPoint, direction === 'up' ? 'UP' : 'DN', DIRECTION_FONT_SIZE, stroke),
+    annotationText(
+      directionPoint,
+      direction === 'up' ? 'SALE' : 'SCENDE',
+      DIRECTION_FONT_SIZE,
+      stroke,
+    ),
     buildCurvedBreakLine(center, innerRadius, outerRadius, breakAngle, stroke),
   ]
   if (stair.railingMode !== 'none') {
     geometries.push(
       annotationText(
         arcPoint(center, outerRadius + ANNOTATION_OFFSET * 2, noteAngle),
-        `RAIL ${stair.railingMode.toLocaleUpperCase()} @ ${formatConstructionLength(stair.railingHeight, unit, profile, { metricNotation })}`,
+        `RINGHIERA ${RAILING_MODE_TEXT[stair.railingMode] ?? stair.railingMode.toLocaleUpperCase()} @ ${formatConstructionLength(stair.railingHeight, unit, profile, { metricNotation })}`,
         ANNOTATION_FONT_SIZE,
         stroke,
       ),

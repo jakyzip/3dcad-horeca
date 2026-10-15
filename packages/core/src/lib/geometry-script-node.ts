@@ -189,7 +189,7 @@ export function scriptInteractive(
   const controls: NonNullable<ItemNode['asset']['interactive']>['controls'] = []
   const effects: NonNullable<ItemNode['asset']['interactive']>['effects'] = []
   if (manifest.lights.length > 0) {
-    controls.push({ kind: 'toggle', label: 'Lights', default: true })
+    controls.push({ kind: 'toggle', label: 'Luci', default: true })
     for (const light of manifest.lights) {
       effects.push({
         kind: 'light',
@@ -212,7 +212,7 @@ export function scriptInteractive(
       control: controls.length,
       clips: { on: 'open', off: clip('close') ? 'close' : undefined },
     })
-    controls.push({ kind: 'toggle', label: 'Open', default: false })
+    controls.push({ kind: 'toggle', label: 'Apertura', default: false })
   }
   if (clip('loop')) effects.push({ kind: 'animation', mode: 'ambient', clips: { loop: 'loop' } })
   // Every other clip gets its own play toggle, labelled with its name.

@@ -97,9 +97,9 @@ describe('Floor & foundation support class (point 5)', () => {
   })
 
   test('the kicker says where the plate is and what it rests on', () => {
-    expect(floorPlateKicker(nodes(), plateOf(GROUND, 'Living'))).toBe('Solaio · Ground floor')
+    expect(floorPlateKicker(nodes(), plateOf(GROUND, 'Living'))).toBe('Solaio · Piano terra')
     expect(floorPlateKicker(nodes(), plateOf(UPPER, 'Bedroom'))).toBe(
-      'Solaio · Floor 1 · poggia su Ground floor',
+      'Solaio · Piano 1 · poggia su Piano terra',
     )
   })
 
@@ -182,7 +182,7 @@ describe('Floor & foundation panel (point 5)', () => {
     expect(ground).toMatchObject({ upper: false, preset: 'ground', underFloor: true, minHeight: 0 })
     const upper = floorFoundationModel(nodes(), plateOf(UPPER, 'Bedroom'))
     expect(upper).toMatchObject({ upper: true, underFloor: false, thickFloor: false })
-    expect(upper.kicker).toBe('Solaio · Floor 1 · poggia su Ground floor')
+    expect(upper.kicker).toBe('Solaio · Piano 1 · poggia su Piano terra')
   })
 
   test('on the ground the two inputs are slab thickness and foundation height; the top follows', () => {

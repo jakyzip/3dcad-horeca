@@ -463,12 +463,12 @@ export const fenceDefinition: NodeDefinition<typeof FenceNode> = {
   },
 
   toolHints: [
-    { key: 'Left click', label: 'Set fence start / end' },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Left click', label: 'Fissa inizio / fine della recinzione' },
+    { key: 'Esc', label: 'Annulla' },
   ],
 
   presentation: {
-    label: 'Fence',
+    label: 'Recinzione',
     description: 'A straight or curved fence segment with configurable posts and infill.',
     icon: { kind: 'url', src: '/icons/fence.webp' },
     paletteSection: 'structure',

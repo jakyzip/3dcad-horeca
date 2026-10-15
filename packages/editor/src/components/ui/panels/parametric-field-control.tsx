@@ -22,6 +22,7 @@ export function ParametricFieldControl({
   onCommit,
 }: ParametricFieldControlProps) {
   const key = String(field.key)
+  const label = field.label ?? prettifyKey(key)
 
   switch (field.kind) {
     case 'number': {
@@ -30,7 +31,7 @@ export function ParametricFieldControl({
       const precision = precisionForStep(step)
       return (
         <SliderControl
-          label={prettifyKey(key)}
+          label={label}
           max={field.max}
           min={field.min}
           mixed={mixed}
@@ -50,7 +51,7 @@ export function ParametricFieldControl({
       return (
         <ToggleControl
           checked={checked}
-          label={prettifyKey(key)}
+          label={label}
           mixed={mixed}
           onChange={(next) => {
             const patch = { [key]: next } as Partial<AnyNode>
@@ -80,7 +81,7 @@ export function ParametricFieldControl({
       }
       return (
         <div className="flex items-center justify-between px-3 py-2">
-          <span className="text-foreground/80 text-xs">{prettifyKey(key)}</span>
+          <span className="text-foreground/80 text-xs">{label}</span>
           <select
             className="rounded-md border border-border/50 bg-black/4 dark:bg-[#2C2C2E] px-2 py-1 text-foreground text-xs focus:outline-none focus:ring-1 focus:ring-foreground/30"
             onChange={(e) => apply(e.target.value)}
@@ -110,7 +111,7 @@ export function ParametricFieldControl({
       }
       return (
         <div className="flex items-center justify-between px-3 py-2">
-          <span className="text-foreground/80 text-xs">{prettifyKey(key)}</span>
+          <span className="text-foreground/80 text-xs">{label}</span>
           <div className="flex items-center gap-2">
             <input
               className="h-6 w-8 cursor-pointer rounded border border-border/50 bg-transparent"

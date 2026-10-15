@@ -605,7 +605,7 @@ export const CREATE_ROOM_CASES: AgentToolCase[] = [
             `the named room is ${master?.name} over ${master && area(master.polygon)} m², not the 9 m² space`,
           ],
           [
-            rooms.some((zone) => /^Room \d+$/.test(zone.name ?? '')),
+            rooms.some((zone) => /^Stanza \d+$/.test(zone.name ?? '')),
             'the smaller space lost its own name',
           ],
         )

@@ -16,7 +16,7 @@ import type { WallNode } from './schema'
 export const wallParametrics: ParametricDescriptor<WallNode> = {
   groups: [
     {
-      label: 'Dimensions',
+      label: 'Dimensioni',
       fields: [
         // Reference is not a raw field: its labels depend on each wall's rooms
         // (`wallReferenceModel` in panel-model), so generic inspectors never

@@ -104,9 +104,9 @@ export function validateDwv(nodes: Readonly<Record<AnyNodeId, AnyNode>>): DwvFin
         findings.push({
           severity: 'error',
           code: 'slope-too-flat',
-          message: `${inchLabel(node.diameter)} drain slopes ${slopePerFootLabel(
+          message: `Scarico da ${inchLabel(node.diameter)}: pendenza ${slopePerFootLabel(
             slope,
-          )} — IPC 704.1 requires at least ${slopePerFootLabel(minSlope)}.`,
+          )}; IPC 704.1 richiede almeno ${slopePerFootLabel(minSlope)}.`,
           nodeIds: [node.id],
         })
         flaggedFlat = true
@@ -115,9 +115,9 @@ export function validateDwv(nodes: Readonly<Record<AnyNodeId, AnyNode>>): DwvFin
         findings.push({
           severity: 'warning',
           code: 'slope-too-steep',
-          message: `${inchLabel(node.diameter)} drain slopes ${slopePerFootLabel(
+          message: `Scarico da ${inchLabel(node.diameter)}: pendenza ${slopePerFootLabel(
             slope,
-          )} — over one pipe-diameter per foot risks siphoning the traps.`,
+          )}; oltre un diametro del tubo per piede rischia di svuotare i sifoni.`,
           nodeIds: [node.id],
         })
         flaggedSteep = true
@@ -148,9 +148,9 @@ export function validateDwv(nodes: Readonly<Record<AnyNodeId, AnyNode>>): DwvFin
         findings.push({
           severity: 'error',
           code: 'trap-arm-too-long',
-          message: `${inchLabel(t.diameter)} trap arm runs ${(armLengthM / 0.0254).toFixed(
-            0,
-          )}" to its vent — IPC 909.1 caps it at ${(maxArm / 0.0254).toFixed(0)}".`,
+          message: `Sifone da ${inchLabel(t.diameter)}: il braccio è lungo ${(
+            armLengthM / 0.0254
+          ).toFixed(0)}" fino allo sfiato; IPC 909.1 lo limita a ${(maxArm / 0.0254).toFixed(0)}".`,
           nodeIds: [t.id],
         })
       }

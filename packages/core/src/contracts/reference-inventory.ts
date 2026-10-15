@@ -1024,6 +1024,10 @@ export const METADATA_NON_REFERENCES: readonly { path: string; reason: string }[
     'balcony.options.depth',
     'balcony.options.railing',
   ]),
+  ...described(
+    'Ho.Re.Ca pack: catalog article data and the link to the external CRM (its own ids); names no node.',
+    ['product', 'crm'],
+  ),
 ]
 
 const bare = (path: string) => path.replace(/^metadata\./, '').replace(/\[\]/g, '')

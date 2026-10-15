@@ -215,16 +215,16 @@ function buildRoomLabels(
   }
 
   const finishes = [
-    node.floorFinish ? `FL: ${node.floorFinish}` : '',
-    node.wallFinish ? `WL: ${node.wallFinish}` : '',
-    node.ceilingFinish ? `CL: ${node.ceilingFinish}` : '',
+    node.floorFinish ? `PAV: ${node.floorFinish}` : '',
+    node.wallFinish ? `MURI: ${node.wallFinish}` : '',
+    node.ceilingFinish ? `SOFF: ${node.ceilingFinish}` : '',
   ].filter(Boolean)
   if (finishes.length > 0) {
     lines.push({ text: finishes.join(' · '), fontSize: ROOM_DETAIL_FONT_SIZE, fontWeight: 500 })
   }
 
   const roomDetails = [
-    `CH: ${formatConstructionLength(node.ceilingHeight, unit, profile, { metricNotation })}`,
+    `H: ${formatConstructionLength(node.ceilingHeight, unit, profile, { metricNotation })}`,
   ]
   if (node.occupancy) roomDetails.push(node.occupancy)
   lines.push({ text: roomDetails.join(' · '), fontSize: ROOM_DETAIL_FONT_SIZE, fontWeight: 500 })

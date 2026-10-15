@@ -137,11 +137,11 @@ const PipeTrapTool = () => {
         zIndexRange={[100, 0]}
       >
         <div className="flex items-center gap-2 whitespace-nowrap rounded-full border border-border/60 bg-background/90 px-4 py-1.5 text-xs tabular-nums shadow-sm backdrop-blur">
-          <span className="font-medium text-foreground">{previewNode.diameter}" Trap</span>
+          <span className="font-medium text-foreground">Sifone da {previewNode.diameter}"</span>
           <span aria-hidden className="text-muted-foreground">
             ·
           </span>
-          <span className="text-muted-foreground">R/T rotate</span>
+          <span className="text-muted-foreground">R/T ruota</span>
         </div>
       </Html>
     </LevelOffsetGroup>

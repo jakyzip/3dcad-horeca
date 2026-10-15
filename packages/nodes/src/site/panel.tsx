@@ -107,11 +107,11 @@ export function SiteNodePanel() {
     if (!node) return
     const address = query.trim()
     if (!address) {
-      setStatus('Type an address first.')
+      setStatus('Prima scrivi un indirizzo.')
       return
     }
     setBusy(true)
-    setStatus('Looking up the parcel and the streets around it…')
+    setStatus('Ricerca della particella e delle strade intorno…')
     try {
       const result = await dropInLot(
         {
@@ -127,7 +127,7 @@ export function SiteNodePanel() {
       )
       setStatus(result.message)
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : 'Parcel lookup failed.')
+      setStatus(error instanceof Error ? error.message : 'Ricerca della particella non riuscita.')
     } finally {
       setBusy(false)
     }
@@ -171,7 +171,7 @@ export function SiteNodePanel() {
               },
             })
           }}
-          placeholder={optional ? 'side' : '0'}
+          placeholder={optional ? 'lato' : '0'}
         />
         <span className="text-muted-foreground text-xs">ft</span>
       </span>
@@ -179,18 +179,18 @@ export function SiteNodePanel() {
   )
 
   return (
-    <PanelWrapper title="Site">
+    <PanelWrapper title="Lotto">
       {parcelProvider ? (
-        <PanelSection title="Address">
+        <PanelSection title="Indirizzo">
           <label className="space-y-1 text-sm">
-            <span className="text-muted-foreground">Street address</span>
+            <span className="text-muted-foreground">Indirizzo</span>
             <input
               className="w-full rounded-md border border-border/70 bg-background px-2 py-1.5 text-foreground"
               onChange={(event) => {
                 setQuery(event.target.value)
                 setPicked(null)
               }}
-              placeholder="1200 W Cass St, Tampa, FL"
+              placeholder="Via Roma 1, Treviso"
               value={query}
             />
           </label>
@@ -218,7 +218,7 @@ export function SiteNodePanel() {
             <ActionButton
               disabled={busy}
               icon={<Search className="size-4" />}
-              label={busy ? 'Finding…' : 'Find parcel'}
+              label={busy ? 'Ricerca…' : 'Trova la particella'}
               onClick={findParcel}
             />
           </ActionGroup>
@@ -227,18 +227,18 @@ export function SiteNodePanel() {
       ) : null}
 
       {node.parcel ? (
-        <PanelSection title="Parcel">
+        <PanelSection title="Particella">
           <Row label="APN" value={node.parcel.apn || '—'} />
-          <Row label="County" value={node.parcel.county || '—'} />
+          <Row label="Contea" value={node.parcel.county || '—'} />
           <Row
-            label="Lot area"
+            label="Superficie del lotto"
             value={
               node.parcel.lotAreaSqFt
-                ? `${Math.round(node.parcel.lotAreaSqFt).toLocaleString()} sq ft`
+                ? `${Math.round(node.parcel.lotAreaSqFt).toLocaleString('it-IT')} ft²`
                 : '—'
             }
           />
-          <Row label="Source" value={node.parcel.layer || node.parcel.source || '—'} />
+          <Row label="Fonte" value={node.parcel.layer || node.parcel.source || '—'} />
           {node.parcel.notes?.length ? (
             <p className="text-muted-foreground text-xs leading-snug">
               {node.parcel.notes.join(' ')}
@@ -247,46 +247,48 @@ export function SiteNodePanel() {
         </PanelSection>
       ) : null}
 
-      <PanelSection title="Setbacks">
-        {setbackField('front', 'Front')}
-        {setbackField('side', 'Side')}
-        {setbackField('rear', 'Rear')}
-        {setbackField('left', 'Left (override)', true)}
-        {setbackField('right', 'Right (override)', true)}
+      <PanelSection title="Distanze dai confini">
+        {setbackField('front', 'Fronte')}
+        {setbackField('side', 'Lato')}
+        {setbackField('rear', 'Retro')}
+        {setbackField('left', 'Sinistra (personalizzata)', true)}
+        {setbackField('right', 'Destra (personalizzata)', true)}
         <label className="space-y-1 text-sm">
-          <span className="text-muted-foreground">Source / citation</span>
+          <span className="text-muted-foreground">Fonte / riferimento</span>
           <input
             className="w-full rounded-md border border-border/70 bg-background px-2 py-1.5 text-foreground"
             defaultValue={node.setbacksSource ?? ''}
             key={node.setbacksSource ?? ''}
             onBlur={(event) => update({ setbacksSource: event.target.value || undefined })}
-            placeholder="e.g. Tampa LDC §27-156"
+            placeholder="es. NTA art. 27"
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="text-muted-foreground">Zone</span>
+          <span className="text-muted-foreground">Zona urbanistica</span>
           <input
             className="w-full rounded-md border border-border/70 bg-background px-2 py-1.5 text-foreground"
             defaultValue={node.zone ?? ''}
             key={node.zone ?? ''}
             onBlur={(event) => update({ zone: event.target.value || undefined })}
-            placeholder="e.g. RS-60"
+            placeholder="es. B2"
           />
         </label>
       </PanelSection>
 
-      <PanelSection title="Terrain">
+      <PanelSection title="Terreno">
         <label className="space-y-1 text-sm">
-          <span className="text-muted-foreground">Contour interval (site plan and 3D)</span>
+          <span className="text-muted-foreground">
+            Equidistanza delle curve di livello (planimetria e 3D)
+          </span>
           <select
             className="w-full rounded-md border border-border/70 bg-background px-2 py-1.5 text-foreground"
             onChange={(event) => update({ contourIntervalIn: Number(event.target.value) })}
             value={String(node.contourIntervalIn ?? 12)}
           >
-            <option value="0">none</option>
-            <option value="6">every 6 in</option>
-            <option value="12">every 12 in</option>
-            <option value="24">every 24 in</option>
+            <option value="0">nessuna</option>
+            <option value="6">ogni 6 in</option>
+            <option value="12">ogni 12 in</option>
+            <option value="24">ogni 24 in</option>
           </select>
         </label>
         <label className="flex items-center gap-2 text-sm">
@@ -295,23 +297,24 @@ export function SiteNodePanel() {
             onChange={(event) => update({ contours3d: event.target.checked })}
             type="checkbox"
           />
-          <span className="text-muted-foreground">Show the contour lines in 3D</span>
+          <span className="text-muted-foreground">Mostra le curve di livello in 3D</span>
         </label>
         {node.terrainContours ? (
           <p className="text-muted-foreground text-xs">
-            {node.terrainContours.lines.length} surveyed lines at {node.terrainContours.intervalFt}{' '}
-            ft ({node.terrainContours.datum}) — {node.terrainContours.source ?? 'survey'}
+            {node.terrainContours.lines.length} curve rilevate ogni{' '}
+            {node.terrainContours.intervalFt} ft ({node.terrainContours.datum}) —{' '}
+            {node.terrainContours.source ?? 'rilievo'}
           </p>
         ) : (
           <p className="text-muted-foreground text-xs">
-            No surveyed lines — contours are drawn from the sculpted ground.
+            Nessuna curva rilevata: le curve di livello seguono il terreno modellato.
           </p>
         )}
       </PanelSection>
 
-      <PanelSection title="Orientation">
+      <PanelSection title="Orientamento">
         <label className="space-y-1 text-sm">
-          <span className="text-muted-foreground">Front (street) edge</span>
+          <span className="text-muted-foreground">Lato fronte strada</span>
           <select
             className="w-full rounded-md border border-border/70 bg-background px-2 py-1.5 text-foreground"
             onChange={(event) =>
@@ -321,7 +324,7 @@ export function SiteNodePanel() {
             }
             value={node.frontEdge == null ? '' : String(node.frontEdge)}
           >
-            <option value="">Auto — most north-facing edge</option>
+            <option value="">Automatico: il lato più rivolto a nord</option>
             {edges.map((edge) => (
               <option key={edge.index} value={String(edge.index)}>
                 {edge.label}
@@ -330,7 +333,7 @@ export function SiteNodePanel() {
           </select>
         </label>
         <label className="flex items-center justify-between gap-3 text-sm">
-          <span className="text-muted-foreground">North rotation</span>
+          <span className="text-muted-foreground">Rotazione del nord</span>
           <span className="flex items-center gap-1">
             <input
               className="w-20 rounded-md border border-border/70 bg-background px-2 py-1 text-right text-foreground"

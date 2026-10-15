@@ -49,7 +49,7 @@ const COLUMN_PRESET_OPTIONS = Object.entries(COLUMN_PRESETS).map(([value, preset
 
 const COLUMN_PROPORTION_PRESETS = {
   slender: {
-    label: 'Slender',
+    label: 'Snello',
     height: 3.6,
     width: 0.34,
     baseHeight: 0.18,
@@ -69,7 +69,7 @@ const COLUMN_PROPORTION_PRESETS = {
     edgeSoftness: 0.025,
   },
   heavy: {
-    label: 'Heavy',
+    label: 'Massiccio',
     height: 3,
     width: 0.58,
     baseHeight: 0.28,
@@ -79,7 +79,7 @@ const COLUMN_PROPORTION_PRESETS = {
     edgeSoftness: 0.035,
   },
   stout: {
-    label: 'Short / Stout',
+    label: 'Basso e tozzo',
     height: 2.2,
     width: 0.62,
     baseHeight: 0.3,
@@ -100,17 +100,17 @@ const COLUMN_PROPORTION_OPTIONS = Object.entries(COLUMN_PROPORTION_PRESETS).map(
 )
 
 const SUPPORT_STYLE_OPTIONS: Array<{ label: string; value: ColumnNode['supportStyle'] }> = [
-  { label: 'Vertical', value: 'vertical' },
-  { label: 'A-Frame', value: 'a-frame' },
-  { label: 'Y Support', value: 'y-frame' },
-  { label: 'V Support', value: 'v-frame' },
-  { label: 'X Brace', value: 'x-brace' },
-  { label: 'K Brace', value: 'k-brace' },
-  { label: 'Single Strut', value: 'single-strut' },
-  { label: 'Tripod', value: 'tripod' },
-  { label: 'Trestle', value: 'trestle' },
-  { label: 'Portal Frame', value: 'portal-frame' },
-  { label: 'Box Frame', value: 'box-frame' },
+  { label: 'Verticale', value: 'vertical' },
+  { label: 'Ad A', value: 'a-frame' },
+  { label: 'A Y', value: 'y-frame' },
+  { label: 'A V', value: 'v-frame' },
+  { label: 'Controvento a X', value: 'x-brace' },
+  { label: 'Controvento a K', value: 'k-brace' },
+  { label: 'Puntone singolo', value: 'single-strut' },
+  { label: 'Treppiede', value: 'tripod' },
+  { label: 'Cavalletto', value: 'trestle' },
+  { label: 'Portale', value: 'portal-frame' },
+  { label: 'Telaio scatolare', value: 'box-frame' },
 ]
 
 type NonVerticalSupportStyle = Exclude<ColumnNode['supportStyle'], 'vertical'>
@@ -352,14 +352,14 @@ export default function ColumnPanel() {
     <PanelWrapper
       icon={scriptImages(node)?.thumbnail ?? '/icons/column.webp'}
       onClose={handleClose}
-      title={node.name || 'Column'}
+      title={node.name || 'Pilastro'}
       width={300}
     >
       {node.source ? (
         <AuthoredParams node={node} />
       ) : (
         <>
-          <PanelSection title="Preset">
+          <PanelSection title="Modello">
             <select
               className={SELECT_CLASS}
               onChange={(event) => {
@@ -368,7 +368,7 @@ export default function ColumnPanel() {
               }}
               value=""
             >
-              <option value="">Apply preset...</option>
+              <option value="">Applica un modello…</option>
               {COLUMN_PRESET_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
@@ -377,7 +377,7 @@ export default function ColumnPanel() {
             </select>
           </PanelSection>
 
-          <PanelSection title="Shape">
+          <PanelSection title="Forma">
             <div className="grid grid-cols-2 gap-2 px-1 pt-1">
               {SUPPORT_STYLE_OPTIONS.map((option) => {
                 const isSelected = supportStyle === option.value
@@ -421,7 +421,7 @@ export default function ColumnPanel() {
             {isBraceSupport ? (
               <>
                 <SliderControl
-                  label="Brace Width"
+                  label="Larghezza del controvento"
                   max={0.8}
                   min={0.04}
                   onChange={(value) => handleUpdate({ braceWidth: value, width: value })}
@@ -431,7 +431,7 @@ export default function ColumnPanel() {
                   value={node.braceWidth ?? node.width}
                 />
                 <SliderControl
-                  label="Brace Depth"
+                  label="Profondità del controvento"
                   max={0.8}
                   min={0.04}
                   onChange={(value) => handleUpdate({ braceDepth: value, depth: value })}
@@ -448,7 +448,7 @@ export default function ColumnPanel() {
                     [
                       {
                         value: 'round',
-                        label: 'Round',
+                        label: 'Tondo',
                         icon: (
                           <svg
                             aria-hidden="true"
@@ -469,7 +469,7 @@ export default function ColumnPanel() {
                       },
                       {
                         value: 'square',
-                        label: 'Square',
+                        label: 'Quadrato',
                         icon: (
                           <svg
                             aria-hidden="true"
@@ -492,7 +492,7 @@ export default function ColumnPanel() {
                       },
                       {
                         value: 'rectangular',
-                        label: 'Rectangular',
+                        label: 'Rettangolare',
                         icon: (
                           <svg
                             aria-hidden="true"
@@ -550,7 +550,7 @@ export default function ColumnPanel() {
                   })}
                 </div>
                 <SliderControl
-                  label="Edge Softness"
+                  label="Arrotondamento degli spigoli"
                   max={0.12}
                   min={0}
                   onChange={(value) => handleUpdate({ edgeSoftness: value })}
@@ -561,7 +561,7 @@ export default function ColumnPanel() {
                 />
                 {(node.crossSection === 'square' || node.crossSection === 'rectangular') && (
                   <SliderControl
-                    label="Shaft Corner Radius"
+                    label="Raggio degli angoli del fusto"
                     max={0.3}
                     min={0}
                     onChange={(value) => handleUpdate({ shaftCornerRadius: value })}
@@ -575,11 +575,11 @@ export default function ColumnPanel() {
             )}
           </PanelSection>
 
-          <PanelSection title="Dimensions">
+          <PanelSection title="Dimensioni">
             {managedByLeanTo && (
               <p className="px-1 pt-1 text-muted-foreground text-xs leading-relaxed">
-                Height and footprint are controlled by the lean-to extension. Rotate or change the
-                support style here; resize from the parent lean-to.
+                Altezza e ingombro dipendono dalla tettoia addossata. Qui puoi ruotare o cambiare il
+                tipo di sostegno; per ridimensionare usa la tettoia.
               </p>
             )}
             {!isBraceSupport && !managedByLeanTo && (
@@ -593,7 +593,7 @@ export default function ColumnPanel() {
                 }}
                 value=""
               >
-                <option value="">Apply proportion...</option>
+                <option value="">Applica una proporzione…</option>
                 {COLUMN_PROPORTION_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
@@ -603,7 +603,7 @@ export default function ColumnPanel() {
             )}
             {!managedByLeanTo && (
               <SliderControl
-                label="Height"
+                label="Altezza"
                 max={1000}
                 min={0.8}
                 onChange={(value) => handleUpdate({ height: value })}
@@ -624,7 +624,7 @@ export default function ColumnPanel() {
                   supportStyle === 'portal-frame' ||
                   supportStyle === 'box-frame') && (
                   <SliderControl
-                    label="Bottom Spread"
+                    label="Apertura in basso"
                     max={1000}
                     min={0.2}
                     onChange={(value) =>
@@ -643,7 +643,9 @@ export default function ColumnPanel() {
                   />
                 )}
                 <SliderControl
-                  label={supportStyle === 'y-frame' ? 'Fork Spread' : 'Top Spread'}
+                  label={
+                    supportStyle === 'y-frame' ? 'Apertura della forcella' : 'Apertura in alto'
+                  }
                   max={
                     supportStyle === 'y-frame' ||
                     supportStyle === 'v-frame' ||
@@ -678,14 +680,14 @@ export default function ColumnPanel() {
                 />
                 <ToggleControl
                   checked={node.bracePlateEnabled ?? true}
-                  label="Connector Plates"
+                  label="Piastre di collegamento"
                   onChange={(checked) => handleUpdate({ bracePlateEnabled: checked })}
                 />
               </>
             ) : !managedByLeanTo ? (
               <>
                 <SliderControl
-                  label="Width"
+                  label="Larghezza"
                   max={1000}
                   min={0.12}
                   onChange={(value) =>
@@ -702,7 +704,7 @@ export default function ColumnPanel() {
                 />
                 {node.crossSection === 'rectangular' && (
                   <SliderControl
-                    label="Depth"
+                    label="Profondità"
                     max={1000}
                     min={0.12}
                     onChange={(value) => handleUpdate({ depth: value })}
@@ -717,7 +719,7 @@ export default function ColumnPanel() {
           </PanelSection>
 
           {!isBraceSupport && (
-            <PanelSection title="Shaft">
+            <PanelSection title="Fusto">
               <select
                 className={SELECT_CLASS}
                 onChange={(event) =>
@@ -727,14 +729,14 @@ export default function ColumnPanel() {
                 }
                 value={shaftProfile}
               >
-                <option value="straight">Straight</option>
-                <option value="tapered">Tapered</option>
-                <option value="bulged">Bulged</option>
-                <option value="hourglass">Hourglass</option>
+                <option value="straight">Dritto</option>
+                <option value="tapered">Rastremato</option>
+                <option value="bulged">Rigonfio</option>
+                <option value="hourglass">A clessidra</option>
               </select>
               {shaftProfile === 'straight' && (
                 <SliderControl
-                  label="Shaft Width"
+                  label="Larghezza del fusto"
                   max={1.2}
                   min={0.3}
                   onChange={(value) =>
@@ -748,7 +750,7 @@ export default function ColumnPanel() {
               {shaftProfile === 'tapered' && (
                 <>
                   <SliderControl
-                    label="Bottom Width"
+                    label="Larghezza in basso"
                     max={1.2}
                     min={0.3}
                     onChange={(value) => handleUpdate({ shaftStartScale: value })}
@@ -757,7 +759,7 @@ export default function ColumnPanel() {
                     value={node.shaftStartScale ?? 0.82}
                   />
                   <SliderControl
-                    label="Top Width"
+                    label="Larghezza in alto"
                     max={1.2}
                     min={0.3}
                     onChange={(value) => handleUpdate({ shaftEndScale: value })}
@@ -766,7 +768,7 @@ export default function ColumnPanel() {
                     value={node.shaftEndScale ?? 0.72}
                   />
                   <SliderControl
-                    label="Taper"
+                    label="Rastremazione"
                     max={0.45}
                     min={0}
                     onChange={(value) => handleUpdate({ shaftTaper: value })}
@@ -779,7 +781,7 @@ export default function ColumnPanel() {
               {shaftProfile === 'bulged' && (
                 <>
                   <SliderControl
-                    label="End Width"
+                    label="Larghezza alle estremità"
                     max={1.2}
                     min={0.3}
                     onChange={(value) =>
@@ -790,7 +792,7 @@ export default function ColumnPanel() {
                     value={node.shaftStartScale ?? 0.68}
                   />
                   <SliderControl
-                    label="Bulge"
+                    label="Rigonfiamento"
                     max={0.35}
                     min={0}
                     onChange={(value) => handleUpdate({ shaftBulge: value })}
@@ -803,7 +805,7 @@ export default function ColumnPanel() {
               {shaftProfile === 'hourglass' && (
                 <>
                   <SliderControl
-                    label="End Width"
+                    label="Larghezza alle estremità"
                     max={1.2}
                     min={0.3}
                     onChange={(value) =>
@@ -814,7 +816,7 @@ export default function ColumnPanel() {
                     value={node.shaftStartScale ?? 0.84}
                   />
                   <SliderControl
-                    label="Waist"
+                    label="Strozzatura"
                     max={0.35}
                     min={0}
                     onChange={(value) => handleUpdate({ shaftBulge: value })}
@@ -825,7 +827,7 @@ export default function ColumnPanel() {
                 </>
               )}
               <SliderControl
-                label="Segment Twist"
+                label="Torsione per segmento"
                 max={90}
                 min={-90}
                 onChange={(value) =>
@@ -843,7 +845,7 @@ export default function ColumnPanel() {
               />
               {Math.abs(node.shaftTwistStep ?? 0) > 0.001 && (
                 <SliderControl
-                  label="Twist Segments"
+                  label="Segmenti di torsione"
                   max={48}
                   min={4}
                   onChange={(value) => handleUpdate({ shaftSegmentCount: Math.round(value) })}
@@ -853,7 +855,7 @@ export default function ColumnPanel() {
                 />
               )}
               <SliderControl
-                label="Ring Pairs"
+                label="Coppie di anelli"
                 max={4}
                 min={0}
                 onChange={(value) =>
@@ -870,7 +872,7 @@ export default function ColumnPanel() {
               />
               {(node.ringCount ?? 0) > 0 && (
                 <SliderControl
-                  label="Ring Thickness"
+                  label="Spessore degli anelli"
                   max={0.14}
                   min={0.01}
                   onChange={(value) => handleUpdate({ ringThickness: value })}
@@ -882,7 +884,7 @@ export default function ColumnPanel() {
               )}
               {(node.ringCount ?? 0) > 0 && (
                 <SliderControl
-                  label="Ring Spread"
+                  label="Distanza tra gli anelli"
                   max={0.45}
                   min={0.04}
                   onChange={(value) => handleUpdate({ ringSpread: value, ringPlacement: 'ends' })}
@@ -895,7 +897,7 @@ export default function ColumnPanel() {
           )}
 
           {!isBraceSupport && (
-            <PanelSection title="Ends">
+            <PanelSection title="Estremità">
               <select
                 className={SELECT_CLASS}
                 onChange={(event) => {
@@ -929,14 +931,14 @@ export default function ColumnPanel() {
                   node.capitalStyle === 'simple-slab' ? 'simple' : (node.capitalStyle ?? 'simple')
                 }
               >
-                <option value="none">No Top</option>
-                <option value="simple">Simple Top</option>
-                <option value="stepped">Stepped Top</option>
-                <option value="rounded">Rounded Top</option>
+                <option value="none">Senza capitello</option>
+                <option value="simple">Capitello semplice</option>
+                <option value="stepped">Capitello a gradini</option>
+                <option value="rounded">Capitello arrotondato</option>
               </select>
               {node.capitalStyle !== 'none' && (
                 <SliderControl
-                  label="Top Height"
+                  label="Altezza del capitello"
                   max={0.8}
                   min={0.06}
                   onChange={(value) => handleUpdate({ capitalHeight: value })}
@@ -948,7 +950,7 @@ export default function ColumnPanel() {
               )}
               {node.capitalStyle !== 'none' && (
                 <SliderControl
-                  label="Top Width"
+                  label="Larghezza del capitello"
                   max={2.4}
                   min={0.6}
                   onChange={(value) =>
@@ -964,7 +966,7 @@ export default function ColumnPanel() {
               )}
               {node.capitalStyle !== 'none' && node.crossSection === 'rectangular' && (
                 <SliderControl
-                  label="Top Depth"
+                  label="Profondità del capitello"
                   max={2.4}
                   min={0.6}
                   onChange={(value) => handleUpdate({ capitalDepthScale: value })}
@@ -975,7 +977,7 @@ export default function ColumnPanel() {
               )}
               {node.capitalStyle === 'stepped' && (
                 <SliderControl
-                  label="Top Tiers"
+                  label="Gradini del capitello"
                   max={8}
                   min={3}
                   onChange={(value) => handleUpdate({ capitalTierCount: Math.round(value) })}
@@ -986,7 +988,7 @@ export default function ColumnPanel() {
               )}
               {node.capitalStyle === 'stepped' && (
                 <SliderControl
-                  label="Top Step Spread"
+                  label="Sporgenza dei gradini del capitello"
                   max={0.9}
                   min={0.05}
                   onChange={(value) => handleUpdate({ capitalStepSpread: value })}
@@ -1038,15 +1040,15 @@ export default function ColumnPanel() {
                 }}
                 value={node.baseStyle ?? 'square-plinth'}
               >
-                <option value="none">No Bottom</option>
-                <option value="simple-square">Simple Block Bottom</option>
-                <option value="square-plinth">Square Plinth Bottom</option>
-                <option value="stepped-square">Stepped Bottom</option>
-                <option value="round-rings">Rounded Bottom</option>
+                <option value="none">Senza base</option>
+                <option value="simple-square">Base a blocco semplice</option>
+                <option value="square-plinth">Base con plinto quadrato</option>
+                <option value="stepped-square">Base a gradini</option>
+                <option value="round-rings">Base arrotondata</option>
               </select>
               {node.baseStyle !== 'none' && (
                 <SliderControl
-                  label="Bottom Height"
+                  label="Altezza della base"
                   max={0.8}
                   min={0.06}
                   onChange={(value) => handleUpdate({ baseHeight: value })}
@@ -1058,7 +1060,7 @@ export default function ColumnPanel() {
               )}
               {node.baseStyle !== 'none' && (
                 <SliderControl
-                  label="Bottom Width"
+                  label="Larghezza della base"
                   max={2.4}
                   min={0.6}
                   onChange={(value) =>
@@ -1074,7 +1076,7 @@ export default function ColumnPanel() {
               )}
               {node.baseStyle !== 'none' && node.crossSection === 'rectangular' && (
                 <SliderControl
-                  label="Bottom Depth"
+                  label="Profondità della base"
                   max={2.4}
                   min={0.6}
                   onChange={(value) => handleUpdate({ baseDepthScale: value })}
@@ -1085,7 +1087,7 @@ export default function ColumnPanel() {
               )}
               {node.baseStyle === 'round-rings' && (
                 <SliderControl
-                  label="Plinth Thickness"
+                  label="Spessore del plinto"
                   max={0.7}
                   min={0.2}
                   onChange={(value) => handleUpdate({ basePlinthHeightRatio: value })}
@@ -1096,7 +1098,7 @@ export default function ColumnPanel() {
               )}
               {node.baseStyle === 'round-rings' && (
                 <SliderControl
-                  label="Round Band Width"
+                  label="Larghezza della fascia tonda"
                   max={1.2}
                   min={0.5}
                   onChange={(value) => handleUpdate({ baseRoundBandScale: value })}
@@ -1107,7 +1109,7 @@ export default function ColumnPanel() {
               )}
               {node.baseStyle === 'round-rings' && (
                 <SliderControl
-                  label="Neck Width"
+                  label="Larghezza del collarino"
                   max={1}
                   min={0.35}
                   onChange={(value) => handleUpdate({ baseNeckScale: value })}
@@ -1118,7 +1120,7 @@ export default function ColumnPanel() {
               )}
               {node.baseStyle === 'stepped-square' && (
                 <SliderControl
-                  label="Bottom Tiers"
+                  label="Gradini della base"
                   max={8}
                   min={3}
                   onChange={(value) => handleUpdate({ baseTierCount: Math.round(value) })}
@@ -1129,7 +1131,7 @@ export default function ColumnPanel() {
               )}
               {node.baseStyle === 'stepped-square' && (
                 <SliderControl
-                  label="Bottom Step Spread"
+                  label="Sporgenza dei gradini della base"
                   max={0.9}
                   min={0.05}
                   onChange={(value) => handleUpdate({ baseStepSpread: value })}
@@ -1142,9 +1144,9 @@ export default function ColumnPanel() {
           )}
         </>
       )}
-      <PanelSection title="Transform">
+      <PanelSection title="Trasformazione">
         <SliderControl
-          label="Yaw"
+          label="Rotazione"
           max={180}
           min={-180}
           onChange={(value) => handleUpdate({ rotation: (value * Math.PI) / 180 })}
@@ -1155,13 +1157,13 @@ export default function ColumnPanel() {
         />
       </PanelSection>
 
-      <PanelSection title="Actions">
+      <PanelSection title="Azioni">
         <ActionGroup>
-          <ActionButton icon={<Move className="h-4 w-4" />} label="Move" onClick={handleMove} />
+          <ActionButton icon={<Move className="h-4 w-4" />} label="Sposta" onClick={handleMove} />
           <ActionButton
             className="border-red-500/40 text-red-700 dark:text-red-200 hover:bg-red-500/15"
             icon={<Trash2 className="h-4 w-4" />}
-            label="Delete"
+            label="Elimina"
             onClick={handleDelete}
           />
         </ActionGroup>

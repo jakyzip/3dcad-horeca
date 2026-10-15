@@ -17,9 +17,9 @@ const HARDWARE_DEFAULT = 'library:metal-chrome'
  */
 export function doorSlots(): SlotDeclaration[] {
   return [
-    { slotId: 'panel', label: 'Panel', default: PANEL_DEFAULT },
-    { slotId: 'frame', label: 'Frame', default: FRAME_DEFAULT },
-    { slotId: 'glass', label: 'Glass', default: GLASS_DEFAULT },
-    { slotId: 'hardware', label: 'Hardware', default: HARDWARE_DEFAULT },
+    { slotId: 'panel', label: 'Anta', default: PANEL_DEFAULT },
+    { slotId: 'frame', label: 'Telaio', default: FRAME_DEFAULT },
+    { slotId: 'glass', label: 'Vetro', default: GLASS_DEFAULT },
+    { slotId: 'hardware', label: 'Ferramenta', default: HARDWARE_DEFAULT },
   ]
 }

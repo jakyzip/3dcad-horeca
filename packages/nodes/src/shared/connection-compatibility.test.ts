@@ -15,10 +15,10 @@ test('system mismatch takes precedence over size', () => {
   ).toBe('incompatible')
 })
 test('size and shape mismatches describe the required adapter', () => {
-  expect(connectionCompatibility(supply, { ...supply, diameter: 8 }).label).toContain('Reducer')
+  expect(connectionCompatibility(supply, { ...supply, diameter: 8 }).label).toContain('riduzione')
   expect(
     connectionCompatibility(supply, { ...supply, shape: 'rect', width: 8, height: 6 }).label,
-  ).toContain('Transition')
+  ).toContain('transizione')
   expect(
     connectionCompatibility(
       { ...supply, shape: 'rect', width: 8, height: 6 },

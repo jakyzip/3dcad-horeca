@@ -130,7 +130,7 @@ describe('applyBlockCommand', () => {
         faceIds: ['missing'],
         distance: 0.25,
       }),
-    ).toEqual({ ok: false, error: 'Face not found: missing' })
+    ).toEqual({ ok: false, error: 'Faccia non trovata: missing' })
   })
 
   test('moves vertices selected directly or through edges and faces', () => {

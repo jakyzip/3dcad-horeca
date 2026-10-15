@@ -89,39 +89,39 @@ import {
 } from './widths'
 
 const HANDLE_STYLE_OPTIONS = [
-  { value: 'bar', label: 'Bar' },
-  { value: 'knob', label: 'Knob' },
-  { value: 'cutout', label: 'Cutout' },
-  { value: 'hole', label: 'Hole' },
-  { value: 'none', label: 'None' },
+  { value: 'bar', label: 'Barra' },
+  { value: 'knob', label: 'Pomolo' },
+  { value: 'cutout', label: 'Incavo' },
+  { value: 'hole', label: 'Foro' },
+  { value: 'none', label: 'Nessuna' },
 ] as const
 
 const HANDLE_POSITION_OPTIONS = [
-  { value: 'auto', label: 'Auto' },
-  { value: 'top', label: 'Top' },
-  { value: 'center', label: 'Center' },
+  { value: 'auto', label: 'Automatica' },
+  { value: 'top', label: 'In alto' },
+  { value: 'center', label: 'Al centro' },
 ] as const
 
 const FRONT_OVERLAY_OPTIONS = [
-  { value: 'full', label: 'Overlay' },
-  { value: 'inset', label: 'Inset' },
+  { value: 'full', label: 'Sovrapposta' },
+  { value: 'inset', label: 'Incassata' },
 ] as const
 
 const FRONT_STYLE_OPTIONS = [
-  { value: 'slab', label: 'Slab' },
+  { value: 'slab', label: 'Liscia' },
   { value: 'shaker', label: 'Shaker' },
-  { value: 'raised-arch', label: 'Raised Arch' },
+  { value: 'raised-arch', label: 'Bugna ad arco' },
 ] as const
 
 const CABINET_TIER_OPTIONS = [
-  { value: 'base', label: 'Base Cabinet' },
-  { value: 'tall', label: 'Tall Cabinet' },
+  { value: 'base', label: 'Mobile base' },
+  { value: 'tall', label: 'Colonna' },
 ] as const
 
 const TOP_FINISH_OPTIONS = [
-  { value: 'none', label: 'None' },
-  { value: 'top-cabinet', label: 'Top Cabinet' },
-  { value: 'trim', label: 'Trim / Soffit' },
+  { value: 'none', label: 'Nessuna' },
+  { value: 'top-cabinet', label: 'Sopralzo' },
+  { value: 'trim', label: 'Cornice / Veletta' },
 ] as const
 
 const EMPTY_MODULES: CabinetModuleNodeType[] = []
@@ -130,7 +130,7 @@ const EMPTY_MODULE_IDS: AnyNodeId[] = []
 const PRESET_BUTTON_CLASS =
   'flex h-9 items-center justify-center rounded-md border border-border/40 bg-black/3 dark:bg-[#252527] px-3 py-2 text-center text-xs font-medium text-foreground transition-colors hover:border-border/70 hover:bg-black/6 dark:hover:bg-[#303033]'
 const REFLOW_REJECTED_MESSAGE =
-  'No space in this run. No base cabinet can shrink enough to fit this item.'
+  'Non c’è spazio in questa composizione: nessun mobile base può restringersi abbastanza da far posto a questo elemento.'
 
 export default function CabinetPanel() {
   const selectedId = useViewer((s) => s.selection.selectedIds[0])
@@ -602,13 +602,13 @@ export default function CabinetPanel() {
       icon="/icons/item.webp"
       onBack={node.type === 'cabinet-module' ? backToRun : undefined}
       onClose={close}
-      title={node.name || 'Modular Cabinet'}
+      title={node.name || 'Mobile modulare'}
       width={320}
     >
       {node.type === 'cabinet-module' &&
         parentRun?.type === 'cabinet' &&
         cabinetModuleSupportsPresets(node) && (
-          <PanelSection title="Presets">
+          <PanelSection title="Predefiniti">
             <div className="grid grid-cols-2 gap-2 px-1 pb-2">
               {CABINET_PRESETS.map((preset) => (
                 <button
@@ -624,11 +624,11 @@ export default function CabinetPanel() {
           </PanelSection>
         )}
 
-      <PanelSection title="Dimensions">
+      <PanelSection title="Dimensioni">
         {node.type === 'cabinet-module' && !isHoodOnlyNode && (
           <div className="space-y-1 px-1 pb-2">
             <div className="px-1 pb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
-              Standard width
+              Larghezza standard
             </div>
             <SegmentedControl
               disabled={usesFixedApplianceWidth}
@@ -649,7 +649,7 @@ export default function CabinetPanel() {
         {isWallCabinetModule && !isHoodOnlyNode && (
           <div className="space-y-1 px-1 pb-2">
             <div className="px-1 pb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
-              Height preset
+              Altezza predefinita
             </div>
             <SegmentedControl
               mixed={wallHeightPreset === 'custom'}
@@ -666,12 +666,12 @@ export default function CabinetPanel() {
               value={wallHeightPreset === 'custom' ? '18' : wallHeightPreset}
             />
             <p className="px-1 pt-1 text-[10px] leading-4 text-muted-foreground">
-              Common wall-cabinet heights. Use the slider below for a custom height.
+              Altezze comuni dei pensili. Per un’altezza personalizzata usa il cursore qui sotto.
             </p>
           </div>
         )}
         <SliderControl
-          label="Width"
+          label="Larghezza"
           max={3}
           min={0.3}
           onChange={(value) => updateNode({ width: value })}
@@ -683,7 +683,7 @@ export default function CabinetPanel() {
         {!isHoodOnlyNode && (
           <>
             <SliderControl
-              label="Depth"
+              label="Profondità"
               max={1.2}
               min={0.3}
               onChange={(value) => updateNode({ depth: value })}
@@ -693,7 +693,7 @@ export default function CabinetPanel() {
               value={node.depth}
             />
             <SliderControl
-              label="Carcass height"
+              label="Altezza della scocca"
               max={
                 node.type === 'cabinet-module' && resolveCabinetType(node, parentRun) === 'tall'
                   ? 2.4
@@ -715,7 +715,7 @@ export default function CabinetPanel() {
       </PanelSection>
 
       {node.type === 'cabinet-module' && parentRun?.type === 'cabinet' && !isHoodOnlyNode && (
-        <PanelSection title="Cabinet Type">
+        <PanelSection title="Tipo di mobile">
           <div className="space-y-2 px-1 pb-2">
             <SegmentedControl
               onChange={(value) => {
@@ -733,11 +733,11 @@ export default function CabinetPanel() {
             />
             {resolveCabinetType(node, parentRun) === 'base' &&
               (hasWallCabinet ? (
-                <ActionButton label="Remove wall cabinet" onClick={removeWallCabinet} />
+                <ActionButton label="Rimuovi il pensile" onClick={removeWallCabinet} />
               ) : (
                 <>
-                  <ActionButton label="Add wall cabinet" onClick={addWallCabinetAbove} />
-                  <ActionButton label="Add chimney" onClick={addHoodAbove} />
+                  <ActionButton label="Aggiungi un pensile" onClick={addWallCabinetAbove} />
+                  <ActionButton label="Aggiungi una cappa" onClick={addHoodAbove} />
                 </>
               ))}
           </div>
@@ -745,11 +745,11 @@ export default function CabinetPanel() {
       )}
 
       {canAddTopFinish && (
-        <PanelSection title="Top / Ceiling">
+        <PanelSection title="Sopra / Soffitto">
           <div className="space-y-2 px-1 pb-2">
             <div>
               <div className="px-1 pb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
-                Finish
+                Finitura
               </div>
               <SegmentedControl
                 onChange={(value) =>
@@ -770,7 +770,7 @@ export default function CabinetPanel() {
             {node.topFinish !== 'none' && (
               <>
                 <ActionButton
-                  label="Fill to ceiling"
+                  label="Arriva al soffitto"
                   onClick={() =>
                     updateNode({
                       topFinishHeight: cabinetCeilingGap(
@@ -781,7 +781,7 @@ export default function CabinetPanel() {
                   }
                 />
                 <SliderControl
-                  label="Top height"
+                  label="Altezza del sopralzo"
                   max={1.2}
                   min={0}
                   onChange={(value) => updateNode({ topFinishHeight: value })}
@@ -791,7 +791,7 @@ export default function CabinetPanel() {
                   value={node.topFinishHeight}
                 />
                 <SliderControl
-                  label="Top depth"
+                  label="Profondità del sopralzo"
                   max={1.2}
                   min={0.15}
                   onChange={(value) => updateNode({ topFinishDepth: value })}
@@ -806,8 +806,7 @@ export default function CabinetPanel() {
               <div className="flex gap-1.5 px-1 text-xs leading-5 text-red-700 dark:text-red-300">
                 <AlertTriangle className="mt-1 h-3.5 w-3.5 shrink-0" />
                 <span>
-                  Finished height extends {(ceilingOverflow * 1000).toFixed(0)} mm above the
-                  ceiling.
+                  L’altezza finita supera il soffitto di {(ceilingOverflow * 1000).toFixed(0)} mm.
                 </span>
               </div>
             )}
@@ -817,7 +816,7 @@ export default function CabinetPanel() {
 
       {planningReport &&
         (planningReport.errors.length > 0 || planningReport.warnings.length > 0) && (
-          <PanelSection title="Planning checks">
+          <PanelSection title="Controlli di progetto">
             <div className="space-y-1 px-1 pb-2 text-xs leading-5">
               {planningReport.errors.map((planningIssue) => (
                 <div
@@ -842,11 +841,11 @@ export default function CabinetPanel() {
         )}
 
       {!isHoodOnlyNode && (
-        <PanelSection title="Open Animation">
+        <PanelSection title="Animazione di apertura">
           <div className="flex items-center gap-2 px-1">
             <div className="min-w-0 flex-1">
               <SliderControl
-                label="Open"
+                label="Apertura"
                 max={100}
                 min={0}
                 onChange={(value) => {
@@ -861,10 +860,10 @@ export default function CabinetPanel() {
             <button
               aria-label={
                 isAnimating
-                  ? 'Stop animation'
+                  ? 'Ferma l’animazione'
                   : (node.operationState ?? 0) >= 0.99
-                    ? 'Close cabinet'
-                    : 'Open cabinet'
+                    ? 'Chiudi il mobile'
+                    : 'Apri il mobile'
               }
               className="flex h-7 shrink-0 items-center gap-1.5 rounded-lg border border-border/40 bg-black/4 dark:bg-[#2C2C2E] px-2.5 text-[11px] font-medium text-foreground transition-colors hover:bg-black/8 dark:hover:bg-[#3e3e3e]"
               onClick={() => {
@@ -876,23 +875,23 @@ export default function CabinetPanel() {
               }}
               title={
                 isAnimating
-                  ? 'Stop animation'
+                  ? 'Ferma l’animazione'
                   : (node.operationState ?? 0) >= 0.99
-                    ? 'Close cabinet'
-                    : 'Play animation'
+                    ? 'Chiudi il mobile'
+                    : 'Avvia l’animazione'
               }
               type="button"
             >
               {isAnimating ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
               <span>
-                {isAnimating ? 'Stop' : (node.operationState ?? 0) >= 0.99 ? 'Close' : 'Play'}
+                {isAnimating ? 'Ferma' : (node.operationState ?? 0) >= 0.99 ? 'Chiudi' : 'Avvia'}
               </span>
             </button>
           </div>
         </PanelSection>
       )}
 
-      <PanelSection title="Compartments">
+      <PanelSection title="Vani">
         {reflowNotice ? (
           <p
             aria-live="polite"
@@ -927,7 +926,7 @@ export default function CabinetPanel() {
         <div className="px-1 pb-1">
           <ActionButton
             icon={<Plus className="h-4 w-4" />}
-            label="Add compartment"
+            label="Aggiungi un vano"
             onClick={addCompartment}
           />
         </div>
@@ -936,34 +935,35 @@ export default function CabinetPanel() {
       {!isHoodOnlyNode && (
         <>
           {isFridgeModule && (
-            <PanelSection title="Appliance front">
+            <PanelSection title="Frontale dell’elettrodomestico">
               <div className="space-y-2 px-1 pb-2">
                 <div>
                   <div className="px-1 pb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
-                    Panel-ready
+                    Rivestimento
                   </div>
                   <SegmentedControl
                     onChange={(value) => updateNode({ panelReady: value === 'on' })}
                     options={[
-                      { value: 'off', label: 'Appliance' },
-                      { value: 'on', label: 'Cabinet panel' },
+                      { value: 'off', label: 'Elettrodomestico' },
+                      { value: 'on', label: 'Anta del mobile' },
                     ]}
                     value={node.panelReady ? 'on' : 'off'}
                   />
                 </div>
                 {node.panelReady && (
                   <p className="px-1 text-xs leading-5 text-muted-foreground">
-                    Uses the cabinet front style, reveal, handle, and front material settings below.
+                    Usa lo stile dei frontali, la fuga, la maniglia e il materiale dei frontali
+                    impostati qui sotto.
                   </p>
                 )}
               </div>
             </PanelSection>
           )}
-          <PanelSection title="Fronts">
+          <PanelSection title="Frontali">
             <div className="space-y-2 px-1 pb-2">
               <div>
                 <div className="px-1 pb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
-                  Style
+                  Stile
                 </div>
                 <SegmentedControl
                   onChange={(value) =>
@@ -978,7 +978,7 @@ export default function CabinetPanel() {
               </div>
               <div>
                 <div className="px-1 pb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
-                  Mounting
+                  Montaggio
                 </div>
                 <SegmentedControl
                   onChange={(value) =>
@@ -993,7 +993,7 @@ export default function CabinetPanel() {
               </div>
               <div>
                 <div className="px-1 pb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
-                  Reveal gap
+                  Fuga
                 </div>
                 <SegmentedControl
                   mixed={cabinetRevealGapId(node.frontGap) === 'custom'}
@@ -1016,11 +1016,11 @@ export default function CabinetPanel() {
             </div>
           </PanelSection>
 
-          <PanelSection title="Handles">
+          <PanelSection title="Maniglie">
             <div className="space-y-2 px-1 pb-2">
               <div>
                 <div className="px-1 pb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
-                  Style
+                  Stile
                 </div>
                 <SegmentedControl
                   onChange={(value) =>
@@ -1036,7 +1036,7 @@ export default function CabinetPanel() {
               {(node.handleStyle === 'bar' || node.handleStyle === 'knob') && (
                 <div>
                   <div className="px-1 pb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
-                    Position
+                    Posizione
                   </div>
                   <SegmentedControl
                     onChange={(value) =>

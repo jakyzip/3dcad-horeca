@@ -20,14 +20,16 @@ export function planStairSizing(
   options: { stepCount?: number; runLength?: number; targets?: Partial<StairDesignTargets> } = {},
 ) {
   const targets = StairDesignTargets.parse(options.targets ?? {})
-  if (!(Number.isFinite(rise) && rise > 0)) throw new RangeError('Rise must be positive')
+  if (!(Number.isFinite(rise) && rise > 0))
+    throw new RangeError('Il dislivello deve essere positivo')
   const ratio = rise / targets.maxRiserHeight
   const stepCount = options.stepCount ?? Math.max(2, Math.ceil(ratio - Number.EPSILON * ratio))
   if (!Number.isSafeInteger(stepCount) || stepCount < 2)
-    throw new RangeError('Use at least two whole risers')
+    throw new RangeError('Usa almeno due alzate intere')
   const length =
     options.runLength ?? stepCount * Math.max(targets.minimumGoing, targets.targetGoing)
-  if (!(Number.isFinite(length) && length > 0)) throw new RangeError('Run must be positive')
+  if (!(Number.isFinite(length) && length > 0))
+    throw new RangeError('La lunghezza deve essere positiva')
   return { stepCount, length, riserHeight: rise / stepCount, going: length / stepCount }
 }
 
@@ -77,7 +79,7 @@ export function planStairCreation(
     if (Math.abs(rise - flight.height) < 1e-6) return { stair: candidate, flight }
     if (iteration === 15)
       throw new RangeError(
-        'Stair support and arrival do not converge; choose an explicit rise or run',
+        'Appoggio e arrivo della scala non coincidono: indica un dislivello o una lunghezza',
       )
     flight = { ...createSizedStairFlight(rise, dimensions, stair.designTargets), id: flight.id }
   }
@@ -101,7 +103,12 @@ export function measureStair(stair: StairNode, nodes: Record<string, AnyNode>) {
     severity: 'error' | 'warning' = 'warning',
   ) => diagnostics.push({ code, severity, nodeId, message })
   if (!(totalRise > 0))
-    report('invalid-rise', stair.id, 'The destination must be above the stair base.', 'error')
+    report(
+      'invalid-rise',
+      stair.id,
+      'L’arrivo deve essere più alto della base della scala.',
+      'error',
+    )
   const arc = resolveStairArcDimensions(stair, totalRise)
   if (
     stair.stairType === 'spiral' &&
@@ -111,7 +118,7 @@ export function measureStair(stair: StairNode, nodes: Record<string, AnyNode>) {
     report(
       'landing-overlap',
       stair.id,
-      'Landing depth exceeds a full circle at the walking line; the visible landing is limited to one circle.',
+      'La profondità del pianerottolo supera un giro completo sulla linea di passo: il pianerottolo visibile è limitato a un giro.',
     )
   const segments = stair.children
     .map((id) => nodes[id])
@@ -150,7 +157,7 @@ export function measureStair(stair: StairNode, nodes: Record<string, AnyNode>) {
             report(
               'narrow-winder-end',
               segment.id,
-              'The narrow end of a winder tread is below 0.10 m; check the intended stair use.',
+              'Il lato stretto di un gradino a ventaglio è sotto 0,10 m: verifica l’uso previsto della scala.',
             )
           return {
             nodeId: segments.length ? segment.id : stair.id,
@@ -175,7 +182,7 @@ export function measureStair(stair: StairNode, nodes: Record<string, AnyNode>) {
       report(
         'invalid-flight',
         flight.nodeId,
-        'Flight dimensions and integer riser count must be positive.',
+        'Le misure della rampa e il numero di alzate devono essere positivi.',
         'error',
       )
     const riserHeight = valid ? flight.rise / flight.count : null
@@ -185,15 +192,15 @@ export function measureStair(stair: StairNode, nodes: Record<string, AnyNode>) {
         : flight.length / flight.count
       : null
     if (riserHeight !== null && riserHeight > targets.maxRiserHeight + 1e-6)
-      report('riser-target', flight.nodeId, 'Riser height exceeds the design target.')
+      report('riser-target', flight.nodeId, 'L’alzata supera il valore di progetto.')
     if (going !== null && going < targets.minimumGoing - 1e-6)
-      report('going-target', flight.nodeId, 'Going is below the design target.')
+      report('going-target', flight.nodeId, 'La pedata è sotto il valore di progetto.')
     const comfort = riserHeight !== null && going !== null ? 2 * riserHeight + going : null
     if (comfort !== null && (comfort < 0.6 || comfort > 0.65))
       report(
         'comfort-target',
         flight.nodeId,
-        'Two risers plus going is outside the 0.60–0.65 m design range.',
+        'Due alzate più una pedata sono fuori dall’intervallo di progetto 0,60–0,65 m.',
       )
     return {
       ...flight,
@@ -212,7 +219,7 @@ export function measureStair(stair: StairNode, nodes: Record<string, AnyNode>) {
     report(
       'nonuniform-risers',
       stair.id,
-      'Flight riser heights differ. Use uniform-riser repair only if this is a proposed design.',
+      'Le alzate delle rampe sono diverse. Uniformale solo se è un progetto nuovo.',
     )
   for (const landing of segments.filter(
     (segment) =>
@@ -225,20 +232,20 @@ export function measureStair(stair: StairNode, nodes: Record<string, AnyNode>) {
     )
   const chainRise = segments.reduce((sum, segment) => sum + segment.height, 0)
   if (stair.stairType === 'straight' && segments.length && Math.abs(chainRise - totalRise) > 1e-4)
-    report(
-      'arrival-mismatch',
-      stair.id,
-      'The flight chain does not reach the declared destination.',
-    )
+    report('arrival-mismatch', stair.id, 'Le rampe non arrivano alla quota di arrivo indicata.')
   const headroom = measureStairHeadroom(stair, nodes)
   if (headroom.status === 'unresolved')
     report(
       'headroom-unresolved',
       stair.id,
-      'Detailed headroom could not be evaluated: check riser counts and the surface query budget.',
+      'Impossibile verificare l’altezza libera in dettaglio: controlla il numero di alzate.',
     )
   else if (headroom.obstructions.length)
-    report('headroom-target', stair.id, 'Overhead surfaces leave less than the target headroom.')
+    report(
+      'headroom-target',
+      stair.id,
+      'Le superfici sopra la scala lasciano meno dell’altezza libera di progetto.',
+    )
   return {
     totalRise,
     targets,
@@ -314,7 +321,7 @@ export function planStairSizingEdit(
     .filter((node): node is StairSegmentNode => node?.type === 'stair-segment')
   const flights = segments.filter((segment) => segment.segmentType === 'stair')
   if (segments.length && !flights.length)
-    throw new RangeError('Add a flight before sizing a stair with only landings')
+    throw new RangeError('Aggiungi una rampa prima di dimensionare una scala con soli pianerottoli')
   const flightRise =
     rise -
     segments
@@ -322,7 +329,7 @@ export function planStairSizingEdit(
       .reduce((sum, segment) => sum + segment.height, 0)
   const sizing = planStairSizing(flightRise, { targets })
   if (!flights.length) {
-    if (fitRun) throw new RangeError('Add a flight before fitting the run')
+    if (fitRun) throw new RangeError('Aggiungi una rampa prima di adattare la lunghezza')
     return [{ id: stair.id, data: { stepCount: sizing.stepCount, uniformRisers: true } }]
   }
   const count = Math.max(2 * flights.length, sizing.stepCount)

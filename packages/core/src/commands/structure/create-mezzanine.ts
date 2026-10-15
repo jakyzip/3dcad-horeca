@@ -36,7 +36,7 @@ export function createMezzanine(
   const zone = newZone({
     id: input.mintId('zone'),
     parentId: level.id,
-    name: 'Mezzanine',
+    name: 'Soppalco',
     spaceRole: 'room',
     hostZoneId: host.id,
     polygon,

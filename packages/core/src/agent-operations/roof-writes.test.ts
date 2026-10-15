@@ -112,7 +112,7 @@ describe('seatWrittenRoofs', () => {
         levelId: 'level_r',
         storeyId: 'level_g',
       })
-      expect(refusal.message).toContain('Ground floor (level_g)')
+      expect(refusal.message).toContain('Piano terra (level_g)')
     })
 
   test('a zone on a level that only holds roofs, never declared, is refused', () => {
@@ -177,7 +177,7 @@ describe('seatWrittenRoofs', () => {
     const nodes = underRoofLevel()
     const ops = creates(level('level_1', 1))
     expect(seatWrittenRoofs(ops, nodes)).toEqual([
-      "Floor 1 (level_r) moved up to floor index 2: a building's roof level stays above its storeys.",
+      "Piano 1 (level_r) moved up to floor index 2: a building's roof level stays above its storeys.",
     ])
     expect(ops.slice(1)).toEqual([{ op: 'update', id: 'level_r', data: { level: 2 } }])
   })

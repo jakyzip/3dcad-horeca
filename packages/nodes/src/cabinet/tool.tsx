@@ -315,7 +315,7 @@ function buildCabinetPlacementPreviewNode({
   const defaults = cabinetDefinition.defaults()
   return CabinetNode.parse({
     ...defaults,
-    name: island ? 'Kitchen Island Preview' : 'Modular Cabinet Preview',
+    name: island ? 'Anteprima isola' : 'Anteprima mobile modulare',
     position,
     rotation: yaw,
     width: previewModule.width,
@@ -1166,7 +1166,7 @@ const CabinetTool = () => {
       const cabinet = CabinetNode.parse({
         ...cabinetDefinition.defaults(),
         ...toolDefaults,
-        name: island ? 'Kitchen Island' : 'Modular Cabinet',
+        name: island ? 'Isola' : 'Mobile modulare',
         position,
         rotation: yaw,
         parentId: activeLevelId,
@@ -1789,18 +1789,18 @@ const CabinetTool = () => {
     0,
   )
   const placementLabel = placement.insertionFailure
-    ? 'No space in this run to insert this cabinet'
+    ? 'Non c’è spazio in questa composizione per inserire questo mobile'
     : stretch
       ? placement.valid
-        ? `${draftSegments.length + 1} leg${draftSegments.length + 1 === 1 ? '' : 's'} · ${stretch.modules.length} module${stretch.modules.length === 1 ? '' : 's'} · Click to continue · Double-click/Esc to finish`
+        ? `${draftSegments.length + 1} ${draftSegments.length + 1 === 1 ? 'tratto' : 'tratti'} · ${stretch.modules.length} ${stretch.modules.length === 1 ? 'modulo' : 'moduli'} · Clic per continuare · Doppio clic/Esc per finire`
         : null
       : placement.valid
         ? placement.snappedToWall
           ? placement.snapReason === 'cabinet-edge'
-            ? 'Edge snap'
+            ? 'Aggancio al bordo'
             : placement.snapReason === 'corner'
-              ? 'Corner snap'
-              : 'Wall snap'
+              ? 'Aggancio all’angolo'
+              : 'Aggancio al muro'
           : null
         : null
   const labelPosition = stretch

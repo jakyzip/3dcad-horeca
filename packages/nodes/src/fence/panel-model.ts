@@ -7,8 +7,8 @@ export const fencePanelModel: NodePanelModel<FenceNode> = {
     return (['gate', 'opening'] as const).map((kind) => ({
       id: `add-${kind}`,
       kind: 'action',
-      section: 'Gates & openings',
-      label: kind === 'gate' ? 'Add Gate' : 'Add Opening',
+      section: 'Cancelli e passaggi',
+      label: kind === 'gate' ? 'Aggiungi cancello' : 'Aggiungi passaggio',
       onSelect: () => beginFenceFeaturePlacement(kind),
     }))
   },

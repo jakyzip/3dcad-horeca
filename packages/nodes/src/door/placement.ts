@@ -13,13 +13,13 @@ import { create } from 'zustand'
 
 /** The door panel's Type row and the tool's Type chip (garage types live under the panel's Garage). */
 export const doorTypeOptions = [
-  { label: 'Hinged', value: 'hinged', available: true },
-  { label: 'Double', value: 'double', available: true },
-  { label: 'French', value: 'french', available: true },
-  { label: 'Folding', value: 'folding', available: true },
-  { label: 'Pocket', value: 'pocket', available: true },
-  { label: 'Barn', value: 'barn', available: true },
-  { label: 'Sliding', value: 'sliding', available: true },
+  { label: 'A battente', value: 'hinged', available: true },
+  { label: 'Doppia', value: 'double', available: true },
+  { label: 'Portafinestra', value: 'french', available: true },
+  { label: 'A libro', value: 'folding', available: true },
+  { label: 'A scomparsa', value: 'pocket', available: true },
+  { label: 'Scorrevole esterna', value: 'barn', available: true },
+  { label: 'Scorrevole', value: 'sliding', available: true },
 ] satisfies {
   label: string
   value: DoorNode['doorType']
@@ -59,28 +59,28 @@ export function placedDoorFields(): Partial<DoorNode> {
 export const DOOR_PLACEMENT_HINTS: ToolHint[] = [
   {
     key: 'O',
-    label: 'Type',
+    label: 'Tipo',
     chip: {
       subscribe: (onChange) => useDoorPlacement.subscribe(onChange),
       value: () => useDoorPlacement.getState().type,
       cycle: () => useDoorPlacement.getState().cycleType(),
       labels: Object.fromEntries(
-        doorTypeOptions.map((option) => [option.value, `Type: ${option.label}`]),
+        doorTypeOptions.map((option) => [option.value, `Tipo: ${option.label}`]),
       ),
-      tooltip: 'Door type — click or press O to cycle',
+      tooltip: 'Tipo di porta: fai clic o premi O per cambiare',
     },
   },
   {
     key: 'L',
-    label: 'Style',
+    label: 'Stile',
     chip: {
       subscribe: (onChange) => useDoorPlacement.subscribe(onChange),
       value: () => useDoorPlacement.getState().style,
       cycle: () => useDoorPlacement.getState().cycleStyle(),
       labels: Object.fromEntries(
-        DOOR_STYLES.map((style) => [style, `Style: ${DOOR_STYLE_LABELS[style]}`]),
+        DOOR_STYLES.map((style) => [style, `Stile: ${DOOR_STYLE_LABELS[style]}`]),
       ),
-      tooltip: 'Door style — click or press L to cycle',
+      tooltip: 'Stile della porta: fai clic o premi L per cambiare',
     },
   },
 ]

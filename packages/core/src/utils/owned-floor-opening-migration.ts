@@ -384,8 +384,8 @@ function migrateOwnedFloorOpeningsOnView(sourceNodes: Record<string, unknown>) {
               id,
               parentId: surface.parentId,
               name: ownerId
-                ? `${metadata.source === 'stair' ? 'Stair' : 'Elevator'} opening`
-                : 'Floor opening',
+                ? `Apertura ${metadata.source === 'stair' ? 'della scala' : 'dell’ascensore'}`
+                : 'Apertura nel pavimento',
               polygon: ownerId ? canonicalOpeningRing(hole) : hole,
               source: ownerId ? metadata.source : 'manual',
               ...(ownerId ? { ownerId } : {}),

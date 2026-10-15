@@ -375,7 +375,7 @@ describe('room construction state', () => {
     const request = useDeleteConfirmation.getState().request!
     expect(request.construction).toMatchObject({ part: 'walls', hostedIds: [door.id] })
     const content = deleteConfirmationContent(request, nodes())
-    expect(content.title).toBe('Rimuovere i muri da Room?')
+    expect(content.title).toBe('Rimuovere i muri da Stanza?')
     expect(content.description).toContain('1 porta (Front door)')
     expect(content.description).not.toContain(door.id)
     expect(content.description).not.toContain('I muri in comune restano')
@@ -419,7 +419,7 @@ describe('room construction state', () => {
     const request = useDeleteConfirmation.getState().request!
     const content = deleteConfirmationContent(request, nodes())
     expect(content).toMatchObject({
-      title: 'Rimuovere il soffitto da Room?',
+      title: 'Rimuovere il soffitto da Stanza?',
       keepLabel: 'Tieni le luci',
       confirmLabel: 'Rimuovi tutto',
     })
@@ -517,7 +517,7 @@ describe('room construction state', () => {
     expect(addRoomConstruction(zoneId, 'walls')).toEqual({ status: 'confirming' })
     expect(steps()).toBe(0)
     expect(content()).toMatchObject({
-      title: 'Aggiungere i muri a Room?',
+      title: 'Aggiungere i muri a Stanza?',
       description: `Aggiunge 1 muro · la stanza perde ${preview.areaLoss.toFixed(2).replace('.', ',')} m² di pavimento.`,
       keepLabel: null,
       confirmLabel: 'Aggiungi i muri',
@@ -570,7 +570,7 @@ describe('room construction state', () => {
     expect(removeRoomConstruction(zoneId, 'floor')).toEqual({ status: 'confirming' })
     expect(steps()).toBe(0)
     expect(content()).toMatchObject({
-      title: 'Rimuovere il pavimento da Room?',
+      title: 'Rimuovere il pavimento da Stanza?',
       keepLabel: 'Tieni gli oggetti',
       confirmLabel: 'Elimina gli oggetti',
     })
@@ -688,7 +688,7 @@ describe('room construction state', () => {
     expect(steps()).toBe(0)
     const other = (nodes()[otherId as AnyNodeId] as ZoneNode).name
     expect(content()).toMatchObject({
-      title: 'Rimuovere il soffitto da Room?',
+      title: 'Rimuovere il soffitto da Stanza?',
       keepLabel: 'Tieni le luci',
       confirmLabel: 'Rimuovi tutto',
     })

@@ -109,7 +109,7 @@ describe('opening construction documentation', () => {
     expect(schedule?.rows[0]?.cells).toMatchObject({
       mark: '101',
       size: `3'-0" x 7'-0"`,
-      roughOpening: 'VERIFY',
+      roughOpening: 'DA VERIFICARE',
     })
   })
 
@@ -191,7 +191,7 @@ describe('opening construction documentation', () => {
       unit: 'imperial',
     })
 
-    expect(schedule?.issues).toEqual(['Duplicate door mark A1 (2 instances)'])
+    expect(schedule?.issues).toEqual(['Sigla porta A1 duplicata (2 occorrenze)'])
   })
 
   test('places the opening mark tag on the interior face of an exterior wall', () => {

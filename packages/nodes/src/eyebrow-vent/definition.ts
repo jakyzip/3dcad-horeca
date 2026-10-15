@@ -155,12 +155,12 @@ export const eyebrowVentDefinition: NodeDefinition<typeof EyebrowVentNode> = {
     move: () => import('./move-tool'),
   },
   toolHints: [
-    { key: 'Left click', label: 'Place eyebrow vent on roof' },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Left click', label: 'Posiziona l’aeratore sul tetto' },
+    { key: 'Esc', label: 'Annulla' },
   ],
 
   presentation: {
-    label: 'Eyebrow Vent',
+    label: 'Aeratore a palpebra',
     description: 'Low curved lens-shaped roof vent with a louvered front.',
     icon: { kind: 'url', src: '/icons/eyebrow-vent.webp' },
     paletteSection: 'structure',

@@ -145,7 +145,7 @@ export default function SolarPanelPanel() {
     if (!(selectedId && node && segment)) return
     const fit = computeAutoFit(segment, node)
     if (!fit) {
-      setAutoFitMessage('Setbacks too large to fit a panel.')
+      setAutoFitMessage('Distanze dai bordi troppo grandi: non entra nessun pannello.')
       return
     }
     updateNode(selectedId as AnyNode['id'], { rows: fit.rows, columns: fit.columns })
@@ -177,17 +177,18 @@ export default function SolarPanelPanel() {
   if (!(node && node.type === 'solar-panel' && selectedId)) return null
 
   const activePreset = node.panelTypePreset
-  const formatDims = (w: number, h: number) => `${w.toFixed(2)} × ${h.toFixed(2)} m`
+  const formatDims = (w: number, h: number) =>
+    `${w.toFixed(2).replace('.', ',')} × ${h.toFixed(2).replace('.', ',')} m`
 
   return (
     <PanelWrapper
       icon="/icons/roof.webp"
       onBack={node.roofSegmentId ? handleBack : undefined}
       onClose={handleClose}
-      title={node.name || 'Solar Panel'}
+      title={node.name || 'Pannello solare'}
       width={300}
     >
-      <PanelSection title="Preset">
+      <PanelSection title="Modello">
         <div className="grid grid-cols-2 gap-1.5 px-1 pt-1">
           {PRESET_CARDS.map((card) => {
             const dims = SOLAR_PANEL_PRESETS[card.key]
@@ -222,9 +223,9 @@ export default function SolarPanelPanel() {
         )}
       </PanelSection>
 
-      <PanelSection title="Array">
+      <PanelSection title="Schiera">
         <SliderControl
-          label="Rows"
+          label="Righe"
           max={20}
           min={1}
           onChange={(v) => previewProp({ rows: Math.round(v) })}
@@ -235,7 +236,7 @@ export default function SolarPanelPanel() {
           value={num(node.rows, 4)}
         />
         <SliderControl
-          label="Columns"
+          label="Colonne"
           max={20}
           min={1}
           onChange={(v) => previewProp({ columns: Math.round(v) })}
@@ -246,7 +247,7 @@ export default function SolarPanelPanel() {
           value={num(node.columns, 5)}
         />
         <SliderControl
-          label="Gap X"
+          label="Distacco X"
           max={0.2}
           min={0}
           onChange={(v) => previewProp({ gapX: v })}
@@ -258,7 +259,7 @@ export default function SolarPanelPanel() {
           value={num(node.gapX, 0.02)}
         />
         <SliderControl
-          label="Gap Y"
+          label="Distacco Y"
           max={0.2}
           min={0}
           onChange={(v) => previewProp({ gapY: v })}
@@ -270,16 +271,16 @@ export default function SolarPanelPanel() {
           value={num(node.gapY, 0.02)}
         />
         <ActionGroup>
-          <ActionButton disabled={!segment} label="Auto-fit to roof" onClick={handleAutoFit} />
+          <ActionButton disabled={!segment} label="Adatta al tetto" onClick={handleAutoFit} />
         </ActionGroup>
         {autoFitMessage ? (
           <p className="px-1 text-amber-700 dark:text-amber-400 text-xs">{autoFitMessage}</p>
         ) : null}
       </PanelSection>
 
-      <PanelSection title="Panel">
+      <PanelSection title="Pannello">
         <SliderControl
-          label="Width"
+          label="Larghezza"
           max={1000}
           min={0.3}
           onChange={(v) => previewProp({ panelWidth: v })}
@@ -291,7 +292,7 @@ export default function SolarPanelPanel() {
           value={num(node.panelWidth, 1)}
         />
         <SliderControl
-          label="Height"
+          label="Altezza"
           max={1000}
           min={0.3}
           onChange={(v) => previewProp({ panelHeight: v })}
@@ -303,10 +304,10 @@ export default function SolarPanelPanel() {
           value={num(node.panelHeight, 1.65)}
         />
         <ActionGroup>
-          <ActionButton label="Flip orientation" onClick={handleFlip} />
+          <ActionButton label="Inverti l’orientamento" onClick={handleFlip} />
         </ActionGroup>
         <SliderControl
-          label="Frame thickness"
+          label="Spessore della cornice"
           max={0.1}
           min={0.005}
           onChange={(v) => previewProp({ frameThickness: v })}
@@ -318,7 +319,7 @@ export default function SolarPanelPanel() {
           value={num(node.frameThickness, 0.04)}
         />
         <SliderControl
-          label="Frame depth"
+          label="Profondità della cornice"
           max={0.1}
           min={0.005}
           onChange={(v) => previewProp({ frameDepth: v })}
@@ -331,18 +332,18 @@ export default function SolarPanelPanel() {
         />
       </PanelSection>
 
-      <PanelSection title="Mounting">
+      <PanelSection title="Montaggio">
         <SegmentedControl
           onChange={(v) => handleUpdate({ mountingType: v })}
           options={[
-            { label: 'Flush', value: 'flush' },
-            { label: 'Tilted', value: 'tilted' },
+            { label: 'Complanare', value: 'flush' },
+            { label: 'Inclinato', value: 'tilted' },
           ]}
           value={node.mountingType ?? 'flush'}
         />
         {node.mountingType === 'tilted' && (
           <SliderControl
-            label="Tilt angle"
+            label="Angolo di inclinazione"
             max={45}
             min={0}
             onChange={(v) => previewProp({ tiltAngle: v })}
@@ -355,7 +356,7 @@ export default function SolarPanelPanel() {
           />
         )}
         <SliderControl
-          label="Standoff"
+          label="Distanza dal tetto"
           max={0.3}
           min={0}
           onChange={(v) => previewProp({ standoffHeight: v })}
@@ -368,12 +369,12 @@ export default function SolarPanelPanel() {
         />
       </PanelSection>
 
-      <PanelSection title="Actions">
+      <PanelSection title="Azioni">
         <ActionGroup>
           <ActionButton
             className="hover:bg-red-500/20"
             icon={<Trash2 className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />}
-            label="Delete"
+            label="Elimina"
             onClick={handleDelete}
           />
         </ActionGroup>

@@ -185,7 +185,7 @@ export const ceilingDefinition: NodeDefinition<typeof CeilingNode> = {
       polygonMeasurementFeatures({
         featurePrefix: 'ceiling',
         height: resolveCeilingHeight(node, useScene.getState().nodes),
-        label: 'Ceiling',
+        label: 'Soffitto',
         polygon: node.polygon,
       }),
   },
@@ -228,13 +228,13 @@ export const ceilingDefinition: NodeDefinition<typeof CeilingNode> = {
   },
 
   toolHints: [
-    { key: 'Left click', label: 'Trace ceiling outline' },
-    { key: 'Enter', label: 'Finish ceiling', minDraftVertices: 3 },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Left click', label: 'Traccia il contorno del soffitto' },
+    { key: 'Enter', label: 'Termina il soffitto', minDraftVertices: 3 },
+    { key: 'Esc', label: 'Annulla' },
   ],
 
   presentation: {
-    label: 'Ceiling',
+    label: 'Soffitto',
     description: 'A polygon-bounded ceiling surface that hosts ceiling-mounted items.',
     icon: { kind: 'url', src: '/icons/ceiling.webp' },
     paletteSection: 'structure',

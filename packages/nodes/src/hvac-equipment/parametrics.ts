@@ -4,7 +4,7 @@ import type { HvacEquipmentNode } from './schema'
 export const hvacEquipmentParametrics: ParametricDescriptor<HvacEquipmentNode> = {
   groups: [
     {
-      label: 'Equipment',
+      label: 'Apparecchiatura',
       fields: [
         {
           key: 'equipmentType',
@@ -15,7 +15,7 @@ export const hvacEquipmentParametrics: ParametricDescriptor<HvacEquipmentNode> =
       ],
     },
     {
-      label: 'Cabinet',
+      label: 'Involucro',
       fields: [
         { key: 'width', kind: 'number', unit: 'm', min: 0.3, max: 1000, step: 0.05 },
         { key: 'depth', kind: 'number', unit: 'm', min: 0.3, max: 1000, step: 0.05 },
@@ -23,7 +23,7 @@ export const hvacEquipmentParametrics: ParametricDescriptor<HvacEquipmentNode> =
       ],
     },
     {
-      label: 'Supply',
+      label: 'Mandata',
       fields: [
         {
           key: 'supplyShape',
@@ -62,7 +62,7 @@ export const hvacEquipmentParametrics: ParametricDescriptor<HvacEquipmentNode> =
       ],
     },
     {
-      label: 'Return',
+      label: 'Ripresa',
       fields: [
         {
           key: 'returnShape',

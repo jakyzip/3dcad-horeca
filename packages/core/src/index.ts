@@ -228,7 +228,7 @@ export {
   plateFootprint,
   roomClearPolygon,
 } from './lib/level-footprints'
-export { getDefaultLevelName, getLevelDisplayName } from './lib/level-name'
+export { getDefaultLevelName, getLevelDisplayName, isDefaultLevelName } from './lib/level-name'
 export {
   areMeasurementPointsCoplanar,
   closestMeasurementFeatureBinding,

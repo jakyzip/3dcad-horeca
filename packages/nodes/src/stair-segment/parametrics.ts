@@ -9,11 +9,11 @@ import { StairSegmentConstructionField } from '../stair/construction-controls'
 export const stairSegmentParametrics: ParametricDescriptor<StairSegmentNode> = {
   groups: [
     {
-      label: 'Construction',
+      label: 'Costruzione',
       fields: [{ key: 'construction', kind: 'custom', component: StairSegmentConstructionField }],
     },
     {
-      label: 'Type',
+      label: 'Tipo',
       fields: [
         {
           key: 'segmentType',
@@ -24,14 +24,14 @@ export const stairSegmentParametrics: ParametricDescriptor<StairSegmentNode> = {
         {
           key: 'attachmentSide',
           kind: 'enum',
-          label: 'Attachment',
+          label: 'Aggancio',
           options: ['front', 'left', 'right'],
           display: 'segmented',
         },
       ],
     },
     {
-      label: 'Dimensions',
+      label: 'Dimensioni',
       fields: [
         { key: 'width', kind: 'number', unit: 'm', min: 0.001, step: 0.1 },
         {
@@ -53,7 +53,7 @@ export const stairSegmentParametrics: ParametricDescriptor<StairSegmentNode> = {
         {
           key: 'stepCount',
           kind: 'number',
-          label: 'Steps',
+          label: 'Gradini',
           min: 2,
           step: 1,
           visibleIf: (node) => node.segmentType === 'stair',
@@ -61,9 +61,9 @@ export const stairSegmentParametrics: ParametricDescriptor<StairSegmentNode> = {
       ],
     },
     {
-      label: 'Structure',
+      label: 'Struttura',
       fields: [
-        { key: 'fillToFloor', kind: 'boolean', label: 'Fill to floor' },
+        { key: 'fillToFloor', kind: 'boolean', label: 'Riempimento fino al pavimento' },
         {
           key: 'thickness',
           kind: 'number',
@@ -75,13 +75,13 @@ export const stairSegmentParametrics: ParametricDescriptor<StairSegmentNode> = {
       ],
     },
     {
-      label: 'Position',
+      label: 'Posizione',
       fields: [
         { key: 'position', kind: 'vec3' },
         {
           key: 'rotation',
           kind: 'number',
-          label: 'Rotation (rad)',
+          label: 'Rotazione (rad)',
           min: -Math.PI,
           max: Math.PI,
           step: Math.PI / 36,

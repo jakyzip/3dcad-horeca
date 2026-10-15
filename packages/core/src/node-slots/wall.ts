@@ -14,41 +14,41 @@ export function wallSlots(node?: WallNode): SlotDeclaration[] {
   if (node?.wallType === 'curtain') {
     const config = getCurtainWallConfig(node)
     return [
-      { slotId: 'curtain-frame', label: 'Frame', default: config.frameColor },
-      { slotId: 'curtain-glass', label: 'Glass', default: config.glassColor },
-      { slotId: 'curtain-solid', label: 'Solid panels', default: config.solidColor },
+      { slotId: 'curtain-frame', label: 'Telaio', default: config.frameColor },
+      { slotId: 'curtain-glass', label: 'Vetro', default: config.glassColor },
+      { slotId: 'curtain-solid', label: 'Pannelli pieni', default: config.solidColor },
     ]
   }
   return [
-    { slotId: 'a', label: 'Side A', default: WALL_SURFACE_SLOT_DEFAULTS.a },
-    { slotId: 'b', label: 'Side B', default: WALL_SURFACE_SLOT_DEFAULTS.b },
+    { slotId: 'a', label: 'Lato A', default: WALL_SURFACE_SLOT_DEFAULTS.a },
+    { slotId: 'b', label: 'Lato B', default: WALL_SURFACE_SLOT_DEFAULTS.b },
     {
       slotId: 'aSkirting',
-      label: 'Skirting (side A)',
+      label: 'Battiscopa (lato A)',
       default: WALL_SURFACE_SLOT_DEFAULTS.aSkirting,
     },
     {
       slotId: 'bSkirting',
-      label: 'Skirting (side B)',
+      label: 'Battiscopa (lato B)',
       default: WALL_SURFACE_SLOT_DEFAULTS.bSkirting,
     },
-    { slotId: 'aCrown', label: 'Crown (side A)', default: WALL_SURFACE_SLOT_DEFAULTS.aCrown },
-    { slotId: 'bCrown', label: 'Crown (side B)', default: WALL_SURFACE_SLOT_DEFAULTS.bCrown },
+    { slotId: 'aCrown', label: 'Cornice (lato A)', default: WALL_SURFACE_SLOT_DEFAULTS.aCrown },
+    { slotId: 'bCrown', label: 'Cornice (lato B)', default: WALL_SURFACE_SLOT_DEFAULTS.bCrown },
     {
       slotId: 'aChairRail',
-      label: 'Chair rail (side A)',
+      label: 'Fascia paracolpi (lato A)',
       default: WALL_SURFACE_SLOT_DEFAULTS.aChairRail,
     },
     {
       slotId: 'bChairRail',
-      label: 'Chair rail (side B)',
+      label: 'Fascia paracolpi (lato B)',
       default: WALL_SURFACE_SLOT_DEFAULTS.bChairRail,
     },
     ...(node?.underpinning
       ? [
           {
             slotId: 'foundation',
-            label: 'Foundation',
+            label: 'Fondazione',
             default: WALL_SURFACE_SLOT_DEFAULTS.foundation,
           },
         ]

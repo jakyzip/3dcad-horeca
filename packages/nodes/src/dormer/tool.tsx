@@ -18,7 +18,8 @@ import { useDormerPlacement } from './use-dormer-placement'
 
 /**
  * Pick the smallest free integer suffix for a new dormer name so the
- * scene tree doesn't end up with multiple `Dormer 3`s after deletes.
+ * scene tree doesn't end up with multiple `Abbaino 3`s after deletes
+ * (old scenes still carry English `Dormer N` names, so both count).
  */
 function nextDormerNumber(nodes: Record<string, unknown>): number {
   const used = new Set<number>()
@@ -26,7 +27,7 @@ function nextDormerNumber(nodes: Record<string, unknown>): number {
     if (!node || typeof node !== 'object') continue
     const n = node as { type?: string; name?: string }
     if (n.type !== 'dormer') continue
-    const m = n.name?.match(/^Dormer (\d+)$/)
+    const m = n.name?.match(/^(?:Dormer|Abbaino) (\d+)$/)
     if (m?.[1]) used.add(Number.parseInt(m[1], 10))
   }
   let n = 1
@@ -49,7 +50,7 @@ const DormerTool = () => {
     () =>
       DormerNode.parse({
         ...dormerDefinition.defaults(),
-        name: 'Dormer',
+        name: 'Abbaino',
         position: [0, 0, 0],
         rotation: 0,
       }),
@@ -62,7 +63,7 @@ const DormerTool = () => {
         const state = useScene.getState()
         const dormer = DormerNode.parse({
           ...dormerDefinition.defaults(),
-          name: `Dormer ${nextDormerNumber(state.nodes)}`,
+          name: `Abbaino ${nextDormerNumber(state.nodes)}`,
           roofSegmentId: hit.segment.id,
           parentId: hit.segment.id,
           // Anchor at the slope height so the renderer matches the ghost.

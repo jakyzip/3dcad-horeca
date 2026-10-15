@@ -726,7 +726,7 @@ export const DUPLICATE_LEVEL_CASES: AgentToolCase[] = [
     expect: {
       result: {
         floorIndex: 1,
-        name: 'Floor 1',
+        name: 'Piano 1',
         shiftedLevelIds: ['level_upper', 'level_roof'],
         copied: HOUSE_COPY,
         skipped: { guide: 1 },
@@ -773,8 +773,8 @@ export const DUPLICATE_LEVEL_CASES: AgentToolCase[] = [
     name: 'a name names the copy',
     tool: 'duplicate_level',
     scene: houseScene,
-    input: { levelId: 'level_upper', name: 'Floor 2' },
-    expect: { result: { name: 'Floor 2', floorIndex: 2, shiftedLevelIds: ['level_roof'] } },
+    input: { levelId: 'level_upper', name: 'Piano 2' },
+    expect: { result: { name: 'Piano 2', floorIndex: 2, shiftedLevelIds: ['level_roof'] } },
   },
   {
     name: 'the structure preset leaves the furniture behind',

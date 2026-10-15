@@ -121,12 +121,12 @@ export const turbineVentDefinition: NodeDefinition<typeof TurbineVentNode> = {
     move: () => import('./move-tool'),
   },
   toolHints: [
-    { key: 'Left click', label: 'Place turbine vent on roof' },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Left click', label: 'Posiziona l’aeratore a turbina sul tetto' },
+    { key: 'Esc', label: 'Annulla' },
   ],
 
   presentation: {
-    label: 'Turbine Vent',
+    label: 'Aeratore a turbina',
     description: 'Wind-driven spinning whirlybird exhaust vent for a roof slope.',
     icon: { kind: 'url', src: '/icons/turbine-vent.webp' },
     paletteSection: 'structure',

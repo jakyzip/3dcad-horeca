@@ -14,27 +14,27 @@ export function wallQuickMeasurement(node: WallNode): QuickMeasurementReport {
   const frame = getWallCurveFrameAt(node, 0.5)
 
   return {
-    title: node.name ?? 'Wall',
-    kindLabel: 'Wall',
+    title: node.name ?? 'Muro',
+    kindLabel: 'Muro',
     anchor: [frame.point.x, height * 0.55, frame.point.y],
     metrics: [
-      { key: 'length', label: 'Length', abbreviation: 'L', quantity: 'length', value: length },
-      { key: 'height', label: 'Height', abbreviation: 'H', quantity: 'length', value: height },
+      { key: 'length', label: 'Lunghezza', abbreviation: 'L', quantity: 'length', value: length },
+      { key: 'height', label: 'Altezza', abbreviation: 'H', quantity: 'length', value: height },
       {
         key: 'surface',
-        label: 'Surface',
+        label: 'Superficie',
         abbreviation: 'A',
         quantity: 'area',
         value: length * height,
       },
       {
         key: 'thickness',
-        label: 'Thickness',
+        label: 'Spessore',
         abbreviation: 'T',
         quantity: 'length',
         value: getWallThickness(node),
       },
     ],
-    note: 'Gross face area before openings.',
+    note: 'Superficie lorda della faccia, aperture comprese.',
   }
 }

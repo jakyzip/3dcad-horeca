@@ -617,7 +617,7 @@ export function resolveLeanToWallPlacement(
 
   const parsed = LeanToExtensionNode.parse({
     ...overrides,
-    name: overrides.name ?? 'Lean-to Extension',
+    name: overrides.name ?? 'Tettoia',
     parentId: wall.id,
     position: [localX, 0, positionZ],
     rotation: [0, rotationY, 0],

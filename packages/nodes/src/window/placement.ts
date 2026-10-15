@@ -20,15 +20,15 @@ import { create } from 'zustand'
 
 /** The window panel's Window Type row and the tool's Type chip. */
 export const windowTypeOptions: Array<{ label: string; value: WindowNode['windowType'] }> = [
-  { label: 'Fixed', value: 'fixed' },
-  { label: 'Sliding', value: 'sliding' },
-  { label: 'Casement', value: 'casement' },
-  { label: 'Awning', value: 'awning' },
-  { label: 'Single Hung', value: 'single-hung' },
-  { label: 'Double Hung', value: 'double-hung' },
-  { label: 'Bay', value: 'bay' },
-  { label: 'Bow', value: 'bow' },
-  { label: 'Louvered', value: 'louvered' },
+  { label: 'Fissa', value: 'fixed' },
+  { label: 'Scorrevole', value: 'sliding' },
+  { label: 'A battente', value: 'casement' },
+  { label: 'A sporgere', value: 'awning' },
+  { label: 'A ghigliottina singola', value: 'single-hung' },
+  { label: 'A ghigliottina doppia', value: 'double-hung' },
+  { label: 'Bovindo', value: 'bay' },
+  { label: 'Bovindo curvo', value: 'bow' },
+  { label: 'A lamelle', value: 'louvered' },
 ]
 
 type WindowPlacementState = {
@@ -70,20 +70,20 @@ export function placedWindowFields(): Partial<WindowNode> {
 export const WINDOW_PLACEMENT_HINTS: ToolHint[] = [
   {
     key: 'O',
-    label: 'Type',
+    label: 'Tipo',
     chip: {
       subscribe: (onChange) => useWindowPlacement.subscribe(onChange),
       value: () => useWindowPlacement.getState().type,
       cycle: () => useWindowPlacement.getState().cycleType(),
       labels: Object.fromEntries(
-        windowTypeOptions.map((option) => [option.value, `Type: ${option.label}`]),
+        windowTypeOptions.map((option) => [option.value, `Tipo: ${option.label}`]),
       ),
-      tooltip: 'Window type — click or press O to cycle',
+      tooltip: 'Tipo di finestra: fai clic o premi O per cambiarlo',
     },
   },
   {
     key: 'L',
-    label: 'Style',
+    label: 'Stile',
     // Shown only while the tool places a Fixed window, the one type a style shapes.
     visible: {
       subscribe: (onChange) => useWindowPlacement.subscribe(onChange),
@@ -94,9 +94,9 @@ export const WINDOW_PLACEMENT_HINTS: ToolHint[] = [
       value: () => useWindowPlacement.getState().style,
       cycle: () => useWindowPlacement.getState().cycleStyle(),
       labels: Object.fromEntries(
-        WINDOW_STYLE_CHOICES.map((style) => [style, `Style: ${WINDOW_STYLE_LABELS[style]}`]),
+        WINDOW_STYLE_CHOICES.map((style) => [style, `Stile: ${WINDOW_STYLE_LABELS[style]}`]),
       ),
-      tooltip: 'Window style — click or press L to cycle',
+      tooltip: 'Stile della finestra: fai clic o premi L per cambiarlo',
     },
   },
 ]

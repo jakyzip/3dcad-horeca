@@ -57,7 +57,7 @@ export function rebaseFloorReference(
             code: 'floor-reference-shared-storey',
             nodeIds: [levelId, ...owners.map((owner) => owner.id)],
             message:
-              'This storey spans floor references that would move by different amounts. Rebase the supporting footprints together.',
+              'Questo piano poggia su riferimenti che si sposterebbero di quantità diverse. Sposta insieme gli appoggi.',
           },
         ],
       }

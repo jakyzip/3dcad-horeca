@@ -472,7 +472,7 @@ function makeRiser(
     parentId: null,
     visible: true,
     metadata: {},
-    name: duct.name ?? 'Duct run',
+    name: duct.name ?? 'Canale',
     path: [from, to],
     shape: duct.shape,
     diameter: duct.diameter,

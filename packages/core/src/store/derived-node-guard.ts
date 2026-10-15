@@ -264,7 +264,7 @@ export function convertDerivedPlateHoleWrites<T extends MutableDerivedChanges>(
         const node = FloorOpeningNode.parse({
           id: generateId('floor-opening'),
           parentId: levelId,
-          name: 'Pool opening',
+          name: 'Apertura della piscina',
           polygon: desired.polygon,
           source: 'plugin:pool',
           ownerId,
@@ -384,7 +384,7 @@ export function convertDerivedPlateHoleWrites<T extends MutableDerivedChanges>(
         const node = FloorOpeningNode.parse({
           id: generateId('floor-opening'),
           parentId: slab.parentId,
-          name: 'Floor opening',
+          name: 'Apertura nel pavimento',
           polygon,
           ...(hostZoneId ? { hostZoneId } : {}),
           metadata: { plateHoleAuthoring: slab.id },

@@ -224,7 +224,7 @@ export const ductFittingParametrics: ParametricDescriptor<DuctFittingNode> = {
   },
   groups: [
     {
-      label: 'Fitting',
+      label: 'Raccordo',
       fields: [
         {
           key: 'fittingType',
@@ -294,7 +294,7 @@ export const ductFittingParametrics: ParametricDescriptor<DuctFittingNode> = {
       ],
     },
     {
-      label: 'Connections',
+      label: 'Collegamenti',
       fields: [
         {
           key: 'inletShape',
@@ -413,7 +413,7 @@ export const ductFittingParametrics: ParametricDescriptor<DuctFittingNode> = {
       ],
     },
     {
-      label: 'Placement',
+      label: 'Posizionamento',
       fields: [
         { key: 'position', kind: 'vec3' },
         { key: 'rotation', kind: 'vec3' },

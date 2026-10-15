@@ -51,7 +51,11 @@ export function setZoneEdges(
     const left = edges[i - 1]!.spanRef,
       right = edges[i]!.spanRef
     if (left.boundaryId === right.boundaryId && right.t1 > left.t0 + 1e-6)
-      return conflict('overlapping-spans', [left.boundaryId], 'Boundary edits must not overlap.')
+      return conflict(
+        'overlapping-spans',
+        [left.boundaryId],
+        'Le modifiche al contorno non devono sovrapporsi.',
+      )
   }
   for (const edge of edges) {
     const span = edge.spanRef
@@ -65,10 +69,14 @@ export function setZoneEdges(
           span.t1 > span.t0,
       )
     )
-      return conflict('invalid-span', [span.boundaryId], 'The span is not on this room boundary.')
+      return conflict(
+        'invalid-span',
+        [span.boundaryId],
+        'Il tratto non è sul contorno di questa stanza.',
+      )
     const boundary = scratch[span.boundaryId]
     if (boundary?.type !== 'wall' && boundary?.type !== 'separator')
-      return conflict('stale-span', [span.boundaryId], 'Replan against the current boundary.')
+      return conflict('stale-span', [span.boundaryId], 'Il contorno è cambiato: riprova.')
     if (boundary.type === edge.kind) continue
     const original = nodes[span.boundaryId]
     if (original?.type !== 'wall' && original?.type !== 'separator')
@@ -98,7 +106,7 @@ export function setZoneEdges(
         return conflict(
           inserted.reason,
           [boundary.id],
-          'Cannot replace this separator with a wall.',
+          'Impossibile sostituire questo separatore con un muro.',
         )
       scratch = applyToScratch(scratch, inserted.plan.changes)
       delete scratch[boundary.id]
@@ -176,7 +184,7 @@ export function setZoneEdges(
       }
       const target = scratch[targetId]
       if (target?.type !== 'wall')
-        return conflict('invalid-span', [boundary.id], 'Could not isolate the wall span.')
+        return conflict('invalid-span', [boundary.id], 'Impossibile isolare il tratto di muro.')
       delete scratch[target.id]
       const points = sampleWallPointsForRoomDetection(target)
       for (let i = 1; i < points.length; i++) {

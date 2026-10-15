@@ -44,7 +44,7 @@ const RidgeVentTool = () => {
     () =>
       RidgeVentNode.parse({
         ...ridgeVentDefinition.defaults(),
-        name: 'Ridge Vent',
+        name: 'Aeratore di colmo',
         position: [0, 0, 0],
         rotation: 0,
       }),
@@ -133,7 +133,7 @@ const RidgeVentTool = () => {
 
       const vent = RidgeVentNode.parse({
         ...ridgeVentDefinition.defaults(),
-        name: 'Ridge Vent',
+        name: 'Aeratore di colmo',
         roofSegmentId: hit.segment.id,
         position: [snap.localX, 0, snap.localZ],
         rotation: snap.rotation,

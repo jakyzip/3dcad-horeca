@@ -73,7 +73,7 @@ describe('Built on: when the picker shows and what it offers', () => {
   test('a room sharing its footprint offers that floor, named as the footprint is', () => {
     const house = plate('slab_house', rect(0, 0, 6, 4), [living.id, lanai.id], 0.15)
     const model = roomBuiltOn(scene(living, lanai, house), lanai.id)
-    expect(model?.current).toEqual({ key: null, plateId: house.id, name: 'Shared floor' })
+    expect(model?.current).toEqual({ key: null, plateId: house.id, name: 'Pavimento comune' })
     expect(model?.choices).toHaveLength(1)
     // A floor the user named shows that name.
     const named = plate('slab_house', rect(0, 0, 6, 4), [living.id, lanai.id], 0.15, 'Cabin')
@@ -93,8 +93,8 @@ describe('Built on: when the picker shows and what it offers', () => {
     const nodes = scene(living, keyedLanai, house, own, far, farRoom)
     const model = roomBuiltOn(nodes, keyedLanai.id)!
     expect(model.choices).toEqual([
-      { key: 'floor_lanai', plateId: own.id, name: 'Lanai floor' },
-      { key: null, plateId: house.id, name: 'Living floor' },
+      { key: 'floor_lanai', plateId: own.id, name: 'Pavimento Lanai' },
+      { key: null, plateId: house.id, name: 'Pavimento Living' },
     ])
     expect(model.shared?.plateId).toBe(house.id)
     expect(separateFloorOffset(nodes, keyedLanai.id)).toBeCloseTo(-0.15)
@@ -110,14 +110,14 @@ describe('Built on: when the picker shows and what it offers', () => {
     const nodes = scene(keyedLanai, own)
     const model = roomBuiltOn(nodes, keyedLanai.id)!
     expect(model.choices).toEqual([
-      { key: 'floor_lanai', plateId: own.id, name: 'Lanai floor' },
-      { key: null, plateId: null, name: 'Shared floor' },
+      { key: 'floor_lanai', plateId: own.id, name: 'Pavimento Lanai' },
+      { key: null, plateId: null, name: 'Pavimento comune' },
     ])
     expect(model.shared).toBeNull()
     expect(separateFloorOffset(nodes, keyedLanai.id)).toBeNull()
     expect(
       separateFloorSummary({ ...model, offset: separateFloorOffset(nodes, keyedLanai.id) }, length),
-    ).toBe('Lanai floor')
+    ).toBe('Pavimento Lanai')
   })
 
   test('a room alone on the shared floor still sees a separate floor it touches', () => {
@@ -156,20 +156,20 @@ describe('Built on: when the picker shows and what it offers', () => {
 })
 
 describe('Built on: the Floor row summary', () => {
-  const lanaiFloor = { name: 'Lanai floor' }
+  const lanaiFloor = { name: 'Pavimento Lanai' }
   test('says how a separate floor sits against the shared floor', () => {
-    const shared = { name: 'Shared floor' }
+    const shared = { name: 'Pavimento comune' }
     expect(separateFloorSummary({ current: lanaiFloor, shared, offset: -0.15 }, length)).toBe(
-      'Lanai floor · 0.15 m sotto Shared floor',
+      'Pavimento Lanai · 0.15 m sotto Pavimento comune',
     )
     expect(
       separateFloorSummary({ current: lanaiFloor, shared: { name: 'Cabin' }, offset: 0.3 }, length),
-    ).toBe('Lanai floor · 0.30 m sopra Cabin')
+    ).toBe('Pavimento Lanai · 0.30 m sopra Cabin')
     expect(separateFloorSummary({ current: lanaiFloor, shared, offset: 0.002 }, length)).toBe(
-      'Lanai floor · alla stessa quota di Shared floor',
+      'Pavimento Lanai · alla stessa quota di Pavimento comune',
     )
     expect(separateFloorSummary({ current: lanaiFloor, shared: null, offset: null }, length)).toBe(
-      'Lanai floor',
+      'Pavimento Lanai',
     )
   })
 
@@ -189,7 +189,7 @@ describe('Built on: the Floor row summary', () => {
     const model = roomBuiltOn(nodes, keyedLanai.id)!
     expect(
       separateFloorSummary({ ...model, offset: separateFloorOffset(nodes, keyedLanai.id) }, length),
-    ).toBe('Lanai floor · 0.30 m sotto Living floor')
+    ).toBe('Pavimento Lanai · 0.30 m sotto Pavimento Living')
     // Nothing shared across a wall or open side: the shared plate's top.
     expect(separateFloorOffset(scene(raised, keyedLanai, house, own), keyedLanai.id)).toBeCloseTo(
       -0.15,
@@ -257,8 +257,8 @@ describe('Built on: moving between floors, through core', () => {
     expect(steps()).toBe(1)
     const model = roomBuiltOn(live(), lanaiRoom)!
     expect(model.current.key).not.toBeNull()
-    expect(model.current.name).toBe('Lanai floor')
-    expect(model.shared?.name).toBe('Shared floor')
+    expect(model.current.name).toBe('Pavimento Lanai')
+    expect(model.shared?.name).toBe('Pavimento comune')
     expect(separateFloorOffset(live(), lanaiRoom)).toBeCloseTo(-0.15)
     // Its height reads the same: measured from the shared floor beside it.
     expect(roomRelativeFloorHeight(live(), lanaiRoom)).toBeCloseTo(-0.15)
@@ -266,8 +266,8 @@ describe('Built on: moving between floors, through core', () => {
     expect(roomConstructionState(live(), lanaiRoom)?.floor.state).toBe('present')
     // The house room touches the new floor: it can join it.
     expect(roomBuiltOn(live(), houseRoom)?.choices.map((choice) => choice.name)).toEqual([
-      'Shared floor',
-      'Lanai floor',
+      'Pavimento comune',
+      'Pavimento Lanai',
     ])
     useScene.temporal.getState().undo()
     expect(roomBuiltOn(live(), lanaiRoom)?.current.key).toBeNull()
@@ -282,7 +282,7 @@ describe('Built on: moving between floors, through core', () => {
     expect(steps()).toBe(1)
     const joined = roomBuiltOn(live(), houseRoom)!
     expect(joined.current).toEqual(roomBuiltOn(live(), lanaiRoom)!.current)
-    expect(joined.current).toMatchObject({ key, name: 'Lanai floor' })
+    expect(joined.current).toMatchObject({ key, name: 'Pavimento Lanai' })
     expect(roomFloorElevation(live(), houseRoom)).toBeCloseTo(top)
   })
 
@@ -352,7 +352,7 @@ describe('Built on: moving between floors, through core', () => {
     expect(setRoomFloor(houseRoom, key).status).toBe('applied')
     const model = roomBuiltOn(live(), lanaiRoom)!
     expect(model.shared).toBeNull()
-    expect(model.choices.at(-1)).toEqual({ key: null, plateId: null, name: 'Shared floor' })
+    expect(model.choices.at(-1)).toEqual({ key: null, plateId: null, name: 'Pavimento comune' })
     clearSceneHistory()
     expect(setRoomFloor(lanaiRoom, null).status).toBe('applied')
     expect(steps()).toBe(1)
@@ -376,6 +376,8 @@ describe('Built on: moving between floors, through core', () => {
     useScene.getState().updateNodes([{ id: lanaiRoom as AnyNode['id'], data: { hasFloor: false } }])
     const result = setRoomFloor(lanaiRoom, 'new')
     expect(result.status).toBe('conflict')
-    expect(result.status === 'conflict' && result.message).toContain('Level the floors first')
+    expect(result.status === 'conflict' && result.message).toContain(
+      'Prima porta i pavimenti alla stessa quota',
+    )
   })
 })

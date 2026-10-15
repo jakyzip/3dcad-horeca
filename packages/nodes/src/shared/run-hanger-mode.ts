@@ -23,7 +23,7 @@ export const useRunHangerMode = create<RunHangerModeState>((set) => ({
 export function createRunHangerToolHint(tool: RunHangerTool): ToolHint {
   return {
     key: 'H',
-    label: 'Auto hangers',
+    label: 'Staffe automatiche',
     chip: {
       subscribe: (onChange) =>
         useRunHangerMode.subscribe((state, previous) => {
@@ -32,14 +32,14 @@ export function createRunHangerToolHint(tool: RunHangerTool): ToolHint {
       value: () => (useRunHangerMode.getState().enabled[tool] ? 'on' : 'off'),
       cycle: () => useRunHangerMode.getState().toggle(tool),
       labels: {
-        off: 'Auto hangers: Off',
-        on: 'Auto hangers: On',
+        off: 'Staffe automatiche: disattive',
+        on: 'Staffe automatiche: attive',
       },
       icons: {
         off: 'lucide:toggle-left',
         on: 'lucide:toggle-right',
       },
-      tooltip: 'Auto hangers - click or press H to toggle',
+      tooltip: 'Staffe automatiche: fai clic o premi H per attivarle o disattivarle',
     },
   }
 }

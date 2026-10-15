@@ -54,34 +54,34 @@ import { StairRailingControls } from './railing-controls'
 import { getStairTypeChange } from './stair-type'
 
 const RAILING_MODE_OPTIONS: { label: string; value: StairRailingMode }[] = [
-  { label: 'None', value: 'none' },
-  { label: 'Left', value: 'left' },
-  { label: 'Right', value: 'right' },
-  { label: 'Both', value: 'both' },
+  { label: 'Nessuna', value: 'none' },
+  { label: 'Sinistra', value: 'left' },
+  { label: 'Destra', value: 'right' },
+  { label: 'Entrambi i lati', value: 'both' },
 ]
 const RAILING_STYLE_OPTIONS: { label: string; value: StairRailingStyle }[] = [
-  { label: 'Balusters', value: 'balusters' },
-  { label: 'Post & rail', value: 'post-and-rail' },
-  { label: 'Cable', value: 'cable' },
-  { label: 'Boards', value: 'boards' },
-  { label: 'Glass', value: 'glass' },
-  { label: 'Metal', value: 'metal' },
+  { label: 'Balaustrini', value: 'balusters' },
+  { label: 'Montanti e corrimano', value: 'post-and-rail' },
+  { label: 'Cavi', value: 'cable' },
+  { label: 'Tavole', value: 'boards' },
+  { label: 'Vetro', value: 'glass' },
+  { label: 'Metallo', value: 'metal' },
 ]
 
 const STAIR_TYPE_OPTIONS: { label: string; value: StairType }[] = [
-  { label: 'Straight', value: 'straight' },
-  { label: 'Curved', value: 'curved' },
-  { label: 'Spiral', value: 'spiral' },
+  { label: 'Dritta', value: 'straight' },
+  { label: 'Curva', value: 'curved' },
+  { label: 'A chiocciola', value: 'spiral' },
 ]
 
 const TOP_LANDING_MODE_OPTIONS: { label: string; value: StairTopLandingMode }[] = [
-  { label: 'None', value: 'none' },
-  { label: 'Integrated', value: 'integrated' },
+  { label: 'Nessuna', value: 'none' },
+  { label: 'Integrato', value: 'integrated' },
 ]
 
 const STAIR_SLAB_OPENING_OPTIONS: { label: string; value: StairSlabOpeningMode }[] = [
-  { label: 'None', value: 'none' },
-  { label: 'Destination', value: 'destination' },
+  { label: 'Nessuna', value: 'none' },
+  { label: 'Al piano di arrivo', value: 'destination' },
 ]
 
 // Slabs at least this high off the storey floor read as decks (mezzanines) —
@@ -378,10 +378,10 @@ export default function StairPanel() {
     <PanelWrapper
       icon="/icons/stairs.webp"
       onClose={handleClose}
-      title={node.name || 'Staircase'}
+      title={node.name || 'Scala'}
       width={300}
     >
-      <PanelSection title="Type">
+      <PanelSection title="Tipo">
         <SegmentedControl
           onChange={handleStairTypeChange}
           options={STAIR_TYPE_OPTIONS}
@@ -389,27 +389,27 @@ export default function StairPanel() {
         />
       </PanelSection>
 
-      <PanelSection title="Layout">
+      <PanelSection title="Disposizione">
         <SegmentedControl
           value={presetTurn}
           onChange={setPresetTurn}
           options={[
-            { label: 'Left turn', value: 'left' },
-            { label: 'Right turn', value: 'right' },
+            { label: 'Svolta a sinistra', value: 'left' },
+            { label: 'Svolta a destra', value: 'right' },
           ]}
         />
         <SegmentedControl
           value={turningStrategy}
           onChange={setTurningStrategy}
           options={[
-            { label: 'Landing', value: 'landing' },
-            { label: 'Winder', value: 'winder' },
+            { label: 'Pianerottolo', value: 'landing' },
+            { label: 'Gradini a ventaglio', value: 'winder' },
           ]}
         />
         {turningStrategy === 'winder' && (
           <>
             <MetricControl
-              label="Inner gap"
+              label="Distanza interna"
               unit="m"
               min={0}
               step={0.05}
@@ -418,7 +418,7 @@ export default function StairPanel() {
               onChange={setInnerGap}
             />
             <MetricControl
-              label="Walking line offset"
+              label="Scostamento della linea di passo"
               unit="m"
               min={0.001}
               step={0.05}
@@ -430,8 +430,8 @@ export default function StairPanel() {
               value={division}
               onChange={setDivision}
               options={[
-                { label: 'Equal going', value: 'equal-going' },
-                { label: 'Equal angle', value: 'equal-angle' },
+                { label: 'Pedate uguali', value: 'equal-going' },
+                { label: 'Angoli uguali', value: 'equal-angle' },
               ]}
             />
           </>
@@ -439,12 +439,12 @@ export default function StairPanel() {
         <div className="grid grid-cols-3 gap-2">
           {layoutOptions.map((option) => {
             const label =
-              option.layout === 'straight' ? 'Straight' : `${option.layout.toUpperCase()} turn`
+              option.layout === 'straight' ? 'Dritta' : `Svolta a ${option.layout.toUpperCase()}`
             return (
               <button
                 key={option.layout}
                 type="button"
-                aria-label={`Apply ${label} layout`}
+                aria-label={`Applica la disposizione ${label}`}
                 disabled={!option.footprint}
                 onClick={() => applyPreset(option.layout)}
                 className="flex min-h-24 flex-col items-center justify-center gap-2 rounded-lg border border-border/60 bg-muted/30 px-1 py-3 text-foreground transition-colors hover:border-foreground/40 hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-40"
@@ -469,7 +469,7 @@ export default function StairPanel() {
                 <span className="text-center text-[11px] leading-tight text-muted-foreground">
                   {option.footprint
                     ? `${formatLinearMeasurement(option.footprint.width, unit, metricNotation)} × ${formatLinearMeasurement(option.footprint.length, unit, metricNotation)}`
-                    : 'Unavailable'}
+                    : 'Non disponibile'}
                 </span>
               </button>
             )
@@ -477,17 +477,17 @@ export default function StairPanel() {
         </div>
       </PanelSection>
 
-      <PanelSection title="Sizing">
+      <PanelSection title="Dimensionamento">
         <details className="px-1 text-xs">
-          <summary className="cursor-pointer py-2 text-muted-foreground">Measurements</summary>
+          <summary className="cursor-pointer py-2 text-muted-foreground">Misure</summary>
           <div className="space-y-2 px-1 text-xs">
             {measurements.flights.map((flight, index) => (
               <div key={flight.nodeId}>
-                Flight {index + 1}: {flight.count} risers · R{' '}
+                Rampa {index + 1}: {flight.count} alzate · A{' '}
                 {flight.riserHeight === null
                   ? '—'
                   : formatLinearMeasurement(flight.riserHeight, unit, metricNotation)}{' '}
-                · T{' '}
+                · P{' '}
                 {flight.going === null
                   ? '—'
                   : formatLinearMeasurement(flight.going, unit, metricNotation)}{' '}
@@ -495,14 +495,14 @@ export default function StairPanel() {
               </div>
             ))}
             <div>
-              Headroom:{' '}
+              Altezza libera:{' '}
               {measurements.headroom.status === 'unresolved'
-                ? 'Not evaluated'
+                ? 'Non valutata'
                 : measurements.headroom.minimum === null
-                  ? 'No overhead surface'
+                  ? 'Nessuna superficie sopra'
                   : formatLinearMeasurement(measurements.headroom.minimum, unit, metricNotation)}
             </div>
-            <div className="text-muted-foreground">Floors, ceilings and stairs only.</div>
+            <div className="text-muted-foreground">Solo pavimenti, soffitti e scale.</div>
           </div>
         </details>
         {[...new Set(measurements.diagnostics.map((diagnostic) => diagnostic.message))].map(
@@ -518,10 +518,10 @@ export default function StairPanel() {
         )}
         <details className="space-y-3">
           <summary className="cursor-pointer px-1 py-2 text-xs text-muted-foreground">
-            Design targets
+            Obiettivi di progetto
           </summary>
           <MetricControl
-            label="Target max riser"
+            label="Alzata massima"
             unit="m"
             precision={3}
             step={0.005}
@@ -532,7 +532,7 @@ export default function StairPanel() {
             }
           />
           <MetricControl
-            label="Target minimum going"
+            label="Pedata minima"
             unit="m"
             precision={3}
             step={0.01}
@@ -543,7 +543,7 @@ export default function StairPanel() {
             }
           />
           <MetricControl
-            label="Target going"
+            label="Pedata obiettivo"
             unit="m"
             precision={3}
             step={0.01}
@@ -554,7 +554,7 @@ export default function StairPanel() {
             }
           />
           <MetricControl
-            label="Target headroom"
+            label="Altezza libera minima"
             unit="m"
             precision={2}
             step={0.05}
@@ -567,29 +567,29 @@ export default function StairPanel() {
         </details>
         <ActionButton
           className="flex-none"
-          label="Fit uniform risers"
+          label="Adatta con alzate uniformi"
           onClick={() => applySizing(false)}
         />
         <ActionButton
           className="flex-none"
-          label="Fit risers and going"
+          label="Adatta alzate e pedate"
           onClick={() => applySizing(true)}
         />
       </PanelSection>
 
-      <PanelSection title="Opening">
+      <PanelSection title="Apertura">
         <div className="space-y-3">
           {attachedDeck ? null : (
             <ToggleControl
               checked={(node.slabOpeningMode ?? 'none') === 'destination'}
-              label="Auto Cutout"
+              label="Taglio automatico del solaio"
               onChange={handleAutoCutoutChange}
             />
           )}
 
           <div className="space-y-1.5">
             <div className="px-1 text-[11px] text-muted-foreground uppercase tracking-[0.14em]">
-              From Level
+              Dal piano
             </div>
             <select
               className="h-9 w-full rounded-lg border border-border/50 bg-black/4 dark:bg-[#2C2C2E] px-3 text-foreground text-sm"
@@ -606,7 +606,7 @@ export default function StairPanel() {
 
           <div className="space-y-1.5">
             <div className="px-1 text-[11px] text-muted-foreground uppercase tracking-[0.14em]">
-              To
+              Al piano
             </div>
             <select
               className="h-9 w-full rounded-lg border border-border/50 bg-black/4 dark:bg-[#2C2C2E] px-3 text-foreground text-sm"
@@ -620,7 +620,7 @@ export default function StairPanel() {
               ))}
               {candidateDecks.map((deck) => (
                 <option key={deck.id} value={deck.id}>
-                  {deck.name || 'Deck'}
+                  {deck.name || 'Pedana'}
                 </option>
               ))}
             </select>
@@ -628,7 +628,7 @@ export default function StairPanel() {
 
           <div className="space-y-1.5">
             <div className="px-1 text-[11px] text-muted-foreground uppercase tracking-[0.14em]">
-              Rise
+              Dislivello
             </div>
             <SegmentedControl
               onChange={(value) =>
@@ -637,18 +637,18 @@ export default function StairPanel() {
                 )
               }
               options={[
-                { label: attachedDeck ? 'Follows deck' : 'Follows level', value: 'follows' },
-                { label: 'Custom rise', value: 'custom' },
+                { label: attachedDeck ? 'Segue la pedana' : 'Segue il piano', value: 'follows' },
+                { label: 'Dislivello personalizzato', value: 'custom' },
               ]}
               value={node.totalRise == null ? 'follows' : 'custom'}
             />
             {node.totalRise == null ? (
               <div className="px-1 text-[11px] text-muted-foreground">
-                Currently {formatLinearMeasurement(resolvedRise, unit, metricNotation)}
+                Attuale: {formatLinearMeasurement(resolvedRise, unit, metricNotation)}
               </div>
             ) : (
               <MetricControl
-                label="Rise"
+                label="Dislivello"
                 min={minimumRise}
                 onChange={(value) => handleUpdate({ totalRise: value })}
                 precision={2}
@@ -675,7 +675,7 @@ export default function StairPanel() {
 
               {(node.slabOpeningMode ?? 'none') === 'destination' ? (
                 <MetricControl
-                  label="Opening Offset"
+                  label="Scostamento dell’apertura"
                   min={0}
                   onChange={(value) => handleUpdate({ openingOffset: value })}
                   precision={2}
@@ -691,7 +691,7 @@ export default function StairPanel() {
             <>
               <div className="space-y-1.5">
                 <div className="px-1 text-[11px] text-muted-foreground uppercase tracking-[0.14em]">
-                  Landing
+                  Pianerottolo
                 </div>
                 <SegmentedControl
                   onChange={(value) => handleUpdate({ topLandingMode: value })}
@@ -701,7 +701,7 @@ export default function StairPanel() {
               </div>
               {(node.topLandingMode ?? 'none') === 'integrated' && (
                 <MetricControl
-                  label="Top Landing"
+                  label="Pianerottolo d’arrivo"
                   max={Math.PI * 2 * resolveStairArcDimensions(node, resolvedRise).walkingRadius}
                   min={0.001}
                   onChange={(value) => handleUpdate({ topLandingDepth: value })}
@@ -717,7 +717,7 @@ export default function StairPanel() {
       </PanelSection>
 
       {node.stairType === 'straight' && (
-        <PanelSection title="Segments">
+        <PanelSection title="Tratti">
           <div className="flex flex-col gap-1">
             {segments.map((seg, i) => (
               <button
@@ -726,20 +726,22 @@ export default function StairPanel() {
                 onClick={() => handleSelectSegment(seg.id)}
                 type="button"
               >
-                <span className="truncate">{seg.name || `Segment ${i + 1}`}</span>
-                <span className="text-muted-foreground text-xs capitalize">{seg.segmentType}</span>
+                <span className="truncate">{seg.name || `Tratto ${i + 1}`}</span>
+                <span className="text-muted-foreground text-xs capitalize">
+                  {seg.segmentType === 'landing' ? 'pianerottolo' : 'rampa'}
+                </span>
               </button>
             ))}
           </div>
           <div className="flex gap-1.5">
             <ActionButton
               icon={<Plus className="h-3.5 w-3.5" />}
-              label="Add flight"
+              label="Aggiungi rampa"
               onClick={handleAddFlight}
             />
             <ActionButton
               icon={<Plus className="h-3.5 w-3.5" />}
-              label="Add landing"
+              label="Aggiungi pianerottolo"
               onClick={handleAddLanding}
             />
           </div>
@@ -747,9 +749,9 @@ export default function StairPanel() {
       )}
 
       {(node.stairType === 'curved' || node.stairType === 'spiral') && (
-        <PanelSection title="Geometry">
+        <PanelSection title="Geometria">
           <MetricControl
-            label="Width"
+            label="Larghezza"
             min={0.001}
             onChange={(value) => handleUpdate({ width: value })}
             precision={2}
@@ -758,7 +760,7 @@ export default function StairPanel() {
             value={node.width ?? 1}
           />
           <MetricControl
-            label="Steps"
+            label="Gradini"
             min={2}
             onChange={(value) => handleUpdate({ stepCount: Math.max(2, Math.round(value)) })}
             precision={0}
@@ -769,13 +771,13 @@ export default function StairPanel() {
           {node.stairType !== 'spiral' && (
             <ToggleControl
               checked={node.fillToFloor ?? true}
-              label="Fit To Floor"
+              label="Adatta al piano"
               onChange={(checked) => handleUpdate({ fillToFloor: checked })}
             />
           )}
           {(node.stairType === 'spiral' || !(node.fillToFloor ?? true)) && (
             <MetricControl
-              label="Thickness"
+              label="Spessore"
               min={0.001}
               onChange={(value) => handleUpdate({ thickness: value })}
               precision={2}
@@ -785,7 +787,7 @@ export default function StairPanel() {
             />
           )}
           <MetricControl
-            label="Inner Radius"
+            label="Raggio interno"
             min={0.001}
             onChange={(value) => handleUpdate({ innerRadius: value })}
             precision={2}
@@ -801,12 +803,12 @@ export default function StairPanel() {
               })
             }
             options={[
-              { label: 'Clockwise', value: 'positive' },
-              { label: 'Counterclockwise', value: 'negative' },
+              { label: 'Orario', value: 'positive' },
+              { label: 'Antiorario', value: 'negative' },
             ]}
           />
           <SliderControl
-            label="Sweep"
+            label="Ampiezza"
             min={0.01}
             onChange={(degrees) =>
               handleUpdate({
@@ -822,12 +824,12 @@ export default function StairPanel() {
             <>
               <ToggleControl
                 checked={node.showCenterColumn ?? true}
-                label="Center Column"
+                label="Colonna centrale"
                 onChange={(checked) => handleUpdate({ showCenterColumn: checked })}
               />
               <ToggleControl
                 checked={node.showStepSupports ?? true}
-                label="Step Supports"
+                label="Supporti dei gradini"
                 onChange={(checked) => handleUpdate({ showStepSupports: checked })}
               />
             </>
@@ -835,13 +837,13 @@ export default function StairPanel() {
         </PanelSection>
       )}
 
-      <PanelSection title="Construction">
+      <PanelSection title="Costruzione">
         <StairConstructionControls
           node={node}
           onChange={(construction) => handleUpdate({ construction })}
         />
       </PanelSection>
-      <PanelSection title="Position">
+      <PanelSection title="Posizione">
         <SliderControl
           label="X"
           onChange={(v) => {
@@ -879,7 +881,7 @@ export default function StairPanel() {
           value={node.position[2]}
         />
         <SliderControl
-          label="Rotation"
+          label="Rotazione"
           max={180}
           min={-180}
           onChange={(degrees) => {
@@ -908,7 +910,7 @@ export default function StairPanel() {
         </div>
       </PanelSection>
 
-      <PanelSection title="Railing">
+      <PanelSection title="Ringhiera">
         <StairRailingControls node={node} onChange={handleUpdate} />
         <SegmentedControl
           onChange={(value) => handleUpdate({ railingMode: value })}
@@ -918,7 +920,7 @@ export default function StairPanel() {
         {(node.railingMode ?? 'none') !== 'none' && (
           <>
             <SelectControl
-              label="Style"
+              label="Stile"
               onChange={(value) =>
                 handleUpdate({
                   railingStyle: value,
@@ -929,7 +931,7 @@ export default function StairPanel() {
               value={node.railingStyle ?? 'balusters'}
             />
             <SliderControl
-              label="Height"
+              label="Altezza"
               min={0.001}
               onChange={(value) => handleUpdate({ railingHeight: value })}
               precision={2}
@@ -941,18 +943,22 @@ export default function StairPanel() {
         )}
       </PanelSection>
 
-      <PanelSection title="Actions">
+      <PanelSection title="Azioni">
         <ActionGroup>
-          <ActionButton icon={<Move className="h-3.5 w-3.5" />} label="Move" onClick={handleMove} />
+          <ActionButton
+            icon={<Move className="h-3.5 w-3.5" />}
+            label="Sposta"
+            onClick={handleMove}
+          />
           <ActionButton
             icon={<Copy className="h-3.5 w-3.5" />}
-            label="Duplicate"
+            label="Duplica"
             onClick={handleDuplicate}
           />
           <ActionButton
             className="hover:bg-red-500/20"
             icon={<Trash2 className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />}
-            label="Delete"
+            label="Elimina"
             onClick={handleDelete}
           />
         </ActionGroup>

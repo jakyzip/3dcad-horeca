@@ -16,7 +16,7 @@ import type { FenceNode } from './schema'
 export const fenceParametrics: ParametricDescriptor<FenceNode> = {
   groups: [
     {
-      label: 'Style',
+      label: 'Stile',
       fields: [
         {
           key: 'style',
@@ -50,7 +50,7 @@ export const fenceParametrics: ParametricDescriptor<FenceNode> = {
       ],
     },
     {
-      label: 'Surface',
+      label: 'Superficie',
       fields: [
         {
           key: 'surfaceMode',
@@ -60,14 +60,14 @@ export const fenceParametrics: ParametricDescriptor<FenceNode> = {
         },
         {
           key: 'transitionMode',
-          label: 'Height transitions',
+          label: 'Raccordi di altezza',
           kind: 'enum',
           options: ['slope', 'step', 'break'],
           visibleIf: (n) => isSplineFence(n) || Math.abs(n.curveOffset ?? 0) > 1e-4,
         },
         {
           key: 'transitionWidth',
-          label: 'Transition length',
+          label: 'Lunghezza del raccordo',
           kind: 'number',
           unit: 'm',
           min: 0.2,
@@ -80,7 +80,7 @@ export const fenceParametrics: ParametricDescriptor<FenceNode> = {
         },
         {
           key: 'supportOffset',
-          label: 'Vertical offset',
+          label: 'Scostamento verticale',
           kind: 'number',
           unit: 'm',
           step: 0.01,
@@ -88,11 +88,11 @@ export const fenceParametrics: ParametricDescriptor<FenceNode> = {
       ],
     },
     {
-      label: 'Pattern distribution',
+      label: 'Distribuzione degli elementi',
       fields: [
         {
           key: 'postSpacing',
-          label: 'Post / infill spacing',
+          label: 'Interasse pali / tamponamento',
           kind: 'number',
           unit: 'm',
           min: 0.05,
@@ -101,7 +101,7 @@ export const fenceParametrics: ParametricDescriptor<FenceNode> = {
         },
         {
           key: 'picketSpacing',
-          label: 'Picket spacing',
+          label: 'Interasse delle doghe',
           kind: 'number',
           unit: 'm',
           min: 0.06,
@@ -111,13 +111,13 @@ export const fenceParametrics: ParametricDescriptor<FenceNode> = {
         },
         {
           key: 'patternDistribution',
-          label: 'Placement',
+          label: 'Posizionamento',
           kind: 'enum',
           options: ['automatic', 'fixed-spacing', 'fixed-count', 'maximum-spacing', 'equal-fit'],
         },
         {
           key: 'patternAlignment',
-          label: 'Align from',
+          label: 'Allinea da',
           kind: 'enum',
           options: ['start', 'center', 'end'],
           visibleIf: (n) =>
@@ -125,14 +125,14 @@ export const fenceParametrics: ParametricDescriptor<FenceNode> = {
         },
         {
           key: 'patternRemainder',
-          label: 'Extra length',
+          label: 'Lunghezza in avanzo',
           kind: 'enum',
           options: ['leave', 'spread'],
           visibleIf: (n) => n.patternDistribution === 'fixed-spacing',
         },
         {
           key: 'patternCount',
-          label: 'Items per span',
+          label: 'Elementi per campata',
           kind: 'number',
           min: 1,
           max: 500,
@@ -148,7 +148,7 @@ export const fenceParametrics: ParametricDescriptor<FenceNode> = {
       ],
     },
     {
-      label: 'Curve points',
+      label: 'Punti della curva',
       fields: [
         {
           key: 'path',
@@ -159,7 +159,7 @@ export const fenceParametrics: ParametricDescriptor<FenceNode> = {
       ],
     },
     {
-      label: 'Dimensions',
+      label: 'Dimensioni',
       fields: [
         // Length / Curve drive start/end + the single sagitta — meaningless
         // for a multi-point spline fence, so hide them when `path` is set.
@@ -180,7 +180,7 @@ export const fenceParametrics: ParametricDescriptor<FenceNode> = {
       ],
     },
     {
-      label: 'Structure',
+      label: 'Struttura',
       fields: [
         { key: 'baseHeight', kind: 'number', unit: 'm', min: 0.04, max: 1, step: 0.01 },
         { key: 'topRailHeight', kind: 'number', unit: 'm', min: 0.01, max: 0.25, step: 0.005 },
@@ -250,7 +250,7 @@ export const fenceParametrics: ParametricDescriptor<FenceNode> = {
         { key: 'groundClearance', kind: 'number', unit: 'm', min: 0, max: 0.6, step: 0.005 },
         {
           key: 'picketTopClearance',
-          label: 'Top clearance',
+          label: 'Distanza dall’alto',
           kind: 'number',
           unit: 'm',
           min: 0,

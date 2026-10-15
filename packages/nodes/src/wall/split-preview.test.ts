@@ -86,7 +86,9 @@ describe('wall split marker', () => {
       end: [8, 0],
       metadata: { linkedArray: { sourceId: 'wall_original' } },
     })
-    expect(wallSplitPreview(graph(wall), wall, [3]).message).toContain('Make the linked array real')
+    expect(wallSplitPreview(graph(wall), wall, [3]).message).toContain(
+      'rendi reale la serie collegata',
+    )
   })
 })
 

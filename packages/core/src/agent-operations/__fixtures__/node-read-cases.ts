@@ -1060,7 +1060,7 @@ export const DESCRIBE_NODE_CASES: AgentToolCase[] = [
     danglingChildScene,
   ),
   get('describe_node on an unnamed ground storey ("Ground floor"): node.displayName', 'level_0', {
-    node: { id: 'level_0', displayName: 'Ground floor' },
+    node: { id: 'level_0', displayName: 'Piano terra' },
     ancestorIds: ['building_main', 'site_lot'],
   }),
   get('describe_node on a named storey ("Upper"): node.displayName', 'level_1', {
@@ -1069,7 +1069,7 @@ export const DESCRIBE_NODE_CASES: AgentToolCase[] = [
   get(
     'describe_node on a floor plate (its footprint name, "Kitchen floor"): node.displayName',
     'slab_plate',
-    { node: { plateRole: 'base', displayName: 'Kitchen floor' } },
+    { node: { plateRole: 'base', displayName: 'Pavimento Kitchen' } },
   ),
   get(
     'describe_node on a ceiling that follows its storey ("height 2.79m", under the 2.8 m storey): node.resolvedHeight, heightIsExplicit false',

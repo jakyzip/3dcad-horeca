@@ -61,7 +61,7 @@ export function setWallGeometry(
       return conflict(
         'hosted-openings',
         hosted.map((n) => n.id),
-        'Moving this junction would remove a wall with hosted objects.',
+        'Spostare questo giunto eliminerebbe un muro con oggetti agganciati.',
       )
     scratch = applyToScratch(scratch, {
       update: getPlannedLinkedWallUpdates(plan, wall.start, wall.end, start, end).map(

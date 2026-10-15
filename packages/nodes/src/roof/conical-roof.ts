@@ -61,7 +61,7 @@ export function createConicalRoofSectorAboveWall(
   })
   const target = roofLevelTarget(nodes, sourceLevelId, getActiveRoofHeight(segment))
   const roof = RoofNode.parse({
-    name: `Roof ${roofCount + 1}`,
+    name: `Tetto ${roofCount + 1}`,
     metadata: { conicalSourceWallId: wall.id },
     support: { kind: 'walls' },
     position: [

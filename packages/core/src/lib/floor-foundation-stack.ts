@@ -202,12 +202,11 @@ export function footprintStackChanges(
         ) > 1e-6,
     )
     if (other && affected) {
-      const subject = 'upper floor'
       conflicts.push({
         code: 'floor-foundation-shared-storey',
         severity: 'error',
         nodeIds: [id, ...owners.map((base) => base.id)],
-        message: `The ${subject} also sits over ${floorFootprintName(nodes, other)}; raise both or neither.`,
+        message: `Il piano superiore poggia anche su ${floorFootprintName(nodes, other)}: alzali entrambi o nessuno dei due.`,
       })
       continue
     }
@@ -262,7 +261,7 @@ export function footprintStackChanges(
         code: 'floor-foundation-shared-storey',
         severity: 'error',
         nodeIds: [node.id, ...owners.map((base) => base.id)],
-        message: `The ${node.type} also sits over ${floorFootprintName(nodes, other)}; raise both or neither.`,
+        message: `L’elemento (${node.type}) poggia anche su ${floorFootprintName(nodes, other)}: alzali entrambi o nessuno dei due.`,
       })
   }
   return { updates, conflicts }

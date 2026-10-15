@@ -36,7 +36,7 @@ export const siteDefinition: NodeDefinition<typeof SiteNode> = {
       polygonMeasurementFeatures({
         featurePrefix: 'site',
         height: 0,
-        label: 'Property',
+        label: 'Lotto',
         polygon: node.polygon.points,
       }),
   },
@@ -49,7 +49,7 @@ export const siteDefinition: NodeDefinition<typeof SiteNode> = {
   },
 
   presentation: {
-    label: 'Site',
+    label: 'Lotto',
     description: 'The top-level container holding buildings, zones, and the property boundary.',
     icon: { kind: 'url', src: '/icons/site-flag.webp' },
     paletteSection: 'site',

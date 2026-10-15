@@ -37,7 +37,7 @@ const floorplanMoveTarget: FloorplanMoveTarget<FenceFeatureNode> = ({ node, scen
 const parametrics: ParametricDescriptor<FenceFeatureNode> = {
   groups: [
     {
-      label: 'Settings',
+      label: 'Impostazioni',
       fields: [{ key: 'center', kind: 'custom', component: FenceFeatureEditor }],
     },
   ],
@@ -56,8 +56,8 @@ const shared = {
   affordanceTools: { move: () => import('./move-tool') },
   affordanceHints: {
     move: [
-      { key: 'Left click', label: 'Place on a fence' },
-      { key: 'Esc', label: 'Cancel move' },
+      { key: 'Left click', label: 'Posiziona su una recinzione' },
+      { key: 'Esc', label: 'Annulla lo spostamento' },
     ],
   },
   parametrics,
@@ -84,7 +84,7 @@ export const fenceGateDefinition: NodeDefinition<typeof FenceGateNode | typeof F
     return rest
   },
   presentation: {
-    label: 'Gate',
+    label: 'Cancello',
     description: 'A gate hosted by a fence.',
     icon: { kind: 'url', src: '/icons/fence.webp' },
     paletteSection: 'structure',
@@ -126,7 +126,7 @@ export const fenceOpeningDefinition: NodeDefinition<
     return rest
   },
   presentation: {
-    label: 'Open Passage',
+    label: 'Passaggio',
     description: 'An intentional opening in a fence.',
     icon: { kind: 'url', src: '/icons/door.webp' },
     paletteSection: 'structure',

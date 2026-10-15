@@ -4,6 +4,13 @@ import type { WindowNode } from '@pascal-app/core'
 import { ActionButton, PanelSection } from '@pascal-app/editor'
 import { Move, Pencil, Plus } from 'lucide-react'
 
+const DORMER_FACE_LABELS: Record<NonNullable<WindowNode['dormerFace']>, string> = {
+  front: 'fronte',
+  back: 'retro',
+  right: 'destra',
+  left: 'sinistra',
+}
+
 export function DormerWindowsSection({
   windows,
   canAdd,
@@ -18,7 +25,7 @@ export function DormerWindowsSection({
   onMove: (window: WindowNode) => void
 }) {
   return (
-    <PanelSection title={`Windows (${windows.length})`}>
+    <PanelSection title={`Finestre (${windows.length})`}>
       {windows.length > 0 ? (
         <div className="flex flex-col gap-1">
           {windows.map((window, index) => (
@@ -32,37 +39,38 @@ export function DormerWindowsSection({
                 type="button"
               >
                 <span className="block truncate font-medium text-foreground text-xs">
-                  {window.name || `Window ${index + 1}`}
+                  {window.name || `Finestra ${index + 1}`}
                 </span>
                 <span className="block truncate text-[10px] text-muted-foreground capitalize">
-                  {window.dormerFace ?? 'front'} · {window.width.toFixed(2)} ×{' '}
-                  {window.height.toFixed(2)} m
+                  {DORMER_FACE_LABELS[window.dormerFace ?? 'front']} ·{' '}
+                  {window.width.toFixed(2).replace('.', ',')} ×{' '}
+                  {window.height.toFixed(2).replace('.', ',')} m
                 </span>
               </button>
               <button
-                aria-label={`Edit ${window.name || `Window ${index + 1}`}`}
+                aria-label={`Modifica ${window.name || `Finestra ${index + 1}`}`}
                 className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-black/8 dark:hover:bg-[#3e3e3e] hover:text-foreground"
                 onClick={() => onEdit(window)}
-                title="Edit window"
+                title="Modifica la finestra"
                 type="button"
               >
                 <Pencil className="h-3.5 w-3.5" />
               </button>
               <button
-                aria-label={`Move ${window.name || `Window ${index + 1}`}`}
+                aria-label={`Sposta ${window.name || `Finestra ${index + 1}`}`}
                 className="flex h-8 shrink-0 items-center justify-center gap-1 rounded-md px-2 text-muted-foreground text-xs transition-colors hover:bg-black/8 dark:hover:bg-[#3e3e3e] hover:text-foreground"
                 onClick={() => onMove(window)}
-                title="Move window"
+                title="Sposta la finestra"
                 type="button"
               >
                 <Move className="h-3.5 w-3.5" />
-                Move
+                Sposta
               </button>
             </div>
           ))}
         </div>
       ) : (
-        <div className="px-2 py-3 text-center text-muted-foreground text-xs">No windows</div>
+        <div className="px-2 py-3 text-center text-muted-foreground text-xs">Nessuna finestra</div>
       )}
 
       <div className="px-1 pt-2 pb-1">
@@ -70,12 +78,12 @@ export function DormerWindowsSection({
           className="w-full"
           disabled={!canAdd}
           icon={<Plus className="h-3.5 w-3.5" />}
-          label="Add Window"
+          label="Aggiungi finestra"
           onClick={onAdd}
         />
         {!canAdd && (
           <p className="px-1 pt-2 text-center text-[10px] text-muted-foreground">
-            Increase the dormer width to add another window.
+            Allarga l’abbaino per aggiungere un’altra finestra.
           </p>
         )}
       </div>

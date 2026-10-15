@@ -73,7 +73,7 @@ export function validateCabinetRun(
         issue(
           'stack-too-short',
           'error',
-          `${module.name || 'Cabinet module'} is shorter than its fixed compartment stack.`,
+          `${module.name || 'Modulo del mobile'}: è più basso della pila di vani fissi.`,
           [module.id],
         ),
       )
@@ -84,7 +84,7 @@ export function validateCabinetRun(
         issue(
           'tier-mismatch',
           'error',
-          `${module.name || 'Cabinet module'} must be a tall module in a tall run.`,
+          `${module.name || 'Modulo del mobile'}: in una composizione di colonne deve essere una colonna.`,
           [run.id, module.id],
         ),
       )
@@ -93,7 +93,7 @@ export function validateCabinetRun(
         issue(
           'tier-mismatch',
           'error',
-          `${module.name || 'Cabinet module'} cannot be a tall module in a wall run.`,
+          `${module.name || 'Modulo del mobile'}: in una composizione di pensili non può essere una colonna.`,
           [run.id, module.id],
         ),
       )
@@ -104,7 +104,7 @@ export function validateCabinetRun(
         issue(
           'top-cabinet-too-short',
           'warning',
-          `${module.name || 'Top cabinet'} is too short to be practical storage; use trim instead.`,
+          `${module.name || 'Sopralzo'}: è troppo basso per essere un contenitore utile, usa una cornice.`,
           [module.id],
         ),
       )
@@ -117,7 +117,7 @@ export function validateCabinetRun(
           issue(
             'ceiling-overflow',
             'warning',
-            `${module.name || 'Cabinet module'} extends ${(overflow * 1000).toFixed(0)} mm above the ceiling.`,
+            `${module.name || 'Modulo del mobile'}: supera il soffitto di ${(overflow * 1000).toFixed(0)} mm.`,
             [run.id, module.id],
           ),
         )
@@ -131,7 +131,7 @@ export function validateCabinetRun(
         issue(
           'module-overlap',
           'error',
-          `${module.name || 'Cabinet module'} overlaps ${next.name || 'the next cabinet module'}.`,
+          `${module.name || 'Modulo del mobile'}: si sovrappone a ${next.name || 'il modulo successivo'}.`,
           [module.id, next.id],
         ),
       )
@@ -140,7 +140,7 @@ export function validateCabinetRun(
         issue(
           'module-gap',
           'warning',
-          `There is an unfilled ${(gap * 1000).toFixed(0)} mm gap between cabinet modules.`,
+          `Tra i moduli del mobile c’è uno spazio vuoto di ${(gap * 1000).toFixed(0)} mm.`,
           [module.id, next.id],
         ),
       )

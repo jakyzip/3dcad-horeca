@@ -12,24 +12,24 @@ export function zoneQuickMeasurement(node: ZoneNode): QuickMeasurementReport | n
 
   return {
     title: node.name,
-    kindLabel: node.spaceRole === 'room' ? 'Room' : 'Zone',
+    kindLabel: node.spaceRole === 'room' ? 'Stanza' : 'Zona',
     anchor: polygonReportAnchor(polygon, 0.08),
     metrics: [
       {
         key: 'area',
-        label: 'Footprint',
+        label: 'Impronta',
         abbreviation: 'A',
         quantity: 'area',
         value: polygonSurfaceArea(polygon, node.holes),
       },
       {
         key: 'perimeter',
-        label: 'Perimeter',
+        label: 'Perimetro',
         abbreviation: 'P',
         quantity: 'length',
         value: polygonBoundaryLength(polygon),
       },
     ],
-    note: 'Footprint only — room envelope not proven.',
+    note: 'Solo impronta: il perimetro chiuso della stanza non è verificato.',
   }
 }

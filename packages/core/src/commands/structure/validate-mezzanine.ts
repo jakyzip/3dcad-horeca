@@ -30,7 +30,7 @@ export function validateMezzanine(
   })
   const polygon = zone.polygon
   if (polygon.length < 3 || !polygon.flat().every(Number.isFinite))
-    return fail('too-small', 'A mezzanine needs a finite polygon of at least 1 m².')
+    return fail('too-small', 'Un soppalco deve avere un contorno valido di almeno 1 m².')
   if (
     polygon.some((start, i) =>
       polygon.some(
@@ -46,9 +46,9 @@ export function validateMezzanine(
       ),
     )
   )
-    return fail('self-intersecting', 'Mezzanine edges must not cross.')
+    return fail('self-intersecting', 'I lati del soppalco non devono incrociarsi.')
   if (area([{ outer: polygon, holes: zone.holes }]) < 1)
-    return fail('too-small', 'A mezzanine must have at least 1 m² of floor.')
+    return fail('too-small', 'Un soppalco deve avere almeno 1 m² di pavimento.')
   // Intent may reach wall reference lines; the structure kernel clips derived plates to wall faces.
   const host = nodes[zone.hostZoneId ?? '']
   const face = host?.type === 'zone' ? roomFace(nodes, host) : undefined
@@ -66,7 +66,7 @@ export function validateMezzanine(
   )
     return fail(
       'outside-host',
-      'The mezzanine must stay inside its host room’s reference boundary.',
+      'Il soppalco deve restare dentro il contorno della stanza che lo ospita.',
     )
   const overlapping = Object.values(nodes).filter(
     (node) =>
@@ -84,7 +84,7 @@ export function validateMezzanine(
   if (overlapping.length)
     return fail(
       'overlaps-mezzanine',
-      'Mezzanines must not overlap.',
+      'I soppalchi non devono sovrapporsi.',
       overlapping.map((node) => node.id),
     )
   return mezzanineElevationConflict(nodes, zone)

@@ -52,12 +52,12 @@ describe('deriveZoneQuantityReport', () => {
     expect(report.wallSurface).toEqual({
       status: 'available',
       value: 35,
-      note: 'Gross indoor-facing wall surface within this zone, including both sides of interior partitions.',
+      note: 'Superficie lorda dei muri verso l’interno in questa zona, compresi i due lati dei tramezzi.',
     })
     expect(report.floorSurface).toEqual({
       status: 'available',
       value: 12,
-      note: 'Zone floor surface proven by compatible slab coverage, after openings.',
+      note: 'Superficie del pavimento della zona coperta da solai compatibili, al netto delle aperture.',
     })
     expect(report.volume.status).toBe('available')
     if (report.volume.status === 'available') expect(report.volume.value).toBeCloseTo(29.4)
@@ -97,7 +97,7 @@ describe('deriveZoneQuantityReport', () => {
     expect(report.floorSurface).toEqual({
       status: 'available',
       value: 11,
-      note: 'Zone floor surface proven by compatible slab coverage, after openings.',
+      note: 'Superficie del pavimento della zona coperta da solai compatibili, al netto delle aperture.',
     })
   })
 
@@ -156,17 +156,17 @@ describe('deriveZoneQuantityReport', () => {
     expect(report.wallSurface).toEqual({
       status: 'available',
       value: 79,
-      note: 'Gross indoor-facing wall surface within this zone, including both sides of interior partitions.',
+      note: 'Superficie lorda dei muri verso l’interno in questa zona, compresi i due lati dei tramezzi.',
     })
     expect(report.floorSurface).toEqual({
       status: 'available',
       value: 49,
-      note: 'Zone floor surface proven by compatible slab coverage, after openings.',
+      note: 'Superficie del pavimento della zona coperta da solai compatibili, al netto delle aperture.',
     })
     expect(report.volume).toEqual({
       status: 'available',
       value: 147,
-      note: 'Proven zone floor area multiplied by clear ceiling height.',
+      note: 'Superficie del pavimento della zona per l’altezza libera del soffitto.',
     })
   })
 
@@ -216,7 +216,7 @@ describe('deriveZoneQuantityReport', () => {
     expect(report.floorSurface).toEqual({
       status: 'available',
       value: 11,
-      note: 'Zone floor surface proven by compatible slab coverage, after openings.',
+      note: 'Superficie del pavimento della zona coperta da solai compatibili, al netto delle aperture.',
     })
   })
 
@@ -329,7 +329,7 @@ describe('deriveZoneQuantityReport', () => {
     expect(report.floorSurface).toEqual({
       status: 'available',
       value: 1,
-      note: 'Zone floor surface proven by compatible slab coverage, after openings.',
+      note: 'Superficie del pavimento della zona coperta da solai compatibili, al netto delle aperture.',
     })
   })
 
@@ -367,14 +367,14 @@ describe('deriveZoneQuantityReport', () => {
     expect(compatible.floorSurface).toEqual({
       status: 'available',
       value: 12,
-      note: 'Zone floor surface proven by compatible slab coverage, after openings.',
+      note: 'Superficie del pavimento della zona coperta da solai compatibili, al netto delle aperture.',
     })
 
     const raisedRight = SlabNode.parse({ ...right, elevation: 0.25 })
     const conflicting = deriveZoneQuantityReport(zone, sceneRecord([zone, left, raisedRight]))
     expect(conflicting.floorSurface).toEqual({
       status: 'unavailable',
-      reason: 'Slabs covering this zone have different elevations.',
+      reason: 'I solai che coprono questa zona hanno quote diverse.',
     })
   })
 

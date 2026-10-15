@@ -101,7 +101,7 @@ describe('duplicate_level', () => {
       bridge.clearHistory()
       const before = bridge.exportJSON()
       const result = await call('duplicate_level', { levelId: level.id, position })
-      expect(result.name).toBe(position === 'above' ? 'Floor 1' : 'Ground floor')
+      expect(result.name).toBe(position === 'above' ? 'Piano 1' : 'Piano terra')
       const nodes = bridge.getNodes()
       const lowerId = position === 'above' ? level.id : result.newLevelId
       const upperId = position === 'above' ? result.newLevelId : level.id

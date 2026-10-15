@@ -5,7 +5,7 @@ import { StairRailingField } from './railing-controls'
 export const stairParametrics: ParametricDescriptor<StairNode> = {
   groups: [
     {
-      label: 'Construction',
+      label: 'Costruzione',
       fields: [
         {
           key: 'construction',
@@ -15,7 +15,7 @@ export const stairParametrics: ParametricDescriptor<StairNode> = {
       ],
     },
     {
-      label: 'Type',
+      label: 'Tipo',
       fields: [
         {
           key: 'stairType',
@@ -26,21 +26,21 @@ export const stairParametrics: ParametricDescriptor<StairNode> = {
       ],
     },
     {
-      label: 'Opening',
+      label: 'Apertura',
       fields: [
-        { key: 'fromLevelId', kind: 'ref', label: 'From level', refKind: 'level' },
-        { key: 'toLevelId', kind: 'ref', label: 'To level', refKind: 'level' },
+        { key: 'fromLevelId', kind: 'ref', label: 'Dal piano', refKind: 'level' },
+        { key: 'toLevelId', kind: 'ref', label: 'Al piano', refKind: 'level' },
         {
           key: 'slabOpeningMode',
           kind: 'enum',
-          label: 'Auto cutout',
+          label: 'Taglio automatico del solaio',
           options: ['none', 'destination'],
           display: 'segmented',
         },
         {
           key: 'openingOffset',
           kind: 'number',
-          label: 'Opening offset',
+          label: 'Scostamento dell’apertura',
           unit: 'm',
           step: 0.01,
           visibleIf: (node) => node.slabOpeningMode === 'destination',
@@ -48,7 +48,7 @@ export const stairParametrics: ParametricDescriptor<StairNode> = {
       ],
     },
     {
-      label: 'Geometry',
+      label: 'Geometria',
       fields: [
         {
           key: 'width',
@@ -61,7 +61,7 @@ export const stairParametrics: ParametricDescriptor<StairNode> = {
         {
           key: 'stepCount',
           kind: 'number',
-          label: 'Steps',
+          label: 'Gradini',
           min: 2,
           step: 1,
           visibleIf: (node) => node.stairType !== 'straight',
@@ -69,7 +69,7 @@ export const stairParametrics: ParametricDescriptor<StairNode> = {
         {
           key: 'fillToFloor',
           kind: 'boolean',
-          label: 'Fill to floor',
+          label: 'Riempimento fino al pavimento',
           visibleIf: (node) => node.stairType === 'curved',
         },
         {
@@ -83,7 +83,7 @@ export const stairParametrics: ParametricDescriptor<StairNode> = {
         {
           key: 'innerRadius',
           kind: 'number',
-          label: 'Inner radius',
+          label: 'Raggio interno',
           unit: 'm',
           min: 0.001,
           step: 0.05,
@@ -92,26 +92,26 @@ export const stairParametrics: ParametricDescriptor<StairNode> = {
         {
           key: 'sweepAngle',
           kind: 'number',
-          label: 'Sweep (rad)',
+          label: 'Ampiezza (rad)',
           step: Math.PI / 180,
           visibleIf: (node) => node.stairType !== 'straight',
         },
         {
           key: 'showCenterColumn',
           kind: 'boolean',
-          label: 'Center column',
+          label: 'Colonna centrale',
           visibleIf: (node) => node.stairType === 'spiral',
         },
         {
           key: 'showStepSupports',
           kind: 'boolean',
-          label: 'Step supports',
+          label: 'Supporti dei gradini',
           visibleIf: (node) => node.stairType === 'spiral',
         },
         {
           key: 'topLandingMode',
           kind: 'enum',
-          label: 'Top landing',
+          label: 'Pianerottolo d’arrivo',
           options: ['none', 'integrated'],
           display: 'segmented',
           visibleIf: (node) => node.stairType === 'spiral',
@@ -119,7 +119,7 @@ export const stairParametrics: ParametricDescriptor<StairNode> = {
         {
           key: 'topLandingDepth',
           kind: 'number',
-          label: 'Landing depth',
+          label: 'Profondità del pianerottolo',
           unit: 'm',
           min: 0.001,
           step: 0.05,
@@ -128,13 +128,13 @@ export const stairParametrics: ParametricDescriptor<StairNode> = {
       ],
     },
     {
-      label: 'Position',
+      label: 'Posizione',
       fields: [
         { key: 'position', kind: 'vec3' },
         {
           key: 'rotation',
           kind: 'number',
-          label: 'Rotation (rad)',
+          label: 'Rotazione (rad)',
           min: -Math.PI,
           max: Math.PI,
           step: Math.PI / 36,
@@ -142,7 +142,7 @@ export const stairParametrics: ParametricDescriptor<StairNode> = {
       ],
     },
     {
-      label: 'Railing',
+      label: 'Ringhiera',
       fields: [
         {
           key: 'railingStyle',
@@ -152,7 +152,7 @@ export const stairParametrics: ParametricDescriptor<StairNode> = {
         {
           key: 'railingPath',
           kind: 'custom',
-          label: 'Rail layout and handrail',
+          label: 'Disposizione della ringhiera e corrimano',
           component: StairRailingField,
         },
         {
@@ -163,7 +163,7 @@ export const stairParametrics: ParametricDescriptor<StairNode> = {
         {
           key: 'railingHeight',
           kind: 'number',
-          label: 'Railing height',
+          label: 'Altezza della ringhiera',
           unit: 'm',
           min: 0.001,
           step: 0.02,

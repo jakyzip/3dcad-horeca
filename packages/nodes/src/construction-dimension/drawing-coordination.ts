@@ -25,7 +25,7 @@ export function resolveConstructionDimensionForDrawing(args: {
     return {
       ...node,
       metadata: lockedMetadata(node),
-      prefix: `UNLINKED CONTROL · ${node.prefix}`,
+      prefix: `CONTROLLO SCOLLEGATO · ${node.prefix}`,
     }
   }
 

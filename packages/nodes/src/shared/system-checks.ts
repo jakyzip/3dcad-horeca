@@ -55,7 +55,7 @@ export function checkDistributionSystems(nodes: Record<AnyNodeId, AnyNode>): Sys
     if (!joined.has(index))
       findings.push({
         code: 'open-end',
-        message: `Open connection: ${entry.port.id}`,
+        message: `Collegamento aperto: ${entry.port.id}`,
         nodeIds: [entry.nodeId],
         severity: 'warning',
       })
@@ -77,7 +77,7 @@ export function checkDistributionSystems(nodes: Record<AnyNodeId, AnyNode>): Sys
       findings.push({
         code: 'disconnected-branch',
         message:
-          'Separate branch: no connection to the other branches of this system. Review whether this is intentional.',
+          'Ramo separato: nessun collegamento con gli altri rami di questo impianto. Verifica che sia voluto.',
         nodeIds: component,
         severity: 'warning',
       })
@@ -116,7 +116,11 @@ export function checkDistributionSystems(nodes: Record<AnyNodeId, AnyNode>): Sys
         continue
       const box = new Box3().setFromPoints([b.a, b.b]).expandByScalar(a.radius + b.radius)
       if (segmentHitsBox(a.a, a.b, box))
-        addClash(a.run.id, b.run.id, 'Possible run intersection. Inspect the highlighted runs.')
+        addClash(
+          a.run.id,
+          b.run.id,
+          'Possibile intersezione tra tubazioni. Controlla i tratti evidenziati.',
+        )
     }
   }
   for (const wall of Object.values(nodes)) {
@@ -140,7 +144,7 @@ export function checkDistributionSystems(nodes: Record<AnyNodeId, AnyNode>): Sys
         addClash(
           segment.run.id,
           wall.id,
-          'Possible wall intersection. Check the wall opening and run clearance.',
+          'Possibile intersezione con un muro. Controlla l’apertura nel muro e la distanza della tubazione.',
         )
     }
   }
@@ -149,7 +153,7 @@ export function checkDistributionSystems(nodes: Record<AnyNodeId, AnyNode>): Sys
     if (missing.length)
       findings.push({
         code: 'unsupported-hanger',
-        message: `${missing.length} hanger${missing.length === 1 ? '' : 's'} without a support.`,
+        message: `${missing.length} ${missing.length === 1 ? 'staffa' : 'staffe'} senza supporto.`,
         nodeIds: [run.id],
         severity: 'warning',
       })

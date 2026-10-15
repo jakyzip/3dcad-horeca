@@ -158,7 +158,12 @@ describe('planRoofLevel', () => {
     const plan = planRoofLevel(house({ id: 'level_g', content: 'walls' }), 'level_g', 3)
     expect(plan.kind).toBe('roof')
     if (plan.kind !== 'roof') return
-    expect(plan.create).toMatchObject({ name: 'Roof', level: 1, height: 3, parentId: 'building_h' })
+    expect(plan.create).toMatchObject({
+      name: 'Tetto',
+      level: 1,
+      height: 3,
+      parentId: 'building_h',
+    })
     expect(isRoofLevel(plan.create!)).toBe(true)
     expect(plan.levelId).toBe(plan.create!.id)
     // the new level stands on the storey: its floor is the storey's height up
@@ -202,7 +207,7 @@ describe('planRoofLevel', () => {
     expect(plan).toMatchObject({ kind: 'roof', levelId: 'level_r', create: null })
     if (plan.kind !== 'roof') return
     expect(plan.update).toEqual([
-      { id: 'level_r', data: { metadata: { role: 'roof' }, name: 'Roof' } },
+      { id: 'level_r', data: { metadata: { role: 'roof' }, name: 'Tetto' } },
     ])
   })
 
@@ -612,7 +617,7 @@ describe('planRoofsOffStorey', () => {
     const move = planRoofsOffStorey(nodes, 'level_g')
     expect(move?.plan.kind).toBe('roof')
     if (move?.plan.kind !== 'roof') return
-    expect(move.plan.create).toMatchObject({ name: 'Roof', level: 1 })
+    expect(move.plan.create).toMatchObject({ name: 'Tetto', level: 1 })
     const moved = applySceneChanges(nodes, move.changes)
     const roof = moved.roof_main as RoofNode
     expect(roof.parentId).toBe(move.plan.levelId)
@@ -1064,7 +1069,7 @@ describe('seatRoofs', () => {
     const made = changes.create[0]!.node as LevelNode
     expect(made).toMatchObject({
       type: 'level',
-      name: 'Roof',
+      name: 'Tetto',
       level: 1,
       metadata: { role: 'roof' },
     })
@@ -1121,7 +1126,7 @@ describe('seatRoofs', () => {
       expect(worldEave(after, 'roof_wing')).toBeCloseTo(TOP, 6)
     }
     expect(notes).toEqual([
-      "roof roof_wing stands on Ground floor's walls, so it is on Floor 1 (level_1) at y -0.25: a roof lives on the level above the walls that carry it.",
+      "roof roof_wing stands on Piano terra's walls, so it is on Piano 1 (level_1) at y -0.25: a roof lives on the level above the walls that carry it.",
     ])
   })
 
@@ -1137,7 +1142,7 @@ describe('seatRoofs', () => {
     const { changes, notes } = seatRoofs(nodes, { create: created(...mainRoof()) })
     for (const after of landed(nodes, changes)) {
       expect(after.roof_main!.parentId).toBe('level_1')
-      expect(after.level_1).toMatchObject({ name: 'Roof', metadata: { role: 'roof' } })
+      expect(after.level_1).toMatchObject({ name: 'Tetto', metadata: { role: 'roof' } })
     }
     expect(notes[0]).toContain('declared the roof level')
   })

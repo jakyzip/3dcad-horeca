@@ -30,8 +30,8 @@ describe('run hanger mode', () => {
     for (const definition of [ductSegmentDefinition, pipeSegmentDefinition]) {
       const hint = definition.toolHints?.find((candidate) => candidate.key === 'H')
       expect(hint?.chip?.labels).toEqual({
-        off: 'Auto hangers: Off',
-        on: 'Auto hangers: On',
+        off: 'Staffe automatiche: disattive',
+        on: 'Staffe automatiche: attive',
       })
     }
   })

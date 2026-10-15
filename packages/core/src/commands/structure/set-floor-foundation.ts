@@ -131,7 +131,7 @@ export function setFloorFoundation(
         {
           code: 'floor-foundation-level',
           nodeIds: [primary.id],
-          message: 'Only a plate at ground contact can have a solid foundation.',
+          message: 'Solo un solaio a contatto con il terreno può avere una fondazione piena.',
         },
       ],
     }
@@ -158,7 +158,7 @@ export function setFloorFoundation(
         {
           code: 'floor-plate-thickness',
           nodeIds: [thin.id],
-          message: `The floor plate ${thin.id} cannot move that far: its thickness must remain at least ${MIN_SLAB_THICKNESS} m.`,
+          message: `Il solaio ${thin.id} non può spostarsi così tanto: il suo spessore deve restare di almeno ${MIN_SLAB_THICKNESS} m.`,
         },
       ],
     }

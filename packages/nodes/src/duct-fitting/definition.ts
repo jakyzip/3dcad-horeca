@@ -127,15 +127,15 @@ export const ductFittingDefinition: NodeDefinition<typeof DuctFittingNode> = {
   toolOptions: ductFittingToolOptions,
   tool: () => import('./tool'),
   toolHints: [
-    { key: 'Click', label: 'Place fitting' },
-    { key: 'Hover a duct end', label: 'Snap onto the run' },
-    { key: 'R / T', label: 'Rotate ±45°' },
-    { key: 'Alt', label: 'Switch rotation axis (Y → X → Z)' },
-    { key: 'Esc', label: 'Exit' },
+    { key: 'Click', label: 'Posiziona il raccordo' },
+    { key: 'Passa sopra l’estremità di un canale', label: 'Aggancia al tratto' },
+    { key: 'R / T', label: 'Ruota di ±45°' },
+    { key: 'Alt', label: 'Cambia l’asse di rotazione (Y → X → Z)' },
+    { key: 'Esc', label: 'Esci' },
   ],
 
   presentation: {
-    label: 'Duct Fitting',
+    label: 'Raccordo',
     description: 'Elbow, tee, reducer, or square-to-round transition connecting duct runs.',
     icon: { kind: 'url', src: '/icons/duct-fitting.webp' },
     paletteSection: 'structure',

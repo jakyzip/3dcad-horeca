@@ -260,7 +260,10 @@ function proveSurfaceCoverage<T extends SlabNode | CeilingNode>(
     area(intersection(footprint, union(candidates.map((node) => node.polygon)))) / footprintArea <
       SURFACE_COVERAGE_THRESHOLD
   ) {
-    return { status: 'unavailable', reason: `No ${labels.singular} coverage proves this zone.` }
+    return {
+      status: 'unavailable',
+      reason: `Nessun ${labels.singular} copre questa zona in modo verificabile.`,
+    }
   }
 
   const datum = getDatum(candidates[0]!)
@@ -270,7 +273,7 @@ function proveSurfaceCoverage<T extends SlabNode | CeilingNode>(
   ) {
     return {
       status: 'unavailable',
-      reason: `${labels.plural} covering this zone have different ${labels.datum}.`,
+      reason: `I ${labels.plural} che coprono questa zona hanno ${labels.datum} diverse.`,
     }
   }
 
@@ -280,10 +283,16 @@ function proveSurfaceCoverage<T extends SlabNode | CeilingNode>(
       const overlap = area(intersection(footprint, hole))
       if (overlap <= 1e-6) continue
       if (area(difference(footprint, hole)) <= 1e-6) {
-        return { status: 'unavailable', reason: 'A surface opening removes this zone.' }
+        return {
+          status: 'unavailable',
+          reason: 'Un’apertura nella superficie elimina questa zona.',
+        }
       }
       if (Math.abs(overlap - area([{ outer: hole, holes: [] }])) > 1e-6) {
-        return { status: 'unavailable', reason: 'A surface opening crosses the zone boundary.' }
+        return {
+          status: 'unavailable',
+          reason: 'Un’apertura nella superficie attraversa il contorno della zona.',
+        }
       }
       openings.push(hole)
     }
@@ -300,7 +309,7 @@ export function deriveZoneQuantityReport(
   sceneNodes: Readonly<Record<string, AnyNode>>,
 ): ZoneQuantityReport {
   if (zone.autoFromWalls && zone.enclosureStatus === 'open') {
-    const missing = unavailable('The room enclosure is open.')
+    const missing = unavailable('Il contorno della stanza è aperto.')
     return {
       classification: 'footprint',
       footprintArea: 0,
@@ -355,14 +364,14 @@ export function deriveZoneQuantityReport(
       )
     }),
     (node) => node.elevation,
-    { singular: 'slab', plural: 'Slabs', datum: 'elevations' },
+    { singular: 'solaio', plural: 'solai', datum: 'quote' },
     clearFootprint,
   )
   const ceilingCoverage = proveSurfaceCoverage(
     zone,
     levelNodes.filter((node): node is CeilingNode => node.type === 'ceiling'),
     (node) => resolveCeilingHeight(node, sceneNodes as Record<AnyNodeId, AnyNode>),
-    { singular: 'ceiling', plural: 'Ceilings', datum: 'heights' },
+    { singular: 'soffitto', plural: 'soffitti', datum: 'altezze' },
     clearFootprint,
   )
 
@@ -396,16 +405,16 @@ export function deriveZoneQuantityReport(
           (sum, span) => sum + span.length * wallEffectiveHeight(span.wall),
           0,
         ),
-        note: 'Gross indoor-facing wall surface within this zone, including both sides of interior partitions.',
+        note: 'Superficie lorda dei muri verso l’interno in questa zona, compresi i due lati dei tramezzi.',
       }
-    : unavailable('No indoor-facing wall surface is proven within this zone.')
+    : unavailable('In questa zona non risultano superfici di muro verso l’interno.')
 
   const floorSurface =
     slabCoverage.status === 'available'
       ? {
           status: 'available' as const,
           value: slabCoverage.area,
-          note: 'Zone floor surface proven by compatible slab coverage, after openings.',
+          note: 'Superficie del pavimento della zona coperta da solai compatibili, al netto delle aperture.',
         }
       : unavailable(slabCoverage.reason)
 
@@ -421,9 +430,9 @@ export function deriveZoneQuantityReport(
         ? {
             status: 'available',
             value: slabCoverage.area * clearHeight,
-            note: 'Proven zone floor area multiplied by clear ceiling height.',
+            note: 'Superficie del pavimento della zona per l’altezza libera del soffitto.',
           }
-        : unavailable('The matching ceiling is not above the slab surface.')
+        : unavailable('Il soffitto corrispondente non è sopra la superficie del solaio.')
   }
 
   return {

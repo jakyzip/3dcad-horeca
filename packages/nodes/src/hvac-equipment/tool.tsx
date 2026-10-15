@@ -52,7 +52,7 @@ const HvacEquipmentTool = () => {
       HvacEquipmentNode.parse({
         ...hvacEquipmentDefinition.defaults(),
         ...toolDefaults,
-        name: 'Furnace',
+        name: 'Generatore d’aria calda',
       }),
     [toolDefaults],
   )
@@ -97,7 +97,7 @@ const HvacEquipmentTool = () => {
       const unit = HvacEquipmentNode.parse({
         ...hvacEquipmentDefinition.defaults(),
         ...toolDefaults,
-        name: 'Furnace',
+        name: 'Generatore d’aria calda',
         position,
         rotation: yawRef.current,
         parentId: activeLevelId,
@@ -154,7 +154,7 @@ const HvacEquipmentTool = () => {
         zIndexRange={[100, 0]}
       >
         <div className="flex items-center gap-2 whitespace-nowrap rounded-full border border-border/60 bg-background/90 px-4 py-1.5 text-xs tabular-nums shadow-sm backdrop-blur">
-          <span className="font-medium text-foreground">R/T rotate</span>
+          <span className="font-medium text-foreground">R/T ruota</span>
         </div>
       </Html>
     </LevelOffsetGroup>

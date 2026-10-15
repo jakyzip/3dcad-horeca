@@ -5,7 +5,7 @@ export const skylightParametrics: ParametricDescriptor<SkylightNode> = {
   customPanel: () => import('./panel'),
   groups: [
     {
-      label: 'Type',
+      label: 'Tipo',
       fields: [
         {
           key: 'skylightType',
@@ -16,7 +16,7 @@ export const skylightParametrics: ParametricDescriptor<SkylightNode> = {
       ],
     },
     {
-      label: 'Dimensions',
+      label: 'Dimensioni',
       fields: [
         { key: 'width', kind: 'number', unit: 'm', min: 0.3, max: 1000, step: 0.05 },
         { key: 'height', kind: 'number', unit: 'm', min: 0.3, max: 1000, step: 0.05 },
@@ -26,7 +26,7 @@ export const skylightParametrics: ParametricDescriptor<SkylightNode> = {
       ],
     },
     {
-      label: 'Curb',
+      label: 'Basamento',
       fields: [
         { key: 'curb', kind: 'boolean' },
         {
@@ -41,7 +41,7 @@ export const skylightParametrics: ParametricDescriptor<SkylightNode> = {
       ],
     },
     {
-      label: 'Opening',
+      label: 'Apertura',
       fields: [
         {
           key: 'operationState',
@@ -77,7 +77,7 @@ export const skylightParametrics: ParametricDescriptor<SkylightNode> = {
       ],
     },
     {
-      label: 'Lantern',
+      label: 'Lanterna',
       fields: [
         {
           key: 'lanternHeight',

@@ -39,7 +39,7 @@ const SkylightTool = () => {
     () =>
       SkylightNode.parse({
         ...skylightDefinition.defaults(),
-        name: 'Skylight',
+        name: 'Lucernario',
         position: [0, 0, 0],
         rotation: 0,
       }),
@@ -107,7 +107,7 @@ const SkylightTool = () => {
 
       const skylight = SkylightNode.parse({
         ...skylightDefinition.defaults(),
-        name: 'Skylight',
+        name: 'Lucernario',
         roofSegmentId: hit.segment.id,
         position: [hit.localX, hit.localY, hit.localZ],
         rotation: 0,

@@ -121,7 +121,7 @@ export function commitBlockOperation(
   baseTopology: BlockTopology,
   command: BlockCommand,
 ): BlockOperationCommit {
-  if (services.readOnly) return { ok: false, error: 'Scene is read-only' }
+  if (services.readOnly) return { ok: false, error: 'La scena è di sola lettura' }
   const result = applyBlockCommand(baseTopology, command)
   if (!result.ok) return result
   if (sameTopology(baseTopology, result.topology)) return { ok: true, changed: false }
@@ -148,13 +148,13 @@ export function replaceCommittedBlockOperation(
   operation: BlockLastOperation,
   command: BlockCommand,
 ): BlockLastOperationReplacement {
-  if (services.readOnly) return { ok: false, error: 'Scene is read-only' }
+  if (services.readOnly) return { ok: false, error: 'La scena è di sola lettura' }
   const current = services.sceneApi.get<BlockNode>(operation.nodeId)
   if (current?.type !== 'block' || !sameTopology(current.topology, operation.resultTopology)) {
-    return { ok: false, error: 'The last operation is no longer the latest scene change' }
+    return { ok: false, error: 'L’ultima operazione non è più l’ultima modifica della scena' }
   }
   if (services.historyApi.depth() !== operation.historyDepth) {
-    return { ok: false, error: 'Scene history changed after the last operation' }
+    return { ok: false, error: 'La cronologia della scena è cambiata dopo l’ultima operazione' }
   }
 
   const result = applyBlockCommand(operation.baseTopology, command)
@@ -167,7 +167,8 @@ export function replaceCommittedBlockOperation(
     }
     return commitBlockTopologyEdit(services.sceneApi, operation.nodeId, result.topology)
   })
-  if (!restored) return { ok: false, error: 'Could not restore the operation baseline' }
+  if (!restored)
+    return { ok: false, error: 'Impossibile ripristinare lo stato prima dell’operazione' }
 
   return {
     ok: true,
@@ -187,16 +188,17 @@ export function repeatCommittedBlockOperation(
   operation: BlockLastOperation,
   selection: RepeatSelection,
 ): BlockLastOperationReplacement {
-  if (services.readOnly) return { ok: false, error: 'Scene is read-only' }
+  if (services.readOnly) return { ok: false, error: 'La scena è di sola lettura' }
   const current = services.sceneApi.get<BlockNode>(operation.nodeId)
   if (current?.type !== 'block' || !sameTopology(current.topology, operation.resultTopology)) {
-    return { ok: false, error: 'The last operation is no longer the latest scene change' }
+    return { ok: false, error: 'L’ultima operazione non è più l’ultima modifica della scena' }
   }
   if (services.historyApi.depth() !== operation.historyDepth) {
-    return { ok: false, error: 'Scene history changed after the last operation' }
+    return { ok: false, error: 'La cronologia della scena è cambiata dopo l’ultima operazione' }
   }
   const command = commandForRepeat(operation.command, current.topology, selection)
-  if (!command) return { ok: false, error: 'The current selection cannot repeat this operation' }
+  if (!command)
+    return { ok: false, error: 'Con la selezione attuale non puoi ripetere questa operazione' }
   const result = applyBlockCommand(current.topology, command)
   if (!result.ok) return result
   if (!commitBlockTopologyEdit(services.sceneApi, operation.nodeId, result.topology))

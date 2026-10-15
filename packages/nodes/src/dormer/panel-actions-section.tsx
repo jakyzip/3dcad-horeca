@@ -17,18 +17,18 @@ export function DormerActionsSection({
   onDelete: () => void
 }) {
   return (
-    <PanelSection title="Actions">
+    <PanelSection title="Azioni">
       <ActionGroup>
-        <ActionButton icon={<Move className="h-3.5 w-3.5" />} label="Move" onClick={onMove} />
+        <ActionButton icon={<Move className="h-3.5 w-3.5" />} label="Sposta" onClick={onMove} />
         <ActionButton
           icon={<Copy className="h-3.5 w-3.5" />}
-          label="Duplicate"
+          label="Duplica"
           onClick={onDuplicate}
         />
         <ActionButton
           className="hover:bg-red-500/20"
           icon={<Trash2 className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />}
-          label="Delete"
+          label="Elimina"
           onClick={onDelete}
         />
       </ActionGroup>

@@ -62,8 +62,8 @@ describe('buildZoneFloorplan room documentation', () => {
     expect(labels.map((label) => ('text' in label ? label.text : ''))).toEqual([
       'Office',
       '101',
-      'FL: Timber · WL: Paint · CL: ACT',
-      'CH: 2.7m · Business',
+      'PAV: Timber · MURI: Paint · SOFF: ACT',
+      'H: 2.7m · Business',
     ])
     expect(labels.every((label) => label.kind === 'text' && label.upright)).toBe(true)
     expect(

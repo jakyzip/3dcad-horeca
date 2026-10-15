@@ -274,7 +274,7 @@ function buildLinearOrChord(
   const suppressedSegments = suppressedDimensionSegmentIndexes(node)
   const visibleSegments = layout.segments.filter((_, index) => !suppressedSegments.has(index))
   const dimensionSegments = visibleSegments.map((segment) => {
-    const baseText = `${node.mode === 'chord' ? 'CH ' : ''}${formatConstructionLength(segment.value, unit, profile, lengthFormatOptions(node))}`
+    const baseText = `${node.mode === 'chord' ? 'CORDA ' : ''}${formatConstructionLength(segment.value, unit, profile, lengthFormatOptions(node))}`
     return {
       witnessStart: segment.witnessStart,
       witnessEnd: segment.witnessEnd,
@@ -424,7 +424,7 @@ function buildArcLength(
       labelPoint,
       notation(
         node,
-        `ARC ${formatConstructionLength(layout.arcLength, unit, profile, lengthFormatOptions(node))}`,
+        `ARCO ${formatConstructionLength(layout.arcLength, unit, profile, lengthFormatOptions(node))}`,
         dangling,
       ),
       0,
@@ -538,7 +538,7 @@ function notation(
   const repeated = includeFeatureCount && node.featureCount > 1 ? `${node.featureCount} x ` : ''
   const content = node.textOverride ?? `${repeated}${base}`
   const decorated = `${node.prefix}${content}${node.suffix}`
-  return dangling ? `UNLINKED · ${decorated}` : decorated
+  return dangling ? `SCOLLEGATA · ${decorated}` : decorated
 }
 
 function dimensionGeometry(

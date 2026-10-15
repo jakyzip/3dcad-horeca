@@ -237,7 +237,7 @@ export function useBlockFaceOperation({
         setTransformNumericInput('')
         setModalFeedbackMode('free')
         if (commitOperation && latestTopology && latestSelection && latestCommand) {
-          commit(baseTopology, latestCommand, operation === 'extrude' ? 'Extrude' : 'Inset')
+          commit(baseTopology, latestCommand, operation === 'extrude' ? 'Estrudi' : 'Rientra')
           playSfx('operation-commit')
         } else if (!commitOperation) {
           playSfx('cancel')

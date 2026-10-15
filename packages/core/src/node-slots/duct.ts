@@ -4,5 +4,5 @@ export const DUCT_BODY_SLOT_ID = 'body'
 export const DUCT_BODY_SLOT_DEFAULT = '#ffffff'
 
 export function ductBodySlots(): SlotDeclaration[] {
-  return [{ slotId: DUCT_BODY_SLOT_ID, label: 'Body', default: DUCT_BODY_SLOT_DEFAULT }]
+  return [{ slotId: DUCT_BODY_SLOT_ID, label: 'Corpo', default: DUCT_BODY_SLOT_DEFAULT }]
 }

@@ -23,7 +23,11 @@ export function ownFloorIntentChanges(
   const refuse = (id: string, detail: string) => ({
     updates: [] as Update[],
     conflicts: [
-      { code: 'room-floor-footprint', nodeIds: [id], message: `Level the floors first. ${detail}` },
+      {
+        code: 'room-floor-footprint',
+        nodeIds: [id],
+        message: `Prima porta i pavimenti alla stessa quota. ${detail}`,
+      },
     ],
   })
   for (const update of updates) {
@@ -57,7 +61,7 @@ export function ownFloorIntentChanges(
     )
       return refuse(
         zone.id,
-        'Only a grounded room with a generated floor can change its footprint.',
+        'Solo una stanza a terra con pavimento automatico può cambiare impronta.',
       )
     const faces = floorRoomFaces(boundaries(nodes, zone.parentId!))
     const face = roomFace(nodes, zone, faces)
@@ -82,14 +86,14 @@ export function ownFloorIntentChanges(
       (node): node is SlabNode =>
         node.type === 'slab' && node.plateRole === 'base' && !!node.zoneIds?.includes(zone.id),
     )
-    if (!base) return refuse(zone.id, 'This room has no single base plate to convert.')
+    if (!base) return refuse(zone.id, 'Questa stanza non ha un unico solaio di base da convertire.')
     const top = roundFloorElevation(zone.floor?.elevation ?? getRoomBaseElevation(nodes, zone.id))
     if (
       mint &&
       floorPlateHoldsUnderside(nodes, base) &&
       base.thickness + top - base.elevation < 0.02 - 1e-9
     )
-      return refuse(zone.id, 'The floor must retain at least 0.02 m above its soffit.')
+      return refuse(zone.id, 'Il pavimento deve restare almeno 0,02 m sopra il suo intradosso.')
     // Room intent stores the level-local walking top, preserving its world height
     // when the destination base is at a different height.
     floor.elevation = top
@@ -136,7 +140,7 @@ export function ownFloorIntentChanges(
   const afterLevels = getLevelElevations(next)
   for (const [id, level] of beforeLevels)
     if (Math.abs(level.baseY - (afterLevels.get(id)?.baseY ?? level.baseY)) > 1e-6)
-      return refuse(id, 'Changing the footprint would move another storey.')
+      return refuse(id, 'Cambiare l’impronta sposterebbe un altro piano.')
   const wallUpdates: Update[] = []
   for (const old of Object.values(nodes)) {
     const current = next[old.id]
@@ -148,7 +152,7 @@ export function ownFloorIntentChanges(
     if (oldTop - support < MIN_WALL_HEIGHT)
       return refuse(
         old.id,
-        `The preserved wall top would leave less than ${MIN_WALL_HEIGHT} m of wall.`,
+        `Mantenendo la sommità del muro resterebbero meno di ${MIN_WALL_HEIGHT} m di muro.`,
       )
     wallUpdates.push({ id: old.id, data: { height: roundFloorElevation(oldTop - support) } })
   }
@@ -180,7 +184,7 @@ export function ownFloorIntentChanges(
       )
         return refuse(
           id,
-          'Changing the footprint cannot preserve the ceiling beneath the covering floor.',
+          'Cambiando l’impronta non si può mantenere il soffitto sotto il pavimento soprastante.',
         )
     }
   }
@@ -233,7 +237,7 @@ export function ownFloorIntentChanges(
           current.position[1],
       ) > 1e-6
     )
-      return refuse(old.id, 'Changing the footprint would move a door or window.')
+      return refuse(old.id, 'Cambiare l’impronta sposterebbe una porta o una finestra.')
   }
   const diff = diffStructure(nodes, next)
   const conflicts = floorIntentConflicts(

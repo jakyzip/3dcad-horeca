@@ -4,7 +4,7 @@ import { cabinetCornerUnlinkPatchesOnDelete, cabinetEmptyRunCascadeDeleteIds } f
 export const cabinetParametrics: ParametricDescriptor<CabinetNode> = {
   groups: [
     {
-      label: 'Dimensions',
+      label: 'Dimensioni',
       fields: [
         { key: 'width', kind: 'number', unit: 'm', min: 0.3, max: 3, step: 0.05 },
         { key: 'depth', kind: 'number', unit: 'm', min: 0.3, max: 1.2, step: 0.01 },
@@ -12,7 +12,7 @@ export const cabinetParametrics: ParametricDescriptor<CabinetNode> = {
       ],
     },
     {
-      label: 'Position',
+      label: 'Posizione',
       fields: [{ key: 'position', kind: 'vec3' }],
     },
   ],
@@ -29,7 +29,7 @@ export const cabinetParametrics: ParametricDescriptor<CabinetNode> = {
 export const cabinetModuleParametrics: ParametricDescriptor<CabinetModuleNode> = {
   groups: [
     {
-      label: 'Dimensions',
+      label: 'Dimensioni',
       fields: [
         { key: 'width', kind: 'number', unit: 'm', min: 0.3, max: 3, step: 0.05 },
         { key: 'depth', kind: 'number', unit: 'm', min: 0.3, max: 1.2, step: 0.01 },
@@ -37,7 +37,7 @@ export const cabinetModuleParametrics: ParametricDescriptor<CabinetModuleNode> =
       ],
     },
     {
-      label: 'Position',
+      label: 'Posizione',
       fields: [{ key: 'position', kind: 'vec3' }],
     },
   ],

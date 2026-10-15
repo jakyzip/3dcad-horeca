@@ -262,7 +262,7 @@ export function createFenceOnCurrentLevel(
   }
   const authoredFence = FenceNode.parse({
     ...defaults,
-    name: `Fence ${fenceCount + 1}`,
+    name: `Recinzione ${fenceCount + 1}`,
     start,
     end,
   })
@@ -308,7 +308,7 @@ export function createSplineFenceOnCurrentLevel(
   }
   const authoredFence = FenceNode.parse({
     ...defaults,
-    name: `Fence ${fenceCount + 1}`,
+    name: `Recinzione ${fenceCount + 1}`,
     start,
     end,
     path,

@@ -152,12 +152,12 @@ export const cupolaDefinition: NodeDefinition<typeof CupolaNode> = {
     move: () => import('./move-tool'),
   },
   toolHints: [
-    { key: 'Left click', label: 'Place cupola on roof' },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Left click', label: 'Posiziona la torretta sul tetto' },
+    { key: 'Esc', label: 'Annulla' },
   ],
 
   presentation: {
-    label: 'Cupola',
+    label: 'Torretta',
     description: 'Louvered roof lantern with a dome or pyramid cap and optional finial.',
     icon: { kind: 'url', src: '/icons/cupola.webp' },
     paletteSection: 'structure',

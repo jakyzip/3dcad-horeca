@@ -69,7 +69,7 @@ export function createDuctRunEndCap(
     system: duct.system,
   }
   const cap = DuctFittingNode.parse({
-    name: 'End Cap',
+    name: 'Tappo',
     metadata: {
       [END_CAP_OWNER_ID_KEY]: duct.id,
       [END_CAP_ENDPOINT_KEY]: endpoint,
@@ -111,7 +111,7 @@ export function createPipeRunEndCap(
     system: pipe.system,
   }
   const cap = PipeFittingNode.parse({
-    name: 'End Cap',
+    name: 'Tappo',
     metadata: {
       [END_CAP_OWNER_ID_KEY]: pipe.id,
       [END_CAP_ENDPOINT_KEY]: endpoint,

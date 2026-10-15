@@ -102,7 +102,7 @@ function publishAdjacentHeightGuide(node: LeanToExtensionNode, sceneApi: SceneAp
       id: `${match.target.nodeId ?? 'lean-to'}:high-edge`,
       elevation: match.target.roofEdgeY,
       anchor: match.target.anchor ?? [pose.position[0], pose.position[2]],
-      label: 'Neighbor shed edge',
+      label: 'Bordo della tettoia vicina',
     },
   )
 }
@@ -182,7 +182,7 @@ function highEdgeHeightHandle(): HandleDescriptor<LeanToExtensionNode> {
     placement: {
       position: (node) => [0, node.highEdgeHeight + HEIGHT_HANDLE_OFFSET, 0],
     },
-    measureLabel: 'High edge height',
+    measureLabel: 'Altezza del bordo alto',
   }
 }
 
@@ -321,7 +321,7 @@ function spanHandle(side: 'left' | 'right'): HandleDescriptor<LeanToExtensionNod
       },
       rotationY: () => (side === 'right' ? 0 : Math.PI),
     },
-    measureLabel: 'Span',
+    measureLabel: 'Larghezza',
   }
 }
 
@@ -380,7 +380,7 @@ function circularRadiusHandle(side: 'left' | 'right'): HandleDescriptor<LeanToEx
       },
       rotationY: () => (side === 'right' ? 0 : Math.PI),
     },
-    measureLabel: 'Host radius',
+    measureLabel: 'Raggio del supporto',
   }
 }
 
@@ -431,7 +431,7 @@ leanToExtensionHandles.push({
       return [0, layout.lowEdgeHeight + HEIGHT_HANDLE_OFFSET, node.projection]
     },
   },
-  measureLabel: 'Projection',
+  measureLabel: 'Aggetto',
 })
 leanToExtensionHandles.push(spanHandle('right'), spanHandle('left'))
 leanToExtensionHandles.push(circularRadiusHandle('right'), circularRadiusHandle('left'))
@@ -487,14 +487,14 @@ export const leanToExtensionDefinition: NodeDefinition<typeof LeanToExtensionNod
   toolHints: [
     {
       key: 'Left click',
-      label: 'Place canopy or set the next run point',
+      label: 'Posiziona la tettoia o fissa il punto successivo della fila',
     },
-    { key: 'R / T', label: 'Rotate or flip the run side' },
-    { key: 'F', label: 'Cycle mono / gable / butterfly' },
-    { key: 'Esc', label: 'End run / cancel' },
+    { key: 'R / T', label: 'Ruota o inverti il lato della fila' },
+    { key: 'F', label: 'Cambia tra una falda / a capanna / a farfalla' },
+    { key: 'Esc', label: 'Termina la fila / annulla' },
   ],
   presentation: {
-    label: 'Canopy',
+    label: 'Tettoia',
     description:
       'An attached mono-pitch or freestanding mono, gable, or butterfly canopy with managed structure and drainage.',
     icon: { kind: 'url', src: '/icons/lean-to-extension.webp' },

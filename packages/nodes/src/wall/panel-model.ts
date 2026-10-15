@@ -35,7 +35,26 @@ const profiles: Record<TrimKey, readonly WallTrimProfile[]> = {
   crown: ['flat', 'crown-cove', 'crown-ogee', 'crown-craftsman', 'crown-layered'],
   chairRail: ['flat', 'rail-rounded', 'rail-ogee', 'rail-picture', 'rail-stepped'],
 }
+const VALUE_LABELS: Record<string, string> = {
+  a: 'Lato A',
+  b: 'Lato B',
+  both: 'Entrambi',
+  flat: 'Piatto',
+  'base-modern': 'Moderno',
+  'base-colonial': 'Coloniale',
+  'base-shoe': 'Sguscio',
+  'base-ogee': 'A gola',
+  'crown-cove': 'A guscio',
+  'crown-ogee': 'A gola',
+  'crown-craftsman': 'Artigianale',
+  'crown-layered': 'A strati',
+  'rail-rounded': 'Arrotondato',
+  'rail-ogee': 'A gola',
+  'rail-picture': 'Portaquadri',
+  'rail-stepped': 'A gradino',
+}
 const pretty = (value: string) =>
+  VALUE_LABELS[value] ??
   value
     .replace(/^(base|crown|rail)-/, '')
     .replace(/(^|[- ])\w/g, (s) => s.replace('-', ' ').toUpperCase())
@@ -44,14 +63,14 @@ export type WallReferenceValue = 'outside' | 'center' | 'inside' | 'left' | 'rig
 export type WallReferenceOption = { label: string; value: WallReferenceValue }
 
 const ROOM_REFERENCE_OPTIONS: WallReferenceOption[] = [
-  { label: 'Outside face', value: 'outside' },
-  { label: 'Center', value: 'center' },
-  { label: 'Inside face', value: 'inside' },
+  { label: 'Faccia esterna', value: 'outside' },
+  { label: 'Centro', value: 'center' },
+  { label: 'Faccia interna', value: 'inside' },
 ]
 const DIRECTION_REFERENCE_OPTIONS: WallReferenceOption[] = [
-  { label: 'Left', value: 'left' },
-  { label: 'Center', value: 'center' },
-  { label: 'Right', value: 'right' },
+  { label: 'Sinistra', value: 'left' },
+  { label: 'Centro', value: 'center' },
+  { label: 'Destra', value: 'right' },
 ]
 
 /** Faces a wall's reference choices name: its room sides when a room is on exactly one side. */
@@ -183,23 +202,23 @@ export function wallSettings(
     reference.apply(reference.options[(index + by + 3) % 3]!.value)
   }
   rows.push({
-    section: 'Dimensions',
+    section: 'Dimensioni',
     id: 'wall-reference',
     kind: 'cycle',
-    label: 'Reference',
-    value: reference.options.find((option) => option.value === reference.value)?.label ?? 'Mixed',
+    label: 'Riferimento',
+    value: reference.options.find((option) => option.value === reference.value)?.label ?? 'Vari',
     next: () => step(1),
     previous: () => step(-1),
   })
   const length = getWallCurveLength(node)
-  number('Dimensions', 'wall-length', 'Length', length, 0.1, 1000, 0.05, (next) => {
+  number('Dimensioni', 'wall-length', 'Lunghezza', length, 0.1, 1000, 0.05, (next) => {
     update(buildWallLengthPatch(node, next))
   })
   choice(
-    'Dimensions',
+    'Dimensioni',
     'wall-top',
-    'Top',
-    node.height == null ? 'Follows level' : 'Custom height',
+    'Sommità',
+    node.height == null ? 'Segue il piano' : 'Altezza personalizzata',
     () =>
       update(
         node.height == null
@@ -208,16 +227,21 @@ export function wallSettings(
       ),
   )
   if (node.height == null)
-    choice('Dimensions', 'wall-height-auto', 'Current height', `${Number(height.toFixed(3))} m`)
+    choice(
+      'Dimensioni',
+      'wall-height-auto',
+      'Altezza attuale',
+      `${String(Number(height.toFixed(3))).replace('.', ',')} m`,
+    )
   else
-    number('Dimensions', 'height', 'Height', node.height, 0.1, 1000, 0.05, (height) =>
+    number('Dimensioni', 'height', 'Altezza', node.height, 0.1, 1000, 0.05, (height) =>
       update({ height }),
     )
   choice(
-    'Dimensions',
+    'Dimensioni',
     'wall-bottom',
-    'Bottom',
-    node.fillToTerrain ? 'Fill to terrain' : 'Auto',
+    'Base',
+    node.fillToTerrain ? 'Fino al terreno' : 'Automatica',
     () =>
       update(
         node.fillToTerrain
@@ -226,9 +250,9 @@ export function wallSettings(
       ),
   )
   number(
-    'Dimensions',
+    'Dimensioni',
     'thickness',
-    'Thickness',
+    'Spessore',
     node.thickness ?? 0.1,
     0.05,
     1000,
@@ -243,9 +267,9 @@ export function wallSettings(
   if (!blockedCurve) {
     const limit = Math.max(0.01, getMaxWallCurveOffset(node))
     number(
-      'Dimensions',
+      'Dimensioni',
       'curveOffset',
-      'Curve',
+      'Curvatura',
       getClampedWallCurveOffset(node),
       -limit,
       limit,
@@ -254,49 +278,49 @@ export function wallSettings(
     )
     if (reshape)
       rows.push({
-        section: 'Dimensions',
+        section: 'Dimensioni',
         id: 'wall-reshape',
         kind: 'action',
-        label: 'Reshape curve in scene',
+        label: 'Modifica la curva nella scena',
         onSelect: reshape,
       })
   }
   for (const [key, title, defaults] of [
-    ['skirting', 'Skirting', WALL_SKIRTING_DEFAULT],
-    ['crown', 'Crown molding', WALL_CROWN_DEFAULT],
-    ['chairRail', 'Chair rail', WALL_CHAIR_RAIL_DEFAULT],
+    ['skirting', 'Battiscopa', WALL_SKIRTING_DEFAULT],
+    ['crown', 'Cornice', WALL_CROWN_DEFAULT],
+    ['chairRail', 'Fascia paracolpi', WALL_CHAIR_RAIL_DEFAULT],
   ] as const) {
     const trim = { ...defaults, ...node[key] }
     const patch = (value: Partial<typeof trim>) => update({ [key]: { ...trim, ...value } })
-    choice(title, `${key}-enabled`, title, trim.enabled ? 'On' : 'Off', () =>
+    choice(title, `${key}-enabled`, title, trim.enabled ? 'Attivo' : 'Disattivo', () =>
       patch({ enabled: !trim.enabled }),
     )
     if (!trim.enabled) continue
     const sides = trim.sides === 'interior' ? 'a' : trim.sides === 'exterior' ? 'b' : trim.sides
-    cycle(title, `${key}-sides`, 'Sides', sides, ['a', 'b', 'both'], (next) =>
+    cycle(title, `${key}-sides`, 'Lati', sides, ['a', 'b', 'both'], (next) =>
       patch({ sides: next as typeof trim.sides }),
     )
-    cycle(title, `${key}-profile`, 'Profile', trim.profile, profiles[key], (profile) =>
+    cycle(title, `${key}-profile`, 'Profilo', trim.profile, profiles[key], (profile) =>
       patch({ profile: profile as WallTrimProfile }),
     )
     number(
       title,
       `${key}-height`,
-      'Height',
+      'Altezza',
       trim.height,
       0.01,
       Math.max(0.05, height),
       0.01,
       (height) => patch({ height }),
     )
-    number(title, `${key}-proud`, 'Projection', trim.proud, 0.001, 0.2, 0.005, (proud) =>
+    number(title, `${key}-proud`, 'Sporgenza', trim.proud, 0.001, 0.2, 0.005, (proud) =>
       patch({ proud }),
     )
     if (key === 'chairRail')
       number(
         title,
         `${key}-offset`,
-        'Offset',
+        'Scostamento',
         trim.offsetY ?? 0,
         0,
         Math.max(0.05, height - trim.height),

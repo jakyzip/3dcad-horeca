@@ -96,21 +96,21 @@ export function buildDoorFloorplanSchedule(args: {
   )
   return {
     id: 'doors',
-    title: 'DOOR SCHEDULE',
+    title: 'ABACO DELLE PORTE',
     columns: [
-      { key: 'mark', label: 'MARK', weight: 0.65 },
-      { key: 'type', label: 'TYPE', weight: 1.25 },
-      { key: 'size', label: 'NOMINAL SIZE', weight: 1.35 },
-      { key: 'roughOpening', label: 'ROUGH OPENING', weight: 1.35 },
-      { key: 'operation', label: 'OPERATION', weight: 1.35 },
-      { key: 'frame', label: 'FRAME T / D', weight: 1.25 },
-      { key: 'hardware', label: 'HARDWARE', weight: 1.35 },
+      { key: 'mark', label: 'SIGLA', weight: 0.65 },
+      { key: 'type', label: 'TIPO', weight: 1.25 },
+      { key: 'size', label: 'MISURA NOMINALE', weight: 1.35 },
+      { key: 'roughOpening', label: 'VANO GREZZO', weight: 1.35 },
+      { key: 'operation', label: 'APERTURA', weight: 1.35 },
+      { key: 'frame', label: 'TELAIO S / P', weight: 1.25 },
+      { key: 'hardware', label: 'FERRAMENTA', weight: 1.35 },
     ],
     rows: args.siblings.map((door) => ({
       id: door.id,
       cells: {
         mark: marks.markById.get(door.id) ?? '—',
-        type: door.openingKind === 'opening' ? 'Opening' : titleCase(door.doorType),
+        type: door.openingKind === 'opening' ? 'Apertura' : typeLabel(door.doorType),
         size: formatSize(door.width, door.height, args.unit, args.profile ?? 'document'),
         roughOpening: formatRoughOpening(door, args.unit, args.profile ?? 'document'),
         operation: doorOperation(door),
@@ -140,21 +140,21 @@ export function buildWindowFloorplanSchedule(args: {
   )
   return {
     id: 'windows',
-    title: 'WINDOW SCHEDULE',
+    title: 'ABACO DELLE FINESTRE',
     columns: [
-      { key: 'mark', label: 'MARK', weight: 0.65 },
-      { key: 'type', label: 'TYPE', weight: 1.2 },
-      { key: 'size', label: 'NOMINAL SIZE', weight: 1.35 },
-      { key: 'roughOpening', label: 'ROUGH OPENING', weight: 1.35 },
-      { key: 'sill', label: 'SILL', weight: 0.9 },
-      { key: 'head', label: 'HEAD', weight: 0.9 },
-      { key: 'operation', label: 'OPERATION', weight: 1.35 },
+      { key: 'mark', label: 'SIGLA', weight: 0.65 },
+      { key: 'type', label: 'TIPO', weight: 1.2 },
+      { key: 'size', label: 'MISURA NOMINALE', weight: 1.35 },
+      { key: 'roughOpening', label: 'VANO GREZZO', weight: 1.35 },
+      { key: 'sill', label: 'DAVANZALE', weight: 0.9 },
+      { key: 'head', label: 'ARCHITRAVE', weight: 0.9 },
+      { key: 'operation', label: 'APERTURA', weight: 1.35 },
     ],
     rows: args.siblings.map((window) => ({
       id: window.id,
       cells: {
         mark: marks.markById.get(window.id) ?? '—',
-        type: window.openingKind === 'opening' ? 'Opening' : titleCase(window.windowType),
+        type: window.openingKind === 'opening' ? 'Apertura' : typeLabel(window.windowType),
         size: formatSize(window.width, window.height, args.unit, args.profile ?? 'document'),
         roughOpening: formatRoughOpening(window, args.unit, args.profile ?? 'document'),
         sill: formatConstructionLength(
@@ -414,7 +414,9 @@ function resolveOpeningMarks<T extends OpeningNode>(
       const mark = resolution.marks.get(opening.id)
       if (mark) markById.set(opening.id, mark)
     }
-    const issues = resolution.issues.filter((issue) => issue.startsWith(`Duplicate ${kind} `))
+    const issues = resolution.issues.filter((issue) =>
+      issue.startsWith(`Sigla ${kindLabel(kind)} `),
+    )
     // Openings the level walk did not reach (detached / hidden) still need
     // a mark so the schedule row is not blank.
     let fallbackSequence = 1
@@ -456,7 +458,7 @@ function resolveOpeningMarks<T extends OpeningNode>(
 
   const issues = [...explicitMarks.entries()]
     .filter(([, ids]) => ids.length > 1)
-    .map(([mark, ids]) => `Duplicate ${kind} mark ${mark} (${ids.length} instances)`)
+    .map(([mark, ids]) => `Sigla ${kindLabel(kind)} ${mark} duplicata (${ids.length} occorrenze)`)
 
   return { markById, issues }
 }
@@ -560,7 +562,7 @@ function formatRoughOpening(
   profile: ConstructionLengthProfile,
 ): string {
   if (opening.roughOpeningWidth === undefined || opening.roughOpeningHeight === undefined) {
-    return 'VERIFY'
+    return 'DA VERIFICARE'
   }
   return formatSize(opening.roughOpeningWidth, opening.roughOpeningHeight, unit, profile)
 }
@@ -604,36 +606,79 @@ function openingDimensionPrefix(reference: OpeningDimensionReference): string {
 }
 
 function doorOperation(door: DoorNode): string {
-  if (door.openingKind === 'opening') return 'None'
+  if (door.openingKind === 'opening') return 'Nessuna'
   if (door.doorType === 'hinged')
-    return `${titleCase(door.hingesSide)} / ${titleCase(door.swingDirection)}`
+    return `${valueLabel(door.hingesSide)} / ${valueLabel(door.swingDirection)}`
   if (door.doorType === 'sliding' || door.doorType === 'pocket' || door.doorType === 'barn') {
-    return `Slide ${titleCase(door.slideDirection)}`
+    return `Scorrevole ${valueLabel(door.slideDirection).toLocaleLowerCase()}`
   }
-  return titleCase(door.doorType)
+  return typeLabel(door.doorType)
 }
 
 function doorHardware(door: DoorNode): string {
-  if (door.openingKind === 'opening') return 'None'
+  if (door.openingKind === 'opening') return 'Nessuna'
   const hardware = []
-  if (door.doorCloser) hardware.push('Closer')
-  if (door.panicBar) hardware.push('Panic bar')
-  if (door.threshold) hardware.push('Threshold')
+  if (door.doorCloser) hardware.push('Chiudiporta')
+  if (door.panicBar) hardware.push('Maniglione antipanico')
+  if (door.threshold) hardware.push('Soglia')
   return hardware.length > 0 ? hardware.join(', ') : 'Standard'
 }
 
 function windowOperation(window: WindowNode): string {
-  if (window.openingKind === 'opening') return 'None'
-  if (window.windowType === 'fixed') return 'Fixed'
+  if (window.openingKind === 'opening') return 'Nessuna'
+  if (window.windowType === 'fixed') return 'Fissa'
   if (window.windowType === 'casement') {
     return window.casementStyle === 'french'
-      ? 'French casement'
-      : `${titleCase(window.hingesSide)} hinge`
+      ? 'A due ante'
+      : `Cerniere a ${valueLabel(window.hingesSide).toLocaleLowerCase()}`
   }
   if (window.windowType === 'awning' || window.windowType === 'hopper') {
-    return titleCase(window.awningDirection)
+    return valueLabel(window.awningDirection)
   }
-  return titleCase(window.windowType)
+  return typeLabel(window.windowType)
+}
+
+function kindLabel(kind: OpeningKind): string {
+  return kind === 'door' ? 'porta' : 'finestra'
+}
+
+const TYPE_LABELS: Record<string, string> = {
+  hinged: 'A battente',
+  double: 'A due ante',
+  french: 'Portafinestra',
+  folding: 'A libro',
+  pocket: 'Scorrevole a scomparsa',
+  barn: 'Scorrevole esterna',
+  sliding: 'Scorrevole',
+  'garage-sectional': 'Sezionale',
+  'garage-rollup': 'Avvolgibile',
+  'garage-tiltup': 'Basculante',
+  fixed: 'Fissa',
+  casement: 'A battente',
+  awning: 'A sporgere',
+  hopper: 'A vasistas',
+  'single-hung': 'Saliscendi singolo',
+  'double-hung': 'Saliscendi doppio',
+  bay: 'Bovindo',
+  bow: 'Bovindo curvo',
+  louvered: 'A lamelle',
+}
+
+const VALUE_LABELS: Record<string, string> = {
+  left: 'Sinistra',
+  right: 'Destra',
+  inward: 'Verso l’interno',
+  outward: 'Verso l’esterno',
+  up: 'In alto',
+  down: 'In basso',
+}
+
+function typeLabel(value: string): string {
+  return TYPE_LABELS[value] ?? titleCase(value)
+}
+
+function valueLabel(value: string): string {
+  return VALUE_LABELS[value] ?? titleCase(value)
 }
 
 function titleCase(value: string): string {

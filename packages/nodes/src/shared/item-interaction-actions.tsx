@@ -21,7 +21,7 @@ export default function ItemInteractionActions() {
     <ActionMenuButton
       // E runs the mechanism when there is one, and only otherwise the light.
       keys={nodeMechanism(node) ? undefined : ['E']}
-      label={lit ? 'Turn light off' : 'Turn light on'}
+      label={lit ? 'Spegni la luce' : 'Accendi la luce'}
       onClick={(event) => {
         event.stopPropagation()
         toggleItemLights(node)

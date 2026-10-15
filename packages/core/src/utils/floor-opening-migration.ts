@@ -137,7 +137,7 @@ function migrateFloorOpeningNodesOnView(sourceNodes: Record<string, unknown>) {
       nodes[id] = FloorOpeningNode.parse({
         id,
         parentId: group.levelId,
-        name: 'Floor opening',
+        name: 'Apertura nel pavimento',
         polygon: part.outer,
         ...(group.hostZoneId ? { hostZoneId: group.hostZoneId } : {}),
         legacyPlateCuts,

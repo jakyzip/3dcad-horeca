@@ -130,7 +130,7 @@ describe('buildConstructionDimensionFloorplan', () => {
     expect(movedDimension).toMatchObject({ start: [3, 0], text: '1m' })
     expect(danglingDimension).toMatchObject({
       start: [1, 0],
-      text: 'UNLINKED · 3m',
+      text: 'SCOLLEGATA · 3m',
       stroke: '#dc2626',
     })
   })
@@ -476,11 +476,11 @@ describe('buildConstructionDimensionFloorplan', () => {
     const arcEntries = arcGeometry ? flatten(arcGeometry) : []
 
     expect(dimensionSegments(chordGeometry)[0]).toMatchObject({
-      text: 'CH 2m',
+      text: 'CORDA 2m',
     })
     expect(arcEntries.some((entry) => entry.kind === 'path')).toBe(true)
     expect(arcEntries.find((entry) => entry.kind === 'dimension-label')).toMatchObject({
-      text: 'ARC 3.14m',
+      text: 'ARCO 3.14m',
     })
   })
 

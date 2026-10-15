@@ -82,7 +82,7 @@ describe('recipe ceiling cuts (version 2)', () => {
     const nodes = { [level.id]: level, [ceiling.id]: ceiling, [node.id]: node }
     expect(() => validateProceduralRelations(node, nodes)).not.toThrow()
     const shallow = { ...nodes, [ceiling.id]: { ...ceiling, height: 2.95 } }
-    expect(() => validateProceduralRelations(node, shallow)).toThrow('level height')
+    expect(() => validateProceduralRelations(node, shallow)).toThrow('altezza del piano')
   })
 
   test('the hole follows the node onto its ceiling, turned with its yaw', () => {
@@ -167,7 +167,7 @@ describe('ceiling cut review fixes (AK-D2 round 2)', () => {
   test('the cut ring must lie inside the ceiling and clear of its holes', () => {
     const wide = downlight()
     wide.cuts = [{ shape: 'rect', size: [1, 1] }]
-    expect(place(wide, ceilingOf(0.25))).toThrow('cut')
+    expect(place(wide, ceilingOf(0.25))).toThrow('taglio')
     expect(place(downlight(), ceilingOf(2))).not.toThrow()
     const hole: [number, number][] = [
       [0.02, 0.02],
@@ -175,7 +175,7 @@ describe('ceiling cut review fixes (AK-D2 round 2)', () => {
       [0.3, 0.3],
       [0.02, 0.3],
     ]
-    expect(place(downlight(), ceilingOf(2, [hole]))).toThrow('holes')
+    expect(place(downlight(), ceilingOf(2, [hole]))).toThrow('fori')
   })
   test('a recessed part may not move up through the storey above', () => {
     const recipe = downlight()
@@ -185,7 +185,7 @@ describe('ceiling cut review fixes (AK-D2 round 2)', () => {
       distance: 1,
     }
     expect(() => parseRecipe(recipe)).not.toThrow()
-    expect(place(recipe, ceilingOf(2))).toThrow('level height')
+    expect(place(recipe, ceilingOf(2))).toThrow('altezza del piano')
   })
   test('a round can spinning inside a circle cut of its own diameter is accepted', () => {
     const recipe = downlight()

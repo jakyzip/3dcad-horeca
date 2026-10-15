@@ -440,7 +440,7 @@ test('BlockEditor axis changes commit the complete accepted extrusion command', 
     await settle(renderer)
     await keys(['e', '0', '.', '2', 'x'])
     await settle(renderer)
-    expect(ui(renderer)).toContain('X axis')
+    expect(ui(renderer)).toContain('asse X')
     const preview = getEffectiveNode(useScene.getState().nodes[host.id] as BlockNode).topology
     await key('Enter')
     await settle(renderer)

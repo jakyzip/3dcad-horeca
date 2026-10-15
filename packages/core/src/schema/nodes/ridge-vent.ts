@@ -106,22 +106,22 @@ export function getRidgeVentLinesForSegment(segment: RoofSegmentNode): RidgeVent
     const topD = Math.max(0, shoulderMaxZ - shoulderMinZ)
     const lowerSlopeLines: RidgeVentLine[] = [
       {
-        name: 'Slope Ridge Vent',
+        name: 'Aeratore di colmo inclinato',
         start: [shoulderMinX, shoulderMaxZ],
         end: [minX, maxZ],
       },
       {
-        name: 'Slope Ridge Vent',
+        name: 'Aeratore di colmo inclinato',
         start: [shoulderMaxX, shoulderMaxZ],
         end: [maxX, maxZ],
       },
       {
-        name: 'Slope Ridge Vent',
+        name: 'Aeratore di colmo inclinato',
         start: [shoulderMaxX, shoulderMinZ],
         end: [maxX, minZ],
       },
       {
-        name: 'Slope Ridge Vent',
+        name: 'Aeratore di colmo inclinato',
         start: [shoulderMinX, shoulderMinZ],
         end: [minX, minZ],
       },
@@ -131,11 +131,13 @@ export function getRidgeVentLinesForSegment(segment: RoofSegmentNode): RidgeVent
       const leftRidge: [number, number] = [shoulderMinX + topD / 2, 0]
       const rightRidge: [number, number] = [shoulderMaxX - topD / 2, 0]
       return [
-        ...(ridgeZVisible ? [{ name: 'Ridge Vent', start: leftRidge, end: rightRidge }] : []),
-        { name: 'Hip Ridge Vent', start: [shoulderMinX, shoulderMaxZ], end: leftRidge },
-        { name: 'Hip Ridge Vent', start: [shoulderMinX, shoulderMinZ], end: leftRidge },
-        { name: 'Hip Ridge Vent', start: [shoulderMaxX, shoulderMaxZ], end: rightRidge },
-        { name: 'Hip Ridge Vent', start: [shoulderMaxX, shoulderMinZ], end: rightRidge },
+        ...(ridgeZVisible
+          ? [{ name: 'Aeratore di colmo', start: leftRidge, end: rightRidge }]
+          : []),
+        { name: 'Aeratore di displuvio', start: [shoulderMinX, shoulderMaxZ], end: leftRidge },
+        { name: 'Aeratore di displuvio', start: [shoulderMinX, shoulderMinZ], end: leftRidge },
+        { name: 'Aeratore di displuvio', start: [shoulderMaxX, shoulderMaxZ], end: rightRidge },
+        { name: 'Aeratore di displuvio', start: [shoulderMaxX, shoulderMinZ], end: rightRidge },
         ...lowerSlopeLines,
       ]
     }
@@ -143,11 +145,11 @@ export function getRidgeVentLinesForSegment(segment: RoofSegmentNode): RidgeVent
     const frontRidge: [number, number] = [0, shoulderMaxZ - topW / 2]
     const backRidge: [number, number] = [0, shoulderMinZ + topW / 2]
     return [
-      ...(ridgeXVisible ? [{ name: 'Ridge Vent', start: frontRidge, end: backRidge }] : []),
-      { name: 'Hip Ridge Vent', start: [shoulderMinX, shoulderMaxZ], end: frontRidge },
-      { name: 'Hip Ridge Vent', start: [shoulderMaxX, shoulderMaxZ], end: frontRidge },
-      { name: 'Hip Ridge Vent', start: [shoulderMinX, shoulderMinZ], end: backRidge },
-      { name: 'Hip Ridge Vent', start: [shoulderMaxX, shoulderMinZ], end: backRidge },
+      ...(ridgeXVisible ? [{ name: 'Aeratore di colmo', start: frontRidge, end: backRidge }] : []),
+      { name: 'Aeratore di displuvio', start: [shoulderMinX, shoulderMaxZ], end: frontRidge },
+      { name: 'Aeratore di displuvio', start: [shoulderMaxX, shoulderMaxZ], end: frontRidge },
+      { name: 'Aeratore di displuvio', start: [shoulderMinX, shoulderMinZ], end: backRidge },
+      { name: 'Aeratore di displuvio', start: [shoulderMaxX, shoulderMinZ], end: backRidge },
       ...lowerSlopeLines,
     ]
   }
@@ -185,11 +187,13 @@ export function getRidgeVentLinesForSegment(segment: RoofSegmentNode): RidgeVent
     const ridgeStart: [number, number] = axis === 'x' ? [-rakeEndHalfX, 0] : [0, rakeEndHalfZ]
     const ridgeEnd: [number, number] = axis === 'x' ? [rakeEndHalfX, 0] : [0, -rakeEndHalfZ]
     return [
-      ...(mainRidgeVisible ? [{ name: 'Ridge Vent', start: ridgeStart, end: ridgeEnd }] : []),
-      { name: 'Hip Ridge Vent', start: [minX, maxZ], end: [-rakeEndHalfX, rakeEndHalfZ] },
-      { name: 'Hip Ridge Vent', start: [maxX, maxZ], end: [rakeEndHalfX, rakeEndHalfZ] },
-      { name: 'Hip Ridge Vent', start: [maxX, minZ], end: [rakeEndHalfX, -rakeEndHalfZ] },
-      { name: 'Hip Ridge Vent', start: [minX, minZ], end: [-rakeEndHalfX, -rakeEndHalfZ] },
+      ...(mainRidgeVisible
+        ? [{ name: 'Aeratore di colmo', start: ridgeStart, end: ridgeEnd }]
+        : []),
+      { name: 'Aeratore di displuvio', start: [minX, maxZ], end: [-rakeEndHalfX, rakeEndHalfZ] },
+      { name: 'Aeratore di displuvio', start: [maxX, maxZ], end: [rakeEndHalfX, rakeEndHalfZ] },
+      { name: 'Aeratore di displuvio', start: [maxX, minZ], end: [rakeEndHalfX, -rakeEndHalfZ] },
+      { name: 'Aeratore di displuvio', start: [minX, minZ], end: [-rakeEndHalfX, -rakeEndHalfZ] },
     ]
   }
 
@@ -197,7 +201,7 @@ export function getRidgeVentLinesForSegment(segment: RoofSegmentNode): RidgeVent
     if (!ridgeZVisible) return []
     return [
       {
-        name: 'Ridge Vent',
+        name: 'Aeratore di colmo',
         start: [minX, 0],
         end: [maxX, 0],
       },
@@ -208,22 +212,22 @@ export function getRidgeVentLinesForSegment(segment: RoofSegmentNode): RidgeVent
     const leftRidge: [number, number] = [minX + halfD, 0]
     const rightRidge: [number, number] = [maxX - halfD, 0]
     return [
-      ...(ridgeZVisible ? [{ name: 'Ridge Vent', start: leftRidge, end: rightRidge }] : []),
-      { name: 'Hip Ridge Vent', start: [minX, maxZ], end: leftRidge },
-      { name: 'Hip Ridge Vent', start: [minX, minZ], end: leftRidge },
-      { name: 'Hip Ridge Vent', start: [maxX, maxZ], end: rightRidge },
-      { name: 'Hip Ridge Vent', start: [maxX, minZ], end: rightRidge },
+      ...(ridgeZVisible ? [{ name: 'Aeratore di colmo', start: leftRidge, end: rightRidge }] : []),
+      { name: 'Aeratore di displuvio', start: [minX, maxZ], end: leftRidge },
+      { name: 'Aeratore di displuvio', start: [minX, minZ], end: leftRidge },
+      { name: 'Aeratore di displuvio', start: [maxX, maxZ], end: rightRidge },
+      { name: 'Aeratore di displuvio', start: [maxX, minZ], end: rightRidge },
     ]
   }
 
   const frontRidge: [number, number] = [0, maxZ - halfW]
   const backRidge: [number, number] = [0, minZ + halfW]
   return [
-    ...(ridgeXVisible ? [{ name: 'Ridge Vent', start: frontRidge, end: backRidge }] : []),
-    { name: 'Hip Ridge Vent', start: [minX, maxZ], end: frontRidge },
-    { name: 'Hip Ridge Vent', start: [maxX, maxZ], end: frontRidge },
-    { name: 'Hip Ridge Vent', start: [minX, minZ], end: backRidge },
-    { name: 'Hip Ridge Vent', start: [maxX, minZ], end: backRidge },
+    ...(ridgeXVisible ? [{ name: 'Aeratore di colmo', start: frontRidge, end: backRidge }] : []),
+    { name: 'Aeratore di displuvio', start: [minX, maxZ], end: frontRidge },
+    { name: 'Aeratore di displuvio', start: [maxX, maxZ], end: frontRidge },
+    { name: 'Aeratore di displuvio', start: [minX, minZ], end: backRidge },
+    { name: 'Aeratore di displuvio', start: [maxX, minZ], end: backRidge },
   ]
 }
 

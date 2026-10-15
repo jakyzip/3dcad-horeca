@@ -15,7 +15,7 @@ import { blockDefinition } from './definition'
 describe('block placement bounds', () => {
   test('starts with the shared default wall-role material', () => {
     expect(blockDefinition.defaults().slots).toEqual({})
-    expect(blockDefinition.defaults().slotNames).toEqual({ body: 'Body' })
+    expect(blockDefinition.defaults().slotNames).toEqual({ body: 'Corpo' })
   })
 
   test('uses the dedicated editable-cube icon in the build palette', () => {
@@ -28,7 +28,7 @@ describe('block placement bounds', () => {
   test('exposes whole-mesh position controls in the inspector', () => {
     expect(blockDefinition.parametrics?.groups).toEqual([
       {
-        label: 'Position',
+        label: 'Posizione',
         fields: [{ key: 'position', kind: 'vec3' }],
       },
     ])

@@ -363,11 +363,11 @@ export function validateProceduralRelations(raw: AnyNode | ProceduralItemNode, n
   if (node.recipe.mounting?.attachTo === 'ceiling' && !awaitingHost) {
     const ceiling = node.parentId ? nodes[node.parentId] : undefined
     if (ceiling?.type !== 'ceiling' || node.wallId || node.side)
-      throw new Error('This design needs a ceiling host')
+      throw new Error('Questo oggetto va appeso a un soffitto')
     if (Math.abs(node.rotation[0]) > 1e-8 || Math.abs(node.rotation[2]) > 1e-8)
-      throw new Error('Ceiling designs allow Y rotation only')
+      throw new Error('Gli oggetti a soffitto ruotano solo attorno all’asse verticale')
     if (Math.abs(node.position[1]) > 1e-6)
-      throw new Error('The top reference must be flush with the ceiling')
+      throw new Error('La parte superiore deve essere a filo del soffitto')
     const pose = proceduralLocalPose(node, nodes)
     const f = frame(pose.position, pose.rotation)
     // Moving parts of a recessed design must stay within the storey through their whole travel.
@@ -382,7 +382,7 @@ export function validateProceduralRelations(raw: AnyNode | ProceduralItemNode, n
       (!recessed && b.max[1] > 1e-6) ||
       b.max[1] + height > getStoredLevelHeight(level?.type === 'level' ? level : {}) + 1e-6
     )
-      throw new Error('The hanging design must fit below the ceiling within the level height')
+      throw new Error('L’oggetto appeso deve stare sotto il soffitto, entro l’altezza del piano')
     const footprint: Point2D[] = [
       [evaluation.min[0], evaluation.min[2]],
       [evaluation.max[0], evaluation.min[2]],
@@ -396,21 +396,21 @@ export function validateProceduralRelations(raw: AnyNode | ProceduralItemNode, n
       !ceilingContainsFootprint(ceiling.polygon, footprint) ||
       ceiling.holes.some((hole) => polygonsOverlap(hole, footprint))
     )
-      throw new Error('The hanging design must fit inside the ceiling, outside its holes')
+      throw new Error('L’oggetto appeso deve stare dentro il soffitto, fuori dai suoi fori')
     const ring = proceduralCeilingHole(node)
     if (
       ring &&
       (!ceilingContainsFootprint(ceiling.polygon, ring) ||
         ceiling.holes.some((hole) => polygonsOverlap(hole, ring)))
     )
-      throw new Error('The design’s ceiling cut must fit inside the ceiling, outside its holes')
+      throw new Error('Il taglio nel soffitto deve stare dentro il soffitto, fuori dai suoi fori')
   } else if (node.recipe.mounting?.attachTo === 'wall-side' && !awaitingHost) {
     const wall = node.wallId ? nodes[node.wallId] : undefined
     if (wall?.type !== 'wall' || node.parentId !== wall.id)
-      throw new Error('This design needs a wall host')
-    if (wall.curveOffset) throw new Error('Curved wall mounting is not supported yet')
+      throw new Error('Questo oggetto va appeso a un muro')
+    if (wall.curveOffset) throw new Error('Non si può ancora appendere a un muro curvo')
     if (node.rotation.some((v) => Math.abs(v) > 1e-8))
-      throw new Error('Move the item onto a wall face or press R to flip it')
+      throw new Error('Sposta l’oggetto su una faccia del muro o premi R per girarlo')
     const pose = proceduralLocalPose(node, nodes)
     const b = boundsOf(
       boxCorners(evaluation.min, evaluation.max).map((p) =>
@@ -427,12 +427,12 @@ export function validateProceduralRelations(raw: AnyNode | ProceduralItemNode, n
       b.max[1] > height + 1e-6 ||
       node.position[2] < 0
     )
-      throw new Error('The mounted item must fit on the wall')
+      throw new Error('L’oggetto appeso deve stare sul muro')
   } else if (
     node.wallId ||
     (node.parentId && ['wall', 'ceiling'].includes(nodes[node.parentId]?.type ?? ''))
   )
-    throw new Error('A floor design cannot be attached to a wall or ceiling')
+    throw new Error('Un oggetto da pavimento non si può appendere a un muro o a un soffitto')
   const regions = new Map<string, ReturnType<typeof attachmentBounds>[]>()
   for (const childId of node.children) {
     const child = nodes[childId]

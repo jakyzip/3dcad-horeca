@@ -4,7 +4,7 @@ import type { LinesetNode } from './schema'
 export const linesetParametrics: ParametricDescriptor<LinesetNode> = {
   groups: [
     {
-      label: 'Lines',
+      label: 'Linee',
       fields: [
         {
           key: 'suctionDiameter',
@@ -25,7 +25,7 @@ export const linesetParametrics: ParametricDescriptor<LinesetNode> = {
       ],
     },
     {
-      label: 'Insulation',
+      label: 'Isolamento',
       fields: [
         {
           key: 'insulated',

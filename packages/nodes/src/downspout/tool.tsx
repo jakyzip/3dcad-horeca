@@ -55,7 +55,7 @@ const DownspoutTool = () => {
     () =>
       DownspoutNode.parse({
         ...downspoutDefinition.defaults(),
-        name: 'Downspout',
+        name: 'Pluviale',
       }),
     [],
   )
@@ -139,7 +139,7 @@ const DownspoutTool = () => {
 
       const downspout = DownspoutNode.parse({
         ...downspoutDefinition.defaults(),
-        name: 'Downspout',
+        name: 'Pluviale',
         gutterId: gutter.id,
         outletId,
         length: dropLength,

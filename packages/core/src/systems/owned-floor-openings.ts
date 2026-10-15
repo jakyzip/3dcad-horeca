@@ -347,7 +347,7 @@ export function planOwnedFloorOpenings(
       ...old,
       id,
       parentId: levelId,
-      name: source === 'stair' ? 'Stair opening' : 'Elevator opening',
+      name: source === 'stair' ? 'Apertura della scala' : 'Apertura dell’ascensore',
       polygon: canonicalOpeningRing(primary.polygon),
       source,
       ownerId,

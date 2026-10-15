@@ -3,10 +3,10 @@ import { type AnyNodeId, type StairNode, useScene } from '@pascal-app/core'
 import { MetricControl, SegmentedControl, ToggleControl } from '@pascal-app/editor'
 
 const MODES = [
-  { label: 'None', value: 'none' },
-  { label: 'Left', value: 'left' },
-  { label: 'Right', value: 'right' },
-  { label: 'Both', value: 'both' },
+  { label: 'Nessuna', value: 'none' },
+  { label: 'Sinistra', value: 'left' },
+  { label: 'Destra', value: 'right' },
+  { label: 'Entrambi i lati', value: 'both' },
 ] as const
 export function StairRailingControls({
   node,
@@ -25,8 +25,8 @@ export function StairRailingControls({
             : (node.railingPath ?? 'original')
         }
         options={[
-          { label: 'Original layout', value: 'original' },
-          { label: 'Continuous', value: 'continuous' },
+          { label: 'Disposizione originale', value: 'original' },
+          { label: 'Continua', value: 'continuous' },
         ]}
         onChange={(value) =>
           onChange({
@@ -39,7 +39,7 @@ export function StairRailingControls({
         }
       />
       <ToggleControl
-        label="Separate handrail"
+        label="Corrimano separato"
         checked={!!config}
         onChange={(checked) =>
           onChange({
@@ -63,10 +63,10 @@ export function StairRailingControls({
               key={key}
               label={
                 key === 'height'
-                  ? 'Handrail height'
+                  ? 'Altezza del corrimano'
                   : key === 'diameter'
-                    ? 'Handrail diameter'
-                    : 'Handrail inset'
+                    ? 'Diametro del corrimano'
+                    : 'Rientro del corrimano'
               }
               value={config[key]}
               min={key === 'offset' ? 0 : 0.001}
@@ -87,7 +87,11 @@ export function StairRailingControls({
             return (
               <div key={end} className="space-y-2">
                 <MetricControl
-                  label={`${end === 'bottom' ? 'Bottom sloped' : 'Top horizontal'} extension`}
+                  label={
+                    end === 'bottom'
+                      ? 'Prolungamento inclinato in basso'
+                      : 'Prolungamento orizzontale in alto'
+                  }
                   value={detail.extension}
                   min={0}
                   step={0.05}
@@ -98,17 +102,17 @@ export function StairRailingControls({
                 <SegmentedControl
                   value={detail.return}
                   options={[
-                    { label: 'No return', value: 'none' },
-                    { label: 'Wall-facing', value: 'wall' },
-                    { label: 'Post-facing', value: 'post' },
-                    { label: 'Floor', value: 'floor' },
+                    { label: 'Nessun ritorno', value: 'none' },
+                    { label: 'Verso il muro', value: 'wall' },
+                    { label: 'Verso il montante', value: 'post' },
+                    { label: 'Verso il pavimento', value: 'floor' },
                   ]}
                   onChange={(value) => update({ return: value as typeof detail.return })}
                 />
                 {detail.return === 'wall' || detail.return === 'post' ? (
                   <>
                     <MetricControl
-                      label="Return length"
+                      label="Lunghezza del ritorno"
                       value={detail.returnLength}
                       min={0}
                       step={0.01}
@@ -117,7 +121,7 @@ export function StairRailingControls({
                       onChange={(returnLength) => update({ returnLength })}
                     />
                     <p className="text-xs text-muted-foreground">
-                      Set the length to reach the wall or post.
+                      Imposta la lunghezza per raggiungere il muro o il montante.
                     </p>
                   </>
                 ) : null}

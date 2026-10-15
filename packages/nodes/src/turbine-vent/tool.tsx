@@ -46,7 +46,7 @@ const TurbineVentTool = () => {
     () =>
       TurbineVentNode.parse({
         ...turbineVentDefinition.defaults(),
-        name: 'Turbine Vent',
+        name: 'Aeratore a turbina',
         position: [0, 0, 0],
         rotation: previewRotation,
       }),
@@ -109,7 +109,7 @@ const TurbineVentTool = () => {
 
       const vent = TurbineVentNode.parse({
         ...turbineVentDefinition.defaults(),
-        name: 'Turbine Vent',
+        name: 'Aeratore a turbina',
         roofSegmentId: hit.segment.id,
         position: [hit.localX, hit.localY, hit.localZ],
         rotation: getDownSlopeYaw(hit.localX, hit.localZ, hit.segment),

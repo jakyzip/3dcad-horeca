@@ -347,7 +347,7 @@ export const slabDefinition: NodeDefinition<typeof SlabNode> = {
       polygonMeasurementFeatures({
         featurePrefix: 'slab',
         height: node.elevation,
-        label: 'Slab',
+        label: 'Solaio',
         polygon: node.polygon,
       }),
     quickMeasure: (node) => slabQuickMeasurement(node),
@@ -397,13 +397,13 @@ export const slabDefinition: NodeDefinition<typeof SlabNode> = {
   },
 
   toolHints: [
-    { key: 'Left click', label: 'Trace slab outline' },
-    { key: 'Enter', label: 'Finish slab', minDraftVertices: 3 },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Left click', label: 'Traccia il contorno del solaio' },
+    { key: 'Enter', label: 'Termina il solaio', minDraftVertices: 3 },
+    { key: 'Esc', label: 'Annulla' },
   ],
 
   presentation: {
-    label: 'Slab',
+    label: 'Solaio',
     description: 'A polygon-bounded floor surface that hosts items on top.',
     icon: { kind: 'url', src: '/icons/floor.webp' },
     paletteSection: 'structure',

@@ -480,18 +480,22 @@ export const slabPaint: PaintCapability & {
   ...base,
   // "Steps · Kitchen": the room a floor finish belongs to, by name.
   roleLabel: (_node, role) => {
-    if (role === 'foundation') return 'Foundation'
+    if (role === 'foundation') return 'Fondazione'
     const side = sideRole(role)
     const zoneId = side?.zoneId ?? parseRoomFinishRole(role)?.zoneId
     if (!zoneId) return null
-    const part = side ? (side.field === 'floorStepFinish' ? 'Steps' : 'Floor edge') : 'Floor'
-    const room = zoneOf(zoneId)?.name?.trim() || 'Room'
+    const part = side
+      ? side.field === 'floorStepFinish'
+        ? 'Gradini'
+        : 'Bordo del pavimento'
+      : 'Pavimento'
+    const room = zoneOf(zoneId)?.name?.trim() || 'Stanza'
     if (!side?.key) return `${part} · ${room}`
     const through = useScene.getState().nodes[side.key as AnyNodeId]
     const label =
       through?.type === 'zone'
-        ? through.name?.trim() || 'Room'
-        : (through as { name?: string } | undefined)?.name?.trim() || 'Doorway'
+        ? through.name?.trim() || 'Stanza'
+        : (through as { name?: string } | undefined)?.name?.trim() || 'Passaggio'
     return `${part} · ${room} · ${label}`
   },
   buildPatch: (args: PaintPatchArgs) =>

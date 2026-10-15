@@ -357,7 +357,7 @@ export const MeasurementRenderer = ({ node }: { node: MeasurementNode }) => {
   const data = buildRenderData(resolved.payload)
   const label = useMemo(() => {
     const value = formatMeasurement(resolved.payload, unit, metricNotation)
-    return resolved.dangling.length > 0 ? `Unlinked · ${value}` : value
+    return resolved.dangling.length > 0 ? `Scollegata · ${value}` : value
   }, [metricNotation, resolved, unit])
   const color = measurementPresentationColor(resolved.dangling.length > 0, active)
   const lineMaterial = useMemo(

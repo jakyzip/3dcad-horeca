@@ -3,7 +3,7 @@ import { type ParametricDescriptor, type RoofSegmentNode, roofTypeHasRakes } fro
 export const roofSegmentParametrics: ParametricDescriptor<RoofSegmentNode> = {
   groups: [
     {
-      label: 'Footprint',
+      label: 'Ingombro',
       fields: [
         { key: 'width', kind: 'number', unit: 'm', min: 0.5, max: 1000, step: 0.5 },
         {
@@ -18,28 +18,28 @@ export const roofSegmentParametrics: ParametricDescriptor<RoofSegmentNode> = {
       ],
     },
     {
-      label: 'Shape',
+      label: 'Forma',
       fields: [
         {
           key: 'wallHeight',
           kind: 'number',
-          label: 'Wall',
+          label: 'Parete',
           unit: 'm',
           min: 0,
           max: 1000,
           step: 0.1,
         },
-        { key: 'pitch', kind: 'number', label: 'Pitch', unit: '°', min: 0, max: 85, step: 1 },
+        { key: 'pitch', kind: 'number', label: 'Pendenza', unit: '°', min: 0, max: 85, step: 1 },
         {
           key: 'conicalFullCircle',
           kind: 'boolean',
-          label: 'Full circle',
+          label: 'Cerchio completo',
           visibleIf: (node) => node.roofType === 'conical',
         },
         {
           key: 'gambrelLowerWidthRatio',
           kind: 'number',
-          label: 'Kink depth',
+          label: 'Profondità della piega',
           min: 0.1,
           max: 0.9,
           step: 0.01,
@@ -48,7 +48,7 @@ export const roofSegmentParametrics: ParametricDescriptor<RoofSegmentNode> = {
         {
           key: 'gambrelLowerHeightRatio',
           kind: 'number',
-          label: 'Kink height',
+          label: 'Altezza della piega',
           min: 0.1,
           max: 0.9,
           step: 0.01,
@@ -57,7 +57,7 @@ export const roofSegmentParametrics: ParametricDescriptor<RoofSegmentNode> = {
         {
           key: 'mansardSteepWidthRatio',
           kind: 'number',
-          label: 'Waist width',
+          label: 'Larghezza del cambio pendenza',
           min: 0.05,
           max: 0.45,
           step: 0.01,
@@ -66,7 +66,7 @@ export const roofSegmentParametrics: ParametricDescriptor<RoofSegmentNode> = {
         {
           key: 'mansardSteepHeightRatio',
           kind: 'number',
-          label: 'Waist height',
+          label: 'Altezza del cambio pendenza',
           min: 0.1,
           max: 0.9,
           step: 0.01,
@@ -75,7 +75,7 @@ export const roofSegmentParametrics: ParametricDescriptor<RoofSegmentNode> = {
         {
           key: 'dutchHipWidthRatio',
           kind: 'number',
-          label: 'Waist width',
+          label: 'Larghezza del cambio pendenza',
           min: 0.05,
           max: 0.45,
           step: 0.01,
@@ -84,7 +84,7 @@ export const roofSegmentParametrics: ParametricDescriptor<RoofSegmentNode> = {
         {
           key: 'dutchHipHeightRatio',
           kind: 'number',
-          label: 'Waist height',
+          label: 'Altezza del cambio pendenza',
           min: 0.1,
           max: 0.9,
           step: 0.01,
@@ -93,7 +93,7 @@ export const roofSegmentParametrics: ParametricDescriptor<RoofSegmentNode> = {
         {
           key: 'dutchWaistLengthRatio',
           kind: 'number',
-          label: 'Waist length',
+          label: 'Lunghezza del cambio pendenza',
           min: 0.1,
           max: 1,
           step: 0.01,
@@ -102,7 +102,7 @@ export const roofSegmentParametrics: ParametricDescriptor<RoofSegmentNode> = {
         {
           key: 'dutchTopRakeThickness',
           kind: 'number',
-          label: 'Top rake thickness',
+          label: 'Spessore del timpano superiore',
           unit: 'm',
           min: 0.01,
           max: 0.5,
@@ -112,7 +112,7 @@ export const roofSegmentParametrics: ParametricDescriptor<RoofSegmentNode> = {
         {
           key: 'dutchGabletRake',
           kind: 'number',
-          label: 'Top rake length',
+          label: 'Lunghezza del timpano superiore',
           unit: 'm',
           min: 0,
           max: 3,
@@ -122,12 +122,12 @@ export const roofSegmentParametrics: ParametricDescriptor<RoofSegmentNode> = {
       ],
     },
     {
-      label: 'Structure',
+      label: 'Struttura',
       fields: [
         {
           key: 'wallThickness',
           kind: 'number',
-          label: 'Wall thickness',
+          label: 'Spessore delle pareti',
           unit: 'm',
           min: 0.05,
           max: 1,
@@ -136,7 +136,7 @@ export const roofSegmentParametrics: ParametricDescriptor<RoofSegmentNode> = {
         {
           key: 'deckThickness',
           kind: 'number',
-          label: 'Deck thickness',
+          label: 'Spessore del tavolato',
           unit: 'm',
           min: 0.04,
           max: 0.3,
@@ -146,7 +146,7 @@ export const roofSegmentParametrics: ParametricDescriptor<RoofSegmentNode> = {
         {
           key: 'gableOverhang',
           kind: 'number',
-          label: 'Gable overhang',
+          label: 'Sporgenza del timpano',
           unit: 'm',
           min: 0,
           max: 3,
@@ -156,7 +156,7 @@ export const roofSegmentParametrics: ParametricDescriptor<RoofSegmentNode> = {
         {
           key: 'shingleThickness',
           kind: 'number',
-          label: 'Shingle thickness',
+          label: 'Spessore delle tegole',
           unit: 'm',
           min: 0.02,
           max: 0.3,
@@ -165,19 +165,19 @@ export const roofSegmentParametrics: ParametricDescriptor<RoofSegmentNode> = {
         {
           key: 'wallShell',
           kind: 'enum',
-          label: 'Wall shell',
+          label: 'Involucro delle pareti',
           options: ['auto', 'include', 'omit'],
         },
       ],
     },
     {
-      label: 'Position',
+      label: 'Posizione',
       fields: [
         { key: 'position', kind: 'vec3' },
         {
           key: 'rotation',
           kind: 'number',
-          label: 'Rotation (rad)',
+          label: 'Rotazione (rad)',
           min: -Math.PI,
           max: Math.PI,
           step: Math.PI / 36,

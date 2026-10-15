@@ -177,7 +177,7 @@ const DuctTerminalTool = () => {
       DuctTerminalNode.parse({
         ...ductTerminalDefinition.defaults(),
         ...toolDefaults,
-        name: 'Register',
+        name: 'Bocchetta',
       }),
     [toolDefaults],
   )
@@ -301,7 +301,7 @@ const DuctTerminalTool = () => {
       const terminal = DuctTerminalNode.parse({
         ...ductTerminalDefinition.defaults(),
         ...toolDefaults,
-        name: 'Register',
+        name: 'Bocchetta',
         mount: p.mount,
         position: p.position,
         rotation: p.yaw,
@@ -484,7 +484,7 @@ const DuctTerminalTool = () => {
 
   if (!activeLevelId || !placement) return null
 
-  const mountLabel = effectiveMount.charAt(0).toUpperCase() + effectiveMount.slice(1)
+  const mountLabel = MOUNT_LABELS[effectiveMount] ?? effectiveMount
 
   // The committed mesh's slab lift is applied by FloorElevationSystem, but the
   // ghost renders here directly — preview it on the slab top too so a floor
@@ -525,29 +525,35 @@ const DuctTerminalTool = () => {
         <div className="flex items-center gap-2 whitespace-nowrap rounded-full border border-border/60 bg-background/90 px-4 py-1.5 text-xs tabular-nums shadow-sm backdrop-blur">
           {placement.snapped && (
             <>
-              <span className="font-medium text-primary">Snapped to duct</span>
+              <span className="font-medium text-primary">Agganciata al canale</span>
               <span aria-hidden className="text-muted-foreground">
                 ·
               </span>
             </>
           )}
-          <span className="font-medium text-foreground">Mount {mountLabel}</span>
+          <span className="font-medium text-foreground">Montaggio: {mountLabel}</span>
           <span aria-hidden className="text-muted-foreground">
             ·
           </span>
-          <span className="text-muted-foreground">M surface</span>
+          <span className="text-muted-foreground">M superficie</span>
           {effectiveMount !== 'wall' && (
             <>
               <span aria-hidden className="text-muted-foreground">
                 ·
               </span>
-              <span className="text-muted-foreground">R/T rotate</span>
+              <span className="text-muted-foreground">R/T ruota</span>
             </>
           )}
         </div>
       </Html>
     </LevelOffsetGroup>
   )
+}
+
+const MOUNT_LABELS: Record<string, string> = {
+  floor: 'pavimento',
+  ceiling: 'soffitto',
+  wall: 'muro',
 }
 
 export default DuctTerminalTool

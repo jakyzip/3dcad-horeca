@@ -122,21 +122,21 @@ export default function EyebrowVentPanel() {
       icon="/icons/roof.webp"
       onBack={node.roofSegmentId ? handleBack : undefined}
       onClose={handleClose}
-      title={node.name || 'Eyebrow Vent'}
+      title={node.name || 'Aeratore a palpebra'}
       width={300}
     >
-      <PanelSection title="Style">
+      <PanelSection title="Stile">
         <SegmentedControl
           onChange={(v) => handleUpdate({ style: v as EyebrowVentNode['style'] })}
           options={[
-            { label: 'Scoop', value: 'scoop' },
-            { label: 'Half-round', value: 'half-round' },
-            { label: 'Slant-box', value: 'slant-box' },
+            { label: 'A conchiglia', value: 'scoop' },
+            { label: 'Semitondo', value: 'half-round' },
+            { label: 'Inclinato', value: 'slant-box' },
           ]}
           value={node.style ?? 'scoop'}
         />
         <SliderControl
-          label="Louvers"
+          label="Lamelle"
           max={8}
           min={0}
           onChange={(v) => previewProp({ louverCount: Math.round(v) })}
@@ -148,7 +148,7 @@ export default function EyebrowVentPanel() {
         />
         {node.style === 'slant-box' ? (
           <SliderControl
-            label="Back height"
+            label="Altezza posteriore"
             max={1}
             min={0.15}
             onChange={(v) => previewProp({ backRatio: v })}
@@ -161,9 +161,9 @@ export default function EyebrowVentPanel() {
         ) : null}
       </PanelSection>
 
-      <PanelSection title="Dimensions">
+      <PanelSection title="Dimensioni">
         <SliderControl
-          label="Width"
+          label="Larghezza"
           max={1000}
           min={0.4}
           onChange={(v) => previewProp({ width: v })}
@@ -175,7 +175,7 @@ export default function EyebrowVentPanel() {
           value={node.width}
         />
         <SliderControl
-          label="Depth"
+          label="Profondità"
           max={1000}
           min={0.2}
           onChange={(v) => previewProp({ depth: v })}
@@ -187,7 +187,7 @@ export default function EyebrowVentPanel() {
           value={node.depth}
         />
         <SliderControl
-          label="Height"
+          label="Altezza"
           max={1000}
           min={0.08}
           onChange={(v) => previewProp({ height: v })}
@@ -200,7 +200,7 @@ export default function EyebrowVentPanel() {
         />
       </PanelSection>
 
-      <PanelSection title="Position">
+      <PanelSection title="Posizione">
         <SliderControl
           label="X"
           max={Math.round(((segment?.width ?? 10) / 2) * 100) / 100}
@@ -253,7 +253,7 @@ export default function EyebrowVentPanel() {
           value={node.position[2] ?? 0}
         />
         <SliderControl
-          label="Rotation"
+          label="Rotazione"
           max={180}
           min={-180}
           onChange={(deg) => previewProp({ rotation: (deg * Math.PI) / 180 })}
@@ -266,18 +266,22 @@ export default function EyebrowVentPanel() {
         />
       </PanelSection>
 
-      <PanelSection title="Actions">
+      <PanelSection title="Azioni">
         <ActionGroup>
-          <ActionButton icon={<Move className="h-3.5 w-3.5" />} label="Move" onClick={handleMove} />
+          <ActionButton
+            icon={<Move className="h-3.5 w-3.5" />}
+            label="Sposta"
+            onClick={handleMove}
+          />
           <ActionButton
             icon={<Copy className="h-3.5 w-3.5" />}
-            label="Duplicate"
+            label="Duplica"
             onClick={handleDuplicate}
           />
           <ActionButton
             className="hover:bg-red-500/20"
             icon={<Trash2 className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />}
-            label="Delete"
+            label="Elimina"
             onClick={handleDelete}
           />
         </ActionGroup>

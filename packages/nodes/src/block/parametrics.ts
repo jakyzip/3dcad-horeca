@@ -4,7 +4,7 @@ import type { BlockNode } from './schema'
 export const blockParametrics: ParametricDescriptor<BlockNode> = {
   groups: [
     {
-      label: 'Position',
+      label: 'Posizione',
       fields: [{ key: 'position', kind: 'vec3' }],
     },
   ],

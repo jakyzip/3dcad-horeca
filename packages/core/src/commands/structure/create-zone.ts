@@ -49,7 +49,7 @@ export function outdoorRoomConflicts(nodes: StructureNodes, levelId: string, pol
           {
             code: 'outdoor-room-overlap',
             nodeIds: [node.id],
-            message: `The terrace overlaps ${node.name || 'an existing room'}.`,
+            message: `La terrazza si sovrappone a ${node.name || 'una stanza esistente'}.`,
           },
         ]
       : [],
@@ -229,7 +229,7 @@ export function createZone(
   const zone = newZone({
     id: input.mintId('zone'),
     parentId: input.levelId,
-    name: input.name ?? 'Room',
+    name: input.name ?? 'Stanza',
     polygon,
     seed: polygonInteriorPoint({ polygon }, true),
     spaceRole: 'room',

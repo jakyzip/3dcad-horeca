@@ -24,7 +24,7 @@ export type FloorChoice = { key: string | null; plateId: string | null; name: st
 /** A floor that exists: its plate is in the scene. */
 export type PlateChoice = FloorChoice & { plateId: string }
 
-const SHARED_FLOOR: FloorChoice = { key: null, plateId: null, name: 'Shared floor' }
+const SHARED_FLOOR: FloorChoice = { key: null, plateId: null, name: 'Pavimento comune' }
 
 const isRoom = (node: AnyNode | undefined): node is ZoneNode =>
   node?.type === 'zone' && node.spaceRole === 'room'

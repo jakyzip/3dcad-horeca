@@ -5,8 +5,8 @@ export function pipeFittingQuickActions({ node }: { node: PipeFittingNode }): No
 
   const variants = (['pvc', 'abs', 'cast-iron'] as const).map((pipeMaterial) => ({
     id: `pipe-fitting:material:${pipeMaterial}`,
-    label: pipeMaterial === 'cast-iron' ? 'Cast iron' : pipeMaterial.toUpperCase(),
-    title: `Use ${pipeMaterial.replace('-', ' ')} for this fitting`,
+    label: pipeMaterial === 'cast-iron' ? 'Ghisa' : pipeMaterial.toUpperCase(),
+    title: `Usa ${pipeMaterial === 'cast-iron' ? 'ghisa' : pipeMaterial.toUpperCase()} per questo raccordo`,
     disabled: node.pipeMaterial === pipeMaterial,
     history: 'single' as const,
     run: ({ sceneApi }: { sceneApi: SceneApi }) => {

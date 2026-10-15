@@ -50,7 +50,7 @@ const SolarPanelTool = () => {
     () =>
       SolarPanelNode.parse({
         ...solarPanelDefinition.defaults(),
-        name: 'Solar Panel',
+        name: 'Pannello solare',
         position: [0, 0, 0],
         rotation: 0,
         rows: 2,
@@ -128,7 +128,7 @@ const SolarPanelTool = () => {
 
       const panel = SolarPanelNode.parse({
         ...solarPanelDefinition.defaults(),
-        name: 'Solar Panel',
+        name: 'Pannello solare',
         roofSegmentId: hit.segment.id,
         position: [hit.localX, hit.localY, hit.localZ],
         rotation: 0,

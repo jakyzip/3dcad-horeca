@@ -204,49 +204,50 @@ export const roofDefinition: NodeDefinition<typeof RoofNode> = {
   },
   tool: () => import('./tool'),
   toolHints: [
-    { key: 'Left click', label: 'Set roof footprint' },
+    { key: 'Left click', label: 'Fissa l’ingombro del tetto' },
     {
       key: 'P',
-      label: 'Placement',
+      label: 'Posizionamento',
       visible: conicalRoofToolHintVisibility,
       chip: {
         subscribe: (onChange) => useRoofPlacementMode.subscribe(onChange),
         value: () => useRoofPlacementMode.getState().mode,
         cycle: () => useRoofPlacementMode.getState().cycleMode(),
         labels: {
-          auto: 'Placement: Auto',
-          ground: 'Placement: Ground',
-          roof: 'Placement: Roof',
+          auto: 'Posizionamento: automatico',
+          ground: 'Posizionamento: a terra',
+          roof: 'Posizionamento: sul tetto',
         },
         icons: {
           auto: 'lucide:scan-search',
           ground: 'lucide:land-plot',
           roof: 'lucide:house',
         },
-        tooltip: 'Placement surface - click or press P to cycle',
+        tooltip: 'Superficie di posizionamento: fai clic o premi P per cambiarla',
       },
     },
     {
       key: 'R',
-      label: 'Rotate roof direction 90°',
+      label: 'Ruota la direzione del tetto di 90°',
       visible: standardRoofToolHintVisibility,
     },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Esc', label: 'Annulla' },
   ],
   toolOptions: [
     {
       id: 'footprintSource',
-      label: 'Create from',
+      label: 'Crea da',
       choices: [
         {
           value: 'draw',
-          label: 'Draw',
-          description: 'Draw the roof footprint with two corner clicks.',
+          label: 'Disegno',
+          description: 'Disegna l’ingombro del tetto con due clic sui vertici.',
         },
         {
           value: 'room',
-          label: 'Room',
-          description: 'Hover a room to preview its boundary, then click to place.',
+          label: 'Stanza',
+          description:
+            'Passa sopra una stanza per vederne il contorno, poi fai clic per posizionare.',
         },
       ],
       subscribe: (onChange) => useRoofFootprintSource.subscribe(onChange),
@@ -273,7 +274,7 @@ export const roofDefinition: NodeDefinition<typeof RoofNode> = {
   },
 
   presentation: {
-    label: 'Roof',
+    label: 'Tetto',
     description: 'A pitched / hip / gable roof composed of one or more segments.',
     icon: { kind: 'url', src: '/icons/roof.webp' },
     paletteSection: 'structure',

@@ -24,24 +24,24 @@ const p = (
 })
 export const shelfRecipe = parseRecipe({
   version: 1,
-  name: 'Everyday shelf',
-  description: 'An open timber bookcase with adjustable shelves and a contrasting back.',
+  name: 'Scaffale',
+  description: 'Libreria aperta in legno con ripiani regolabili e schienale a contrasto.',
   parameters: [
-    p('width', 'Width', 1.2, 0.6, 2.4, 0.05, { axis: 'x' }),
-    p('height', 'Height', 1.8, 0.8, 2.5, 0.05, { axis: 'y' }),
-    p('depth', 'Depth', 0.4, 0.25, 0.7, 0.025, { axis: 'z' }),
-    p('rows', 'Shelves', 4, 2, 7, 1, { unit: 'count', part: 'shelves' }),
-    p('thickness', 'Board thickness', 0.03, 0.015, 0.06, 0.005, { part: 'frame' }),
+    p('width', 'Larghezza', 1.2, 0.6, 2.4, 0.05, { axis: 'x' }),
+    p('height', 'Altezza', 1.8, 0.8, 2.5, 0.05, { axis: 'y' }),
+    p('depth', 'Profondità', 0.4, 0.25, 0.7, 0.025, { axis: 'z' }),
+    p('rows', 'Ripiani', 4, 2, 7, 1, { unit: 'count', part: 'shelves' }),
+    p('thickness', 'Spessore dei pannelli', 0.03, 0.015, 0.06, 0.005, { part: 'frame' }),
   ],
   slots: [
-    { id: 'frame', label: 'Frame', color: '#b58a60' },
-    { id: 'shelves', label: 'Shelves', color: '#d5b38d' },
-    { id: 'back', label: 'Back', color: '#495b50' },
+    { id: 'frame', label: 'Telaio', color: '#b58a60' },
+    { id: 'shelves', label: 'Ripiani', color: '#d5b38d' },
+    { id: 'back', label: 'Schienale', color: '#495b50' },
   ],
   parts: [
     {
       id: 'frame',
-      label: 'Frame',
+      label: 'Telaio',
       count: 2,
       shapes: [
         {
@@ -55,7 +55,7 @@ export const shelfRecipe = parseRecipe({
     },
     {
       id: 'shelves',
-      label: 'Shelves',
+      label: 'Ripiani',
       count: 'rows',
       shapes: [
         {
@@ -74,7 +74,7 @@ export const shelfRecipe = parseRecipe({
     },
     {
       id: 'back',
-      label: 'Back panel',
+      label: 'Pannello posteriore',
       count: 1,
       shapes: [
         {

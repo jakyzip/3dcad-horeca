@@ -8,7 +8,7 @@ describe('gutter paint capability', () => {
     const paint = gutterDefinition.capabilities.paint
 
     expect(gutterDefinition.capabilities.slots?.(node)).toEqual([
-      { slotId: 'gutter', label: 'Gutter', default: 'library:preset-softwhite' },
+      { slotId: 'gutter', label: 'Grondaia', default: 'library:preset-softwhite' },
     ])
     expect(paint?.materialTarget).toBe('gutter')
     expect(

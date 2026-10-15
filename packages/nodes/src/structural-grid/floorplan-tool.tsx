@@ -182,7 +182,7 @@ export function FloorplanStructuralGridToolLayer({
 
       const label = nextStructuralGridLabel(sceneApi.nodes(), activeLevelId, currentStart, point)
       const node = StructuralGridNode.parse({
-        name: `Grid ${label}`,
+        name: `Asse ${label}`,
         start: currentStart,
         end: point,
         label,

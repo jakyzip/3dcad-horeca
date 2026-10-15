@@ -118,7 +118,7 @@ describe('terrace tool', () => {
         [8, 3],
         [4, 3],
       ]),
-    ).toEqual({ message: 'The terrace overlaps Living room.' })
+    ).toEqual({ message: 'La terrazza si sovrappone a Living room.' })
   })
 
   test('draws like the room tools: each outline one undo step, the tool stays armed', () => {
@@ -135,7 +135,7 @@ describe('terrace tool', () => {
     // An outline over the house is refused in place; nothing is written.
     box([2, 2], [4, 4])
     expect(useFloorRegionDraft.getState().draft).toMatchObject({
-      refusal: 'The terrace overlaps Living room.',
+      refusal: 'La terrazza si sovrappone a Living room.',
     })
     expect(history()).toBe(1)
     cancelTerraceDraft()

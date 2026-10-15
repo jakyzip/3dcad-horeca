@@ -144,23 +144,23 @@ export default function TurbineVentPanel() {
       icon="/icons/roof.webp"
       onBack={node.roofSegmentId ? handleBack : undefined}
       onClose={handleClose}
-      title={node.name || 'Turbine Vent'}
+      title={node.name || 'Aeratore a turbina'}
       width={300}
     >
-      <PanelSection title="Style">
+      <PanelSection title="Stile">
         <SegmentedControl
           onChange={(v) => handleUpdate({ style: v as TurbineVentNode['style'] })}
           options={[
-            { label: 'Globe', value: 'globe' },
-            { label: 'Cylinder', value: 'cylinder' },
+            { label: 'Sferico', value: 'globe' },
+            { label: 'Cilindrico', value: 'cylinder' },
           ]}
           value={node.style ?? 'globe'}
         />
       </PanelSection>
 
-      <PanelSection title="Dimensions">
+      <PanelSection title="Dimensioni">
         <SliderControl
-          label="Diameter"
+          label="Diametro"
           max={1000}
           min={0.15}
           onChange={(v) => previewProp({ diameter: v })}
@@ -172,7 +172,7 @@ export default function TurbineVentPanel() {
           value={node.diameter}
         />
         <SliderControl
-          label="Height"
+          label="Altezza"
           max={1000}
           min={0.2}
           onChange={(v) => previewProp({ height: v })}
@@ -184,7 +184,7 @@ export default function TurbineVentPanel() {
           value={node.height}
         />
         <SliderControl
-          label="Neck Height"
+          label="Altezza del collo"
           max={Math.max(0.04, node.height * 0.5)}
           min={0.02}
           onChange={(v) => previewProp({ neckHeight: v })}
@@ -196,7 +196,7 @@ export default function TurbineVentPanel() {
           value={node.neckHeight ?? 0.09}
         />
         <SliderControl
-          label="Vanes"
+          label="Alette"
           max={36}
           min={6}
           onChange={(v) => previewProp({ vaneCount: Math.round(v) })}
@@ -209,16 +209,16 @@ export default function TurbineVentPanel() {
         />
       </PanelSection>
 
-      <PanelSection title="Motion">
+      <PanelSection title="Movimento">
         <ActionGroup>
           <ActionButton
             icon={isSpinning ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
-            label={isSpinning ? 'Pause' : 'Play'}
+            label={isSpinning ? 'Pausa' : 'Avvia'}
             onClick={handleToggleSpin}
           />
         </ActionGroup>
         <SliderControl
-          label="Spin Speed"
+          label="Velocità di rotazione"
           max={4}
           min={0}
           onChange={(v) => previewProp({ spinSpeed: v })}
@@ -231,7 +231,7 @@ export default function TurbineVentPanel() {
         />
       </PanelSection>
 
-      <PanelSection title="Position">
+      <PanelSection title="Posizione">
         <SliderControl
           label="X"
           max={Math.round(((segment?.width ?? 10) / 2) * 100) / 100}
@@ -284,7 +284,7 @@ export default function TurbineVentPanel() {
           value={node.position[2] ?? 0}
         />
         <SliderControl
-          label="Rotation"
+          label="Rotazione"
           max={180}
           min={-180}
           onChange={(deg) => previewProp({ rotation: (deg * Math.PI) / 180 })}
@@ -297,18 +297,22 @@ export default function TurbineVentPanel() {
         />
       </PanelSection>
 
-      <PanelSection title="Actions">
+      <PanelSection title="Azioni">
         <ActionGroup>
-          <ActionButton icon={<Move className="h-3.5 w-3.5" />} label="Move" onClick={handleMove} />
+          <ActionButton
+            icon={<Move className="h-3.5 w-3.5" />}
+            label="Sposta"
+            onClick={handleMove}
+          />
           <ActionButton
             icon={<Copy className="h-3.5 w-3.5" />}
-            label="Duplicate"
+            label="Duplica"
             onClick={handleDuplicate}
           />
           <ActionButton
             className="hover:bg-red-500/20"
             icon={<Trash2 className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />}
-            label="Delete"
+            label="Elimina"
             onClick={handleDelete}
           />
         </ActionGroup>

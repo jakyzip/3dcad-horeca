@@ -146,7 +146,7 @@ export function resolveWinderStairConstruction(
     (mode === 'side-stringers' ? 2 : mode === 'center-stringer' ? 1 : 0)
   if (segment.stepCount * parts * 2 > 10000)
     throw new RangeError(
-      'Detailed winder construction exceeds the 10,000-surface computation budget. The authored values are preserved.',
+      'I gradini a ventaglio superano il limite di calcolo di 10.000 superfici. I valori inseriti restano invariati.',
     )
   const pieces: StairWinderConstructionPiece[] = []
   const angle = ([x, z]: StairWinderPoint) => Math.atan2(z, sign * (pivot - x))

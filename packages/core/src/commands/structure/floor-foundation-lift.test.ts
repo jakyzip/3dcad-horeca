@@ -160,7 +160,7 @@ test('an upper floor spanning house and shed refuses one lift, accepts a matchin
   expect(plan.changes).toEqual([])
   expect(plan.conflicts?.[0]).toMatchObject({
     code: 'floor-foundation-shared-storey',
-    message: 'The upper floor also sits over Shed floor; raise both or neither.',
+    message: 'Il piano superiore poggia anche su Shed floor: alzali entrambi o nessuno dei due.',
   })
   const updates = expandFloorIntentChanges(
     nodes,

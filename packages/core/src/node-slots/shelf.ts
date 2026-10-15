@@ -25,11 +25,11 @@ export function shelfSlotIdForMeshName(name: string): ShelfSlotId | null {
 /** Which slots a given shelf actually exposes (depends on style/flags). */
 export function shelfSlots(node: ShelfNode): SlotDeclaration[] {
   const slots: SlotDeclaration[] = [
-    { slotId: 'shelves', label: 'Shelves', default: SHELF_SLOT_DEFAULT_COLOR },
+    { slotId: 'shelves', label: 'Ripiani', default: SHELF_SLOT_DEFAULT_COLOR },
   ]
   const hasFrame = !(node.style === 'wall-shelf' && node.bracketStyle === 'hidden')
-  if (hasFrame) slots.push({ slotId: 'frame', label: 'Frame', default: SHELF_SLOT_DEFAULT_COLOR })
+  if (hasFrame) slots.push({ slotId: 'frame', label: 'Telaio', default: SHELF_SLOT_DEFAULT_COLOR })
   const hasBack = node.style === 'cubby' || (node.style === 'bookshelf' && node.withBack)
-  if (hasBack) slots.push({ slotId: 'back', label: 'Back', default: SHELF_SLOT_DEFAULT_COLOR })
+  if (hasBack) slots.push({ slotId: 'back', label: 'Schienale', default: SHELF_SLOT_DEFAULT_COLOR })
   return slots
 }

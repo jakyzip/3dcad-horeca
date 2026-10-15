@@ -8,7 +8,7 @@ describe('eyebrow vent paint', () => {
     const node = EyebrowVentNode.parse({})
     expect(eyebrowVentDefinition.capabilities.slots?.(node)).toContainEqual({
       slotId: 'front',
-      label: 'Louvers',
+      label: 'Lamelle',
       default: 'library:preset-softwhite',
     })
   })

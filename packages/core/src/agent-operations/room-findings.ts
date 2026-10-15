@@ -39,7 +39,7 @@ type Wall = AnyNode & { type: 'wall' }
 type Shape = { polygon: Polygon; box: [number, number, number, number]; area: number }
 
 /** No name, or the bare word an older scene or a blank name leaves: "Room", "Zone". */
-const PLACEHOLDER_NAME = /^\s*(room|zone)?\s*$/i
+const PLACEHOLDER_NAME = /^\s*(room|zone|stanza|zona)?\s*$/i
 
 /** A space is covered, a room enclosed, a zone in a space, and a zone walled like a room, past half. */
 const HALF = 0.5

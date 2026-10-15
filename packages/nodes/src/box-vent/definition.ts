@@ -215,12 +215,12 @@ export const boxVentDefinition: NodeDefinition<typeof BoxVentNode> = {
     move: () => import('./move-tool'),
   },
   toolHints: [
-    { key: 'Left click', label: 'Place box vent on roof' },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Left click', label: 'Posiziona l’aeratore sul tetto' },
+    { key: 'Esc', label: 'Annulla' },
   ],
 
   presentation: {
-    label: 'Box Vent',
+    label: 'Aeratore a cassetta',
     description: 'Small louvered exhaust vent that sits on a roof slope.',
     icon: { kind: 'url', src: '/icons/box-vent.webp' },
     paletteSection: 'structure',

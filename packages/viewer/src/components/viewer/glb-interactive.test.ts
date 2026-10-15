@@ -145,7 +145,10 @@ test('a scripted window opens and lights from its base, and a music box plays it
     ['window_fan', 'Fanlight', 0.6, true],
     ['item_box', 'Music box', 1.2, true],
   ])
-  expect(items[0]!.interactive.controls.map((control) => control.label)).toEqual(['Lights', 'Open'])
+  expect(items[0]!.interactive.controls.map((control) => control.label)).toEqual([
+    'Luci',
+    'Apertura',
+  ])
   expect(items[1]!.interactive.controls).toEqual([
     { kind: 'toggle', label: 'Princess twirl', default: false },
   ])

@@ -98,15 +98,15 @@ export const pipeFittingDefinition: NodeDefinition<typeof PipeFittingNode> = {
   toolOptions: pipeFittingToolOptions,
   tool: () => import('./tool'),
   toolHints: [
-    { key: 'Click', label: 'Place fitting' },
-    { key: 'Hover a pipe end', label: 'Snap onto the run' },
-    { key: 'R / T', label: 'Rotate ±45°' },
-    { key: 'Alt', label: 'Switch rotation axis (Y → X → Z)' },
-    { key: 'Esc', label: 'Exit' },
+    { key: 'Click', label: 'Posiziona il raccordo' },
+    { key: 'Hover a pipe end', label: 'Aggancia alla tubazione' },
+    { key: 'R / T', label: 'Ruota di ±45°' },
+    { key: 'Alt', label: 'Cambia l’asse di rotazione (Y → X → Z)' },
+    { key: 'Esc', label: 'Esci' },
   ],
 
   presentation: {
-    label: 'Pipe Fitting',
+    label: 'Raccordo per tubo',
     description: 'DWV joint — elbow bend, 45° wye, or sanitary tee.',
     // Reuses the duct-fitting artwork — DWV fittings read the same in the UI.
     icon: { kind: 'url', src: '/icons/duct-fitting.webp' },

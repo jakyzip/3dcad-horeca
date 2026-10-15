@@ -293,10 +293,10 @@ test('D11 door resizing and wall lowering use the same floor feasibility check',
     assertDerivedNodeWrites(s.nodes, {
       update: [{ id: s.door.id, data: { height: 3, position: [2, 1.5, 0] } }],
     }),
-  ).toThrow('fit')
+  ).toThrow('non ci sta')
   expect(() =>
     assertDerivedNodeWrites(s.nodes, { update: [{ id: s.divider.id, data: { height: 2 } }] }),
-  ).toThrow('fit')
+  ).toThrow('supera')
 })
 
 test('D14 moving the structural floor also moves the explicit wall top in the feasibility draft', () => {

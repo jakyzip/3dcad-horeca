@@ -50,13 +50,13 @@ export function roofSegmentMeasurementFeatures(
   const linework = getRoofSegmentPlanLinework(node)
   return [
     ...linework.ridges.map((segment, index) =>
-      segmentFeature(node, roof, `roof:ridge:${index}`, 'Roof ridge', 'ridge', segment),
+      segmentFeature(node, roof, `roof:ridge:${index}`, 'Colmo del tetto', 'ridge', segment),
     ),
     ...linework.hips.map((segment, index) =>
-      segmentFeature(node, roof, `roof:hip:${index}`, 'Roof hip', 'edge', segment),
+      segmentFeature(node, roof, `roof:hip:${index}`, 'Displuvio', 'edge', segment),
     ),
     ...linework.breaks.map((segment, index) =>
-      segmentFeature(node, roof, `roof:break:${index}`, 'Roof break', 'edge', segment),
+      segmentFeature(node, roof, `roof:break:${index}`, 'Cambio di pendenza', 'edge', segment),
     ),
   ]
 }

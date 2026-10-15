@@ -357,18 +357,20 @@ const DuctFittingTool = () => {
         <div className="flex items-center gap-2 whitespace-nowrap rounded-full border border-border/60 bg-background/90 px-4 py-1.5 text-xs tabular-nums shadow-sm backdrop-blur">
           {previewNode.fittingType === 'access-panel' && (
             <span>
-              {placement.valid ? 'Place access door' : 'Hover a duct face that fits the door'}
+              {placement.valid
+                ? 'Posiziona lo sportello d’ispezione'
+                : 'Passa sopra una faccia del canale adatta allo sportello'}
             </span>
           )}
-          <span className="font-medium text-foreground">Axis {axis.toUpperCase()}</span>
+          <span className="font-medium text-foreground">Asse {axis.toUpperCase()}</span>
           <span aria-hidden className="text-muted-foreground">
             ·
           </span>
-          <span className="text-muted-foreground">R/T rotate</span>
+          <span className="text-muted-foreground">R/T ruota</span>
           <span aria-hidden className="text-muted-foreground">
             ·
           </span>
-          <span className="text-muted-foreground">⌥ axis</span>
+          <span className="text-muted-foreground">⌥ asse</span>
         </div>
       </Html>
       {/* Port-snap halo so the user sees the click will mate, not free-place. */}

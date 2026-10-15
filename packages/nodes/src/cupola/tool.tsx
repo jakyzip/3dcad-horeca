@@ -44,7 +44,7 @@ const CupolaTool = () => {
     () =>
       CupolaNode.parse({
         ...cupolaDefinition.defaults(),
-        name: 'Cupola',
+        name: 'Torretta',
         position: [0, 0, 0],
         rotation: 0,
       }),
@@ -103,7 +103,7 @@ const CupolaTool = () => {
 
       const cupola = CupolaNode.parse({
         ...cupolaDefinition.defaults(),
-        name: 'Cupola',
+        name: 'Torretta',
         roofSegmentId: hit.segment.id,
         position: [hit.localX, hit.localY, hit.localZ],
         rotation: 0,

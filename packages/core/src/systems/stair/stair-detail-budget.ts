@@ -13,9 +13,9 @@ export function stairSegmentDetailError(
 ): string | null {
   if (segment.segmentType === 'landing') return null
   if (!Number.isSafeInteger(segment.stepCount) || segment.stepCount < 1)
-    return 'Detailed stair geometry requires a positive whole riser count.'
+    return 'La scala richiede un numero intero positivo di alzate.'
   if (segment.stepCount > STAIR_DETAIL_SURFACE_BUDGET)
-    return `Detailed stair geometry exceeds the ${STAIR_DETAIL_SURFACE_BUDGET.toLocaleString('en-US')}-surface computation budget. The authored count is preserved.`
+    return `La scala supera il limite di calcolo di ${STAIR_DETAIL_SURFACE_BUDGET.toLocaleString('it-IT')} superfici. Il numero inserito resta invariato.`
   return null
 }
 
@@ -32,13 +32,13 @@ export function measureStairDetail(stair: StairNode, segments: readonly StairSeg
     stair.handrail &&
     stair.handrail.mode !== 'none' &&
     stair.handrail.offset + stair.handrail.diameter / 2 > railWidth
-      ? 'The handrail inset and radius must fit within the stair width.'
+      ? 'Rientro e raggio del corrimano devono stare dentro la larghezza della scala.'
       : (stair.railingPath === 'continuous' ||
             stair.railingStyle === 'glass' ||
             stair.railingStyle === 'metal') &&
           stair.railingMode !== 'none' &&
           !(stair.railingHeight > 0)
-        ? 'Guard height must be positive.'
+        ? 'L’altezza del parapetto deve essere positiva.'
         : null
   const constructionError = railError ?? stairConstructionError(stair, segments)
   if (constructionError)
@@ -69,7 +69,7 @@ export function measureStairDetail(stair: StairNode, segments: readonly StairSeg
   if (surfaces > STAIR_DETAIL_SURFACE_BUDGET)
     return {
       status: 'unresolved' as const,
-      error: `Detailed stair geometry exceeds the ${STAIR_DETAIL_SURFACE_BUDGET.toLocaleString('en-US')}-surface computation budget. The authored counts are preserved.`,
+      error: `La scala supera il limite di calcolo di ${STAIR_DETAIL_SURFACE_BUDGET.toLocaleString('it-IT')} superfici. I numeri inseriti restano invariati.`,
       budget: STAIR_DETAIL_SURFACE_BUDGET,
     }
   const railWork = stairRailComplexity(stair, segments)
@@ -77,7 +77,7 @@ export function measureStairDetail(stair: StairNode, segments: readonly StairSeg
     return {
       status: 'unresolved' as const,
       error:
-        'Detailed stair rails exceed the 10,000-unit computation budget. The authored dimensions are preserved.',
+        'I corrimano superano il limite di calcolo di 10.000 elementi. Le misure inserite restano invariate.',
       budget: STAIR_DETAIL_SURFACE_BUDGET,
     }
   return { status: 'evaluated' as const, error: null, budget: STAIR_DETAIL_SURFACE_BUDGET }

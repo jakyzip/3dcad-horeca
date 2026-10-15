@@ -61,7 +61,7 @@ const ChimneyTool = () => {
     () =>
       ChimneyNode.parse({
         ...chimneyDefinition.defaults(),
-        name: 'Chimney',
+        name: 'Comignolo',
         position: [0, 0, 0],
         rotation: 0,
       }),
@@ -137,7 +137,7 @@ const ChimneyTool = () => {
 
       const chimney = ChimneyNode.parse({
         ...chimneyDefinition.defaults(),
-        name: 'Chimney',
+        name: 'Comignolo',
         roofSegmentId: hit.segment.id,
         position: [hit.localX, hit.localY, hit.localZ],
         rotation: 0,

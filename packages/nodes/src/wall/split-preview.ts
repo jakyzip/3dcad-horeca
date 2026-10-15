@@ -130,12 +130,12 @@ export function wallSplitPreview(
       (n) => n.metadata.arrayModifier || n.metadata.linkedArray,
     )
   ) {
-    message = 'Make the linked array real before splitting this wall.'
+    message = 'Prima di dividere il muro, rendi reale la serie collegata.'
   } else {
     try {
       planWallDivisions(nodes, wall.id, distances)
     } catch (error) {
-      message = error instanceof Error ? error.message : 'This wall cannot be split here.'
+      message = error instanceof Error ? error.message : 'Qui il muro non si può dividere.'
     }
   }
   return { distances: [...distances], length, frames, valid: !message, message }

@@ -77,7 +77,7 @@ describe('block modal transform', () => {
 
   test('describes the current operation and constraint', () => {
     expect(blockModalTransformStatus({ operation: 'rotate', constraint: 'z' })).toBe(
-      'Rotate · Z axis · Free · X/Y/Z constrains · click applies · Esc cancels',
+      'Ruota · asse Z · Libero · X/Y/Z vincola · clic applica · Esc annulla',
     )
   })
 
@@ -115,12 +115,12 @@ describe('block modal transform', () => {
   test('includes the typed value in modal feedback', () => {
     expect(
       blockModalTransformStatus({ operation: 'translate', constraint: 'z' }, '-1.25', 'exact'),
-    ).toBe('Move · Z axis · -1.25 m · Exact · X/Y/Z constrains · click applies · Esc cancels')
+    ).toBe('Sposta · asse Z · -1.25 m · Esatto · X/Y/Z vincola · clic applica · Esc annulla')
     expect(blockModalTransformStatus({ operation: 'rotate', constraint: 'y' }, '45', 'angle')).toBe(
-      'Rotate · Y axis · 45° · Angle snap · X/Y/Z constrains · click applies · Esc cancels',
+      'Ruota · asse Y · 45° · Aggancio angolare · X/Y/Z vincola · clic applica · Esc annulla',
     )
     expect(blockModalTransformStatus({ operation: 'translate', constraint: 'xz' })).toBe(
-      'Move · XZ plane · Free · X/Y/Z constrains · click applies · Esc cancels',
+      'Sposta · piano XZ · Libero · X/Y/Z vincola · clic applica · Esc annulla',
     )
   })
 })

@@ -65,18 +65,18 @@ describe('buildRoomFloorplanSchedule', () => {
       unit: 'metric',
     })
 
-    expect(schedule?.title).toBe('ROOM SCHEDULE')
+    expect(schedule?.title).toBe('ABACO DELLE STANZE')
     expect(schedule?.rows.map((row) => row.id)).toEqual(['zone_lobby', 'zone_office'])
     expect(schedule?.rows[0]?.cells).toMatchObject({
       number: '101',
       name: 'Lobby',
-      area: '10.00 m²',
+      area: '10,00 m²',
       floorFinish: '—',
       wallFinish: 'Paint',
       ceilingFinish: 'ACT',
       ceilingHeight: '2700',
       occupancy: 'Business',
-      enclosure: 'Open',
+      enclosure: 'Aperta',
     })
   })
 
@@ -97,7 +97,7 @@ describe('buildRoomFloorplanSchedule', () => {
     })
 
     expect(schedule?.rows[0]?.cells).toMatchObject({
-      area: '10.8 ft²',
+      area: '10,8 ft²',
       ceilingHeight: `8'-10 5/16"`,
     })
   })
@@ -124,9 +124,9 @@ describe('buildRoomFloorplanSchedule', () => {
     })
 
     expect(schedule?.issues).toEqual([
-      'Room Storage has no room number',
-      'Room a01 is marked enclosed but not proven',
-      'Duplicate room number A01 (2 rooms)',
+      'La stanza Storage non ha un numero',
+      'La stanza a01 è indicata come chiusa ma non è verificata',
+      'Numero di stanza A01 duplicato (2 stanze)',
     ])
   })
 

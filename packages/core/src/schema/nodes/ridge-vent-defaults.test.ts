@@ -24,7 +24,7 @@ describe('createDefaultRidgeVentsForSegment', () => {
     const vents = createDefaultRidgeVentsForSegment(segment)
 
     expect(vents).toHaveLength(1)
-    expect(vents[0]?.name).toBe('Ridge Vent')
+    expect(vents[0]?.name).toBe('Aeratore di colmo')
     expect(vents[0]?.style).toBe('shingled')
     expect(vents[0]?.roofSegmentId).toBe(segment.id)
     expect(isDefaultRidgeVentNode(vents[0], segment.id)).toBe(true)
@@ -58,8 +58,8 @@ describe('createDefaultRidgeVentsForSegment', () => {
     const vents = createDefaultRidgeVentsForSegment(segment)
 
     expect(vents).toHaveLength(5)
-    expect(vents.filter((vent) => vent.name === 'Ridge Vent')).toHaveLength(1)
-    expect(vents.filter((vent) => vent.name === 'Hip Ridge Vent')).toHaveLength(4)
+    expect(vents.filter((vent) => vent.name === 'Aeratore di colmo')).toHaveLength(1)
+    expect(vents.filter((vent) => vent.name === 'Aeratore di displuvio')).toHaveLength(4)
     for (const vent of vents) {
       expect(vent.style).toBe('shingled')
       expect(vent.length).toBeGreaterThan(0.4)
@@ -77,7 +77,7 @@ describe('createDefaultRidgeVentsForSegment', () => {
     const vents = createDefaultRidgeVentsForSegment(segment)
 
     expect(vents).toHaveLength(4)
-    expect(vents.every((vent) => vent.name === 'Hip Ridge Vent')).toBe(true)
+    expect(vents.every((vent) => vent.name === 'Aeratore di displuvio')).toBe(true)
   })
 
   test('creates a top ridge plus four hip vents for width-axis Dutch roofs', () => {
@@ -92,14 +92,14 @@ describe('createDefaultRidgeVentsForSegment', () => {
 
     const vents = createDefaultRidgeVentsForSegment(segment)
 
-    expect(vents.filter((vent) => vent.name === 'Ridge Vent')).toHaveLength(1)
-    expect(vents.filter((vent) => vent.name === 'Hip Ridge Vent')).toHaveLength(4)
+    expect(vents.filter((vent) => vent.name === 'Aeratore di colmo')).toHaveLength(1)
+    expect(vents.filter((vent) => vent.name === 'Aeratore di displuvio')).toHaveLength(4)
     // Width-axis Dutch ridge runs along X (constant Z = 0).
     const metrics = getDutchRoofMetrics(segment)
-    const ridge = vents.find((vent) => vent.name === 'Ridge Vent')
+    const ridge = vents.find((vent) => vent.name === 'Aeratore di colmo')
     const frontRightHip = vents.find(
       (vent) =>
-        vent.name === 'Hip Ridge Vent' &&
+        vent.name === 'Aeratore di displuvio' &&
         (vent.position[0] ?? 0) > 0 &&
         (vent.position[2] ?? 0) > 0,
     )
@@ -177,8 +177,8 @@ describe('createDefaultRidgeVentsForSegment', () => {
       Math.max(0, segment.depth / 2 - metrics.waistHalfZ) * 0.98,
     )
 
-    const ridges = lines.filter((line) => line.name === 'Ridge Vent')
-    const hips = lines.filter((line) => line.name === 'Hip Ridge Vent')
+    const ridges = lines.filter((line) => line.name === 'Aeratore di colmo')
+    const hips = lines.filter((line) => line.name === 'Aeratore di displuvio')
     expect(ridges).toHaveLength(1)
     expect(hips).toHaveLength(4)
     // Depth-axis Dutch ridge runs along Z (constant X = 0).
@@ -204,8 +204,8 @@ describe('createDefaultRidgeVentsForSegment', () => {
     })
 
     const lines = getRidgeVentLinesForSegment(segment)
-    const hips = lines.filter((line) => line.name === 'Hip Ridge Vent')
-    const ridge = lines.find((line) => line.name === 'Ridge Vent')
+    const hips = lines.filter((line) => line.name === 'Aeratore di displuvio')
+    const ridge = lines.find((line) => line.name === 'Aeratore di colmo')
     expect(hips).toHaveLength(4)
     expect(ridge).toBeDefined()
 
@@ -247,11 +247,13 @@ describe('createDefaultRidgeVentsForSegment', () => {
     const vents = createDefaultRidgeVentsForSegment(segment)
 
     expect(vents).toHaveLength(9)
-    expect(vents.filter((vent) => vent.name === 'Ridge Vent')).toHaveLength(1)
-    expect(vents.filter((vent) => vent.name === 'Hip Ridge Vent')).toHaveLength(4)
-    expect(vents.filter((vent) => vent.name === 'Slope Ridge Vent')).toHaveLength(4)
-    expect(vents.find((vent) => vent.name === 'Ridge Vent')?.length).toBeLessThan(segment.width)
-    const slopeVents = vents.filter((vent) => vent.name === 'Slope Ridge Vent')
+    expect(vents.filter((vent) => vent.name === 'Aeratore di colmo')).toHaveLength(1)
+    expect(vents.filter((vent) => vent.name === 'Aeratore di displuvio')).toHaveLength(4)
+    expect(vents.filter((vent) => vent.name === 'Aeratore di colmo inclinato')).toHaveLength(4)
+    expect(vents.find((vent) => vent.name === 'Aeratore di colmo')?.length).toBeLessThan(
+      segment.width,
+    )
+    const slopeVents = vents.filter((vent) => vent.name === 'Aeratore di colmo inclinato')
     const slopeRotations = slopeVents.map((vent) => Math.abs(vent.rotation))
     expect(slopeRotations.every((rotation) => rotation > 0.1)).toBe(true)
     expect(slopeRotations.every((rotation) => Math.abs(rotation - Math.PI / 2) > 0.1)).toBe(true)

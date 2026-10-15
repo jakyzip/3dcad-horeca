@@ -657,7 +657,7 @@ const WindowTool: React.FC = () => {
       }).length
 
       const node = WindowNode.parse({
-        name: `Window ${windowCount + 1}`,
+        name: `Finestra ${windowCount + 1}`,
         position: [clampedX, clampedY, 0],
         rotation: [0, itemRotation, 0],
         side,
@@ -714,7 +714,7 @@ const WindowTool: React.FC = () => {
       const windowCount = Object.values(state.nodes).filter((node) => node.type === 'window').length
       const side = sideFlip ? 'back' : 'front'
       const node = WindowNode.parse({
-        name: `Window ${windowCount + 1}`,
+        name: `Finestra ${windowCount + 1}`,
         position: target.position,
         rotation: [0, sideFlip ? Math.PI : 0, 0],
         side,
@@ -1069,7 +1069,7 @@ const WindowTool: React.FC = () => {
       ).length
 
       const node = WindowNode.parse({
-        name: `Window ${windowCount + 1}`,
+        name: `Finestra ${windowCount + 1}`,
         position,
         rotation: [0, 0, 0],
         side: 'front',

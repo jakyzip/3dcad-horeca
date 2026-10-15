@@ -51,7 +51,7 @@ export function floorOpeningHints(
           code: 'manual-ceiling',
           openingId: opening.id,
           surfaceIds,
-          message: 'The adjacent ceiling is manual. Cut it in Edit ceiling.',
+          message: 'Il soffitto adiacente è manuale: taglialo in Modifica soffitto.',
         },
       ]
     : []
@@ -112,7 +112,7 @@ export function cutFloorOpening(
     return FloorOpeningNode.parse({
       id,
       parentId: levelId,
-      name: 'Floor opening',
+      name: 'Apertura nel pavimento',
       polygon,
       ...(hostZoneId ? { hostZoneId } : {}),
       source: input.source ?? 'manual',

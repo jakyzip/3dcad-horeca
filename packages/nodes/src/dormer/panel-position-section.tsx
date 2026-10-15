@@ -165,7 +165,7 @@ export function DormerPositionSection({
   }
 
   return (
-    <PanelSection title="Position">
+    <PanelSection title="Posizione">
       <SliderControl
         label="X"
         max={Math.round(worldMaxX * 10) / 10}
@@ -199,7 +199,7 @@ export function DormerPositionSection({
         value={worldZ_now}
       />
       <SliderControl
-        label="Rotation"
+        label="Rotazione"
         max={180}
         min={-180}
         onChange={(degrees) => {

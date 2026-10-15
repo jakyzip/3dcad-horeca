@@ -114,14 +114,14 @@ export const linesetDefinition: NodeDefinition<typeof LinesetNode> = {
 
   tool: () => import('./tool'),
   toolHints: [
-    { key: 'Click', label: 'Start lineset' },
-    { key: 'Click again', label: 'Place it (locked to 45°)' },
-    { key: 'Alt + drag', label: 'Go vertical ↕, click to place' },
-    { key: 'Esc', label: 'Cancel start point' },
+    { key: 'Click', label: 'Inizia la linea frigorifera' },
+    { key: 'Click again', label: 'Posizionala (bloccata a 45°)' },
+    { key: 'Alt + drag', label: 'Sali in verticale ↕, fai clic per posizionare' },
+    { key: 'Esc', label: 'Annulla il punto iniziale' },
   ],
 
   presentation: {
-    label: 'Lineset',
+    label: 'Linea frigorifera',
     description:
       'Refrigerant lineset — copper suction + liquid pair joining a condenser to the indoor coil.',
     icon: { kind: 'url', src: '/icons/lineset.webp' },

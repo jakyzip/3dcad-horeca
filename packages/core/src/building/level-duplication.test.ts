@@ -111,32 +111,22 @@ describe('duplicate names', () => {
 
   for (const sourceName of ['Level 0', 'Ground floor', undefined]) {
     test(`a copy of the ${sourceName ?? 'unnamed'} ground floor reads by its place, like an added level`, () => {
-      expect(duplicate(sourceName, 'above')).toEqual([
-        'Ground floor',
-        'Floor 1',
-        'Floor 2',
-        'Attic',
-      ])
-      expect(duplicate(sourceName, 'below')).toEqual([
-        'Ground floor',
-        'Floor 1',
-        'Floor 2',
-        'Attic',
-      ])
+      expect(duplicate(sourceName, 'above')).toEqual(['Piano terra', 'Piano 1', 'Piano 2', 'Attic'])
+      expect(duplicate(sourceName, 'below')).toEqual(['Piano terra', 'Piano 1', 'Piano 2', 'Attic'])
     })
   }
 
   test('a name someone gave stays with its level, and the copy reads by its place', () => {
     expect(duplicate('Kitchen floor', 'above')).toEqual([
       'Kitchen floor',
-      'Floor 1',
-      'Floor 2',
+      'Piano 1',
+      'Piano 2',
       'Attic',
     ])
     expect(duplicate('Kitchen floor', 'below')).toEqual([
-      'Ground floor',
+      'Piano terra',
       'Kitchen floor',
-      'Floor 2',
+      'Piano 2',
       'Attic',
     ])
   })
@@ -195,7 +185,7 @@ describe('unit duplication', () => {
       expect(op.node.type).toBe('unit')
       if (op.node.type !== 'unit') return
       expect(op.node.id).not.toBe(single.id)
-      expect(op.node.name).toBe('Suite copy')
+      expect(op.node.name).toBe('Suite (copia)')
       expect(op.node.kind).toBe(single.kind)
       expect(op.node.color).toBe(single.color)
       expect(op.node.parentId).toBe(building.id)
@@ -343,8 +333,8 @@ describe('duplicated construction', () => {
         const upperId = position === 'above' ? newLevelId : level.id
         expect(after[groundId]).toMatchObject({ level: 0 })
         expect(after[upperId]).toMatchObject({ level: 1, baseElevation: 0 })
-        expect(getLevelDisplayName(after[groundId] as LevelNode)).toBe('Ground floor')
-        expect(getLevelDisplayName(after[upperId] as LevelNode)).toBe('Floor 1')
+        expect(getLevelDisplayName(after[groundId] as LevelNode)).toBe('Piano terra')
+        expect(getLevelDisplayName(after[upperId] as LevelNode)).toBe('Piano 1')
         expect(after[newLevelId]).not.toHaveProperty('name')
         const plates = Object.values(after).filter((node) => node.type === 'slab')
         expect(plates).toHaveLength(2)
@@ -388,7 +378,7 @@ describe('duplicated construction', () => {
     expect(() => assertDerivedNodeWrites(nodes, { create: createOps })).not.toThrow()
     const taller = WindowNode.parse({ ...window, id: undefined, height: 2.6 })
     expect(() => assertDerivedNodeWrites(nodes, { create: [{ node: taller }] })).toThrow(
-      'does not fit',
+      'non ci sta',
     )
   })
 

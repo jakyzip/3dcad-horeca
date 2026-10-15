@@ -17,7 +17,7 @@ export function createWallRectangle(
   options?: WallConstructionOptions,
 ) {
   const scene = useScene.getState()
-  if (scene.readOnly) throw Error('This scene is read-only.')
+  if (scene.readOnly) throw Error('Questa scena è di sola lettura.')
   const plan = planWallRectangle(scene.nodes, { levelId, start, end, wallDefaults: defaults })
   if (!plan.changes.create.length && !plan.changes.update.length && !plan.changes.delete.length)
     return []

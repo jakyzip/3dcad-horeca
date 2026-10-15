@@ -252,8 +252,8 @@ describe('floor footprints', () => {
     expect(levelFootprints(nodes(), LEVEL)).toHaveLength(2)
     expect(roomFootprint(nodes(), livingId)?.id).toBe(house.id)
     expect(roomFootprint(nodes(), shedId)?.id).toBe(shed.id)
-    expect(floorFootprintName(nodes(), house)).toBe('Shared floor')
-    expect(floorFootprintName(nodes(), shed)).toBe('Shed floor')
+    expect(floorFootprintName(nodes(), house)).toBe('Pavimento comune')
+    expect(floorFootprintName(nodes(), shed)).toBe('Pavimento Shed')
     // A name the user gives the plate wins.
     expect(floorFootprintName(nodes(), { ...house, name: 'Cabin' })).toBe('Cabin')
   })
@@ -375,7 +375,7 @@ describe('floor footprints', () => {
     expect(applyFloorFoundation(house.id, footprintHeightPatch(nodes(), house, 0.3))).toBeNull()
     const before = nodes()
     const message = applyFloorFoundation(house.id, { foundation: { type: 'solid' } })
-    expect(message).toBe('Only a plate at ground contact can have a solid foundation.')
+    expect(message).toBe('Solo un solaio a contatto con il terreno può avere una fondazione piena.')
     expect(nodes()).toBe(before)
   })
 
@@ -411,7 +411,7 @@ describe('floor footprints', () => {
     const before = nodes()
     const patch = presetPatch(nodes(), house, 'raised')
     expect(applyFloorFoundation(house.id, patch)).toBe(
-      'The upper floor also sits over Shed floor; raise both or neither.',
+      'Il piano superiore poggia anche su Pavimento Shed: alzali entrambi o nessuno dei due.',
     )
     expect(nodes()).toBe(before)
 

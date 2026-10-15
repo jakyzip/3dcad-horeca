@@ -453,7 +453,7 @@ function dimensionAcrossSharedRoomWall(
     offsetNormal: [-axis[1], axis[0]],
     offsetDistance: 0,
     extensionOvershoot: EXTENSION_OVERSHOOT,
-    text: `R-R ${formatConstructionLength(clear, unit, profile, { metricNotation })}`,
+    text: `S-S ${formatConstructionLength(clear, unit, profile, { metricNotation })}`,
     stroke,
   }
 }

@@ -91,9 +91,9 @@ test('ceiling hosting rejects wrong parents, tilt, non-flush tops and designs be
     ).toThrow()
   expect(() =>
     validateProceduralRelations(node, { ...nodes, [ceiling.id]: { ...ceiling, height: 1 } }),
-  ).toThrow('level height')
+  ).toThrow('altezza del piano')
   expect(() => validateProceduralRelations({ ...node, recipe: shelfRecipe }, nodes)).toThrow(
-    'floor design',
+    'oggetto da pavimento',
   )
   expect(() =>
     validateProceduralRelations({ ...node, parentId: level.id, metadata: { isNew: true } }, nodes),
@@ -116,10 +116,10 @@ test('full rotated footprint must fit, including holes away from its center and 
       ],
     },
   }
-  expect(() => validateProceduralRelations(centered, scene as typeof nodes)).toThrow('holes')
+  expect(() => validateProceduralRelations(centered, scene as typeof nodes)).toThrow('fori')
   expect(() =>
     validateProceduralRelations(resolveProceduralCeilingPlacement(node, ceiling, 4, 0), nodes),
-  ).toThrow('inside')
+  ).toThrow('dentro')
   const concave = {
     ...ceiling,
     polygon: [
@@ -135,7 +135,7 @@ test('full rotated footprint must fit, including holes away from its center and 
   }
   expect(() =>
     validateProceduralRelations(centered, { ...nodes, [ceiling.id]: concave } as typeof nodes),
-  ).toThrow('inside')
+  ).toThrow('dentro')
   const fitted = {
     ...ceiling,
     polygon: [

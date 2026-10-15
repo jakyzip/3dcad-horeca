@@ -3,13 +3,13 @@ import type { ElevatorNode, ParametricDescriptor } from '@pascal-app/core'
 export const elevatorParametrics: ParametricDescriptor<ElevatorNode> = {
   groups: [
     {
-      label: 'Position',
+      label: 'Posizione',
       fields: [
         { key: 'position', kind: 'vec3' },
         {
           key: 'rotation',
           kind: 'number',
-          label: 'Rotation (rad)',
+          label: 'Rotazione (rad)',
           min: -Math.PI,
           max: Math.PI,
           step: Math.PI / 36,
@@ -17,7 +17,7 @@ export const elevatorParametrics: ParametricDescriptor<ElevatorNode> = {
       ],
     },
     {
-      label: 'Cab',
+      label: 'Cabina',
       fields: [
         { key: 'width', kind: 'number', unit: 'm', min: 0.8, max: 1000, step: 0.05 },
         { key: 'depth', kind: 'number', unit: 'm', min: 0.8, max: 1000, step: 0.05 },
@@ -25,12 +25,12 @@ export const elevatorParametrics: ParametricDescriptor<ElevatorNode> = {
       ],
     },
     {
-      label: 'Shaft',
+      label: 'Vano',
       fields: [
         {
           key: 'shaftWallThickness',
           kind: 'number',
-          label: 'Wall thickness',
+          label: 'Spessore delle pareti',
           unit: 'm',
           min: 0.04,
           max: 1000,
@@ -45,7 +45,7 @@ export const elevatorParametrics: ParametricDescriptor<ElevatorNode> = {
       ],
     },
     {
-      label: 'Doors',
+      label: 'Porte',
       fields: [
         { key: 'doorWidth', kind: 'number', unit: 'm', min: 0.45, max: 1000, step: 0.05 },
         { key: 'doorHeight', kind: 'number', unit: 'm', min: 1.2, max: 1000, step: 0.05 },
@@ -57,27 +57,27 @@ export const elevatorParametrics: ParametricDescriptor<ElevatorNode> = {
         {
           key: 'doorPanelStyle',
           kind: 'enum',
-          label: 'Panel style',
+          label: 'Stile dei pannelli',
           options: ['glass-frame', 'solid-panel', 'segmented-panel'],
         },
       ],
     },
     {
-      label: 'Levels',
+      label: 'Piani',
       fields: [
-        { key: 'fromLevelId', kind: 'ref', label: 'From level', refKind: 'level' },
-        { key: 'toLevelId', kind: 'ref', label: 'To level', refKind: 'level' },
-        { key: 'defaultLevelId', kind: 'ref', label: 'Default level', refKind: 'level' },
+        { key: 'fromLevelId', kind: 'ref', label: 'Dal piano', refKind: 'level' },
+        { key: 'toLevelId', kind: 'ref', label: 'Al piano', refKind: 'level' },
+        { key: 'defaultLevelId', kind: 'ref', label: 'Piano predefinito', refKind: 'level' },
       ],
     },
     {
-      label: 'Motion',
+      label: 'Movimento',
       fields: [
         { key: 'speed', kind: 'number', unit: 'm/s', min: 0.5, max: 8, step: 0.1 },
         {
           key: 'doorDurationMs',
           kind: 'number',
-          label: 'Door time',
+          label: 'Tempo delle porte',
           unit: 'ms',
           min: 300,
           max: 2200,
@@ -86,7 +86,7 @@ export const elevatorParametrics: ParametricDescriptor<ElevatorNode> = {
         {
           key: 'dwellMs',
           kind: 'number',
-          label: 'Dwell',
+          label: 'Sosta',
           unit: 'ms',
           min: 300,
           max: 5000,

@@ -47,7 +47,7 @@ export const guideDefinition: NodeDefinition<typeof GuideNode> = {
   },
 
   presentation: {
-    label: 'Guide',
+    label: 'Immagine di riferimento',
     description: 'A measurement / reference annotation (linear, area, or arc).',
     icon: { kind: 'url', src: '/icons/blueprint.webp' },
     paletteSection: 'site',

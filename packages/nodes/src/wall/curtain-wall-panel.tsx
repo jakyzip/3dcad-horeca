@@ -138,12 +138,12 @@ function GridSection({
   return (
     <PanelSection title={title}>
       <Choice
-        label="Layout"
+        label="Disposizione"
         onChange={(layout) => onChange({ ...value, layout })}
         options={[
-          { label: 'Panel count', value: 'count' },
-          { label: 'Maximum spacing', value: 'maximum-spacing' },
-          { label: 'Fixed spacing', value: 'fixed-spacing' },
+          { label: 'Numero di pannelli', value: 'count' },
+          { label: 'Interasse massimo', value: 'maximum-spacing' },
+          { label: 'Interasse fisso', value: 'fixed-spacing' },
         ]}
         value={value.layout}
       />
@@ -153,7 +153,7 @@ function GridSection({
           onCancel={onCancel}
           restoreOnCommit={false}
           previewWhileTyping
-          label="Panels"
+          label="Pannelli"
           max={32}
           min={1}
           onChange={(count) => onPreview({ ...value, count: Math.round(count) })}
@@ -165,7 +165,7 @@ function GridSection({
         <LengthControl
           onCommit={onCommit}
           onCancel={onCancel}
-          label="Spacing"
+          label="Interasse"
           max={100}
           min={0.2}
           onChange={(spacing) => onPreview({ ...value, spacing })}
@@ -177,9 +177,9 @@ function GridSection({
         <SegmentedControl
           onChange={(alignment) => onChange({ ...value, alignment })}
           options={[
-            { label: vertical ? 'Bottom' : 'Start', value: 'start' },
-            { label: 'Center', value: 'center' },
-            { label: vertical ? 'Top' : 'End', value: 'end' },
+            { label: vertical ? 'In basso' : 'Inizio', value: 'start' },
+            { label: 'Centro', value: 'center' },
+            { label: vertical ? 'In alto' : 'Fine', value: 'end' },
           ]}
           value={value.alignment}
         />
@@ -188,10 +188,10 @@ function GridSection({
         {(() => {
           const positions = curtainGridPositions(length, value)
           const spans = positions.slice(1).map((position, i) => position - positions[i]!)
-          if (!spans.length) return 'No panels'
+          if (!spans.length) return 'Nessun pannello'
           const min = metersToLinearUnit(Math.min(...spans), unit)
           const max = metersToLinearUnit(Math.max(...spans), unit)
-          return `${spans.length} ${vertical ? 'rows' : 'columns'} · ${min.toFixed(2)}${max - min > 0.005 ? `–${max.toFixed(2)}` : ''} ${getLinearUnitLabel(unit)} grid spacing`
+          return `${spans.length} ${vertical ? 'righe' : 'colonne'} · interasse ${min.toFixed(2).replace('.', ',')}${max - min > 0.005 ? `–${max.toFixed(2).replace('.', ',')}` : ''} ${getLinearUnitLabel(unit)}`
         })()}
       </p>
     </PanelSection>
@@ -199,9 +199,9 @@ function GridSection({
 }
 
 const PANEL_OPTIONS = [
-  { label: 'Glass', value: 'glass' },
-  { label: 'Solid', value: 'solid' },
-  { label: 'Empty', value: 'empty' },
+  { label: 'Vetro', value: 'glass' },
+  { label: 'Pieno', value: 'solid' },
+  { label: 'Vuoto', value: 'empty' },
 ] as const
 
 export function getCurtainWallUpdate(
@@ -270,35 +270,35 @@ export function CurtainWallPanel({
 
   return (
     <>
-      <PanelSection title="Wall system">
+      <PanelSection title="Sistema di facciata">
         <Choice
-          label="Construction"
+          label="Costruzione"
           onChange={(construction) => update({ construction })}
           options={[
-            { label: 'Stick-built', value: 'stick' },
-            { label: 'Unitized', value: 'unitized' },
+            { label: 'A montanti e traversi', value: 'stick' },
+            { label: 'A cellule', value: 'unitized' },
           ]}
           value={config.construction}
         />
         <Choice
-          label="Framing"
+          label="Telaio"
           onChange={(framing) => update({ framing })}
           options={[
-            { label: 'Fully capped', value: 'capped' },
-            { label: 'Vertical caps', value: 'vertical-caps' },
-            { label: 'Horizontal caps', value: 'horizontal-caps' },
-            { label: 'Structural glazing', value: 'structural-glazing' },
+            { label: 'Con coprifili ovunque', value: 'capped' },
+            { label: 'Coprifili verticali', value: 'vertical-caps' },
+            { label: 'Coprifili orizzontali', value: 'horizontal-caps' },
+            { label: 'Vetro strutturale', value: 'structural-glazing' },
           ]}
           value={config.framing}
         />
         <p className="text-[11px] text-muted-foreground">
           {config.construction === 'unitized'
-            ? 'Separate framed modules with joints between units.'
-            : 'Continuous mullions and transoms assembled along the wall.'}
+            ? 'Moduli con telaio separati, con giunti tra le cellule.'
+            : 'Montanti e traversi continui montati lungo il muro.'}
         </p>
         {config.framing !== 'capped' && (
           <p className="text-[11px] text-muted-foreground">
-            Uncapped members sit behind the glazing.
+            I profili senza coprifilo stanno dietro il vetro.
           </p>
         )}
       </PanelSection>
@@ -307,7 +307,7 @@ export function CurtainWallPanel({
         onPreview={(columns) => update({ columns }, true)}
         onCommit={onCommit}
         onCancel={onCancel}
-        title="Column layout"
+        title="Disposizione delle colonne"
         length={getWallCurveLength(node)}
         unit={unit}
         value={config.columns}
@@ -317,7 +317,7 @@ export function CurtainWallPanel({
         onPreview={(rows) => update({ rows }, true)}
         onCommit={onCommit}
         onCancel={onCancel}
-        title="Row layout"
+        title="Disposizione delle righe"
         length={height}
         vertical
         unit={unit}
@@ -327,15 +327,15 @@ export function CurtainWallPanel({
         config.columns.layout !== 'count') ||
         (height / config.rows.spacing > 32 && config.rows.layout !== 'count')) && (
         <p className="px-3 text-[11px] text-muted-foreground">
-          Grid limited to 32 panels per axis. Spacing expands to fit this wall.
+          Griglia limitata a 32 pannelli per asse. L’interasse si allarga per adattarsi al muro.
         </p>
       )}
-      <PanelSection title="Frame dimensions">
+      <PanelSection title="Dimensioni del telaio">
         <LengthControl
           profile
           onCommit={onCommit}
           onCancel={onCancel}
-          label="Vertical frame width"
+          label="Larghezza dei montanti"
           max={0.3}
           min={0.01}
           onChange={(mullionWidth) => update({ mullionWidth }, true)}
@@ -346,7 +346,7 @@ export function CurtainWallPanel({
           profile
           onCommit={onCommit}
           onCancel={onCancel}
-          label="Horizontal frame width"
+          label="Larghezza dei traversi"
           max={0.3}
           min={0.01}
           onChange={(transomWidth) => update({ transomWidth }, true)}
@@ -357,7 +357,7 @@ export function CurtainWallPanel({
           profile
           onCommit={onCommit}
           onCancel={onCancel}
-          label="Border / opening frame"
+          label="Telaio di bordo / apertura"
           max={0.3}
           min={0.01}
           onChange={(perimeterWidth) => update({ perimeterWidth }, true)}
@@ -369,7 +369,11 @@ export function CurtainWallPanel({
             profile
             onCommit={onCommit}
             onCancel={onCancel}
-            label={config.construction === 'unitized' ? 'Module joint width' : 'Glazing gap'}
+            label={
+              config.construction === 'unitized'
+                ? 'Larghezza del giunto tra moduli'
+                : 'Distacco del vetro'
+            }
             max={0.05}
             min={0.002}
             onChange={(jointWidth) => update({ jointWidth }, true)}
@@ -378,31 +382,32 @@ export function CurtainWallPanel({
           />
         )}
       </PanelSection>
-      <PanelSection title="Panel infill">
+      <PanelSection title="Tamponamento dei pannelli">
         <Choice
-          label="Default panel"
+          label="Pannello predefinito"
           onChange={(panelType) => update({ panelType })}
           options={PANEL_OPTIONS}
           value={config.panelType}
         />
         <Choice
-          label="Opaque band"
+          label="Fascia opaca"
           onChange={(spandrel) => update({ spandrel })}
           options={[
-            { label: 'None', value: 'none' },
-            { label: 'Bottom row', value: 'bottom' },
-            { label: 'Top row', value: 'top' },
+            { label: 'Nessuna', value: 'none' },
+            { label: 'Riga in basso', value: 'bottom' },
+            { label: 'Riga in alto', value: 'top' },
           ]}
           value={config.spandrel}
         />
         <p className="text-[11px] text-muted-foreground">
-          Opaque bands replace a full row with solid panels. Apply their finish with the paint tool.
+          Le fasce opache sostituiscono un’intera riga con pannelli pieni. Applica la finitura con
+          lo strumento Dipingi.
         </p>
         <LengthControl
           profile
           onCommit={onCommit}
           onCancel={onCancel}
-          label="Panel thickness"
+          label="Spessore del pannello"
           max={0.08}
           min={0.004}
           onChange={(glassThickness) => update({ glassThickness }, true)}
@@ -411,25 +416,25 @@ export function CurtainWallPanel({
         />
         {effectiveThickness < config.glassThickness - 1e-6 && (
           <p className="text-[11px] text-muted-foreground">
-            Effective thickness:{' '}
+            Spessore effettivo:{' '}
             {unit === 'metric'
-              ? `${(effectiveThickness * 1000).toFixed(1)} mm`
-              : `${metersToLinearUnit(effectiveThickness, unit).toFixed(3)} ${getLinearUnitLabel(unit)}`}
+              ? `${(effectiveThickness * 1000).toFixed(1).replace('.', ',')} mm`
+              : `${metersToLinearUnit(effectiveThickness, unit).toFixed(3).replace('.', ',')} ${getLinearUnitLabel(unit)}`}
             , limited by frame depth.
           </p>
         )}
       </PanelSection>
-      <PanelSection title="Edit individual panels">
+      <PanelSection title="Modifica i singoli pannelli">
         <ToggleControl
           checked={panelEditing}
-          label="Enable panel editing"
+          label="Attiva la modifica dei pannelli"
           onChange={setPanelEditing}
         />
         {panelEditing && (
           <>
             <p className="text-[11px] text-muted-foreground">
-              Choose a cell or enter its column and row. Use arrow keys to move between cells.
-              Columns run from the wall start; rows count upward.
+              Scegli una cella o inserisci colonna e riga. Usa le frecce per spostarti tra le celle.
+              Le colonne partono dall’inizio del muro; le righe si contano dal basso.
             </p>
             <div className="max-h-64 overflow-auto rounded border border-border">
               <svg
@@ -437,7 +442,7 @@ export function CurtainWallPanel({
                 style={{ width: diagramWidth, height: diagramHeight }}
                 className="block"
                 role="group"
-                aria-label="Curtain wall panel selection"
+                aria-label="Selezione dei pannelli della facciata continua"
               >
                 {xs.slice(1).flatMap((_, c) =>
                   ys.slice(1).map((_, r) => {
@@ -448,7 +453,7 @@ export function CurtainWallPanel({
                         key={`${c}-${r}`}
                         role="button"
                         tabIndex={selected ? 0 : -1}
-                        aria-label={`Column ${c + 1}, row ${r + 1}: ${type}`}
+                        aria-label={`Colonna ${c + 1}, riga ${r + 1}: ${PANEL_OPTIONS.find((option) => option.value === type)?.label ?? type}`}
                         aria-pressed={selected}
                         data-cell={`${c}-${r}`}
                         x={(c / columnCount) * diagramWidth}
@@ -519,16 +524,16 @@ export function CurtainWallPanel({
                     })
                   }
                 >
-                  Clear hidden overrides
+                  Elimina le modifiche nascoste
                 </button>
               </div>
             )}
             <p className="text-[11px] text-muted-foreground">
-              Column {column + 1}, row {row + 1} ·{' '}
-              {overridden ? 'Custom infill' : 'Following wall defaults'}
+              Colonna {column + 1}, riga {row + 1} ·{' '}
+              {overridden ? 'Tamponamento personalizzato' : 'Segue le impostazioni del muro'}
             </p>
             <SliderControl
-              label="Column"
+              label="Colonna"
               max={Math.max(1, columnCount)}
               min={1}
               onChange={(value) => setColumn(Math.round(value) - 1)}
@@ -537,7 +542,7 @@ export function CurtainWallPanel({
               value={column + 1}
             />
             <SliderControl
-              label="Row"
+              label="Riga"
               max={Math.max(1, rowCount)}
               min={1}
               onChange={(value) => setRow(Math.round(value) - 1)}
@@ -546,7 +551,7 @@ export function CurtainWallPanel({
               value={row + 1}
             />
             <Choice
-              label="Panel infill"
+              label="Tamponamento del pannello"
               onChange={changePanel}
               options={PANEL_OPTIONS}
               value={selectedType}
@@ -557,19 +562,19 @@ export function CurtainWallPanel({
               onClick={() => changePanel()}
               type="button"
             >
-              Reset this panel
+              Ripristina questo pannello
             </button>
             <p className="text-[11px] text-muted-foreground">
-              Use the Door or Window tool to add an opening through the wall.
+              Usa lo strumento Porta o Finestra per aprire un’apertura nel muro.
             </p>
           </>
         )}
       </PanelSection>
       {hasGlass && (
-        <PanelSection title="Glass appearance">
+        <PanelSection title="Aspetto del vetro">
           {paintedGlass && (
             <div className="space-y-2 text-xs text-muted-foreground">
-              <p>Glass appearance is controlled by the paint tool.</p>
+              <p>L’aspetto del vetro è gestito dallo strumento Dipingi.</p>
               <button
                 type="button"
                 className="rounded border border-border px-2 py-1"
@@ -580,7 +585,7 @@ export function CurtainWallPanel({
                   onUpdate({ slots })
                 }}
               >
-                Use glass settings instead
+                Usa invece le impostazioni del vetro
               </button>
             </div>
           )}
@@ -591,7 +596,7 @@ export function CurtainWallPanel({
                 onCancel={onCancel}
                 restoreOnCommit={false}
                 previewWhileTyping
-                label="Opacity"
+                label="Opacità"
                 max={100}
                 min={5}
                 onChange={(value) => update({ glassOpacity: value / 100 }, true)}
@@ -605,7 +610,7 @@ export function CurtainWallPanel({
                 onCancel={onCancel}
                 restoreOnCommit={false}
                 previewWhileTyping
-                label="Surface roughness"
+                label="Ruvidità della superficie"
                 max={1}
                 min={0}
                 onChange={(glassRoughness) => update({ glassRoughness }, true)}
@@ -614,9 +619,9 @@ export function CurtainWallPanel({
                 value={config.glassRoughness}
               />
               <label className="flex items-center justify-between text-xs text-muted-foreground">
-                Glass tint
+                Tinta del vetro
                 <input
-                  aria-label="Glass tint"
+                  aria-label="Tinta del vetro"
                   className="h-7 w-10 cursor-pointer rounded border border-border bg-transparent"
                   onKeyDown={(event) => {
                     if (event.key === 'Escape') {

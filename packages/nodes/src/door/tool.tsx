@@ -457,7 +457,7 @@ const DoorTool: React.FC = () => {
       }).length
 
       const node = DoorNode.parse({
-        name: `Door ${doorCount + 1}`,
+        name: `Porta ${doorCount + 1}`,
         position: [clampedX, clampedY, 0],
         rotation: [0, itemRotation, 0],
         side,
@@ -695,7 +695,7 @@ const DoorTool: React.FC = () => {
       ).length
 
       const node = DoorNode.parse({
-        name: `Door ${doorCount + 1}`,
+        name: `Porta ${doorCount + 1}`,
         position,
         rotation: [0, 0, 0],
         side: 'front',

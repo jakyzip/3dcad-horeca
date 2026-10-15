@@ -107,7 +107,7 @@ describe('lean-to canopy placement', () => {
     expect(
       resolveLeanToFreestandingPlacement('level_ground', [4, 6], 0, 'butterfly'),
     ).toMatchObject({
-      name: 'Freestanding Butterfly Canopy',
+      name: 'Tettoia isolata a farfalla',
       canopyForm: 'butterfly',
       position: [4, 0, 6],
     })

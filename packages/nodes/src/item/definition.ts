@@ -205,7 +205,7 @@ export const itemDefinition: NodeDefinition<typeof ItemNode> = {
       asset: {
         id: 'placeholder',
         category: 'misc',
-        name: 'Item',
+        name: 'Oggetto',
         thumbnail: '',
         src: 'asset:placeholder',
         dimensions: [1, 1, 1],
@@ -368,15 +368,15 @@ export const itemDefinition: NodeDefinition<typeof ItemNode> = {
   },
 
   toolHints: [
-    { key: 'Left click', label: 'Place item' },
-    { key: 'R / T', label: 'Rotate' },
-    { key: 'Shift', label: 'Cycle snapping mode' },
-    { key: 'Alt', label: 'Force place' },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Left click', label: 'Posiziona l’oggetto' },
+    { key: 'R / T', label: 'Ruota' },
+    { key: 'Shift', label: 'Cambia la modalità di aggancio' },
+    { key: 'Alt', label: 'Forza il posizionamento' },
+    { key: 'Esc', label: 'Annulla' },
   ],
 
   presentation: {
-    label: 'Item',
+    label: 'Oggetto',
     description: 'A catalog-backed item (furniture, fixtures, decorations).',
     icon: { kind: 'url', src: '/icons/item.webp' },
     paletteSection: 'furnish',

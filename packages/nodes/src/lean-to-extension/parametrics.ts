@@ -89,11 +89,11 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
   },
   groups: [
     {
-      label: 'Size',
+      label: 'Dimensioni',
       fields: [
         {
           key: 'canopyForm',
-          label: 'Roof form',
+          label: 'Forma del tetto',
           kind: 'enum',
           options: ['mono', 'gable', 'butterfly'],
           display: 'segmented',
@@ -101,13 +101,13 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'autoSpan',
-          label: 'Match host width',
+          label: 'Adatta alla larghezza del supporto',
           kind: 'boolean',
           visibleIf: (node) => node.hostKind !== 'freestanding',
         },
         {
           key: 'span',
-          label: 'Width',
+          label: 'Larghezza',
           kind: 'number',
           unit: 'm',
           min: 0.5,
@@ -116,7 +116,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'projection',
-          label: 'Projection',
+          label: 'Aggetto',
           kind: 'number',
           unit: 'm',
           min: 0.5,
@@ -125,7 +125,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'highEdgeHeight',
-          label: 'High edge height',
+          label: 'Altezza del bordo alto',
           kind: 'number',
           unit: 'm',
           min: 0.8,
@@ -135,7 +135,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'pitch',
-          label: 'Slope',
+          label: 'Pendenza',
           kind: 'number',
           unit: '°',
           min: 1,
@@ -145,11 +145,11 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
       ],
     },
     {
-      label: 'Connection',
+      label: 'Collegamento',
       fields: [
         {
           key: 'connectionMode',
-          label: 'Roof connection',
+          label: 'Collegamento al tetto',
           kind: 'enum',
           options: ['auto', 'manual'],
           display: 'segmented',
@@ -157,14 +157,14 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'highSideMode',
-          label: 'High-side support',
+          label: 'Appoggio del lato alto',
           kind: 'enum',
           options: ['wall-ledger', 'independent-high-beam'],
           visibleIf: (node) => node.hostKind === 'wall',
         },
         {
           key: 'connectionOffset',
-          label: 'Connection offset',
+          label: 'Scostamento del collegamento',
           kind: 'number',
           unit: 'm',
           min: -1,
@@ -174,30 +174,30 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'matchHostRoofMaterial',
-          label: 'Match host roof material',
+          label: 'Materiale come il tetto esistente',
           kind: 'boolean',
           visibleIf: (node) => node.connectionMode === 'auto' && Boolean(node.hostRoofId),
         },
         {
           key: 'matchHostRoofStructure',
-          label: 'Match host roof structure',
+          label: 'Struttura come il tetto esistente',
           kind: 'boolean',
           visibleIf: (node) => node.connectionMode === 'auto' && Boolean(node.hostRoofId),
         },
       ],
     },
     {
-      label: 'Structure',
+      label: 'Struttura',
       fields: [
         {
           key: 'postLayoutMode',
-          label: 'Post layout',
+          label: 'Disposizione dei montanti',
           kind: 'enum',
           options: ['count', 'target-spacing'],
         },
         {
           key: 'postCount',
-          label: 'Post count',
+          label: 'Numero di montanti',
           kind: 'number',
           min: 2,
           max: 20,
@@ -206,7 +206,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'postSpacing',
-          label: 'Post spacing',
+          label: 'Interasse dei montanti',
           kind: 'number',
           unit: 'm',
           min: 0.3,
@@ -216,7 +216,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'postWidth',
-          label: 'Post width',
+          label: 'Larghezza dei montanti',
           kind: 'number',
           unit: 'm',
           min: 0.05,
@@ -225,7 +225,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'postDepth',
-          label: 'Post depth',
+          label: 'Profondità dei montanti',
           kind: 'number',
           unit: 'm',
           min: 0.05,
@@ -234,7 +234,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'beamHeight',
-          label: 'Beam height',
+          label: 'Altezza della trave',
           kind: 'number',
           unit: 'm',
           min: 0.05,
@@ -243,7 +243,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'beamWidth',
-          label: 'Beam width',
+          label: 'Larghezza della trave',
           kind: 'number',
           unit: 'm',
           min: 0.05,
@@ -252,31 +252,31 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'framingStrategy',
-          label: 'Framing',
+          label: 'Orditura',
           kind: 'enum',
           options: ['hidden', 'rafters', 'purlins', 'covering-specific'],
         },
         {
           key: 'autoMiterCorners',
-          label: 'Auto miter corners',
+          label: 'Taglio a 45° automatico negli angoli',
           kind: 'boolean',
         },
       ],
     },
     {
-      label: 'Drainage',
+      label: 'Smaltimento acque',
       fields: [
-        { key: 'gutterEnabled', label: 'Gutters', kind: 'boolean' },
+        { key: 'gutterEnabled', label: 'Grondaie', kind: 'boolean' },
         {
           key: 'gutterProfile',
-          label: 'Gutter profile',
+          label: 'Profilo della grondaia',
           kind: 'enum',
           options: ['k-style', 'half-round', 'box'],
           visibleIf: (node) => node.gutterEnabled,
         },
         {
           key: 'gutterSize',
-          label: 'Gutter size',
+          label: 'Dimensione della grondaia',
           kind: 'number',
           unit: 'm',
           min: 0.04,
@@ -286,13 +286,13 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'downspoutEnabled',
-          label: 'Downspout',
+          label: 'Pluviale',
           kind: 'boolean',
           visibleIf: (node) => node.gutterEnabled,
         },
         {
           key: 'downspoutPosition',
-          label: 'Downspout position',
+          label: 'Posizione del pluviale',
           kind: 'number',
           min: -1,
           max: 1,
@@ -302,17 +302,17 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
       ],
     },
     {
-      label: 'Advanced',
+      label: 'Avanzate',
       fields: [
         {
           key: 'resizeLock',
-          label: 'When resizing',
+          label: 'Nel ridimensionamento',
           kind: 'enum',
           options: ['preserve-high-edge', 'preserve-low-edge', 'preserve-pitch'],
         },
         {
           key: 'lowEdgeHeight',
-          label: 'Outer edge height',
+          label: 'Altezza del bordo esterno',
           kind: 'number',
           unit: 'm',
           min: 0.2,
@@ -322,7 +322,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'roofThickness',
-          label: 'Roof thickness',
+          label: 'Spessore del tetto',
           kind: 'number',
           unit: 'm',
           min: 0.02,
@@ -331,7 +331,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'shingleThickness',
-          label: 'Shingle thickness',
+          label: 'Spessore delle tegole',
           kind: 'number',
           unit: 'm',
           min: 0,
@@ -340,13 +340,13 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'coveringType',
-          label: 'Roof covering',
+          label: 'Manto di copertura',
           kind: 'enum',
           options: ['generic', 'shingle', 'metal-panel'],
         },
         {
           key: 'highOverhang',
-          label: 'High-side overhang',
+          label: 'Sporgenza lato alto',
           kind: 'number',
           unit: 'm',
           min: 0,
@@ -355,7 +355,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'lowOverhang',
-          label: 'Outer overhang',
+          label: 'Sporgenza esterna',
           kind: 'number',
           unit: 'm',
           min: 0,
@@ -364,7 +364,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'leftOverhang',
-          label: 'Left overhang',
+          label: 'Sporgenza sinistra',
           kind: 'number',
           unit: 'm',
           min: 0,
@@ -373,17 +373,17 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'rightOverhang',
-          label: 'Right overhang',
+          label: 'Sporgenza destra',
           kind: 'number',
           unit: 'm',
           min: 0,
           max: 1.5,
           step: 0.05,
         },
-        { key: 'sideFlashing', label: 'Side flashing', kind: 'boolean' },
+        { key: 'sideFlashing', label: 'Scossaline laterali', kind: 'boolean' },
         {
           key: 'flashingProjection',
-          label: 'Flashing projection',
+          label: 'Sporgenza della scossalina',
           kind: 'number',
           unit: 'm',
           min: 0.01,
@@ -393,7 +393,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'flashingHeight',
-          label: 'Flashing height',
+          label: 'Altezza della scossalina',
           kind: 'number',
           unit: 'm',
           min: 0.03,
@@ -403,19 +403,19 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'leftEndCondition',
-          label: 'Left end',
+          label: 'Estremità sinistra',
           kind: 'enum',
           options: ['open', 'wall-abutment', 'joined'],
         },
         {
           key: 'rightEndCondition',
-          label: 'Right end',
+          label: 'Estremità destra',
           kind: 'enum',
           options: ['open', 'wall-abutment', 'joined'],
         },
         {
           key: 'ledgerVerticalOffset',
-          label: 'High beam offset',
+          label: 'Scostamento della trave alta',
           kind: 'number',
           unit: 'm',
           min: -1,
@@ -425,7 +425,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'ledgerDepth',
-          label: 'High beam depth',
+          label: 'Profondità della trave alta',
           kind: 'number',
           unit: 'm',
           min: 0.03,
@@ -435,7 +435,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'ledgerHeight',
-          label: 'High beam height',
+          label: 'Altezza della trave alta',
           kind: 'number',
           unit: 'm',
           min: 0.05,
@@ -445,7 +445,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'lowBeamInset',
-          label: 'Beam setback',
+          label: 'Arretramento della trave',
           kind: 'number',
           unit: 'm',
           min: 0,
@@ -454,7 +454,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'postInset',
-          label: 'Post inset',
+          label: 'Rientro dei montanti',
           kind: 'number',
           unit: 'm',
           min: 0,
@@ -463,7 +463,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'rafterWidth',
-          label: 'Rafter width',
+          label: 'Larghezza dei travetti',
           kind: 'number',
           unit: 'm',
           min: 0.03,
@@ -473,7 +473,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'rafterHeight',
-          label: 'Rafter height',
+          label: 'Altezza dei travetti',
           kind: 'number',
           unit: 'm',
           min: 0.03,
@@ -482,7 +482,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'rafterSpacing',
-          label: 'Rafter spacing',
+          label: 'Interasse dei travetti',
           kind: 'number',
           unit: 'm',
           min: 0.2,
@@ -492,7 +492,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'rafterEndInset',
-          label: 'Rafter end inset',
+          label: 'Rientro di testa dei travetti',
           kind: 'number',
           unit: 'm',
           min: 0,
@@ -502,7 +502,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'purlinWidth',
-          label: 'Purlin width',
+          label: 'Larghezza degli arcarecci',
           kind: 'number',
           unit: 'm',
           min: 0.03,
@@ -513,7 +513,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'purlinHeight',
-          label: 'Purlin height',
+          label: 'Altezza degli arcarecci',
           kind: 'number',
           unit: 'm',
           min: 0.03,
@@ -524,7 +524,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'purlinSpacing',
-          label: 'Purlin spacing',
+          label: 'Interasse degli arcarecci',
           kind: 'number',
           unit: 'm',
           min: 0.2,
@@ -535,13 +535,13 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         },
         {
           key: 'postBracing',
-          label: 'Post bracing',
+          label: 'Controventi dei montanti',
           kind: 'enum',
           options: ['none', 'knee'],
         },
         {
           key: 'footingStyle',
-          label: 'Footings',
+          label: 'Plinti',
           kind: 'enum',
           options: ['none', 'base-plate', 'concrete-pad'],
         },
@@ -555,7 +555,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         ? [
             {
               field: 'pitch',
-              msg: `Pitch is too steep for the selected height and projection; leave at least ${MIN_LEAN_TO_POST_HEIGHT}m of post height.`,
+              msg: `Pendenza troppo forte per l’altezza e l’aggetto scelti: lascia almeno ${String(MIN_LEAN_TO_POST_HEIGHT).replace('.', ',')} m di altezza ai montanti.`,
               severity: 'error' as const,
             },
           ]
@@ -567,7 +567,7 @@ export const leanToExtensionParametrics: ParametricDescriptor<LeanToExtensionNod
         ? [
             {
               field: 'pitch',
-              msg: `${node.coveringType} covering typically needs at least ${minimum}° pitch; verify the selected product and local requirements.`,
+              msg: `Questo manto di copertura richiede di solito una pendenza di almeno ${String(minimum).replace('.', ',')}°: verifica il prodotto scelto e le norme locali.`,
               severity: 'warning' as const,
             },
           ]

@@ -51,13 +51,13 @@ export const pipeTrapDefinition: NodeDefinition<typeof PipeTrapNode> = {
 
   tool: () => import('./tool'),
   toolHints: [
-    { key: 'Click', label: 'Place trap' },
-    { key: 'R / T', label: 'Rotate ±45°' },
-    { key: 'Esc', label: 'Exit' },
+    { key: 'Click', label: 'Posiziona il sifone' },
+    { key: 'R / T', label: 'Ruota di ±45°' },
+    { key: 'Esc', label: 'Esci' },
   ],
 
   presentation: {
-    label: 'Trap',
+    label: 'Sifone',
     description: 'DWV P-trap — water seal on the waste line. The trap arm runs to the vent.',
     icon: { kind: 'url', src: '/icons/dwv-pipes.webp' },
     paletteSection: 'structure',

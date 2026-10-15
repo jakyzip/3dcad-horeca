@@ -124,7 +124,7 @@ describe('continuous construction-dimension drafting', () => {
       children: expect.arrayContaining([
         expect.objectContaining({ kind: 'path' }),
         expect.objectContaining({ kind: 'line', x2: 3, y2: 3 }),
-        expect.objectContaining({ kind: 'dimension-label', text: 'ARC 3.14m' }),
+        expect.objectContaining({ kind: 'dimension-label', text: 'ARCO 3.14m' }),
       ]),
     })
   })

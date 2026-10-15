@@ -74,7 +74,7 @@ const CEILING_TARGETS: MaterialTarget[] = [MaterialTargetSchema.enum.ceiling]
 export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   {
     id: 'wood-finewood27',
-    label: 'Finewood 27',
+    label: 'Legno fine 27',
     category: 'wood',
     surfaces: ['floor', 'wall', 'furniture'],
     description: 'Fine wood finish',
@@ -107,7 +107,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-floorplank1',
-    label: 'Floor Plank 1',
+    label: 'Listone 1',
     category: 'wood',
     surfaces: ['floor'],
     description: 'Wood plank finish',
@@ -140,7 +140,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-hungarianparquet10',
-    label: 'Hungarian Parquet 10',
+    label: 'Parquet a spina ungherese 10',
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
@@ -173,7 +173,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-hungarianparquet2',
-    label: 'Hungarian Parquet 2',
+    label: 'Parquet a spina ungherese 2',
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
@@ -206,7 +206,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-squareparquet21',
-    label: 'Square Parquet 21',
+    label: 'Parquet a quadrotte 21',
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
@@ -239,7 +239,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-squareparquet23',
-    label: 'Square Parquet 23',
+    label: 'Parquet a quadrotte 23',
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
@@ -272,7 +272,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-woodfine1',
-    label: 'Wood Fine 1',
+    label: 'Legno fine 1',
     category: 'wood',
     surfaces: ['floor', 'wall', 'furniture'],
     description: 'Fine wood finish',
@@ -305,7 +305,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-woodfine11',
-    label: 'Wood Fine 11',
+    label: 'Legno fine 11',
     category: 'wood',
     surfaces: ['floor', 'wall', 'furniture'],
     description: 'Fine wood finish',
@@ -338,7 +338,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-woodfine13',
-    label: 'Wood Fine 13',
+    label: 'Legno fine 13',
     category: 'wood',
     surfaces: ['floor', 'wall', 'furniture'],
     description: 'Fine wood finish',
@@ -371,7 +371,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-woodfine2',
-    label: 'Wood Fine 2',
+    label: 'Legno fine 2',
     category: 'wood',
     surfaces: ['floor', 'wall', 'furniture'],
     description: 'Fine wood finish',
@@ -404,7 +404,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-woodfine22',
-    label: 'Wood Fine 22',
+    label: 'Legno fine 22',
     category: 'wood',
     surfaces: ['floor', 'wall', 'furniture'],
     description: 'Fine wood finish',
@@ -437,7 +437,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-woodfine24',
-    label: 'Wood Fine 24',
+    label: 'Legno fine 24',
     category: 'wood',
     surfaces: ['floor', 'wall', 'furniture'],
     description: 'Fine wood finish',
@@ -470,7 +470,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-woodparquet14',
-    label: 'Wood Parquet 14',
+    label: 'Parquet 14',
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
@@ -503,7 +503,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-woodenparquet11',
-    label: 'Wooden Parquet 11',
+    label: 'Parquet in legno 11',
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
@@ -536,7 +536,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-woodparquet121',
-    label: 'Wood Parquet 121',
+    label: 'Parquet 121',
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
@@ -569,7 +569,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-woodparquet56',
-    label: 'Wood Parquet 56',
+    label: 'Parquet 56',
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
@@ -602,7 +602,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-woodparquet65',
-    label: 'Wood Parquet 65',
+    label: 'Parquet 65',
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
@@ -635,7 +635,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-woodparquet99',
-    label: 'Wood Parquet 99',
+    label: 'Parquet 99',
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
@@ -668,7 +668,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-woodplank19',
-    label: 'Wood Plank 19',
+    label: 'Listone 19',
     category: 'wood',
     surfaces: ['floor', 'wall'],
     description: 'Wood plank finish',
@@ -701,7 +701,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'wood-woodplank48',
-    label: 'Wood Plank 48',
+    label: 'Listone 48',
     category: 'wood',
     surfaces: ['floor', 'wall'],
     description: 'Wood plank finish',
@@ -734,7 +734,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-tile85a',
-    label: 'Quarry Tile',
+    label: 'Cotto',
     category: 'tile',
     surfaces: ['floor'],
     description: 'Floor tile finish',
@@ -767,7 +767,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-rusticbrick',
-    label: 'Rustic Brick',
+    label: 'Mattone rustico',
     category: 'brick',
     surfaces: ['wall', 'floor', 'outdoor'],
     description: 'Brick finish',
@@ -800,7 +800,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-agedbrick',
-    label: 'Aged Brick',
+    label: 'Mattone invecchiato',
     category: 'brick',
     surfaces: ['wall', 'floor', 'outdoor'],
     description: 'Brick finish',
@@ -833,7 +833,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-weatheredbrick',
-    label: 'Weathered Brick',
+    label: 'Mattone consumato',
     category: 'brick',
     surfaces: ['wall', 'floor', 'outdoor'],
     description: 'Brick finish',
@@ -866,7 +866,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-garagedoor',
-    label: 'Garage Panel',
+    label: 'Pannello da garage',
     category: 'metal',
     surfaces: ['wall', 'furniture'],
     description: 'Panel finish',
@@ -899,7 +899,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-greenlabradorite',
-    label: 'Green Labradorite',
+    label: 'Labradorite verde',
     category: 'stone',
     surfaces: ['floor', 'wall'],
     description: 'Stone flooring finish',
@@ -932,7 +932,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-ground13',
-    label: 'Earth Ground',
+    label: 'Terra',
     category: 'ground',
     surfaces: ['outdoor', 'floor'],
     description: 'Ground surface finish',
@@ -965,7 +965,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-pooltiles',
-    label: 'Pool Tiles',
+    label: 'Piastrelle da piscina',
     category: 'tile',
     surfaces: ['floor', 'outdoor'],
     description: 'Pool tile finish',
@@ -998,7 +998,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-tiles3',
-    label: 'Checker Tiles',
+    label: 'Piastrelle a scacchi',
     category: 'tile',
     surfaces: ['floor'],
     description: 'Tile flooring finish',
@@ -1031,7 +1031,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-tiles4',
-    label: 'Grid Tiles',
+    label: 'Piastrelle a griglia',
     category: 'tile',
     surfaces: ['floor'],
     description: 'Tile flooring finish',
@@ -1064,7 +1064,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-wallstone1',
-    label: 'Stone Wall',
+    label: 'Muro in pietra',
     category: 'stone',
     surfaces: ['wall', 'floor', 'outdoor'],
     description: 'Stone finish',
@@ -1097,7 +1097,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-woodenceramic3',
-    label: 'Wooden Ceramic 3',
+    label: 'Ceramica effetto legno 3',
     category: 'tile',
     surfaces: ['floor'],
     description: 'Wood-look ceramic flooring finish',
@@ -1130,7 +1130,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-ceramic53',
-    label: 'Ceramic Mosaic',
+    label: 'Mosaico ceramico',
     category: 'tile',
     surfaces: ['floor', 'wall'],
     description: 'Ceramic flooring finish',
@@ -1163,7 +1163,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-terrazzo19',
-    label: 'Terrazzo',
+    label: 'Seminato',
     category: 'stone',
     surfaces: ['floor', 'wall'],
     description: 'Terrazzo flooring finish',
@@ -1196,7 +1196,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-tile79',
-    label: 'Stone Tile',
+    label: 'Piastrella in pietra',
     category: 'stone',
     surfaces: ['floor', 'wall'],
     description: 'Floor tile finish',
@@ -1229,7 +1229,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-tile86',
-    label: 'Terracotta Tile',
+    label: 'Piastrella in cotto',
     category: 'tile',
     surfaces: ['floor'],
     description: 'Floor tile finish',
@@ -1262,7 +1262,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-greenquartzitea',
-    label: 'Green Quartzite A',
+    label: 'Quarzite verde A',
     category: 'stone',
     surfaces: ['floor', 'wall'],
     description: 'Green quartzite flooring finish',
@@ -1295,7 +1295,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-darkceramic22',
-    label: 'Dark Ceramic Grunge',
+    label: 'Ceramica scura anticata',
     category: 'tile',
     surfaces: ['floor'],
     description: 'Dark ceramic flooring finish',
@@ -1328,7 +1328,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-lightceramic24',
-    label: 'Light Ceramic Grunge',
+    label: 'Ceramica chiara anticata',
     category: 'tile',
     surfaces: ['floor'],
     description: 'Light ceramic flooring finish',
@@ -1361,7 +1361,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-statuarettowhite',
-    label: 'Statuaretto White',
+    label: 'Bianco statuaretto',
     category: 'stone',
     surfaces: ['floor', 'wall'],
     description: 'White marble flooring finish',
@@ -1394,7 +1394,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-tile20',
-    label: 'Mosaic Tile',
+    label: 'Mosaico',
     category: 'tile',
     surfaces: ['floor', 'wall'],
     description: 'Floor tile finish',
@@ -1427,7 +1427,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-tile68',
-    label: 'Pattern Tile',
+    label: 'Piastrella decorata',
     category: 'tile',
     surfaces: ['floor', 'wall'],
     description: 'Floor tile finish',
@@ -1460,7 +1460,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-woodenceramic2',
-    label: 'Wooden Ceramic 2',
+    label: 'Ceramica effetto legno 2',
     category: 'tile',
     surfaces: ['floor'],
     description: 'Wood-look ceramic flooring finish',
@@ -1493,7 +1493,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'flooring-woodparquet76',
-    label: 'Wood Parquet',
+    label: 'Parquet',
     category: 'wood',
     surfaces: ['floor'],
     description: 'Wood parquet flooring finish',
@@ -1526,7 +1526,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'roof-classicshingles',
-    label: 'Classic Shingles',
+    label: 'Tegole canadesi classiche',
     category: 'roofing',
     surfaces: ['roof'],
     description: 'Classic roof shingle finish',
@@ -1559,7 +1559,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'roof-claytiles',
-    label: 'Clay Tiles',
+    label: 'Tegole in cotto',
     category: 'roofing',
     surfaces: ['roof'],
     description: 'Clay roof tile finish',
@@ -1592,7 +1592,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'roof-terracottatiles',
-    label: 'Terracotta Tiles',
+    label: 'Tegole in terracotta',
     category: 'roofing',
     surfaces: ['roof'],
     description: 'Terracotta roof tile finish',
@@ -1625,7 +1625,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'roof-greyshingles',
-    label: 'Grey Shingles',
+    label: 'Tegole canadesi grigie',
     category: 'roofing',
     surfaces: ['roof'],
     description: 'Grey composition shingle finish',
@@ -1658,7 +1658,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'roof-weatheredshingles',
-    label: 'Weathered Shingles',
+    label: 'Tegole canadesi consumate',
     category: 'roofing',
     surfaces: ['roof'],
     description: 'Weathered roof shingle finish',
@@ -1691,7 +1691,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-white',
-    label: 'White',
+    label: 'Bianco',
     category: 'colors',
     description: 'Clean painted finish',
     // Real white paint reflects ~80%; a literal #ffffff albedo kills GI/shadow
@@ -1725,7 +1725,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-softwhite',
-    label: 'Soft White',
+    label: 'Bianco caldo',
     category: 'colors',
     description: 'Warm off-white painted finish',
     previewColor: '#ebe7df',
@@ -1757,7 +1757,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-cream',
-    label: 'Cream',
+    label: 'Crema',
     category: 'colors',
     description: 'Soft cream painted finish',
     previewColor: '#efe3cc',
@@ -1821,7 +1821,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-lightgrey',
-    label: 'Light grey',
+    label: 'Grigio chiaro',
     category: 'colors',
     description: 'Cool light grey painted finish',
     previewColor: '#d8d6d1',
@@ -1885,7 +1885,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-midgrey',
-    label: 'Mid grey',
+    label: 'Grigio medio',
     category: 'colors',
     description: 'Neutral mid grey painted finish',
     previewColor: '#8b8a86',
@@ -1917,7 +1917,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-charcoal',
-    label: 'Charcoal',
+    label: 'Antracite',
     category: 'colors',
     description: 'Dark charcoal painted finish',
     previewColor: '#4e5257',
@@ -1949,7 +1949,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-nearblack',
-    label: 'Near-black',
+    label: 'Quasi nero',
     category: 'colors',
     description: 'Soft near-black painted finish',
     previewColor: '#232322',
@@ -1981,7 +1981,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-blush',
-    label: 'Blush',
+    label: 'Rosa cipria',
     category: 'colors',
     description: 'Pale blush painted finish',
     previewColor: '#e8c6c0',
@@ -2013,7 +2013,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-tomato',
-    label: 'Tomato',
+    label: 'Pomodoro',
     category: 'colors',
     description: 'Warm tomato red painted finish',
     previewColor: '#c0594f',
@@ -2045,7 +2045,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-brickred',
-    label: 'Brick red',
+    label: 'Rosso mattone',
     category: 'colors',
     description: 'Deep brick red painted finish',
     previewColor: '#9e3b34',
@@ -2077,7 +2077,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-oxblood',
-    label: 'Oxblood',
+    label: 'Rosso sangue di bue',
     category: 'colors',
     description: 'Dark oxblood painted finish',
     previewColor: '#6f2c2a',
@@ -2109,7 +2109,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-peach',
-    label: 'Peach',
+    label: 'Pesca',
     category: 'colors',
     description: 'Soft peach painted finish',
     previewColor: '#f0c3a0',
@@ -2173,7 +2173,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-burntorange',
-    label: 'Burnt orange',
+    label: 'Arancio bruciato',
     category: 'colors',
     description: 'Burnt orange painted finish',
     previewColor: '#b25a2c',
@@ -2205,7 +2205,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-clay',
-    label: 'Clay',
+    label: 'Argilla',
     category: 'colors',
     description: 'Deep clay painted finish',
     previewColor: '#8f4a2e',
@@ -2237,7 +2237,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-paleyellow',
-    label: 'Pale yellow',
+    label: 'Giallo chiaro',
     category: 'colors',
     description: 'Pale yellow painted finish',
     previewColor: '#f2e3b3',
@@ -2269,7 +2269,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-mustard',
-    label: 'Mustard',
+    label: 'Senape',
     category: 'colors',
     description: 'Warm mustard painted finish',
     previewColor: '#c8a449',
@@ -2301,7 +2301,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-ochre',
-    label: 'Ochre',
+    label: 'Ocra',
     category: 'colors',
     description: 'Warm ochre painted finish',
     previewColor: '#b8852f',
@@ -2333,7 +2333,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-gold',
-    label: 'Gold',
+    label: 'Oro',
     category: 'colors',
     description: 'Deep gold painted finish',
     previewColor: '#9c7320',
@@ -2365,7 +2365,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-mint',
-    label: 'Mint',
+    label: 'Menta',
     category: 'colors',
     description: 'Soft mint painted finish',
     previewColor: '#cfe0cf',
@@ -2397,7 +2397,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-sage',
-    label: 'Sage',
+    label: 'Salvia',
     category: 'colors',
     description: 'Muted sage painted finish',
     previewColor: '#bcc5b2',
@@ -2429,7 +2429,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-olive',
-    label: 'Olive',
+    label: 'Oliva',
     category: 'colors',
     description: 'Natural olive painted finish',
     previewColor: '#8d9368',
@@ -2461,7 +2461,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-forest',
-    label: 'Forest',
+    label: 'Verde bosco',
     category: 'colors',
     description: 'Deep forest green painted finish',
     previewColor: '#4f6b57',
@@ -2493,7 +2493,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-paleteal',
-    label: 'Pale teal',
+    label: 'Verde acqua chiaro',
     category: 'colors',
     description: 'Pale teal painted finish',
     previewColor: '#b9d2cf',
@@ -2525,7 +2525,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-teal',
-    label: 'Teal',
+    label: 'Verde petrolio',
     category: 'colors',
     description: 'Balanced teal painted finish',
     previewColor: '#4f8a86',
@@ -2557,7 +2557,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-deepteal',
-    label: 'Deep teal',
+    label: 'Verde petrolio scuro',
     category: 'colors',
     description: 'Deep teal painted finish',
     previewColor: '#2f5f5c',
@@ -2589,7 +2589,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-powderblue',
-    label: 'Powder blue',
+    label: 'Azzurro polvere',
     category: 'colors',
     description: 'Powder blue painted finish',
     previewColor: '#cddce8',
@@ -2621,7 +2621,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-softblue',
-    label: 'Soft Blue',
+    label: 'Azzurro tenue',
     category: 'colors',
     description: 'Muted blue painted finish',
     previewColor: '#c7d6e3',
@@ -2653,7 +2653,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-sky',
-    label: 'Sky',
+    label: 'Cielo',
     category: 'colors',
     description: 'Sky blue painted finish',
     previewColor: '#8fb4d4',
@@ -2685,7 +2685,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-slateblue',
-    label: 'Slate Blue',
+    label: 'Blu ardesia',
     category: 'colors',
     description: 'Muted slate blue painted finish',
     previewColor: '#6f87a4',
@@ -2717,7 +2717,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-royalblue',
-    label: 'Royal blue',
+    label: 'Blu reale',
     category: 'colors',
     description: 'Royal blue painted finish',
     previewColor: '#3a5a9c',
@@ -2749,7 +2749,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-navy',
-    label: 'Navy',
+    label: 'Blu navy',
     category: 'colors',
     description: 'Classic navy painted finish',
     previewColor: '#2f4865',
@@ -2781,7 +2781,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-lavender',
-    label: 'Lavender',
+    label: 'Lavanda',
     category: 'colors',
     description: 'Soft lavender painted finish',
     previewColor: '#c9c2da',
@@ -2813,7 +2813,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-plum',
-    label: 'Plum',
+    label: 'Prugna',
     category: 'colors',
     description: 'Muted plum painted finish',
     previewColor: '#6d4a63',
@@ -2845,7 +2845,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-aubergine',
-    label: 'Aubergine',
+    label: 'Melanzana',
     category: 'colors',
     description: 'Deep aubergine painted finish',
     previewColor: '#594354',
@@ -2877,7 +2877,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-petal',
-    label: 'Petal',
+    label: 'Petalo',
     category: 'colors',
     description: 'Pale petal pink painted finish',
     previewColor: '#f0d3da',
@@ -2909,7 +2909,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-rose',
-    label: 'Rose',
+    label: 'Rosa',
     category: 'colors',
     description: 'Muted rose painted finish',
     previewColor: '#cf8fa6',
@@ -2941,7 +2941,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-dustyrose',
-    label: 'Dusty Rose',
+    label: 'Rosa antico',
     category: 'colors',
     description: 'Muted rose painted finish',
     previewColor: '#c48a8d',
@@ -2973,7 +2973,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-berry',
-    label: 'Berry',
+    label: 'Frutti di bosco',
     category: 'colors',
     description: 'Deep berry painted finish',
     previewColor: '#8f4a5a',
@@ -3005,7 +3005,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-sand',
-    label: 'Sand',
+    label: 'Sabbia',
     category: 'colors',
     description: 'Warm sand painted finish',
     previewColor: '#ddccae',
@@ -3037,7 +3037,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-tan',
-    label: 'Tan',
+    label: 'Cuoio',
     category: 'colors',
     description: 'Natural tan painted finish',
     previewColor: '#c4a87f',
@@ -3069,7 +3069,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-taupe',
-    label: 'Taupe',
+    label: 'Tortora',
     category: 'colors',
     description: 'Earthy taupe painted finish',
     previewColor: '#8f7a64',
@@ -3101,7 +3101,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-espresso',
-    label: 'Espresso',
+    label: 'Caffè',
     category: 'colors',
     description: 'Dark espresso painted finish',
     previewColor: '#4a382c',
@@ -3133,7 +3133,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-metal',
-    label: 'Metal',
+    label: 'Metallo',
     category: 'metal',
     surfaces: ['furniture', 'wall'],
     description: 'Brushed metal finish',
@@ -3166,7 +3166,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'preset-glass',
-    label: 'Glass',
+    label: 'Vetro',
     category: 'glass',
     description: 'Light glass finish',
     previewColor: '#87ceeb',
@@ -3200,7 +3200,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'fabric-linen',
-    label: 'Linen',
+    label: 'Lino',
     category: 'fabric',
     surfaces: ['furniture', 'wall'],
     description: 'Natural linen weave',
@@ -3233,7 +3233,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'fabric-cotton',
-    label: 'Cotton',
+    label: 'Cotone',
     category: 'fabric',
     surfaces: ['furniture', 'wall'],
     description: 'Plain cotton weave',
@@ -3266,7 +3266,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'fabric-velvet',
-    label: 'Velvet',
+    label: 'Velluto',
     category: 'fabric',
     surfaces: ['furniture'],
     description: 'Velvet with a soft sheen',
@@ -3299,7 +3299,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'fabric-wool',
-    label: 'Wool',
+    label: 'Lana',
     category: 'fabric',
     surfaces: ['furniture'],
     description: 'Matte wool felt',
@@ -3332,7 +3332,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'fabric-suede',
-    label: 'Suede',
+    label: 'Scamosciato',
     category: 'fabric',
     surfaces: ['furniture'],
     description: 'Matte suede nap',
@@ -3398,7 +3398,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'leather-black',
-    label: 'Black Leather',
+    label: 'Pelle nera',
     category: 'leather',
     surfaces: ['furniture'],
     description: 'Smooth black leather',
@@ -3431,7 +3431,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'leather-calf',
-    label: 'Calf Leather',
+    label: 'Pelle di vitello',
     category: 'leather',
     surfaces: ['furniture'],
     description: 'Pebbled calf leather',
@@ -3464,7 +3464,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'concrete-plaster',
-    label: 'Painted Plaster',
+    label: 'Intonaco tinteggiato',
     category: 'concrete',
     surfaces: ['wall', 'ceiling'],
     description: 'Smooth painted plaster wall',
@@ -3497,7 +3497,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'concrete-polished',
-    label: 'Polished Concrete',
+    label: 'Cemento levigato',
     category: 'concrete',
     surfaces: ['floor', 'wall'],
     description: 'Polished concrete floor',
@@ -3530,7 +3530,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'concrete-raw',
-    label: 'Raw Concrete',
+    label: 'Cemento grezzo',
     category: 'concrete',
     surfaces: ['wall', 'floor', 'outdoor'],
     description: 'Board-formed raw concrete',
@@ -3563,7 +3563,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'concrete-plate',
-    label: 'Concrete Plate',
+    label: 'Lastra di cemento',
     category: 'concrete',
     surfaces: ['wall', 'floor'],
     description: 'Smooth cast concrete plate',
@@ -3596,7 +3596,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'concrete-stucco',
-    label: 'White Stucco',
+    label: 'Intonaco bianco',
     category: 'concrete',
     surfaces: ['wall', 'outdoor'],
     description: 'Exterior stucco render',
@@ -3629,7 +3629,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'concrete-drywall',
-    label: 'Prepared Drywall',
+    label: 'Cartongesso rasato',
     category: 'concrete',
     surfaces: ['wall', 'ceiling'],
     description: 'Smooth prepared drywall ready for paint',
@@ -3662,7 +3662,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'metal-copper',
-    label: 'Copper',
+    label: 'Rame',
     category: 'metal',
     surfaces: ['furniture', 'wall'],
     description: 'Warm copper',
@@ -3695,7 +3695,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'metal-polished',
-    label: 'Polished Metal',
+    label: 'Metallo lucido',
     category: 'metal',
     surfaces: ['furniture', 'wall'],
     description: 'Polished stainless steel',
@@ -3728,7 +3728,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'metal-steel',
-    label: 'Brushed Steel',
+    label: 'Acciaio spazzolato',
     category: 'metal',
     surfaces: ['furniture', 'wall'],
     description: 'Brushed stainless steel',
@@ -3763,7 +3763,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     // Parameter-only metal (no texture maps) — a worked example of a non-PBR
     // catalog finish driven purely by three.js material settings.
     id: 'metal-brass',
-    label: 'Brass',
+    label: 'Ottone',
     category: 'metal',
     surfaces: ['furniture', 'wall'],
     description: 'Polished brass (flat metal, no maps)',
@@ -3798,7 +3798,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     // Parameter-only chrome (no texture maps) — moderate metalness so it reads
     // as bright metal under direct/ambient light without needing an env map.
     id: 'metal-chrome',
-    label: 'Chrome',
+    label: 'Cromo',
     category: 'metal',
     surfaces: ['furniture', 'wall'],
     description: 'Polished chrome (flat metal, no maps)',
@@ -3838,7 +3838,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
    */
   {
     id: 'siding-lap-white',
-    label: 'Lap siding — white',
+    label: 'Doghe — bianco',
     category: 'wood',
     surfaces: ['wall', 'outdoor'],
     description: 'Exterior clapboard lap siding, painted white',
@@ -3871,7 +3871,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'siding-lap-greige',
-    label: 'Lap siding — greige',
+    label: 'Doghe — greige',
     category: 'wood',
     surfaces: ['wall', 'outdoor'],
     description: 'Exterior clapboard lap siding, painted greige',
@@ -3904,7 +3904,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'siding-lap-gray',
-    label: 'Lap siding — gray',
+    label: 'Doghe — grigio',
     category: 'wood',
     surfaces: ['wall', 'outdoor'],
     description: 'Exterior clapboard lap siding, painted gray',
@@ -3937,7 +3937,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'siding-lap-sage',
-    label: 'Lap siding — sage',
+    label: 'Doghe — salvia',
     category: 'wood',
     surfaces: ['wall', 'outdoor'],
     description: 'Exterior clapboard lap siding, painted sage',
@@ -3970,7 +3970,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'siding-lap-cedar',
-    label: 'Lap siding — cedar',
+    label: 'Doghe — cedro',
     category: 'wood',
     surfaces: ['wall', 'outdoor'],
     description: 'Exterior clapboard lap siding, stained cedar',
@@ -4003,7 +4003,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'siding-lap-forest',
-    label: 'Lap siding — forest',
+    label: 'Doghe — verde bosco',
     category: 'wood',
     surfaces: ['wall', 'outdoor'],
     description: 'Exterior clapboard lap siding, painted forest',
@@ -4036,7 +4036,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'siding-lap-navy',
-    label: 'Lap siding — navy',
+    label: 'Doghe — blu navy',
     category: 'wood',
     surfaces: ['wall', 'outdoor'],
     description: 'Exterior clapboard lap siding, painted navy',
@@ -4069,7 +4069,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'siding-lap-yellow',
-    label: 'Lap siding — yellow',
+    label: 'Doghe — giallo',
     category: 'wood',
     surfaces: ['wall', 'outdoor'],
     description: 'Exterior clapboard lap siding, painted yellow',
@@ -4102,7 +4102,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'siding-lap-nearblack',
-    label: 'Lap siding — nearblack',
+    label: 'Doghe — quasi nero',
     category: 'wood',
     surfaces: ['wall', 'outdoor'],
     description: 'Exterior clapboard lap siding, painted nearblack',
@@ -4135,7 +4135,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'siding-lap-clay',
-    label: 'Lap siding — clay',
+    label: 'Doghe — argilla',
     category: 'wood',
     surfaces: ['wall', 'outdoor'],
     description: 'Exterior clapboard lap siding, painted clay',
@@ -4168,7 +4168,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'siding-batten-cream',
-    label: 'Board & batten — cream',
+    label: 'Doghe e coprigiunti — crema',
     category: 'wood',
     surfaces: ['wall', 'outdoor'],
     description: 'Exterior board-and-batten siding, painted cream',
@@ -4201,7 +4201,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'siding-batten-sand',
-    label: 'Board & batten — sand',
+    label: 'Doghe e coprigiunti — sabbia',
     category: 'wood',
     surfaces: ['wall', 'outdoor'],
     description: 'Exterior board-and-batten siding, painted sand',
@@ -4234,7 +4234,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'siding-batten-charcoal',
-    label: 'Board & batten — charcoal',
+    label: 'Doghe e coprigiunti — antracite',
     category: 'wood',
     surfaces: ['wall', 'outdoor'],
     description: 'Exterior board-and-batten siding, painted charcoal',
@@ -4267,7 +4267,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
   },
   {
     id: 'siding-batten-olive',
-    label: 'Board & batten — olive',
+    label: 'Doghe e coprigiunti — oliva',
     category: 'wood',
     surfaces: ['wall', 'outdoor'],
     description: 'Exterior board-and-batten siding, painted olive',

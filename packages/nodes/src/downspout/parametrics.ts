@@ -6,7 +6,7 @@ export const downspoutParametrics: ParametricDescriptor<DownspoutNode> = {
   derive: (_next, patch) => ('length' in patch ? { lengthMode: 'manual' } : {}),
   groups: [
     {
-      label: 'Dimensions',
+      label: 'Dimensioni',
       fields: [
         { key: 'length', kind: 'number', unit: 'm', min: 0.1, max: 1000, step: 0.05 },
         { key: 'diameter', kind: 'number', unit: 'm', min: 0.02, max: 0.15, step: 0.005 },
@@ -20,7 +20,7 @@ export const downspoutParametrics: ParametricDescriptor<DownspoutNode> = {
       ],
     },
     {
-      label: 'Hardware',
+      label: 'Accessori',
       fields: [
         // Wall straps clamping the run, like the gutter's hangers.
         {
@@ -48,7 +48,7 @@ export const downspoutParametrics: ParametricDescriptor<DownspoutNode> = {
       ],
     },
     {
-      label: 'Placement',
+      label: 'Posizionamento',
       fields: [
         // Slide the outlet (and so this downspout) along the eave. Edits
         // the linked outlet's offset on the host gutter — the only way to

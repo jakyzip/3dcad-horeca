@@ -150,13 +150,13 @@ describe('block modal face operation', () => {
 
   test('reports operation value and modal controls', () => {
     expect(blockModalFaceOperationStatus('extrude', '0.35', 'grid')).toBe(
-      'Extrude · 0.35 m · Grid snap · type value · click applies · Esc cancels',
+      'Estrudi · 0.35 m · Aggancio alla griglia · digita il valore · clic applica · Esc annulla',
     )
     expect(blockModalFaceOperationStatus('extrude', '0.35', 'grid', 'z')).toBe(
-      'Extrude · 0.35 m · Grid snap · Z axis · type value · click applies · Esc cancels',
+      'Estrudi · 0.35 m · Aggancio alla griglia · asse Z · digita il valore · clic applica · Esc annulla',
     )
     expect(blockModalFaceOperationStatus('inset', '0.2')).toBe(
-      'Inset · 0.2 ratio · Free · type value · click applies · Esc cancels',
+      'Rientra · 0.2 rapporto · Libero · digita il valore · clic applica · Esc annulla',
     )
   })
 })

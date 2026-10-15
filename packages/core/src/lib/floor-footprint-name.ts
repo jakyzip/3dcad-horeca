@@ -2,18 +2,19 @@ import type { AnyNode, SlabNode, ZoneNode } from '../schema'
 import { floorFootprintCreatorId } from './floor-footprint-key'
 import { area } from './polygon-boolean'
 
-const GENERATED_NAME = /^(floor plate|slab|floor)\b|slab$/i
+// English names are what an older build stored; they still read as generated.
+const GENERATED_NAME = /^(floor plate|slab|floor|pavimento|solaio)\b|slab$/i
 
 const polygonArea = (outer: SlabNode['polygon'], holes: SlabNode['holes'] = []) =>
   area([{ outer, holes }])
 
 /**
  * What a base-plate footprint is called everywhere (panel, "Sits on", scene
- * graph, MCP messages). Never "Floor N": that reads as a level. A name the
+ * graph, MCP messages). Never "Piano N": that reads as a level. A name the
  * user gave the plate wins; the level's largest multi-room footprint is the
- * "Shared floor". Keyed floors use their creator's current name while that
+ * "Pavimento comune". Keyed floors use their creator's current name while that
  * room remains on the key, including disconnected pieces. Otherwise use the
- * largest named room ("Kitchen floor"), or "Floor area" with no rooms.
+ * largest named room ("Pavimento Cucina"), or "Pavimento" with no rooms.
  */
 export function floorFootprintName(
   nodes: Readonly<Record<string, AnyNode>>,
@@ -34,7 +35,7 @@ export function floorFootprintName(
     !rooms.some((room) => room.floor?.footprint) &&
     isLargestFootprint(nodes, plate)
   )
-    return 'Shared floor'
+    return 'Pavimento comune'
   const key = rooms.find((room) => room.floor?.footprint)?.floor?.footprint
   const creatorId = key && floorFootprintCreatorId(key)
   const creator = creatorId ? nodes[creatorId] : undefined
@@ -49,8 +50,8 @@ export function floorFootprintName(
       ? creator.name?.trim()
       : undefined
   const named = creatorName || rooms.map((room) => room.name?.trim()).find(Boolean)
-  if (!named) return rooms.some((room) => room.floor?.footprint) ? 'Shared floor' : 'Floor area'
-  return /\bfloor$/i.test(named) ? named : `${named} floor`
+  if (!named) return rooms.some((room) => room.floor?.footprint) ? 'Pavimento comune' : 'Pavimento'
+  return /\bfloor$|^pavimento\b/i.test(named) ? named : `Pavimento ${named}`
 }
 
 function isLargestFootprint(nodes: Readonly<Record<string, AnyNode>>, plate: SlabNode) {

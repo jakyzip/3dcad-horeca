@@ -34,23 +34,23 @@ type ShedHighSide = DormerNode['shedHighSide']
 type DormerSection = 'dormer' | 'window'
 
 const ROOF_TYPE_OPTIONS: Array<{ label: string; value: RoofType }> = [
-  { label: 'Gable', value: 'gable' },
-  { label: 'Hip', value: 'hip' },
-  { label: 'Shed', value: 'shed' },
-  { label: 'Gambrel', value: 'gambrel' },
-  { label: 'Dutch', value: 'dutch' },
-  { label: 'Mansard', value: 'mansard' },
-  { label: 'Flat', value: 'flat' },
+  { label: 'A capanna', value: 'gable' },
+  { label: 'A padiglione', value: 'hip' },
+  { label: 'A una falda', value: 'shed' },
+  { label: 'A capanna spezzata', value: 'gambrel' },
+  { label: 'A padiglione con frontone', value: 'dutch' },
+  { label: 'A mansarda', value: 'mansard' },
+  { label: 'Piano', value: 'flat' },
 ]
 
 const SHED_HIGH_SIDE_OPTIONS: Array<{ label: string; value: ShedHighSide }> = [
-  { label: 'Rise Back', value: 'back' },
-  { label: 'Rise Front', value: 'front' },
+  { label: 'Alta dietro', value: 'back' },
+  { label: 'Alta davanti', value: 'front' },
 ]
 
 const SECTION_OPTIONS: Array<{ label: string; value: DormerSection }> = [
-  { label: 'Dormer', value: 'dormer' },
-  { label: 'Windows', value: 'window' },
+  { label: 'Abbaino', value: 'dormer' },
+  { label: 'Finestre', value: 'window' },
 ]
 
 export default function DormerPanel() {
@@ -244,7 +244,7 @@ export default function DormerPanel() {
       icon="/icons/roof.webp"
       onBack={node.roofSegmentId ? handleBack : undefined}
       onClose={handleClose}
-      title={node.name || 'Dormer'}
+      title={node.name || 'Abbaino'}
       width={300}
     >
       <DormerPositionSection
@@ -256,7 +256,7 @@ export default function DormerPanel() {
         selectedId={selectedId}
       />
 
-      <PanelSection title="Section">
+      <PanelSection title="Parte">
         <div className="grid grid-cols-3 gap-1.5 px-1 pt-1">
           {SECTION_OPTIONS.map((option) => {
             const isSelected = section === option.value
@@ -281,9 +281,9 @@ export default function DormerPanel() {
 
       {section === 'dormer' && (
         <>
-          <PanelSection title="Dimensions">
+          <PanelSection title="Dimensioni">
             <SliderControl
-              label="Width"
+              label="Larghezza"
               max={1000}
               min={0.5}
               onChange={(v) => previewProp({ width: v })}
@@ -295,7 +295,7 @@ export default function DormerPanel() {
               value={node.width}
             />
             <SliderControl
-              label="Depth"
+              label="Profondità"
               max={1000}
               min={0.5}
               onChange={(v) => previewProp({ depth: v })}
@@ -307,7 +307,7 @@ export default function DormerPanel() {
               value={node.depth}
             />
             <SliderControl
-              label="Wall Height"
+              label="Altezza delle pareti"
               max={1000}
               min={0}
               onChange={(v) => previewProp({ height: v })}
@@ -319,7 +319,7 @@ export default function DormerPanel() {
               value={node.height}
             />
             <SliderControl
-              label={node.roofType === 'shed' ? 'Pitch Rise' : 'Roof Height'}
+              label={node.roofType === 'shed' ? 'Dislivello della falda' : 'Altezza del tetto'}
               max={3}
               min={0}
               onChange={(v) => previewProp({ roofHeight: v })}
@@ -332,7 +332,7 @@ export default function DormerPanel() {
             />
           </PanelSection>
 
-          <PanelSection title="Roof Type">
+          <PanelSection title="Tipo di tetto">
             <div className="grid grid-cols-3 gap-1.5 px-1 pt-1">
               {ROOF_TYPE_OPTIONS.map((option) => {
                 const isSelected = node.roofType === option.value
@@ -356,7 +356,7 @@ export default function DormerPanel() {
           </PanelSection>
 
           {node.roofType === 'shed' && (
-            <PanelSection title="Pitch Direction">
+            <PanelSection title="Direzione della pendenza">
               <div className="grid grid-cols-2 gap-1.5 px-1 pt-1">
                 {SHED_HIGH_SIDE_OPTIONS.map((option) => {
                   const isSelected = node.shedHighSide === option.value

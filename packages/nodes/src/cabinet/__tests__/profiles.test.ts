@@ -37,7 +37,7 @@ test('keeps custom dimensions distinguishable from standard profiles', () => {
 test('returns the complete profile used by the side-panel action', () => {
   expect(cabinetDimensionProfileById('metric-base')).toEqual({
     id: 'metric-base',
-    label: 'Metric · 600 mm',
+    label: 'Metrico · 600 mm',
     depth: 0.6,
     carcassHeight: 0.8,
     plinthHeight: 0.1,

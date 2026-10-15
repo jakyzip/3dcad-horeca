@@ -266,12 +266,12 @@ export const skylightDefinition: NodeDefinition<typeof SkylightNode> = {
     move: () => import('./move-tool'),
   },
   toolHints: [
-    { key: 'Left click', label: 'Place skylight on roof' },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Left click', label: 'Posiziona il lucernario sul tetto' },
+    { key: 'Esc', label: 'Annulla' },
   ],
 
   presentation: {
-    label: 'Skylight',
+    label: 'Lucernario',
     description: 'Framed glass opening on a roof segment.',
     icon: { kind: 'url', src: '/icons/skylight.webp' },
     paletteSection: 'structure',

@@ -3282,7 +3282,7 @@ export function addWallChildAbove({
     ? Math.max(0.4, hoodCompartmentHeight('hood-pyramid'))
     : CABINET_WALL_CARCASS_HEIGHT
   const wall = CabinetModuleNodeSchema.parse({
-    name: isHood ? 'Chimney' : 'Wall Cabinet',
+    name: isHood ? 'Cappa' : 'Wall Cabinet',
     parentId: module.id,
     // Wall cabinet top aligns with the default tall cabinet top.
     position: [
@@ -3395,7 +3395,7 @@ export function switchCabinetToTall({
   sceneApi.update(
     module.id as AnyNodeId,
     {
-      name: 'Tall Cabinet',
+      name: 'Colonna',
       cabinetType: 'tall',
       depth: CABINET_TALL_DEPTH,
       position: [

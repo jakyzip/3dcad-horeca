@@ -28,9 +28,9 @@ export function DuctFittingSizeSwapEditor({
       <ActionButton
         className="h-8 w-full flex-none"
         icon={<ArrowLeftRight className="h-3.5 w-3.5" />}
-        label="Swap W/H"
+        label="Scambia L/A"
         onClick={() => onUpdate({ width: nextWidth, height: nextHeight })}
-        title="Swap width and height"
+        title="Scambia larghezza e altezza"
         type="button"
       />
     </div>

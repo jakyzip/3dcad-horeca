@@ -325,13 +325,13 @@ export const dormerDefinition: NodeDefinition<typeof DormerNode> = {
 
   tool: () => import('./tool'),
   toolHints: [
-    { key: 'Left click', label: 'Place dormer on roof' },
-    { key: 'R / Shift+R', label: 'Rotate ghost ±15°' },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Left click', label: 'Posiziona l’abbaino sul tetto' },
+    { key: 'R / Shift+R', label: 'Ruota l’anteprima di ±15°' },
+    { key: 'Esc', label: 'Annulla' },
   ],
 
   presentation: {
-    label: 'Dormer',
+    label: 'Abbaino',
     description: 'House-shaped protrusion on a roof segment.',
     icon: { kind: 'url', src: '/icons/dormer.webp' },
     paletteSection: 'structure',

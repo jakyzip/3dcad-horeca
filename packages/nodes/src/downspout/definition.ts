@@ -204,13 +204,13 @@ export const downspoutDefinition: NodeDefinition<typeof DownspoutNode> = {
   preview: () => import('./preview'),
   tool: () => import('./tool'),
   toolHints: [
-    { key: 'Hover gutter', label: 'Highlight outlet' },
-    { key: 'Left click', label: 'Drop downspout from outlet' },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Passa sopra la grondaia', label: 'Evidenzia il bocchettone' },
+    { key: 'Left click', label: 'Cala il pluviale dal bocchettone' },
+    { key: 'Esc', label: 'Annulla' },
   ],
 
   presentation: {
-    label: 'Downspout',
+    label: 'Pluviale',
     description: 'Vertical drop pipe from a gutter outlet to the ground.',
     icon: { kind: 'url', src: '/icons/downspout.webp' },
     paletteSection: 'structure',

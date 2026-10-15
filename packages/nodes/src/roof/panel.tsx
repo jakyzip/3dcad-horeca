@@ -39,6 +39,17 @@ import { useCallback, useState } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import { commitSeatedRoofEdit } from './roof-level-target'
 
+const ROOF_TYPE_LABEL: Record<string, string> = {
+  hip: 'a padiglione',
+  gable: 'a capanna',
+  shed: 'a una falda',
+  gambrel: 'a capanna spezzata',
+  dutch: 'a padiglione con frontone',
+  mansard: 'a mansarda',
+  flat: 'piana',
+  conical: 'conica',
+}
+
 export default function RoofPanel() {
   const [ventType, setVentType] = useState<'box-vent' | 'ridge-vent' | 'turbine-vent'>('box-vent')
   const selectedId = useViewer((s) => s.selection.selectedIds[0])
@@ -165,8 +176,8 @@ export default function RoofPanel() {
         storey: getLevelDisplayName(level),
         label:
           above.kind === 'roof'
-            ? 'Move to the roof level'
-            : `Move to ${getLevelDisplayName(above.level)}`,
+            ? 'Sposta al piano del tetto'
+            : `Sposta su ${getLevelDisplayName(above.level)}`,
         roofs: level.children.filter((id) => isRoofOnStoreyWalls(s.nodes, id)).length,
       }
     }),
@@ -284,16 +295,16 @@ export default function RoofPanel() {
     <PanelWrapper
       icon="/icons/roof.webp"
       onClose={handleClose}
-      title={node.name || 'Roof'}
+      title={node.name || 'Tetto'}
       width={300}
     >
       {levelMove && (
-        <PanelSection title="Level">
+        <PanelSection title="Piano">
           <div className="flex flex-col gap-2 px-1 pb-1">
             <p className="text-muted-foreground text-xs">
-              On {levelMove.storey} with its walls, so it hides that floor's plan in solo and
-              exploded views.
-              {levelMove.roofs > 1 && ` The floor's ${levelMove.roofs} roofs move together.`}
+              Sta su {levelMove.storey} insieme ai muri, quindi nasconde la pianta di quel piano
+              nelle viste Singolo ed Esplosi.
+              {levelMove.roofs > 1 && ` I ${levelMove.roofs} tetti del piano si spostano insieme.`}
             </p>
             <button
               className="w-full rounded-full bg-foreground/[0.08] px-3 py-2 font-medium text-foreground text-xs transition-colors hover:bg-foreground/[0.14]"
@@ -306,7 +317,7 @@ export default function RoofPanel() {
         </PanelSection>
       )}
 
-      <PanelSection title="Segments">
+      <PanelSection title="Falde">
         <div className="flex flex-col gap-1">
           {segments.map((seg, i) => (
             <button
@@ -315,21 +326,23 @@ export default function RoofPanel() {
               onClick={() => handleSelectSegment(seg.id)}
               type="button"
             >
-              <span className="truncate">{seg.name || `Segment ${i + 1}`}</span>
-              <span className="text-muted-foreground text-xs capitalize">{seg.roofType}</span>
+              <span className="truncate">{seg.name || `Falda ${i + 1}`}</span>
+              <span className="text-muted-foreground text-xs">
+                {ROOF_TYPE_LABEL[seg.roofType] ?? seg.roofType}
+              </span>
             </button>
           ))}
         </div>
         <ActionGroup>
           <ActionButton
             icon={<Plus className="h-3.5 w-3.5" />}
-            label="Draw Segment"
+            label="Disegna falda"
             onClick={handleAddSegment}
           />
         </ActionGroup>
       </PanelSection>
 
-      <PanelSection title="Position">
+      <PanelSection title="Posizione">
         <SliderControl
           label="X"
           onChange={(v) => {
@@ -348,15 +361,15 @@ export default function RoofPanel() {
               handleUpdate({ support: { kind: mode === 'walls' ? 'walls' : 'level' } })
             }
             options={[
-              { label: 'Follows walls', value: 'walls' },
-              { label: 'Custom', value: 'custom' },
+              { label: 'Segue i muri', value: 'walls' },
+              { label: 'Personalizzata', value: 'custom' },
             ]}
             value={node.support?.kind === 'walls' ? 'walls' : 'custom'}
           />
         )}
         {node.support?.kind === 'walls' ? (
           <div className="px-1 text-[11px] text-muted-foreground">
-            Currently {formatLinearMeasurement(node.position[1], unit, metricNotation)}
+            Attuale: {formatLinearMeasurement(node.position[1], unit, metricNotation)}
           </div>
         ) : (
           <SliderControl
@@ -393,7 +406,7 @@ export default function RoofPanel() {
           value={node.position[2]}
         />
         <SliderControl
-          label="Rotation"
+          label="Rotazione"
           max={180}
           min={-180}
           onChange={(degrees) => {
@@ -422,7 +435,7 @@ export default function RoofPanel() {
         </div>
       </PanelSection>
 
-      <PanelSection title="Elements">
+      <PanelSection title="Elementi">
         <div className="flex flex-col gap-3">
           <div className="flex flex-col gap-1">
             {chimneys.map((chimney, i) => (
@@ -432,14 +445,14 @@ export default function RoofPanel() {
                 onClick={() => handleSelectElement(chimney.id)}
                 type="button"
               >
-                <span className="truncate">{chimney.name || `Chimney ${i + 1}`}</span>
-                <span className="text-muted-foreground text-xs">chimney</span>
+                <span className="truncate">{chimney.name || `Comignolo ${i + 1}`}</span>
+                <span className="text-muted-foreground text-xs">comignolo</span>
               </button>
             ))}
             <ActionGroup>
               <ActionButton
                 icon={<Plus className="h-3.5 w-3.5" />}
-                label="Add Chimney"
+                label="Aggiungi comignolo"
                 onClick={() => activateTool('chimney')}
               />
             </ActionGroup>
@@ -453,14 +466,14 @@ export default function RoofPanel() {
                 onClick={() => handleSelectElement(dormer.id)}
                 type="button"
               >
-                <span className="truncate">{dormer.name || `Dormer ${i + 1}`}</span>
-                <span className="text-muted-foreground text-xs">dormer</span>
+                <span className="truncate">{dormer.name || `Abbaino ${i + 1}`}</span>
+                <span className="text-muted-foreground text-xs">abbaino</span>
               </button>
             ))}
             <ActionGroup>
               <ActionButton
                 icon={<Plus className="h-3.5 w-3.5" />}
-                label="Add Dormer"
+                label="Aggiungi abbaino"
                 onClick={() => activateTool('dormer')}
               />
             </ActionGroup>
@@ -474,14 +487,14 @@ export default function RoofPanel() {
                 onClick={() => handleSelectElement(skylight.id)}
                 type="button"
               >
-                <span className="truncate">{skylight.name || `Skylight ${i + 1}`}</span>
-                <span className="text-muted-foreground text-xs">skylight</span>
+                <span className="truncate">{skylight.name || `Lucernario ${i + 1}`}</span>
+                <span className="text-muted-foreground text-xs">lucernario</span>
               </button>
             ))}
             <ActionGroup>
               <ActionButton
                 icon={<Plus className="h-3.5 w-3.5" />}
-                label="Add Skylight"
+                label="Aggiungi lucernario"
                 onClick={() => activateTool('skylight')}
               />
             </ActionGroup>
@@ -495,14 +508,14 @@ export default function RoofPanel() {
                 onClick={() => handleSelectElement(panel.id)}
                 type="button"
               >
-                <span className="truncate">{panel.name || `Solar Panel ${i + 1}`}</span>
-                <span className="text-muted-foreground text-xs">solar panel</span>
+                <span className="truncate">{panel.name || `Pannello solare ${i + 1}`}</span>
+                <span className="text-muted-foreground text-xs">pannello solare</span>
               </button>
             ))}
             <ActionGroup>
               <ActionButton
                 icon={<Plus className="h-3.5 w-3.5" />}
-                label="Add Solar Panel"
+                label="Aggiungi pannello solare"
                 onClick={() => activateTool('solar-panel')}
               />
             </ActionGroup>
@@ -519,33 +532,33 @@ export default function RoofPanel() {
                 <span className="truncate">
                   {vent.name ||
                     (vent.type === 'box-vent'
-                      ? `Box Vent ${i + 1}`
+                      ? `Aeratore a cassetta ${i + 1}`
                       : vent.type === 'ridge-vent'
-                        ? `Ridge Vent ${i + 1}`
-                        : `Turbine Vent ${i + 1}`)}
+                        ? `Aeratore di colmo ${i + 1}`
+                        : `Aeratore a turbina ${i + 1}`)}
                 </span>
                 <span className="text-muted-foreground text-xs">
                   {vent.type === 'box-vent'
-                    ? 'box vent'
+                    ? 'aeratore a cassetta'
                     : vent.type === 'ridge-vent'
-                      ? 'ridge vent'
-                      : 'turbine vent'}
+                      ? 'aeratore di colmo'
+                      : 'aeratore a turbina'}
                 </span>
               </button>
             ))}
             <SegmentedControl<'box-vent' | 'ridge-vent' | 'turbine-vent'>
               onChange={setVentType}
               options={[
-                { label: 'Box', value: 'box-vent' },
-                { label: 'Ridge', value: 'ridge-vent' },
-                { label: 'Turbine', value: 'turbine-vent' },
+                { label: 'A cassetta', value: 'box-vent' },
+                { label: 'Di colmo', value: 'ridge-vent' },
+                { label: 'A turbina', value: 'turbine-vent' },
               ]}
               value={ventType}
             />
             <ActionGroup>
               <ActionButton
                 icon={<Plus className="h-3.5 w-3.5" />}
-                label="Add Vent"
+                label="Aggiungi aeratore"
                 onClick={() => activateTool(ventType)}
               />
             </ActionGroup>
@@ -555,7 +568,7 @@ export default function RoofPanel() {
             <ActionGroup>
               <ActionButton
                 icon={<Plus className="h-3.5 w-3.5" />}
-                label="Add Cupola"
+                label="Aggiungi torretta"
                 onClick={() => activateTool('cupola')}
               />
             </ActionGroup>
@@ -565,7 +578,7 @@ export default function RoofPanel() {
             <ActionGroup>
               <ActionButton
                 icon={<Plus className="h-3.5 w-3.5" />}
-                label="Add Eyebrow Vent"
+                label="Aggiungi aeratore a palpebra"
                 onClick={() => activateTool('eyebrow-vent')}
               />
             </ActionGroup>
@@ -579,14 +592,14 @@ export default function RoofPanel() {
                 onClick={() => handleSelectElement(gutter.id)}
                 type="button"
               >
-                <span className="truncate">{gutter.name || `Gutter ${i + 1}`}</span>
-                <span className="text-muted-foreground text-xs">gutter</span>
+                <span className="truncate">{gutter.name || `Grondaia ${i + 1}`}</span>
+                <span className="text-muted-foreground text-xs">grondaia</span>
               </button>
             ))}
             <ActionGroup>
               <ActionButton
                 icon={<Plus className="h-3.5 w-3.5" />}
-                label="Add Gutter"
+                label="Aggiungi grondaia"
                 onClick={() => activateTool('gutter')}
               />
             </ActionGroup>
@@ -594,18 +607,22 @@ export default function RoofPanel() {
         </div>
       </PanelSection>
 
-      <PanelSection title="Actions">
+      <PanelSection title="Azioni">
         <ActionGroup>
-          <ActionButton icon={<Move className="h-3.5 w-3.5" />} label="Move" onClick={handleMove} />
+          <ActionButton
+            icon={<Move className="h-3.5 w-3.5" />}
+            label="Sposta"
+            onClick={handleMove}
+          />
           <ActionButton
             icon={<Copy className="h-3.5 w-3.5" />}
-            label="Duplicate"
+            label="Duplica"
             onClick={handleDuplicate}
           />
           <ActionButton
             className="hover:bg-red-500/20"
             icon={<Trash2 className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />}
-            label="Delete"
+            label="Elimina"
             onClick={handleDelete}
           />
         </ActionGroup>

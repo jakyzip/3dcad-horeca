@@ -139,5 +139,5 @@ it('resolves explicit arc construction below the same signed multi-turn walking 
     sweepAngle: 5 * Math.PI,
     construction: { mode: 'waist' },
   })
-  expect(measureStairDetail(impossible, []).error).toContain('One tread')
+  expect(measureStairDetail(impossible, []).error).toContain('Un gradino')
 })

@@ -344,7 +344,7 @@ describe('buildRidgeVentGeometry', () => {
       shingleThickness: 0,
     })
     const hipLine = getRidgeVentLinesForSegment(segment).find(
-      (line) => line.name === 'Hip Ridge Vent' && line.start[0] < 0 && line.start[1] < 0,
+      (line) => line.name === 'Aeratore di displuvio' && line.start[0] < 0 && line.start[1] < 0,
     )
     expect(hipLine).toBeDefined()
     const line = hipLine!

@@ -75,14 +75,14 @@ export function blockTransformDisplayValue(
 
 export function blockModalFeedbackLabel(mode: BlockModalFeedbackMode): string {
   return mode === 'grid'
-    ? 'Grid snap'
+    ? 'Aggancio alla griglia'
     : mode === 'angle'
-      ? 'Angle snap'
+      ? 'Aggancio angolare'
       : mode === 'exact'
-        ? 'Exact'
+        ? 'Esatto'
         : mode === 'geometry'
-          ? 'Geometry snap'
-          : 'Free'
+          ? 'Aggancio alla geometria'
+          : 'Libero'
 }
 
 export function blockAxisDelta(
@@ -178,18 +178,18 @@ export function blockModalTransformStatus(
 ): string {
   const operation =
     activeTransform.operation === 'translate'
-      ? 'Move'
+      ? 'Sposta'
       : activeTransform.operation === 'rotate'
-        ? 'Rotate'
-        : 'Scale'
+        ? 'Ruota'
+        : 'Ridimensiona'
   const constraint =
     activeTransform.constraint === 'free'
-      ? 'free'
+      ? 'libero'
       : activeTransform.constraint === 'uniform'
-        ? 'uniform'
+        ? 'uniforme'
         : activeTransform.constraint.length === 2
-          ? `${activeTransform.constraint.toUpperCase()} plane`
-          : `${activeTransform.constraint.toUpperCase()} axis`
+          ? `piano ${activeTransform.constraint.toUpperCase()}`
+          : `asse ${activeTransform.constraint.toUpperCase()}`
   const typedValue = typedInput
     ? ` · ${typedInput}${
         activeTransform.operation === 'translate'
@@ -199,5 +199,5 @@ export function blockModalTransformStatus(
             : '×'
       }`
     : ''
-  return `${operation} · ${constraint}${typedValue} · ${blockModalFeedbackLabel(feedbackMode)} · X/Y/Z constrains · click applies · Esc cancels`
+  return `${operation} · ${constraint}${typedValue} · ${blockModalFeedbackLabel(feedbackMode)} · X/Y/Z vincola · clic applica · Esc annulla`
 }

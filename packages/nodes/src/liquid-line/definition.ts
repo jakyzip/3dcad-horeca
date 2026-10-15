@@ -105,15 +105,15 @@ export const liquidLineDefinition: NodeDefinition<typeof LiquidLineNode> = {
 
   tool: () => import('./tool'),
   toolHints: [
-    { key: 'Click', label: 'Start liquid line' },
-    { key: 'Click again', label: 'Place it (locked to 45°)' },
-    { key: 'Alt + drag', label: 'Go vertical ↕, click to place' },
-    { key: 'F', label: 'Follow: trace a lineset' },
-    { key: 'Esc', label: 'Cancel' },
+    { key: 'Click', label: 'Inizia la linea del liquido' },
+    { key: 'Click again', label: 'Posizionala (bloccata a 45°)' },
+    { key: 'Alt + drag', label: 'Sali in verticale ↕, fai clic per posizionare' },
+    { key: 'F', label: 'Segui: ricalca una linea frigorifera' },
+    { key: 'Esc', label: 'Annulla' },
   ],
 
   presentation: {
-    label: 'Liquid Line',
+    label: 'Linea del liquido',
     description:
       'Standalone refrigerant liquid line — a thin bare-copper run; Follow mode traces an existing lineset.',
     icon: { kind: 'url', src: '/icons/lineset.webp' },
