@@ -32,11 +32,20 @@ const runtimeDirectory = () =>
     ? path.join(process.resourcesPath, 'runtime')
     : path.join(__dirname, '../build/runtime')
 
-function freePort(): Promise<number> {
+/**
+ * Always the same port when it's free: the page's saved settings (catalog, compositions, labels)
+ * live in the browser storage of its address, port included, so a new port each launch would
+ * lose them. Another free port only when something else holds it.
+ */
+const PREFERRED_PORT = 39203
+
+function freePort(port = PREFERRED_PORT): Promise<number> {
   return new Promise((resolve, reject) => {
     const probe = createServer()
-    probe.once('error', reject)
-    probe.listen(0, HOST, () => {
+    probe.once('error', (error: NodeJS.ErrnoException) =>
+      port !== 0 && error.code === 'EADDRINUSE' ? resolve(freePort(0)) : reject(error),
+    )
+    probe.listen(port, HOST, () => {
       const address = probe.address()
       probe.close(() =>
         typeof address === 'object' && address ? resolve(address.port) : reject(new Error('port')),

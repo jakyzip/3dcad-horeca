@@ -211,6 +211,16 @@ Nota: `floorplanDependsOnSiblings: true` sulle attrezzature bloccava il caricame
 ### 8b. Controlli automatici (fatto e provato dall'utente, 2026-10-15)
 Avvisi, mai blocchi: attrezzature che si sovrappongono (solo se si sovrappongono anche in altezza: un pensile sopra un tavolo va bene), attrezzature che entrano in un muro, passaggi davanti a un'attrezzatura più stretti del minimo. Minimi scelti dall'utente (2026-10-15): 90 cm per il passaggio, 120 cm per la zona di lavoro (due attrezzature affacciate), modificabili nel pannello e salvati nel progetto (`metadata.controlli` del lotto, come il collegamento al CRM). Le attrezzature a parete sopra 1,20 m non restringono i passaggi. In pianta: bordo rosso e striscia rossa con la larghezza misurata; nel pannello Ho.Re.Ca → "Controlli": elenco cliccabile; mentre si trascina o si seleziona, la riga "!" dell'editor (`placementNotice`). Codice: `controlli.ts`, `controlli-section.tsx`.
 
+### 8c. Composizioni salvate (fatto, da provare nell'editor)
+Pannello Ho.Re.Ca → "Composizioni": selezionate alcune attrezzature (Maiusc + clic), "Salva" con un nome; "Inserisci" la ricrea al centro della stanza del piano (centro dei muri), già selezionata da spostare, in un solo passo di annulla. Porta con sé misure, opzioni, articolo e allacciamenti, posizioni relative e rotazioni. Salvate su questo computer (memoria del browser, come il catalogo); "Esporta" / "Importa" un file `composizioni.json` per passarle a un altro computer. Codice: `composizioni.ts`, `composizioni-store.ts`, `composizioni-section.tsx`.
+App desktop: porta fissa 39203 (un'altra solo se occupata), perché la memoria del browser dipende dall'indirizzo con la porta e con una porta nuova a ogni avvio catalogo, composizioni ed etichette si perdevano.
+
+### 8d. Progetti modello (da fare)
+Un progetto nuovo che parte da un modello già arredato, e "salva come modello".
+
+### 8e. Banconi e vetrine componibili (da decidere con l'utente)
+Servono i moduli usati davvero (tipi, larghezze standard, angoli).
+
 ## Fase 7: rilascio
 
 `README` nuovo, `THIRD_PARTY_NOTICES.md` completo, `LICENSE`, nome e logo, CI. Controllare un'ultima volta `ASSETS.md` e le licenze di tutte le dipendenze.
