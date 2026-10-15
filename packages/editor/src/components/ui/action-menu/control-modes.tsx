@@ -28,7 +28,7 @@ const controls: ControlConfig[] = [
   {
     id: 'select',
     imageSrc: '/icons/select.webp',
-    label: 'Select',
+    label: 'Seleziona',
     shortcut: 'V',
     color: 'hover:bg-blue-500/20 hover:text-blue-600 dark:hover:text-blue-400',
     activeColor: 'bg-blue-500/20 text-blue-600 dark:text-blue-400 dark:hover:text-accent-foreground',
@@ -36,7 +36,7 @@ const controls: ControlConfig[] = [
   {
     id: 'delete',
     icon: Trash2,
-    label: 'Delete',
+    label: 'Elimina',
     shortcut: 'X',
     color: 'hover:bg-red-500/20 hover:text-red-600 dark:hover:text-red-400',
     activeColor: 'bg-red-500/20 text-red-600 dark:text-red-400 dark:hover:text-accent-foreground',

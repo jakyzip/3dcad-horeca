@@ -94,7 +94,7 @@ export function BuildPanelAdvancedSection({
             open && 'rotate-90',
           )}
         />
-        <h3 className="font-medium text-foreground text-xs">Advanced</h3>
+        <h3 className="font-medium text-foreground text-xs">Avanzate</h3>
         {hint ? (
           <span className="ml-auto truncate text-[11px] text-muted-foreground">{hint}</span>
         ) : null}
@@ -211,7 +211,7 @@ export function BuildPanelRoomsSection({
 }) {
   const active = WALL_DRAW_VARIANTS.find((variant) => variant.id === activeVariant)
   return (
-    <BuildPanelSection hint="walls · floor · ceiling" id="rooms" title="Rooms">
+    <BuildPanelSection hint="muri · pavimento · soffitto" id="rooms" title="Stanze">
       <BuildToolGrid columns={3}>
         {WALL_DRAW_VARIANTS.map((variant) => (
           <BuildToolTile

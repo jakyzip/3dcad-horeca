@@ -31,13 +31,13 @@ export function CameraActions({ hideOrbit = false }: { hideOrbit?: boolean }) {
           {/* Orbit CCW */}
           <ActionButton
             className="group hover:bg-black/4"
-            label="Orbit Left"
+            label="Ruota a sinistra"
             onClick={orbitCCW}
             size="icon"
             variant="ghost"
           >
             <Image
-              alt="Orbit Left"
+              alt="Ruota a sinistra"
               className="h-[28px] w-[28px] -scale-x-100 object-contain opacity-70 transition-opacity group-hover:opacity-100"
               height={28}
               src="/icons/rotate.webp"
@@ -48,13 +48,13 @@ export function CameraActions({ hideOrbit = false }: { hideOrbit?: boolean }) {
           {/* Orbit CW */}
           <ActionButton
             className="group hover:bg-black/4"
-            label="Orbit Right"
+            label="Ruota a destra"
             onClick={orbitCW}
             size="icon"
             variant="ghost"
           >
             <Image
-              alt="Orbit Right"
+              alt="Ruota a destra"
               className="h-[28px] w-[28px] object-contain opacity-70 transition-opacity group-hover:opacity-100"
               height={28}
               src="/icons/rotate.webp"
@@ -71,13 +71,13 @@ export function CameraActions({ hideOrbit = false }: { hideOrbit?: boolean }) {
       {!is2dOnly && (
         <ActionButton
           className="group hover:bg-black/4"
-          label="Top View"
+          label="Vista dall'alto"
           onClick={goToTopView}
           size="icon"
           variant="ghost"
         >
           <Image
-            alt="Top View"
+            alt="Vista dall'alto"
             className="h-[28px] w-[28px] object-contain opacity-70 transition-opacity group-hover:opacity-100"
             height={28}
             src="/icons/topview.webp"

@@ -75,13 +75,13 @@ export function HoverChip() {
       <div className="pa-hlabel" ref={label}>
         {hover ? (
           busy ? (
-            'The assistant is working on this'
+            'L’assistente ci sta lavorando'
           ) : (
             <>
               {plus}
               {hover.target.name}
               {hover.target.size ? <span className="sz">{hover.target.size}</span> : null}
-              {hover.ambiguous ? <span className="sub">⌥ the wall</span> : null}
+              {hover.ambiguous ? <span className="sub">⌥ il muro</span> : null}
             </>
           )
         ) : null}

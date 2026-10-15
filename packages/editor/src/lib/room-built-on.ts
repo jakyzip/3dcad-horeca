@@ -133,6 +133,6 @@ export function separateFloorSummary(
 ): string {
   const { current, shared, offset } = model
   if (!shared || offset === null) return current.name
-  if (Math.abs(offset) < 0.005) return `${current.name} · level with ${shared.name}`
-  return `${current.name} · ${length(Math.abs(offset))} ${offset > 0 ? 'above' : 'below'} ${shared.name}`
+  if (Math.abs(offset) < 0.005) return `${current.name} · alla stessa quota di ${shared.name}`
+  return `${current.name} · ${length(Math.abs(offset))} ${offset > 0 ? 'sopra' : 'sotto'} ${shared.name}`
 }

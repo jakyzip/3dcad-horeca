@@ -10,81 +10,81 @@ export type RoomNameContext = 'room' | 'outdoor' | 'mezzanine'
 export const ROOM_NAME_SECTIONS: readonly RoomNameSection[] = [
   {
     id: 'living',
-    title: 'Living',
+    title: 'Zona giorno',
     names: [
-      'Living room',
-      'Family room',
-      'Dining room',
-      'Kitchen',
-      'Kitchenette',
-      'Pantry',
-      'Lounge',
-      'Den',
-      'Library',
-      'Playroom',
-      'Home cinema',
-      'Games room',
-      'Sunroom',
+      'Soggiorno',
+      'Salotto',
+      'Sala da pranzo',
+      'Cucina',
+      'Angolo cottura',
+      'Dispensa',
+      'Salottino',
+      'Studiolo',
+      'Biblioteca',
+      'Stanza giochi',
+      'Home theater',
+      'Sala giochi',
+      'Veranda chiusa',
     ],
   },
   {
     id: 'sleeping',
-    title: 'Sleeping',
+    title: 'Zona notte',
     names: [
-      'Bedroom',
-      'Primary bedroom',
-      'Guest room',
-      "Kids' room",
-      'Nursery',
-      'Dressing room',
-      'Walk-in closet',
+      'Camera da letto',
+      'Camera matrimoniale',
+      'Camera degli ospiti',
+      'Cameretta',
+      'Stanza del neonato',
+      'Spogliatoio',
+      'Cabina armadio',
     ],
   },
   {
     id: 'bathrooms',
-    title: 'Bathrooms',
-    names: ['Bathroom', 'En-suite', 'Shower room', 'Toilet', 'Powder room'],
+    title: 'Bagni',
+    names: ['Bagno', 'Bagno in camera', 'Doccia', 'WC', 'Bagno di servizio'],
   },
   {
     id: 'work',
-    title: 'Work & hobbies',
-    names: ['Office', 'Study', 'Studio', 'Workshop', 'Gym'],
+    title: 'Lavoro e hobby',
+    names: ['Ufficio', 'Studio', 'Atelier', 'Laboratorio', 'Palestra'],
   },
   {
     id: 'circulation',
-    title: 'Circulation',
-    names: ['Entrance', 'Hallway', 'Corridor', 'Landing', 'Stairwell', 'Mudroom'],
+    title: 'Distribuzione',
+    names: ['Ingresso', 'Disimpegno', 'Corridoio', 'Pianerottolo', 'Vano scala', 'Antibagno'],
   },
   {
     id: 'utility',
-    title: 'Utility & storage',
+    title: 'Servizi e depositi',
     names: [
-      'Laundry',
-      'Utility room',
-      'Storage',
-      'Closet',
-      'Boiler room',
-      'Cellar',
-      'Basement',
-      'Attic',
+      'Lavanderia',
+      'Locale tecnico',
+      'Ripostiglio',
+      'Armadio',
+      'Centrale termica',
+      'Cantina',
+      'Seminterrato',
+      'Soffitta',
       'Garage',
     ],
   },
   {
     id: 'outdoor',
-    title: 'Outdoor',
+    title: 'Esterni',
     names: [
-      'Garden',
+      'Giardino',
       'Patio',
-      'Terrace',
-      'Balcony',
-      'Porch',
+      'Terrazza',
+      'Balcone',
+      'Portico',
       'Veranda',
-      'Deck',
-      'Courtyard',
-      'Pool area',
-      'Carport',
-      'Garden shed',
+      'Pedana',
+      'Cortile',
+      'Zona piscina',
+      'Posto auto coperto',
+      'Casetta da giardino',
     ],
   },
 ]
@@ -92,8 +92,8 @@ export const ROOM_NAME_SECTIONS: readonly RoomNameSection[] = [
 /** Only offered, and first, when the selection is a mezzanine. */
 export const MEZZANINE_NAME_SECTION: RoomNameSection = {
   id: 'mezzanine',
-  title: 'Mezzanine',
-  names: ['Mezzanine', 'Loft', 'Reading nook', 'Gallery'],
+  title: 'Soppalco',
+  names: ['Soppalco', 'Loft', 'Angolo lettura', 'Galleria'],
 }
 
 /**
@@ -110,7 +110,7 @@ export function roomNameContext(nodes: Record<string, AnyNode>, zoneId: string):
   return 'room'
 }
 
-/** A name without the number the picker adds to a repeat: "Bedroom 2" → "Bedroom". */
+/** A name without the number the picker adds to a repeat: "Camera da letto 2" → "Camera da letto". */
 export function baseRoomName(name: string) {
   return name.trim().replace(/\s+\d+$/, '')
 }

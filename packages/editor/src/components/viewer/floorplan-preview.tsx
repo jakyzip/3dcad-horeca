@@ -869,7 +869,7 @@ export function FloorplanPreview({
         className={className}
         style={{ display: 'grid', placeItems: 'center', background: '#f8fafc', color: '#64748b' }}
       >
-        No floor plans are available for this scene.
+        Nessuna pianta disponibile per questa scena.
       </div>
     )
   }
@@ -882,7 +882,7 @@ export function FloorplanPreview({
       {synchronizeNavigation ? <FloorplanCameraSyncMount /> : null}
       <div
         aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight + - 0 F"
-        aria-label={`${activeLevel ? levelLabel(activeLevel) : 'Floor plan'} 2D view`}
+        aria-label={`${activeLevel ? levelLabel(activeLevel) : 'Pianta'}: vista 2D`}
         onKeyDown={onKeyDown}
         role="application"
         ref={interactionRef}
@@ -969,9 +969,9 @@ export function FloorplanPreview({
             fontWeight: 600,
           }}
         >
-          Floor
+          Piano
           <select
-            aria-label="Floor"
+            aria-label="Piano"
             onChange={(event) => chooseLevel(event.target.value)}
             style={{
               border: '1px solid rgba(148,163,184,.55)',
@@ -1013,28 +1013,28 @@ export function FloorplanPreview({
         }}
       >
         <button
-          aria-label="Zoom out"
+          aria-label="Riduci"
           onClick={() => zoom(1.2)}
           style={controlStyle}
-          title="Zoom out"
+          title="Riduci"
           type="button"
         >
           <Minus size={16} />
         </button>
         <button
-          aria-label="Fit floor plan"
+          aria-label="Adatta la pianta"
           onClick={() => updateLocalViewBox(fittedViewBox)}
           style={controlStyle}
-          title="Fit floor plan"
+          title="Adatta la pianta"
           type="button"
         >
           <Maximize2 size={15} />
         </button>
         <button
-          aria-label="Zoom in"
+          aria-label="Ingrandisci"
           onClick={() => zoom(0.8)}
           style={controlStyle}
-          title="Zoom in"
+          title="Ingrandisci"
           type="button"
         >
           <Plus size={16} />

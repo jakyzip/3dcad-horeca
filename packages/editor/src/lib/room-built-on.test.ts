@@ -160,13 +160,13 @@ describe('Built on: the Floor row summary', () => {
   test('says how a separate floor sits against the shared floor', () => {
     const shared = { name: 'Shared floor' }
     expect(separateFloorSummary({ current: lanaiFloor, shared, offset: -0.15 }, length)).toBe(
-      'Lanai floor · 0.15 m below Shared floor',
+      'Lanai floor · 0.15 m sotto Shared floor',
     )
     expect(
       separateFloorSummary({ current: lanaiFloor, shared: { name: 'Cabin' }, offset: 0.3 }, length),
-    ).toBe('Lanai floor · 0.30 m above Cabin')
+    ).toBe('Lanai floor · 0.30 m sopra Cabin')
     expect(separateFloorSummary({ current: lanaiFloor, shared, offset: 0.002 }, length)).toBe(
-      'Lanai floor · level with Shared floor',
+      'Lanai floor · alla stessa quota di Shared floor',
     )
     expect(separateFloorSummary({ current: lanaiFloor, shared: null, offset: null }, length)).toBe(
       'Lanai floor',
@@ -189,7 +189,7 @@ describe('Built on: the Floor row summary', () => {
     const model = roomBuiltOn(nodes, keyedLanai.id)!
     expect(
       separateFloorSummary({ ...model, offset: separateFloorOffset(nodes, keyedLanai.id) }, length),
-    ).toBe('Lanai floor · 0.30 m below Living floor')
+    ).toBe('Lanai floor · 0.30 m sotto Living floor')
     // Nothing shared across a wall or open side: the shared plate's top.
     expect(separateFloorOffset(scene(raised, keyedLanai, house, own), keyedLanai.id)).toBeCloseTo(
       -0.15,
@@ -365,7 +365,9 @@ describe('Built on: moving between floors, through core', () => {
     expect(result.status).toBe('conflict')
     const notice = useRoomTransform.getState().notice
     expect(notice?.zoneId).toBe(houseRoom)
-    expect(notice?.message).toMatch(/^Too high: the floor can rise at most \d+\.\d\d m/)
+    expect(notice?.message).toMatch(
+      /^Troppo alto: il pavimento può salire al massimo di \d+\.\d\d m/,
+    )
     expect(steps()).toBe(0)
     showRoomNotice(null)
   })

@@ -304,7 +304,7 @@ export function planRoomPush(
   mintId: (kind: 'zone' | 'wall' | 'separator') => string = generateId,
 ): StructurePlan {
   const wall = nodes[span.wallId]
-  if (wall?.type !== 'wall') throw Error('Select a wall.')
+  if (wall?.type !== 'wall') throw Error('Seleziona un muro.')
   const shift = ([x, z]: Point): Point => [x + outward[0] * distance, z + outward[1] * distance]
   const whole = span.t0 <= WHOLE && span.t1 >= 1 - WHOLE
   if (whole)
@@ -942,7 +942,7 @@ export function runWallPushDrag({
       const preview = previewRoomPush(handle, handle.outward, distance)
       ghosts = preview.ghosts
       blocked = !!preview.code
-      publish(preview.code ? "Can't move this wall there" : undefined)
+      publish(preview.code ? 'Non puoi spostare il muro lì' : undefined)
     },
     onCommit: () => {
       if (blocked) endRoomPushPreview()

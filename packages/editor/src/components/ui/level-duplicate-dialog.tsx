@@ -21,28 +21,28 @@ const DUPLICATE_PRESETS: Array<{
 }> = [
   {
     id: 'everything',
-    label: 'Everything',
-    description: 'Structure, materials, furniture, and references.',
+    label: 'Tutto',
+    description: 'Struttura, materiali, arredi e riferimenti.',
   },
   {
     id: 'structure',
-    label: 'Structure only',
-    description: 'Walls, slabs, roofs, stairs, windows, and doors without finishes.',
+    label: 'Solo struttura',
+    description: 'Muri, solai, tetti, scale, finestre e porte senza finiture.',
   },
   {
     id: 'structure-materials',
-    label: 'Structure + materials',
-    description: 'Structure with the current material and finish assignments.',
+    label: 'Struttura + materiali',
+    description: 'Struttura con i materiali e le finiture assegnati ora.',
   },
   {
     id: 'structure-furniture',
-    label: 'Structure + furniture',
-    description: 'Structure, finishes, and placed items, without guide references.',
+    label: 'Struttura + arredi',
+    description: 'Struttura, finiture e oggetti posizionati, senza immagini di riferimento.',
   },
 ]
 
 function getLevelLabel(level: LevelNode | null) {
-  if (!level) return 'this level'
+  if (!level) return 'questo piano'
   return getLevelDisplayName(level)
 }
 
@@ -69,8 +69,8 @@ export function LevelDuplicateDialog({
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent className="sm:max-w-md" showCloseButton={false}>
         <DialogHeader>
-          <DialogTitle>Duplicate Level</DialogTitle>
-          <DialogDescription>Choose what to copy from {getLevelLabel(level)}.</DialogDescription>
+          <DialogTitle>Duplica piano</DialogTitle>
+          <DialogDescription>Scegli cosa copiare da {getLevelLabel(level)}.</DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-2">
@@ -98,14 +98,14 @@ export function LevelDuplicateDialog({
             onClick={() => onOpenChange(false)}
             type="button"
           >
-            Cancel
+            Annulla
           </button>
           <button
             className="cursor-pointer rounded-md bg-primary px-4 py-2 text-primary-foreground text-sm transition-opacity hover:opacity-90"
             onClick={() => onConfirm(preset)}
             type="button"
           >
-            Duplicate
+            Duplica
           </button>
         </DialogFooter>
       </DialogContent>

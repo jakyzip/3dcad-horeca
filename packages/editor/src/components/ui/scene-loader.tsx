@@ -60,13 +60,13 @@ export function SceneLoadFailed({ className, onRetry }: SceneLoadFailedProps) {
       role="alert"
     >
       <div className="flex flex-col gap-1">
-        <p className="font-medium text-foreground text-sm">This project couldn't be loaded</p>
+        <p className="font-medium text-foreground text-sm">Non è stato possibile caricare il progetto</p>
         <p className="text-muted-foreground text-sm">
-          Nothing was changed. Check your connection and try again.
+          Non è stato modificato nulla. Controlla la connessione e riprova.
         </p>
       </div>
       <Button className="rounded-full" onClick={onRetry} size="sm" type="button">
-        Try again
+        Riprova
       </Button>
     </div>
   )

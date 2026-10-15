@@ -25,9 +25,12 @@ async function initializeDecompressRenderer(): Promise<WebGPURenderer> {
       new WebGPURenderer(parameters as ConstructorParameters<typeof WebGPURenderer>[0]),
   })
   if (result.status !== 'ready') {
-    throw new Error('Could not start a GPU renderer to decompress textures for export.', {
-      cause: result.error,
-    })
+    throw new Error(
+      'Impossibile avviare il rendering GPU per decomprimere le texture da esportare.',
+      {
+        cause: result.error,
+      },
+    )
   }
   return result.renderer
 }
@@ -61,7 +64,7 @@ export function createExportTextureUtils(
   return {
     async decompress(texture, maxTextureSize = Number.POSITIVE_INFINITY) {
       if (disposed) {
-        throw new Error('The export was abandoned before this texture was decompressed.')
+        throw new Error('L’esportazione è stata interrotta prima di decomprimere questa texture.')
       }
       pending ??= initialize()
       const renderer = await pending
@@ -90,7 +93,7 @@ export function createExportTextureUtils(
       canvas.height = height
       const context = canvas.getContext('2d')
       if (!context) {
-        throw new Error('Could not create a 2D canvas to read back a decompressed texture.')
+        throw new Error('Impossibile creare un canvas 2D per leggere una texture decompressa.')
       }
       context.drawImage(renderer.domElement, 0, 0, width, height)
 

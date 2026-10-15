@@ -21,7 +21,7 @@ export const CONTINUATION_PROFILES: Record<
   wall: {
     options: ['room', 'single', 'rectangle'],
     default: 'room',
-    labels: { room: 'Polygon room', single: 'Walls', rectangle: 'Rectangle room' },
+    labels: { room: 'Stanza poligonale', single: 'Muri', rectangle: 'Stanza rettangolare' },
     icons: { room: 'lucide:pentagon', single: 'lucide:minus', rectangle: 'lucide:square' },
     chosenInPanel: true,
   },
@@ -29,10 +29,10 @@ export const CONTINUATION_PROFILES: Record<
     options: ['single', 'continuous', 'curved', 'freehand'],
     default: 'continuous',
     labels: {
-      continuous: 'Continuous',
-      single: 'Single fence',
-      curved: 'Curved fence',
-      freehand: 'Freehand fence',
+      continuous: 'Continua',
+      single: 'Recinzione singola',
+      curved: 'Recinzione curva',
+      freehand: 'Recinzione a mano libera',
     },
     icons: {
       continuous: 'lucide:waypoints',
@@ -44,19 +44,19 @@ export const CONTINUATION_PROFILES: Record<
   point: {
     options: ['once', 'repeat'],
     default: 'once',
-    labels: { once: 'Place once', repeat: 'Place multiple' },
+    labels: { once: 'Posiziona una volta', repeat: 'Posiziona più volte' },
     icons: { once: 'lucide:target', repeat: 'lucide:copy-plus' },
   },
   cabinet: {
     options: ['single', 'continuous'],
     default: 'single',
-    labels: { single: 'Single cabinet', continuous: 'Continuous run' },
+    labels: { single: 'Mobile singolo', continuous: 'Fila continua' },
     icons: { single: 'lucide:minus', continuous: 'lucide:waypoints' },
   },
   canopy: {
     options: ['single', 'continuous'],
     default: 'single',
-    labels: { single: 'Single canopy', continuous: 'Continuous canopy' },
+    labels: { single: 'Tettoia singola', continuous: 'Tettoia continua' },
     icons: { single: 'lucide:minus', continuous: 'lucide:waypoints' },
   },
 }

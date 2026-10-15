@@ -40,9 +40,9 @@ import { type PinRecord, usePointAsk } from '../../store/use-point-ask'
 import { finishOptionalAnimations, pointMotionCalm, usePointMotionCalm } from './optional-motion'
 
 const COMPARE_REFUSAL_WORDS = {
-  'history-held': 'Another change is in progress. Try again in a moment.',
-  'no-before': 'The scene has changed too much since to show how it was.',
-  'turn-working': "The assistant is still working. Try again when it's done.",
+  'history-held': 'È in corso un’altra modifica. Riprova tra poco.',
+  'no-before': 'Da allora la scena è cambiata troppo per mostrare com’era.',
+  'turn-working': 'L’assistente sta ancora lavorando. Riprova quando ha finito.',
 } as const
 
 const SETTLED = new Set(['done', 'answered', 'no-change', 'undone'])
@@ -328,14 +328,14 @@ function PinView({ askId }: { askId: string }) {
   const changes = model.changedTargetIds.length
   const overHere =
     model.state === 'needs-input'
-      ? 'The assistant needs you over here'
+      ? 'Qui l’assistente ha bisogno di te'
       : model.state === 'error'
-        ? 'Something failed over here'
+        ? 'Qui qualcosa non è riuscito'
         : changes > 0
-          ? `${changes} change${changes === 1 ? '' : 's'} over here`
+          ? `Qui ${changes} modific${changes === 1 ? 'a' : 'he'}`
           : model.state === 'working'
-            ? 'The assistant is working over here'
-            : 'Over here'
+            ? 'Qui l’assistente sta lavorando'
+            : 'Qui'
   return (
     <>
       <button
@@ -418,7 +418,7 @@ function PinView({ askId }: { askId: string }) {
           arcs.current = node?.querySelector<SVGGElement>('.pa-parcs') ?? null
         }}
         title={
-          model.state === 'working' && model.sentence ? model.sentence : 'Sent to the assistant'
+          model.state === 'working' && model.sentence ? model.sentence : 'Inviato all’assistente'
         }
       >
         {PIN_SVG}
@@ -530,14 +530,14 @@ function PinCard() {
       : model.state === 'answered'
         ? (model.answer ?? '').split('\n').slice(0, 2).join(' ')
         : model.state === 'no-change'
-          ? `The assistant didn't change ${pin.label}.`
+          ? `L’assistente non ha modificato ${pin.label}.`
           : model.state === 'error'
-            ? (model.error ?? 'The assistant could not do this.')
+            ? (model.error ?? 'L’assistente non è riuscito a farlo.')
             : model.state === 'needs-input'
-              ? (model.question ?? 'The assistant needs a word from you.')
+              ? (model.question ?? 'L’assistente ha bisogno di una tua risposta.')
               : model.state === 'undone'
-                ? 'Undone'
-                : model.sentence || 'The assistant is on it'
+                ? 'Annullato'
+                : model.sentence || 'L’assistente ci sta lavorando'
   const also = alsoChangedLine(model)
   const edits = handEditsSince(askId)
   const keepOpen = () => {
@@ -575,9 +575,9 @@ function PinCard() {
           <div className="pa-card-head">
             <div className="pa-card-t">{title}</div>
             {pin.after?.dataUrl || pin.before?.dataUrl ? (
-              <div className="pa-card-thumb" title="After">
+              <div className="pa-card-thumb" title="Dopo">
                 {/* biome-ignore lint/performance/noImgElement: data URLs the capture just made */}
-                <img alt="After" src={pin.after?.dataUrl ?? pin.before?.dataUrl} />
+                <img alt="Dopo" src={pin.after?.dataUrl ?? pin.before?.dataUrl} />
               </div>
             ) : null}
           </div>
@@ -599,7 +599,7 @@ function PinCard() {
         {note ? <div className="pa-card-s">{note}</div> : null}
         {model.state === 'done' && edits > 0 && warn ? (
           <div className="pa-card-s">
-            You've changed the scene since. Undoing also removes those changes.
+            Nel frattempo hai modificato la scena. Annullando togli anche quelle modifiche.
           </div>
         ) : null}
         {refusal ? <div className="pa-card-s">{COMPARE_REFUSAL_WORDS[refusal]}</div> : null}
@@ -624,7 +624,7 @@ function PinCard() {
             onPointerUp={() => endCompare()}
             type="button"
           >
-            {comparing ? 'Showing before' : 'Hold to see before'}
+            {comparing ? 'Stai vedendo il prima' : 'Tieni premuto per vedere il prima'}
           </button>
         ) : null}
         <div className="pa-card-row">
@@ -638,7 +638,7 @@ function PinCard() {
                 }}
                 type="button"
               >
-                Keep
+                Tieni
               </button>
               <button
                 className="pa-btn"
@@ -647,7 +647,7 @@ function PinCard() {
                 }}
                 type="button"
               >
-                Change more
+                Modifica ancora
               </button>
               <button
                 className="pa-btn"
@@ -655,11 +655,13 @@ function PinCard() {
                   const result = await undoAsk(askId, { force: edits > 0 && warn })
                   if (result === 'needs-confirm') setWarn(true)
                   else if (result === 'unavailable')
-                    setNote("This can't be undone from here: the scene's history has moved on.")
+                    setNote(
+                      'Non si può annullare da qui: la cronologia della scena è andata avanti.',
+                    )
                 }}
                 type="button"
               >
-                {edits > 0 && warn ? 'Undo anyway' : 'Undo'}
+                {edits > 0 && warn ? 'Annulla comunque' : 'Annulla'}
               </button>
             </>
           ) : null}
@@ -672,7 +674,7 @@ function PinCard() {
               }}
               type="button"
             >
-              Redo
+              Ripeti
             </button>
           ) : null}
           {model.state === 'error' ? (
@@ -684,14 +686,14 @@ function PinCard() {
                 }}
                 type="button"
               >
-                Try again
+                Riprova
               </button>
               <button
                 className="pa-btn"
                 onClick={() => emitter.emit('point-ask:pin', { askId, action: 'open' })}
                 type="button"
               >
-                Open in chat
+                Apri nella chat
               </button>
             </>
           ) : null}
@@ -703,7 +705,7 @@ function PinCard() {
               onClick={() => emitter.emit('point-ask:pin', { askId, action: 'open' })}
               type="button"
             >
-              {model.state === 'no-change' ? 'See why' : 'Open in chat'}
+              {model.state === 'no-change' ? 'Scopri perché' : 'Apri nella chat'}
             </button>
           ) : null}
         </div>

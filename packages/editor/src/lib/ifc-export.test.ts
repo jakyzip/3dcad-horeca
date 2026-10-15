@@ -105,7 +105,7 @@ describe('export warnings', () => {
     try {
       const { warnings } = exportPreparedSceneToIfc(new THREE.Group(), nodes, {})
       expect(warnings).toEqual([
-        '1 object has no exportable geometry and was left out of the IFC file.',
+        '1 oggetto non ha geometria esportabile ed è stato escluso dal file IFC.',
       ])
     } finally {
       sceneRegistry.nodes.delete('item_ghost')

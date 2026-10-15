@@ -103,7 +103,7 @@ function commitElevatorPlacement(
     z,
   })
   const elevator = ElevatorNode.parse({
-    name: `Elevator ${elevatorCount + 1}`,
+    name: `Ascensore ${elevatorCount + 1}`,
     parentId: buildingId,
     position: [x, supportY, z],
     rotation,
@@ -138,7 +138,7 @@ export const ElevatorTool: React.FC<ElevatorToolProps> = ({ buildingId, levelId,
   const floorplanPreviewNode = useMemo(
     () =>
       ElevatorNode.parse({
-        name: 'Elevator',
+        name: 'Ascensore',
         position: [0, 0, 0],
         rotation: 0,
         width: DEFAULT_ELEVATOR_WIDTH,

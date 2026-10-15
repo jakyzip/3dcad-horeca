@@ -23,21 +23,21 @@ export type ImportSrcResult = { ok: true; url: URL } | { ok: false; reason: stri
  */
 export function parseImportSrc(raw: string | null | undefined): ImportSrcResult {
   if (!raw) {
-    return { ok: false, reason: 'Missing `src` parameter.' }
+    return { ok: false, reason: 'Manca il parametro `src`.' }
   }
   let url: URL
   try {
     url = new URL(raw)
   } catch {
-    return { ok: false, reason: 'The `src` parameter is not an absolute URL.' }
+    return { ok: false, reason: 'Il parametro `src` non è un URL assoluto.' }
   }
   if (url.username || url.password) {
-    return { ok: false, reason: 'Credentials in the `src` URL are not allowed.' }
+    return { ok: false, reason: "L'URL in `src` non può contenere credenziali." }
   }
   const isLocalhost =
     url.hostname === 'localhost' || url.hostname === '127.0.0.1' || url.hostname === '[::1]'
   if (url.protocol === 'https:' || (url.protocol === 'http:' && isLocalhost)) {
     return { ok: true, url }
   }
-  return { ok: false, reason: 'Only https URLs can be imported.' }
+  return { ok: false, reason: 'Si possono importare solo URL https.' }
 }

@@ -40,4 +40,4 @@ export function useParcelProvider(): ParcelProvider | null {
   return useSyncExternalStore(subscribe, getParcelProvider, getParcelProvider)
 }
 
-export const NO_PARCEL_SERVICE = 'No parcel service is available.'
+export const NO_PARCEL_SERVICE = 'Nessun servizio catastale disponibile.'

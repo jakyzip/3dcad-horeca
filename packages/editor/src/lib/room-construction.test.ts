@@ -344,8 +344,8 @@ describe('room construction state', () => {
     useScene.getState().applyNodeChanges({ create: [{ node: art, parentId: wall.id }] })
     expect(removeRoomConstruction(zoneId, 'walls')).toEqual({ status: 'confirming' })
     const content = deleteConfirmationContent(useDeleteConfirmation.getState().request!, nodes())
-    expect(content.description).toContain('1 item (Painting)')
-    expect(content.description).toContain('Shared walls remain.')
+    expect(content.description).toContain('1 oggetto (Painting)')
+    expect(content.description).toContain('I muri in comune restano.')
   })
 
   test('a lone room with its walls removed reads Absent; Add brings them back', () => {
@@ -375,10 +375,10 @@ describe('room construction state', () => {
     const request = useDeleteConfirmation.getState().request!
     expect(request.construction).toMatchObject({ part: 'walls', hostedIds: [door.id] })
     const content = deleteConfirmationContent(request, nodes())
-    expect(content.title).toBe('Remove walls from Room?')
-    expect(content.description).toContain('1 door (Front door)')
+    expect(content.title).toBe('Rimuovere i muri da Room?')
+    expect(content.description).toContain('1 porta (Front door)')
     expect(content.description).not.toContain(door.id)
-    expect(content.description).not.toContain('Shared walls remain')
+    expect(content.description).not.toContain('I muri in comune restano')
     expect(content.keepLabel).toBeNull()
     useDeleteConfirmation.getState().confirm()
     expect(nodes()[door.id]).toBeUndefined()
@@ -419,11 +419,11 @@ describe('room construction state', () => {
     const request = useDeleteConfirmation.getState().request!
     const content = deleteConfirmationContent(request, nodes())
     expect(content).toMatchObject({
-      title: 'Remove the ceiling from Room?',
-      keepLabel: 'Keep lights',
-      confirmLabel: 'Remove all',
+      title: 'Rimuovere il soffitto da Room?',
+      keepLabel: 'Tieni le luci',
+      confirmLabel: 'Rimuovi tutto',
     })
-    expect(content.description).toContain('1 light (Pendant) hangs from it')
+    expect(content.description).toContain('1 luce (Pendant) è appesa al soffitto')
     expect(content.description).not.toContain(light.id)
     expect(steps()).toBe(0)
 
@@ -498,7 +498,7 @@ describe('room construction state', () => {
     expect(nodes()[late.id]).toBeDefined()
     expect(dialog()).not.toBe(shown)
     expect([...dialog()!.construction!.hostedIds].sort()).toEqual([late.id, door.id].sort())
-    expect(content().description).toContain('2 doors (Front door, Back door)')
+    expect(content().description).toContain('2 porte (Front door, Back door)')
 
     useDeleteConfirmation.getState().confirm()
     expect(nodes()[door.id]).toBeUndefined()
@@ -517,10 +517,10 @@ describe('room construction state', () => {
     expect(addRoomConstruction(zoneId, 'walls')).toEqual({ status: 'confirming' })
     expect(steps()).toBe(0)
     expect(content()).toMatchObject({
-      title: 'Add walls to Room?',
-      description: `Adds 1 wall · the room loses ${preview.areaLoss.toFixed(2)} m² of floor.`,
+      title: 'Aggiungere i muri a Room?',
+      description: `Aggiunge 1 muro · la stanza perde ${preview.areaLoss.toFixed(2).replace('.', ',')} m² di pavimento.`,
       keepLabel: null,
-      confirmLabel: 'Add walls',
+      confirmLabel: 'Aggiungi i muri',
       destructive: false,
     })
     useDeleteConfirmation.getState().confirm()
@@ -570,11 +570,11 @@ describe('room construction state', () => {
     expect(removeRoomConstruction(zoneId, 'floor')).toEqual({ status: 'confirming' })
     expect(steps()).toBe(0)
     expect(content()).toMatchObject({
-      title: 'Remove the floor from Room?',
-      keepLabel: 'Keep items',
-      confirmLabel: 'Delete items',
+      title: 'Rimuovere il pavimento da Room?',
+      keepLabel: 'Tieni gli oggetti',
+      confirmLabel: 'Elimina gli oggetti',
     })
-    expect(content().description).toContain('2 items (Sofa, Floor lamp) stand on it')
+    expect(content().description).toContain('2 oggetti (Sofa, Floor lamp) poggiano sul pavimento')
 
     dialog()!.onKeepContents!()
     useDeleteConfirmation.getState().cancel()
@@ -608,7 +608,7 @@ describe('room construction state', () => {
     useDeleteConfirmation.getState().confirm()
     expect(steps()).toBe(0)
     expect(nodes()[zoneId as AnyNodeId]).not.toMatchObject({ hasFloor: false })
-    expect(content().description).toContain('2 items (Sofa, Chair)')
+    expect(content().description).toContain('2 oggetti (Sofa, Chair)')
   })
 
   test('ceiling contents come from its children and read neutrally unless they are lights', () => {
@@ -618,9 +618,12 @@ describe('room construction state', () => {
     expect(state().ceiling.hostedIds).toEqual(ceilingOf(zoneId)!.children)
     expect(removeRoomConstruction(zoneId, 'ceiling')).toEqual({ status: 'confirming' })
     // A "lighting" category and a lamp-like name are not enough to call it a light.
-    expect(content()).toMatchObject({ keepLabel: 'Keep items', confirmLabel: 'Remove all' })
-    expect(content().description).toContain('2 items are on the ceiling (Pendant, Fan).')
-    expect(content().description).not.toContain('light')
+    expect(content()).toMatchObject({
+      keepLabel: 'Tieni gli oggetti',
+      confirmLabel: 'Rimuovi tutto',
+    })
+    expect(content().description).toContain('2 oggetti sono sul soffitto (Pendant, Fan).')
+    expect(content().description).not.toMatch(/\bluc[ei]\b/)
   })
 
   test('a hand-drawn ceiling: Use existing keeps it, in one intent step', () => {
@@ -685,13 +688,13 @@ describe('room construction state', () => {
     expect(steps()).toBe(0)
     const other = (nodes()[otherId as AnyNodeId] as ZoneNode).name
     expect(content()).toMatchObject({
-      title: 'Remove the ceiling from Room?',
-      keepLabel: 'Keep lights',
-      confirmLabel: 'Remove all',
+      title: 'Rimuovere il soffitto da Room?',
+      keepLabel: 'Tieni le luci',
+      confirmLabel: 'Rimuovi tutto',
     })
-    expect(content().description).toContain('Removes the hand-drawn ceiling (Loft ceiling).')
-    expect(content().description).toContain(`It also covers ${other.trim() || 'another room'}.`)
-    expect(content().description).toContain('1 light (Pendant) hangs from it.')
+    expect(content().description).toContain('Rimuove il soffitto disegnato a mano (Loft ceiling).')
+    expect(content().description).toContain(`Copre anche ${other.trim() || "un'altra stanza"}.`)
+    expect(content().description).toContain('1 luce (Pendant) è appesa al soffitto.')
     expect(content().description).not.toContain(manual.id)
 
     dialog()!.onKeepContents!()
@@ -738,7 +741,7 @@ describe('room construction state', () => {
         },
         { code: 'invalid-span', nodeIds: ['wall_b'], message: 'x' },
       ]),
-    ).toBe('The room changed. Try again.')
+    ).toBe('La stanza è cambiata. Riprova.')
     expect(roomConflictMessage([{ code: 'other', nodeIds: [], message: 'Fallback.' }])).toBe(
       'Fallback.',
     )

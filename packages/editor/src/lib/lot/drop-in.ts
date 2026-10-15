@@ -124,7 +124,7 @@ export async function dropInLot(
   const address = (input.address ?? '').trim()
   const hasCoords = Number.isFinite(input.latitude) && Number.isFinite(input.longitude)
   if (!address && !hasCoords)
-    return { ok: false, error: 'address is required', message: 'Type an address first.' }
+    return { ok: false, error: 'address is required', message: 'Prima scrivi un indirizzo.' }
 
   // The Pascal Map dossier first — the parcel with its frontage, the
   // zoning, flood, code basis, utilities, soils, wetlands, structures and

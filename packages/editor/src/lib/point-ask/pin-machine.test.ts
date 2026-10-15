@@ -259,7 +259,7 @@ describe('the turn ends', () => {
     expect(pin.state).toBe('done')
     expect(pin.landed).toBe(0)
     expect(pin.alsoChangedIds).toEqual(['wall_9'])
-    expect(cardTitle(pin)).toBe('The assistant changed 1 element')
+    expect(cardTitle(pin)).toBe('L’assistente ha modificato 1 elemento')
     expect(play(pin, { type: 'undo' }).state).toBe('undone')
     expect(play(pin, { type: 'undo' }, { type: 'redo' }).state).toBe('done')
   })
@@ -271,7 +271,7 @@ describe('the turn ends', () => {
     expect(pin.landed).toBe(0)
     expect(pin.changedTargetIds).toEqual([])
     expect(pin.alsoChangedIds).toEqual([])
-    expect(cardTitle(pin)).toBe('Pascal updated the scene')
+    expect(cardTitle(pin)).toBe('La scena è stata aggiornata')
     expect(play(pin, { type: 'undo' }).state).toBe('undone')
   })
 
@@ -405,7 +405,7 @@ describe('what the card says', () => {
     const titled = { ...play(working(), commit(['window_1'])), title: 'Widened to 1.20 m' }
 
     expect(cardTitle(titled, 'Done')).toBe('Widened to 1.20 m')
-    expect(cardTitle(fresh())).toBe('Done')
+    expect(cardTitle(fresh())).toBe('Fatto')
     expect(cardTitle(fresh(), 'Pascal didn’t change this window.')).toBe(
       'Pascal didn’t change this window.',
     )
@@ -428,16 +428,16 @@ describe('what the card says', () => {
   })
 
   test('undone says so', () => {
-    expect(cardTitle({ ...fresh(), state: 'undone' as const }, 'Done')).toBe('Undone')
+    expect(cardTitle({ ...fresh(), state: 'undone' as const }, 'Done')).toBe('Annullato')
   })
 
   test('the "also changed" line, singular and plural', () => {
     expect(alsoChangedLine(fresh())).toBeNull()
     expect(alsoChangedLine({ ...fresh(), alsoChangedIds: ['a'] })).toBe(
-      'Also changed 1 other element',
+      'Modificato anche 1 altro elemento',
     )
     expect(alsoChangedLine({ ...fresh(), alsoChangedIds: ['a', 'b'] })).toBe(
-      'Also changed 2 other elements',
+      'Modificati anche 2 altri elementi',
     )
   })
 })

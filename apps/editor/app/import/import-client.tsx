@@ -27,7 +27,7 @@ type Phase =
 export function ImportClient({ src, name }: { src: string | null; name: string | null }) {
   const router = useRouter()
   const [phase, setPhase] = useState<Phase>({ kind: 'fetching' })
-  const [sceneName, setSceneName] = useState(name ?? 'Imported scene')
+  const [sceneName, setSceneName] = useState(name ?? 'Scena importata')
   // Synchronous re-entry guard: a second tap can fire before React
   // re-renders into 'creating', and two scenes would be created (review
   // feedback — especially likely on the mobile hand-off).
@@ -56,38 +56,38 @@ export function ImportClient({ src, name }: { src: string | null; name: string |
         update({
           kind: 'error',
           message:
-            'The file could not be fetched. The server hosting it must allow cross-origin requests (CORS).',
+            'Impossibile scaricare il file. Il server che lo ospita deve consentire le richieste da altre origini (CORS).',
         })
         return
       }
       if (!response.ok) {
-        update({ kind: 'error', message: `The file could not be fetched (${response.status}).` })
+        update({ kind: 'error', message: `Impossibile scaricare il file (${response.status}).` })
         return
       }
       const declared = Number(response.headers.get('content-length') ?? 0)
       if (declared > MAX_IMPORT_BYTES) {
-        update({ kind: 'error', message: 'The file is too large to import.' })
+        update({ kind: 'error', message: 'Il file è troppo grande per essere importato.' })
         return
       }
       let text: string
       try {
         text = await response.text()
       } catch {
-        update({ kind: 'error', message: 'The file could not be read.' })
+        update({ kind: 'error', message: 'Impossibile leggere il file.' })
         return
       }
       // Blob measures BYTES — text.length counts UTF-16 code units, and
       // a graph full of non-ASCII names could pass here yet still 413
       // at the store (review feedback).
       if (new Blob([text]).size > MAX_IMPORT_BYTES) {
-        update({ kind: 'error', message: 'The file is too large to import.' })
+        update({ kind: 'error', message: 'Il file è troppo grande per essere importato.' })
         return
       }
       let parsed: unknown
       try {
         parsed = JSON.parse(text)
       } catch {
-        update({ kind: 'error', message: 'The file could not be parsed as JSON.' })
+        update({ kind: 'error', message: 'Il file non è un JSON valido.' })
         return
       }
       update({ kind: 'review', result: validateBuildJson(parsed) })
@@ -109,7 +109,7 @@ export function ImportClient({ src, name }: { src: string | null; name: string |
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: sceneName || 'Imported scene',
+          name: sceneName || 'Scena importata',
           graph: phase.result.parsed,
         }),
       })
@@ -119,10 +119,10 @@ export function ImportClient({ src, name }: { src: string | null; name: string |
           result: review,
           createError:
             response.status === 401 || response.status === 403
-              ? 'You need to be signed in to import a scene.'
+              ? 'Devi accedere per importare una scena.'
               : response.status === 413
-                ? 'The scene is too large for the scene store.'
-                : `Creating the scene failed (${response.status}).`,
+                ? "La scena è troppo grande per l'archivio delle scene."
+                : `Creazione della scena non riuscita (${response.status}).`,
         })
         return
       }
@@ -132,7 +132,7 @@ export function ImportClient({ src, name }: { src: string | null; name: string |
       setPhase({
         kind: 'review',
         result: review,
-        createError: error instanceof Error ? error.message : 'Creating the scene failed.',
+        createError: error instanceof Error ? error.message : 'Creazione della scena non riuscita.',
       })
     } finally {
       // Released in every path: after an error the user may retry.
@@ -141,10 +141,10 @@ export function ImportClient({ src, name }: { src: string | null; name: string |
   }, [phase, router, sceneName])
 
   if (phase.kind === 'fetching') {
-    return <p className="text-muted-foreground text-sm">Fetching the scene…</p>
+    return <p className="text-muted-foreground text-sm">Download della scena…</p>
   }
   if (phase.kind === 'creating') {
-    return <p className="text-muted-foreground text-sm">Creating the scene…</p>
+    return <p className="text-muted-foreground text-sm">Creazione della scena…</p>
   }
   if (phase.kind === 'error') {
     return (
@@ -161,7 +161,7 @@ export function ImportClient({ src, name }: { src: string | null; name: string |
     <div className="space-y-6">
       <div className="rounded-xl border border-border/60 bg-background p-6">
         <label className="mb-1 block font-medium text-muted-foreground text-xs uppercase">
-          Scene name
+          Nome della scena
         </label>
         <input
           className="w-full rounded-md border border-border bg-background px-3 py-1.5 text-sm"
@@ -169,11 +169,11 @@ export function ImportClient({ src, name }: { src: string | null; name: string |
           value={sceneName}
         />
 
-        <p className="mt-4 mb-1 font-medium text-muted-foreground text-xs uppercase">Contents</p>
+        <p className="mt-4 mb-1 font-medium text-muted-foreground text-xs uppercase">Contenuto</p>
         <p className="text-sm">
-          {result.stats.total} node{result.stats.total === 1 ? '' : 's'}
+          {result.stats.total} {result.stats.total === 1 ? 'elemento' : 'elementi'}
           {result.stats.floorAreaM2 > 0
-            ? ` · ${Math.round(result.stats.floorAreaM2)} m² of floor`
+            ? ` · ${Math.round(result.stats.floorAreaM2)} m² di pavimento`
             : ''}
         </p>
         {typeEntries.length > 0 && (
@@ -223,7 +223,7 @@ export function ImportClient({ src, name }: { src: string | null; name: string |
         onClick={handleImport}
         type="button"
       >
-        {phase.createError ? 'Try again' : 'Import as a new scene'}
+        {phase.createError ? 'Riprova' : 'Importa come nuova scena'}
       </button>
     </div>
   )

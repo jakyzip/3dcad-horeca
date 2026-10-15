@@ -133,7 +133,7 @@ function openingRow(
     wall.type === 'wall' &&
     (wall.frontSide === 'exterior' || wall.backSide === 'exterior')
   ) {
-    remarks.push('Exterior')
+    remarks.push('Esterno')
   }
 
   return {
@@ -176,7 +176,7 @@ function groupOpeningRows(rows: readonly OpeningScheduleRow[]): OpeningScheduleR
 }
 
 function openingTypeLabel(opening: DoorNode | WindowNode): string {
-  if (opening.openingKind === 'opening') return 'Opening'
+  if (opening.openingKind === 'opening') return 'Apertura'
   return titleCase(
     opening.type === 'door' ? (opening as DoorNode).doorType : (opening as WindowNode).windowType,
   )
@@ -198,11 +198,11 @@ function openingFrame(opening: DoorNode | WindowNode, unit: ScheduleUnit): strin
 }
 
 function doorHardware(door: DoorNode): string {
-  if (door.openingKind === 'opening') return 'None'
+  if (door.openingKind === 'opening') return 'Nessuna'
   const hardware: string[] = []
-  if (door.doorCloser) hardware.push('Closer')
-  if (door.panicBar) hardware.push('Panic bar')
-  if (door.threshold) hardware.push('Threshold')
+  if (door.doorCloser) hardware.push('Chiudiporta')
+  if (door.panicBar) hardware.push('Maniglione antipanico')
+  if (door.threshold) hardware.push('Soglia')
   return hardware.length > 0 ? hardware.join(', ') : 'Standard'
 }
 
@@ -228,7 +228,7 @@ export function roomSchedule(
       if (zone.spaceRole !== 'room') continue
       const report = deriveZoneQuantityReport(zone, nodes as Record<string, AnyNode>)
       const number = zone.roomNumber.trim()
-      if (!number) issues.push(`Room ${zone.name.trim() || zone.id} has no room number`)
+      if (!number) issues.push(`La stanza ${zone.name.trim() || zone.id} non ha un numero`)
       else {
         const owners = seenNumbers.get(number.toLocaleUpperCase())
         if (owners) owners.push(zone.id)
@@ -248,7 +248,8 @@ export function roomSchedule(
   }
 
   for (const [number, owners] of seenNumbers) {
-    if (owners.length > 1) issues.push(`Duplicate room number ${number} (${owners.length} rooms)`)
+    if (owners.length > 1)
+      issues.push(`Numero di stanza ${number} duplicato (${owners.length} stanze)`)
   }
 
   rows.sort((left, right) => left.number.localeCompare(right.number, 'en', { numeric: true }))

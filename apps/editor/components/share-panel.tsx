@@ -53,7 +53,7 @@ export function SharePanel({ sceneId, anchorRef, onClose }: SharePanelProps) {
       .catch(() => {
         if (cancelled) return
         setShared(false)
-        setError('Could not read the sharing state.')
+        setError('Impossibile leggere lo stato della condivisione.')
       })
     return () => {
       cancelled = true
@@ -87,7 +87,11 @@ export function SharePanel({ sceneId, anchorRef, onClose }: SharePanelProps) {
       setShared(await writeShared(sceneId, next))
     } catch {
       setShared(previous)
-      setError(next ? 'Could not turn on the public link.' : 'Could not turn off the public link.')
+      setError(
+        next
+          ? 'Impossibile attivare il link pubblico.'
+          : 'Impossibile disattivare il link pubblico.',
+      )
     } finally {
       setSaving(false)
     }
@@ -99,7 +103,7 @@ export function SharePanel({ sceneId, anchorRef, onClose }: SharePanelProps) {
   return (
     // Keystrokes in here (Delete, Cmd+A, tool keys) must not reach the editor's shortcuts.
     <div
-      aria-label="Share project"
+      aria-label="Condividi progetto"
       className="dark absolute top-full right-0 z-50 mt-2 w-80 rounded-xl border border-border/60 bg-background p-4 text-foreground shadow-2xl [color-scheme:dark]"
       onKeyDown={(event: KeyboardEvent) => {
         if (event.key !== 'Escape') event.stopPropagation()
@@ -108,7 +112,7 @@ export function SharePanel({ sceneId, anchorRef, onClose }: SharePanelProps) {
     >
       <div className="flex items-center justify-between gap-3">
         <span className="font-medium text-sm" id="share-public-link-label">
-          Public link
+          Link pubblico
         </span>
         <Switch
           checked={shared === true}
@@ -118,7 +122,7 @@ export function SharePanel({ sceneId, anchorRef, onClose }: SharePanelProps) {
         />
       </div>
       <p className="mt-1.5 text-muted-foreground text-xs">
-        Anyone with the link can view this project. They cannot edit it.
+        Chiunque abbia il link può vedere questo progetto, ma non modificarlo.
       </p>
       {error && <p className="mt-2 text-destructive text-xs">{error}</p>}
 
@@ -127,7 +131,7 @@ export function SharePanel({ sceneId, anchorRef, onClose }: SharePanelProps) {
           <div>
             <div className="flex items-center justify-between gap-3">
               <span className="font-medium text-sm" id="share-hide-controls-label">
-                Hide controls
+                Nascondi i comandi
               </span>
               <Switch
                 checked={hideControls}
@@ -136,14 +140,14 @@ export function SharePanel({ sceneId, anchorRef, onClose }: SharePanelProps) {
               />
             </div>
             <p className="mt-1.5 text-muted-foreground text-xs">
-              Only the 3D view, no header or toolbar.
+              Solo la vista 3D, senza intestazione né barra degli strumenti.
             </p>
           </div>
           <div>
             <span className="mb-1.5 block text-muted-foreground text-xs">Link</span>
             <div className="flex items-center gap-1.5">
               <input
-                aria-label="Embed link"
+                aria-label="Link da incorporare"
                 className={FIELD}
                 onFocus={(event) => event.currentTarget.select()}
                 readOnly
@@ -158,16 +162,16 @@ export function SharePanel({ sceneId, anchorRef, onClose }: SharePanelProps) {
               target="_blank"
             >
               <ExternalLink className="h-3 w-3" />
-              Open
+              Apri
             </a>
           </div>
           <div>
             <div className="mb-1.5 flex items-center justify-between">
-              <span className="text-muted-foreground text-xs">Embed code</span>
+              <span className="text-muted-foreground text-xs">Codice da incorporare</span>
               <CopyButton text={snippet} />
             </div>
             <textarea
-              aria-label="Embed code"
+              aria-label="Codice da incorporare"
               className={cn(FIELD, 'h-20 resize-none leading-relaxed')}
               onFocus={(event) => event.currentTarget.select()}
               readOnly
@@ -240,7 +244,7 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button className={SMALL_BUTTON} onClick={copy} type="button">
       {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-      {copied ? 'Copied' : 'Copy'}
+      {copied ? 'Copiato' : 'Copia'}
     </button>
   )
 }

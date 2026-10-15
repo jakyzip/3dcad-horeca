@@ -41,7 +41,7 @@ export function CaptureLevelPicker() {
 
   return (
     <div
-      aria-label="Levels in the shot"
+      aria-label="Piani nell'inquadratura"
       className="pointer-events-auto absolute top-4 left-4 flex w-36 flex-col gap-0.5 rounded-xl border border-border bg-background/90 p-1 shadow-2xl backdrop-blur-md"
       data-capture-level-picker
       role="group"
@@ -52,7 +52,7 @@ export function CaptureLevelPicker() {
         onClick={() => setCaptureLevel(null)}
         type="button"
       >
-        <span className="truncate">Whole building</span>
+        <span className="truncate">Tutto l'edificio</span>
       </button>
       <div className="mx-1.5 my-0.5 h-px bg-border/60" />
       {levels.map((level) => (

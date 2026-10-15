@@ -6,8 +6,8 @@ import type { FloorRegionPoint } from './floor-region-snap'
 
 /** Smaller than this (m²) is a click, not a region. */
 export const MIN_FLOOR_REGION_AREA = 0.01
-export const CROSSING_MESSAGE = "Edges can't cross"
-export const OUTSIDE_MESSAGE = 'Draw inside the room'
+export const CROSSING_MESSAGE = 'I lati non possono incrociarsi'
+export const OUTSIDE_MESSAGE = 'Disegna dentro la stanza'
 
 /** The first room (in the given order) whose clear floor holds the point. */
 /**

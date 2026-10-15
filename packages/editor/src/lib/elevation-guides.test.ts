@@ -55,10 +55,10 @@ describe('elevation guides', () => {
     )
 
     expect(targets.map((target) => [target.label, target.elevation])).toEqual([
-      ['Level', 0],
-      ['Slab top', 0.6],
-      ['Slab underside', 0.39999999999999997],
-      ['Ceiling', 2.4],
+      ['Piano', 0],
+      ['Estradosso solaio', 0.6],
+      ['Intradosso solaio', 0.39999999999999997],
+      ['Soffitto', 2.4],
     ])
 
     const withoutSelf = collectElevationSnapTargets(
@@ -99,7 +99,7 @@ describe('elevation guides', () => {
     expect(useElevationGuides.getState().guide).toMatchObject({
       ownerId: 'wall_moving',
       elevation: 0.6,
-      label: 'Slab top',
+      label: 'Estradosso solaio',
       direction: [1, 0],
     })
 

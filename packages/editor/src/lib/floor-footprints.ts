@@ -171,7 +171,7 @@ export function footprintHeightPatch(
     : { foundationHeight: Math.max(0, Math.round(value * 1e6) / 1e6) }
 }
 
-export const THICK_FLOOR_HINT = 'Very thick floor — a mezzanine may fit better.'
+export const THICK_FLOOR_HINT = 'Pavimento molto spesso: forse è meglio un soppalco.'
 
 /** A plate thick enough that a mezzanine would likely serve better (core's advice; never a refusal). */
 export function thickFloorAdvice(nodes: Record<string, AnyNode>, plate: SlabNode, top?: number) {
@@ -262,7 +262,7 @@ export function footprintsToMoveTogether(
 /** Sets a footprint's height (`footprintHeightValue`'s terms). */
 export function setFootprintHeight(slabId: string, value: number): string | null {
   const plate = useScene.getState().nodes[slabId as AnyNodeId]
-  if (!isBase(plate)) return 'The floor is gone.'
+  if (!isBase(plate)) return 'Il pavimento non esiste più.'
   return applyFloorFoundation(slabId, footprintHeightPatch(useScene.getState().nodes, plate, value))
 }
 

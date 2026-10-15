@@ -8,14 +8,14 @@ type SuggestionState = {
 }
 
 const CHIPS: Record<Exclude<PointKind, 'room' | 'wall'>, [string, string, string]> = {
-  window: ['Make it wider', 'Add a matching window', 'Change the frame colour'],
-  door: ['Flip the swing', 'Make it a sliding door', 'Widen it to 90 cm'],
-  item: ['Swap for something similar', 'Put it against the wall', 'Remove it'],
-  roof: ['Change the pitch', 'Make it a hip roof', 'Change the roofing'],
-  stair: ['Turn it 90°', 'Add a handrail', 'Make it wider'],
-  several: ['Make these match', 'Line them up', 'Space them evenly'],
-  area: ['What’s wrong here?', 'Make this match the reference', 'Tidy this up'],
-  other: ['Tell me about this', 'Change its finish', 'Remove it'],
+  window: ['Allargala', 'Aggiungi una finestra uguale', 'Cambia il colore del telaio'],
+  door: ['Inverti l’apertura', 'Trasformala in porta scorrevole', 'Allargala a 90 cm'],
+  item: ['Sostituiscilo con qualcosa di simile', 'Mettilo contro il muro', 'Eliminalo'],
+  roof: ['Cambia la pendenza', 'Trasformalo in tetto a padiglione', 'Cambia il manto di copertura'],
+  stair: ['Ruotala di 90°', 'Aggiungi un corrimano', 'Allargala'],
+  several: ['Rendili uguali', 'Allineali', 'Distanziali in modo uniforme'],
+  area: ['Cosa non va qui?', 'Rendilo uguale al riferimento', 'Metti in ordine qui'],
+  other: ['Dimmi cos’è', 'Cambia la finitura', 'Eliminalo'],
 }
 
 /**
@@ -25,36 +25,36 @@ const CHIPS: Record<Exclude<PointKind, 'room' | 'wall'>, [string, string, string
 export function suggestionsFor(kind: PointKind, state: SuggestionState = {}): string[] {
   if (kind === 'room')
     return [
-      state.empty ? 'Furnish this room' : 'Rearrange the furniture',
-      'Make it 1 m longer',
-      'Change the floor finish',
+      state.empty ? 'Arreda questa stanza' : 'Riorganizza gli arredi',
+      'Allungala di 1 m',
+      'Cambia la finitura del pavimento',
     ]
   if (kind === 'wall')
     return [
-      state.hasWindowAtStation ? 'Move the window along the wall' : 'Add a window here',
-      'Change the finish on this side',
-      'Move it 50 cm',
+      state.hasWindowAtStation ? 'Sposta la finestra lungo il muro' : 'Aggiungi una finestra qui',
+      'Cambia la finitura su questo lato',
+      'Spostalo di 50 cm',
     ]
   return [...CHIPS[kind]]
 }
 
 const THIS: Partial<Record<PointKind, string>> = {
-  wall: 'this wall',
-  window: 'this window',
-  door: 'this door',
-  item: 'this item',
-  roof: 'this roof',
-  stair: 'this stair',
+  wall: 'questo muro',
+  window: 'questa finestra',
+  door: 'questa porta',
+  item: 'questo oggetto',
+  roof: 'questo tetto',
+  stair: 'questa scala',
 }
 
-/** "Ask about Kitchen…", "Ask about this window…", "Ask about these…", "Ask about this area…". */
+/** "Chiedi di Cucina…", "Chiedi di questa finestra…", "Chiedi di questi elementi…", "Chiedi di quest’area…". */
 export function placeholderFor(targets: readonly PointTarget[]): string {
-  if (targets.length === 0) return 'Ask about this area…'
-  if (targets.length > 1) return 'Ask about these…'
+  if (targets.length === 0) return 'Chiedi di quest’area…'
+  if (targets.length > 1) return 'Chiedi di questi elementi…'
   const [only] = targets as [PointTarget]
-  if (only.kind === 'room') return `Ask about ${only.name}…`
-  if (only.kind === 'area') return 'Ask about this area…'
-  return `Ask about ${THIS[only.kind] ?? 'this'}…`
+  if (only.kind === 'room') return `Chiedi di ${only.name}…`
+  if (only.kind === 'area') return 'Chiedi di quest’area…'
+  return `Chiedi di ${THIS[only.kind] ?? 'questo elemento'}…`
 }
 
 /** What the chips are chosen by, from a node's type. A region is an area whatever it holds. */
@@ -92,21 +92,41 @@ export function kindForTargets(targets: readonly PointTarget[], isRegion = false
 }
 
 const FOLLOW_UP_CHIPS: Record<PointKind, string[]> = {
-  room: ['Add a rug', 'Change the wall colour', 'Hang something on the walls', 'Add more light'],
-  wall: ['Add a door here', 'Paint this wall', 'Hang something on it', 'Make it thicker'],
-  window: [
-    'Make it taller',
-    'Move it 30 cm along the wall',
-    'Change the sill height',
-    'Add a matching window',
+  room: [
+    'Aggiungi un tappeto',
+    'Cambia il colore dei muri',
+    'Appendi qualcosa ai muri',
+    'Aggiungi più luce',
   ],
-  door: ['Make it wider', 'Move it along the wall', 'Change the colour', 'Add a window beside it'],
-  item: ['Turn it 90°', 'Make it bigger', 'Change its colour', 'Add another one'],
-  roof: ['Add a skylight', 'Make the eaves longer', 'Change the colour', 'Add a chimney'],
-  stair: ['Add a landing', 'Change the treads', 'Move it 50 cm', 'Make the rise lower'],
-  several: ['Make them bigger', 'Change their colour', 'Group them', 'Remove the second one'],
-  area: ['Add something here', 'Clear this space', 'Make it brighter', 'Change the floor here'],
-  other: ['Make it bigger', 'Change the colour', 'Move it 50 cm', 'Duplicate it'],
+  wall: [
+    'Aggiungi una porta qui',
+    'Dipingi questo muro',
+    'Appendici qualcosa',
+    'Rendilo più spesso',
+  ],
+  window: [
+    'Rendila più alta',
+    'Spostala di 30 cm lungo il muro',
+    'Cambia l’altezza del davanzale',
+    'Aggiungi una finestra uguale',
+  ],
+  door: [
+    'Allargala',
+    'Spostala lungo il muro',
+    'Cambia il colore',
+    'Aggiungi una finestra accanto',
+  ],
+  item: ['Ruotalo di 90°', 'Ingrandiscilo', 'Cambia il colore', 'Aggiungine un altro'],
+  roof: ['Aggiungi un lucernario', 'Allunga la gronda', 'Cambia il colore', 'Aggiungi un camino'],
+  stair: ['Aggiungi un pianerottolo', 'Cambia le pedate', 'Spostala di 50 cm', 'Abbassa l’alzata'],
+  several: ['Ingrandiscili', 'Cambia il loro colore', 'Raggruppali', 'Elimina il secondo'],
+  area: [
+    'Aggiungi qualcosa qui',
+    'Libera questo spazio',
+    'Rendilo più luminoso',
+    'Cambia il pavimento qui',
+  ],
+  other: ['Ingrandiscilo', 'Cambia il colore', 'Spostalo di 50 cm', 'Duplicalo'],
 }
 
 const plain = (words: string) =>

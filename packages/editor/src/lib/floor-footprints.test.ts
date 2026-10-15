@@ -338,7 +338,7 @@ describe('floor footprints', () => {
     const base = (nodes()[house.id] as SlabNode).elevation
     expect(max).toBeCloseTo(2 - base)
     expect(floorHeightRefusalText(result as never, (m) => `${m.toFixed(2)} m`)).toBe(
-      `Too high: the floor can rise at most ${(2 - base).toFixed(2)} m and keep headroom.`,
+      `Troppo alto: il pavimento può salire al massimo di ${(2 - base).toFixed(2)} m mantenendo l’altezza libera.`,
     )
   })
 

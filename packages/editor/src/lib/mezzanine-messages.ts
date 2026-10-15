@@ -3,12 +3,12 @@ import { CROSSING_MESSAGE } from './floor-region-geometry'
 // Short labels for what core refuses a mezzanine — drawing, moving, turning,
 // copying, pushing an edge or adding its stair all read the same words.
 
-export const MEZZANINE_OUTSIDE_MESSAGE = 'Outside the room'
-export const MEZZANINE_TOO_SMALL_MESSAGE = 'At least 1 m²'
-export const MEZZANINE_OVERLAP_MESSAGE = 'Overlaps a mezzanine'
-export const MEZZANINE_ELEVATION_MESSAGE = 'Too high or too low'
-export const MEZZANINE_FAILED_MESSAGE = "Can't add a mezzanine here"
-export const MEZZANINE_NO_STAIR_MESSAGE = 'No room for stairs'
+export const MEZZANINE_OUTSIDE_MESSAGE = 'Fuori dalla stanza'
+export const MEZZANINE_TOO_SMALL_MESSAGE = 'Almeno 1 m²'
+export const MEZZANINE_OVERLAP_MESSAGE = 'Si sovrappone a un soppalco'
+export const MEZZANINE_ELEVATION_MESSAGE = 'Troppo alto o troppo basso'
+export const MEZZANINE_FAILED_MESSAGE = 'Qui non si può aggiungere un soppalco'
+export const MEZZANINE_NO_STAIR_MESSAGE = 'Non c’è spazio per la scala'
 
 const CONFLICT_MESSAGES: Record<string, string> = {
   'outside-host': MEZZANINE_OUTSIDE_MESSAGE,

@@ -182,7 +182,7 @@ export function wallPolygonDraftWalls(): WallNode[] {
     object: 'node',
     id: `wall_polygon_draft_${index}` as WallNode['id'],
     type: 'wall',
-    name: 'Draft wall',
+    name: 'Muro in bozza',
     parentId: current.levelId,
     visible: true,
     metadata: {},

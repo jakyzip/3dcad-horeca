@@ -77,14 +77,14 @@ describe('paintScopeLabel', () => {
     expect(paintScopeLabel('single', info({ slotLabel: 'Seat cushion' }))).toBe('Seat cushion')
   })
   it('single falls back when there is no slot label', () => {
-    expect(paintScopeLabel('single', info({ slotLabel: '' }))).toBe('This surface')
+    expect(paintScopeLabel('single', info({ slotLabel: '' }))).toBe('Questa superficie')
   })
-  it('object reads "Whole <noun>"', () => {
-    expect(paintScopeLabel('object', info({ nodeNoun: 'shelf' }))).toBe('Whole shelf')
+  it('object reads as the whole object', () => {
+    expect(paintScopeLabel('object', info({ nodeNoun: 'shelf' }))).toBe('Tutto l’oggetto')
   })
   it('matching / room are kind-agnostic', () => {
-    expect(paintScopeLabel('matching', info({}))).toBe('All matching')
-    expect(paintScopeLabel('room', info({}))).toBe('Room')
+    expect(paintScopeLabel('matching', info({}))).toBe('Tutti quelli uguali')
+    expect(paintScopeLabel('room', info({}))).toBe('Stanza')
   })
 })
 
@@ -634,9 +634,9 @@ describe('wall and floor scopes', () => {
     expect(paintScopeLabel('single', { scopes: [], slotLabel: 'Face', nodeNoun: 'wall' })).toBe(
       'Face',
     )
-    expect(paintSurfaceLabel(wall, 'room:zone_left/a')).toBe('Face')
-    expect(paintSurfaceLabel(wall, 'region:wainscot')).toBe('Face')
-    expect(paintSurfaceLabel(wall, 'a')).toBe('Face')
+    expect(paintSurfaceLabel(wall, 'room:zone_left/a')).toBe('Faccia')
+    expect(paintSurfaceLabel(wall, 'region:wainscot')).toBe('Faccia')
+    expect(paintSurfaceLabel(wall, 'a')).toBe('Faccia')
   })
 
   it('the room scope on a room floor is one room-wide role on every plate of the level', () => {
@@ -738,20 +738,23 @@ describe('generated floor plates: scopes per surface', () => {
   }
 
   it('a floor is this surface or the whole room', () => {
-    expect(chip(plate(), 'room:zone_k')).toEqual(['This surface', 'Whole room'])
-    expect(chip(plate(), 'room:zone_k/rug')).toEqual(['This surface', 'Whole room'])
-    expect(chip(plate('platform'), 'room:zone_k')).toEqual(['This surface', 'Whole room'])
+    expect(chip(plate(), 'room:zone_k')).toEqual(['Questa superficie', 'Tutta la stanza'])
+    expect(chip(plate(), 'room:zone_k/rug')).toEqual(['Questa superficie', 'Tutta la stanza'])
+    expect(chip(plate('platform'), 'room:zone_k')).toEqual(['Questa superficie', 'Tutta la stanza'])
   })
 
   it('a step is this step or every step of its room', () => {
-    expect(chip(plate(), 'step:zone_k/door_1')).toEqual(['This step', 'All steps in this room'])
+    expect(chip(plate(), 'step:zone_k/door_1')).toEqual([
+      'Questo gradino',
+      'Tutti i gradini della stanza',
+    ])
   })
 
   it("a footprint's faces have one fixed label and nothing to cycle", () => {
-    expect(chip(plate(), 'edge')).toEqual(['Floor edge · all around this floor'])
-    expect(chip(plate(), 'foundation')).toEqual(['Foundation · all around this floor'])
-    expect(chip(plate(), 'riser')).toEqual(['Riser · all around this floor'])
-    expect(chip(plate(), 'underside')).toEqual(['Underside · all of this floor'])
+    expect(chip(plate(), 'edge')).toEqual(['Bordo del pavimento · tutto intorno'])
+    expect(chip(plate(), 'foundation')).toEqual(['Fondazione · tutto intorno al pavimento'])
+    expect(chip(plate(), 'riser')).toEqual(['Alzata · tutto intorno al pavimento'])
+    expect(chip(plate(), 'underside')).toEqual(['Lato inferiore · tutto il pavimento'])
   })
 
   it('no plate offers the whole slab; a hand-drawn slab still does', () => {
@@ -760,7 +763,7 @@ describe('generated floor plates: scopes per surface', () => {
         'object',
       )
     // (The room scope comes from the registry, not wired in this unit context.)
-    expect(chip(manual, 'surface')).toContain('Whole slab')
+    expect(chip(manual, 'surface')).toContain('Tutto l’oggetto')
   })
 
   it('a scope the surface does not offer paints just that surface', () => {

@@ -46,7 +46,7 @@ function EditorItemsPanel() {
 const SIDEBAR_TABS: (SidebarTab & { component: React.ComponentType })[] = [
   {
     id: 'site',
-    label: 'Scene',
+    label: 'Scena',
     component: () => null, // Built-in SitePanel handles this
     mobileDefaultSnap: 0.5,
     mobileIcon: <Layers className="h-5 w-5" />,
@@ -62,7 +62,7 @@ const SIDEBAR_TABS: (SidebarTab & { component: React.ComponentType })[] = [
   },
   {
     id: 'build',
-    label: 'Build',
+    label: 'Costruisci',
     component: BuildTab,
     mobileDefaultSnap: 0.5,
     mobileIcon: <Hammer className="h-5 w-5" />,
@@ -78,7 +78,7 @@ const SIDEBAR_TABS: (SidebarTab & { component: React.ComponentType })[] = [
   },
   {
     id: 'paint',
-    label: 'Paint',
+    label: 'Dipingi',
     component: PaintPanel,
     mobileDefaultSnap: 0.5,
     mobileIcon: <Palette className="h-5 w-5" />,
@@ -94,7 +94,7 @@ const SIDEBAR_TABS: (SidebarTab & { component: React.ComponentType })[] = [
   },
   {
     id: 'items',
-    label: 'Items',
+    label: 'Oggetti',
     component: EditorItemsPanel,
     mobileDefaultSnap: 0.5,
     mobileIcon: <Package className="h-5 w-5" />,
@@ -110,7 +110,7 @@ const SIDEBAR_TABS: (SidebarTab & { component: React.ComponentType })[] = [
   },
   {
     id: 'settings',
-    label: 'Settings',
+    label: 'Impostazioni',
     component: () => null,
     mobileDefaultSnap: 0.5,
     mobileIcon: <Settings className="h-5 w-5" />,
@@ -202,7 +202,7 @@ function SceneEditor({ initialScene, meta: initialMeta }: SceneLoaderProps) {
           return
         }
         if (!response.ok) {
-          setSaveError(`Rename failed (${response.status})`)
+          setSaveError(`Impossibile rinominare (${response.status})`)
           return
         }
         const next = (await response.json()) as SceneMeta
@@ -210,7 +210,7 @@ function SceneEditor({ initialScene, meta: initialMeta }: SceneLoaderProps) {
         setRenamedTo(next.name)
         setSaveError(null)
       } catch (error) {
-        setSaveError(error instanceof Error ? error.message : 'Rename failed')
+        setSaveError(error instanceof Error ? error.message : 'Impossibile rinominare')
       }
     },
     [meta.id],
@@ -236,7 +236,9 @@ function SceneEditor({ initialScene, meta: initialMeta }: SceneLoaderProps) {
           `[scene-loader] Blocked autosave: refusing to overwrite scene ${meta.id} ` +
             `(${serverNodeCountRef.current} nodes on the server) with an empty graph.`,
         )
-        setSaveError('Autosave blocked: the editor tried to save an empty scene')
+        setSaveError(
+          "Salvataggio automatico bloccato: l'editor ha tentato di salvare una scena vuota",
+        )
         return
       }
 
@@ -263,7 +265,9 @@ function SceneEditor({ initialScene, meta: initialMeta }: SceneLoaderProps) {
             console.error(
               `[scene-loader] Server rejected an empty-graph save for scene ${meta.id}.`,
             )
-            setSaveError('Autosave blocked: the editor tried to save an empty scene')
+            setSaveError(
+              "Salvataggio automatico bloccato: l'editor ha tentato di salvare una scena vuota",
+            )
             return
           }
           setConflict(true)
@@ -271,7 +275,7 @@ function SceneEditor({ initialScene, meta: initialMeta }: SceneLoaderProps) {
         }
 
         if (!response.ok) {
-          setSaveError(`Save failed (${response.status})`)
+          setSaveError(`Salvataggio non riuscito (${response.status})`)
           return
         }
 
@@ -280,7 +284,7 @@ function SceneEditor({ initialScene, meta: initialMeta }: SceneLoaderProps) {
         serverNodeCountRef.current = next.nodeCount
         setSaveError(null)
       } catch (error) {
-        setSaveError(error instanceof Error ? error.message : 'Save failed')
+        setSaveError(error instanceof Error ? error.message : 'Salvataggio non riuscito')
       }
     },
     [meta.id, meta.name],
@@ -310,7 +314,7 @@ function SceneEditor({ initialScene, meta: initialMeta }: SceneLoaderProps) {
 
     source.addEventListener('error', () => {
       if (source.readyState === EventSource.CLOSED) {
-        setSaveError('Live scene connection closed')
+        setSaveError('Connessione in tempo reale alla scena interrotta')
       }
     })
 
@@ -333,9 +337,9 @@ function SceneEditor({ initialScene, meta: initialMeta }: SceneLoaderProps) {
     <div className="dark relative h-screen w-screen">
       {conflict && (
         <div className="dark pointer-events-auto absolute top-14 left-1/2 z-50 w-full max-w-md -translate-x-1/2 rounded-lg border border-border bg-background p-4 text-foreground shadow-xl">
-          <h2 className="font-semibold text-sm">Another session saved first — refresh?</h2>
+          <h2 className="font-semibold text-sm">Un'altra sessione ha salvato prima: aggiornare?</h2>
           <p className="mt-1 text-muted-foreground text-xs">
-            Your changes haven&apos;t been saved. Reload to pick up the latest version.
+            Le tue modifiche non sono state salvate. Ricarica per avere l&apos;ultima versione.
           </p>
           <div className="mt-3 flex items-center gap-2">
             <button
@@ -343,14 +347,14 @@ function SceneEditor({ initialScene, meta: initialMeta }: SceneLoaderProps) {
               onClick={() => router.refresh()}
               type="button"
             >
-              Reload
+              Ricarica
             </button>
             <button
               className="rounded-lg border border-border px-3 py-1.5 font-medium text-xs hover:bg-accent"
               onClick={() => setConflict(false)}
               type="button"
             >
-              Dismiss
+              Chiudi
             </button>
           </div>
         </div>

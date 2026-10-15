@@ -43,7 +43,7 @@ export function useMaterialPaintPanelModel(enabled = true) {
     const id = generateSceneMaterialId()
     scene.addSceneMaterial({
       id,
-      name: `Material ${Object.keys(scene.materials).length + 1}`,
+      name: `Materiale ${Object.keys(scene.materials).length + 1}`,
       material: {
         preset: 'custom',
         properties: {

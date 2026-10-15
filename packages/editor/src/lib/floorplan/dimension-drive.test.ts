@@ -160,7 +160,7 @@ describe('driving a wall length', () => {
       start: [1.5, -1],
       end: [1.5, 1],
     })
-    expect(resolution).toEqual({ drivable: false, reason: 'dimension is not along the wall' })
+    expect(resolution).toEqual({ drivable: false, reason: 'la quota non è lungo il muro' })
   })
 
   test('a locked wall refuses to drive', () => {
@@ -172,7 +172,7 @@ describe('driving a wall length', () => {
       start: [0, 0],
       end: [3, 0],
     })
-    expect(resolution).toEqual({ drivable: false, reason: 'node is locked' })
+    expect(resolution).toEqual({ drivable: false, reason: 'l’elemento è bloccato' })
   })
 })
 
@@ -273,7 +273,7 @@ describe('construction-dimension nodes', () => {
         start: [0, 0],
         end: [3, 0],
       }),
-    ).toEqual({ drivable: false, reason: 'dimension anchors are free points' })
+    ).toEqual({ drivable: false, reason: 'gli estremi della quota sono punti liberi' })
   })
 
   test('a feature anchor on a wall drives that wall', () => {

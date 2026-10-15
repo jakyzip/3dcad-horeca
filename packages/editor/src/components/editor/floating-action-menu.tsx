@@ -424,7 +424,7 @@ export function FloatingActionMenu() {
           ? getWallEffectiveHeightForNodes(node, useScene.getState().nodes)
           : FENCE_DEFAULT_HEIGHT
       const liveHeight = override?.height ?? node.height ?? fallbackHeight
-      pillHeightRef.current.textContent = `H ${formatMeasurement(liveHeight, unit, metricNotation)}`
+      pillHeightRef.current.textContent = `A ${formatMeasurement(liveHeight, unit, metricNotation)}`
     }
 
     const obj = sceneRegistry.nodes.get(selectedId)
@@ -749,16 +749,16 @@ export function FloatingActionMenu() {
                 {hasAxisCycling(node.type) ? (
                   <div className="flex items-center gap-2 whitespace-nowrap rounded-full border border-border/60 bg-background/90 px-4 py-1.5 text-xs tabular-nums shadow-sm backdrop-blur">
                     <span className="font-medium text-foreground">
-                      Axis {rotationAxis.toUpperCase()}
+                      Asse {rotationAxis.toUpperCase()}
                     </span>
                     <span aria-hidden className="text-muted-foreground">
                       ·
                     </span>
-                    <span className="text-muted-foreground">R/T rotate</span>
+                    <span className="text-muted-foreground">R/T ruota</span>
                     <span aria-hidden className="text-muted-foreground">
                       ·
                     </span>
-                    <span className="text-muted-foreground">⌥ axis</span>
+                    <span className="text-muted-foreground">⌥ asse</span>
                   </div>
                 ) : null}
               </div>
@@ -779,6 +779,14 @@ export function FloatingActionMenu() {
  * subscription it needs (connectivity changes when ANY joint moves) doesn't
  * re-render the always-mounted parent menu on every unrelated scene tick.
  */
+const SYSTEM_LABELS: Record<string, string> = {
+  supply: 'Mandata',
+  return: 'Ripresa',
+  refrigerant: 'Refrigerante',
+  waste: 'Scarico',
+  vent: 'Ventilazione',
+}
+
 function SystemSummaryPill({
   metricNotation,
   nodeId,
@@ -795,8 +803,10 @@ function SystemSummaryPill({
     <div className="flex items-center gap-2 whitespace-nowrap rounded-full border border-border/60 bg-background/90 px-4 py-1.5 text-xs tabular-nums shadow-sm backdrop-blur">
       <span className="font-medium text-foreground">
         {summary.systems.length > 0
-          ? summary.systems.map((sys) => sys[0]!.toUpperCase() + sys.slice(1)).join(' + ')
-          : 'System'}
+          ? summary.systems
+              .map((sys) => SYSTEM_LABELS[sys] ?? sys[0]!.toUpperCase() + sys.slice(1))
+              .join(' + ')
+          : 'Impianto'}
       </span>
       {summary.runCount > 0 ? (
         <>
@@ -805,7 +815,7 @@ function SystemSummaryPill({
           </span>
           <span className="text-muted-foreground">
             {formatMeasurement(summary.runLengthM, unit, metricNotation)} · {summary.runCount}{' '}
-            {summary.runCount === 1 ? 'run' : 'runs'}
+            {summary.runCount === 1 ? 'tratto' : 'tratti'}
           </span>
         </>
       ) : null}
@@ -815,7 +825,7 @@ function SystemSummaryPill({
             ·
           </span>
           <span className="text-muted-foreground">
-            {summary.terminalCount} {summary.terminalCount === 1 ? 'register' : 'registers'}
+            {summary.terminalCount} {summary.terminalCount === 1 ? 'bocchetta' : 'bocchette'}
           </span>
         </>
       ) : null}
@@ -824,7 +834,7 @@ function SystemSummaryPill({
           <span aria-hidden className="text-muted-foreground">
             ·
           </span>
-          <span className="font-medium text-amber-500">⚠ no equipment</span>
+          <span className="font-medium text-amber-500">⚠ nessuna apparecchiatura</span>
         </>
       )}
     </div>

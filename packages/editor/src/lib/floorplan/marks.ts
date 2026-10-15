@@ -116,7 +116,9 @@ export function resolveMarkDetail(
 
     for (const [mark, owners] of explicitOwners) {
       if (owners.length > 1) {
-        issues.push(`Duplicate ${kind} mark ${mark} (${owners.length} instances)`)
+        issues.push(
+          `Sigla ${kind === 'door' ? 'porta' : 'finestra'} ${mark} duplicata (${owners.length} occorrenze)`,
+        )
       }
     }
   }

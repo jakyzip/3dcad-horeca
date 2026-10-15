@@ -26,9 +26,9 @@ describe('Divide HUD', () => {
         <ContextualHelperPanel hints={ROOM_DIVIDE_HINTS} snapContext="wall" />
       </TooltipProvider>,
     )
-    expect(html).toContain('Snapping: Grid')
-    expect(html).toContain('Grid: 0.50 m')
-    for (const label of ['Add point', 'Remove last point', 'Finish at the edge', 'Cancel'])
+    expect(html).toContain('Aggancio: Griglia')
+    expect(html).toContain('Griglia: 0,50 m')
+    for (const label of ['Aggiungi punto', 'Rimuovi l’ultimo punto', 'Termina sul bordo', 'Annulla'])
       expect(html).toContain(label)
     expect(ROOM_DIVIDE_HINTS.map((hint) => hint.keys)).toEqual([
       ['Left click'],
@@ -45,18 +45,18 @@ describe('HUD header', () => {
       <TooltipProvider>
         <ContextualHelperPanel
           hints={[
-            { keys: ['Left click'], label: 'Set one corner, then the opposite' },
-            { keys: ['Esc'], label: 'Cancel' },
+            { keys: ['Left click'], label: 'Fissa un vertice, poi quello opposto' },
+            { keys: ['Esc'], label: 'Annulla' },
           ]}
           snapContext="wall"
           title={toolHudTitle('wall', 'rectangle')}
         />
       </TooltipProvider>,
     )
-    expect(html).toContain('data-hud-title="Rectangle room"')
+    expect(html).toContain('data-hud-title="Stanza rettangolare"')
     expect(html).toContain('src="/icons/room.webp"')
     // Header, then the gesture, then the mode chips, with Esc last.
-    const order = ['Rectangle room', 'Set one corner', 'Snapping: Grid', 'Cancel'].map((text) =>
+    const order = ['Stanza rettangolare', 'Fissa un vertice', 'Aggancio: Griglia', 'Annulla'].map((text) =>
       html.indexOf(text),
     )
     expect(order.every((at) => at >= 0)).toBe(true)
@@ -64,6 +64,6 @@ describe('HUD header', () => {
   })
 
   test('select mode is titled Select with its V key', () => {
-    expect(SELECT_HUD_TITLE).toMatchObject({ label: 'Select', shortcut: 'V' })
+    expect(SELECT_HUD_TITLE).toMatchObject({ label: 'Seleziona', shortcut: 'V' })
   })
 })

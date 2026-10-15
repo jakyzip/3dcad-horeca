@@ -169,7 +169,7 @@ describe('mezzanine selection', () => {
     expect(gesture(hostId, ROOM_MOVE_DRAG_LABEL)).toBeNull()
     expect(gesture(mezzanineId, 'height')).toBeNull()
     expect(mezzanineGesture(null, nodes())).toBeNull()
-    expect(MEZZANINE_GESTURE_HINTS.move[0]!.label).toBe('Place inside the room')
+    expect(MEZZANINE_GESTURE_HINTS.move[0]!.label).toBe('Posiziona dentro la stanza')
   })
 
   test('the delete dialog speaks of the mezzanine, and of its items only when it has some', () => {
@@ -180,19 +180,21 @@ describe('mezzanine selection', () => {
       onKeepContents: () => {},
     })
     const empty = deleteConfirmationContent(request(), nodes())
-    expect(empty.title).toBe('Delete Mezzanine?')
-    expect(empty.description).toMatch(/^Removes the mezzanine floor/)
-    expect(empty.description).not.toContain('item')
+    expect(empty.title).toBe('Eliminare Mezzanine?')
+    expect(empty.description).toMatch(/^Rimuove il soppalco/)
+    expect(empty.description).not.toContain('oggett')
     expect(empty.keepLabel).toBeNull()
     const hasCeiling = Object.values(nodes()).some(
       (node) => node.type === 'ceiling' && node.zoneId === mezzanineId,
     )
-    expect(empty.description.includes('ceiling')).toBe(hasCeiling)
+    expect(empty.description.includes('soffitto')).toBe(hasCeiling)
     const withItems = request()
     withItems.room = { ...withItems.room, itemIds: ['item_a', 'item_b'] }
     const loaded = deleteConfirmationContent(withItems, nodes())
-    expect(loaded.description).toContain('2 items are on it. Keep them on the floor below')
-    expect(loaded.keepLabel).toBe('Keep items')
+    expect(loaded.description).toContain(
+      '2 oggetti sono sul soppalco. Puoi tenerli al piano di sotto',
+    )
+    expect(loaded.keepLabel).toBe('Tieni gli oggetti')
     // A room's dialog is unchanged.
     const room = deleteConfirmationContent(
       {
@@ -202,6 +204,6 @@ describe('mezzanine selection', () => {
       },
       nodes(),
     )
-    expect(room.description).not.toContain('mezzanine')
+    expect(room.description).not.toContain('soppalco')
   })
 })

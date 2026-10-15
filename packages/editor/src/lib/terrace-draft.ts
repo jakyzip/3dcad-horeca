@@ -35,9 +35,9 @@ import { sfxEmitter } from './sfx-bus'
 // room tools.
 
 export const TERRACE_DRAFT_HANDLE = 'terrace-draft'
-export const TERRACE_NAME = 'Terrace'
-export const TERRACE_TOO_SMALL_MESSAGE = 'Too small for a terrace.'
-export const TERRACE_FAILED_MESSAGE = "Can't place a terrace here."
+export const TERRACE_NAME = 'Terrazza'
+export const TERRACE_TOO_SMALL_MESSAGE = 'Troppo piccola per una terrazza.'
+export const TERRACE_FAILED_MESSAGE = 'Qui non si può posizionare una terrazza.'
 
 export type TerraceShape = 'rectangle' | 'polygon'
 
@@ -202,13 +202,13 @@ export function toggleTerraceShape() {
 /** The HUD's shape chip (T). */
 export const TERRACE_SHAPE_HINT: ToolHint = {
   key: 'T',
-  label: 'Shape',
+  label: 'Forma',
   chip: {
     subscribe: (onChange) => useTerraceDraft.subscribe(onChange),
     value: () => useTerraceDraft.getState().shape,
     cycle: toggleTerraceShape,
-    labels: { rectangle: 'Shape: Rectangle', polygon: 'Shape: Polygon' },
+    labels: { rectangle: 'Forma: rettangolo', polygon: 'Forma: poligono' },
     icons: { rectangle: 'lucide:square', polygon: 'lucide:pentagon' },
-    tooltip: 'Outline shape — click or press T to switch',
+    tooltip: 'Forma del contorno: fai clic o premi T per cambiare',
   },
 }

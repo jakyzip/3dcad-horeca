@@ -125,7 +125,7 @@ export function describeZoneOutline(levelId: string, zone: ZoneNode): RoomSelect
   return {
     ...geometry,
     geometry,
-    name: zone.name || 'Zone',
+    name: zone.name || 'Zona',
     zoneId: zone.id,
     slabId: null,
     slabName: null,
@@ -163,13 +163,13 @@ function describeRoom(
   return {
     ...geometry,
     geometry,
-    name: zone.name || 'Room',
+    name: zone.name || 'Stanza',
     area: area([{ outer: zone.polygon, holes: zone.holes }]),
     zoneId: zone.id,
     slabId: slab?.id ?? null,
-    slabName: slab ? slab.name || 'Slab' : null,
+    slabName: slab ? slab.name || 'Solaio' : null,
     ceilingId: ceiling?.id ?? null,
-    ceilingName: ceiling ? ceiling.name || 'Ceiling' : null,
+    ceilingName: ceiling ? ceiling.name || 'Soffitto' : null,
   }
 }
 

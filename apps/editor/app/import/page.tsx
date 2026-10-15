@@ -25,18 +25,18 @@ export default async function ImportPage({
               className="text-muted-foreground transition-colors hover:text-foreground"
               href="/"
             >
-              Home
+              Inizio
             </Link>
             <span className="text-muted-foreground">/</span>
-            <span className="font-medium text-foreground">Import</span>
+            <span className="font-medium text-foreground">Importa</span>
           </nav>
         </div>
       </header>
 
       <main className="container mx-auto max-w-2xl px-6 py-12">
-        <h1 className="mb-2 font-bold text-3xl">Import a scene</h1>
+        <h1 className="mb-2 font-bold text-3xl">Importa una scena</h1>
         <p className="mb-8 text-muted-foreground text-sm">
-          Review the file before it becomes a scene. Nothing is created until you confirm.
+          Controlla il file prima che diventi una scena. Non viene creato nulla finché non confermi.
         </p>
         {/* Keyed by src: a new file is a new flow — state (scene name,
             phase) must never leak from the previous one. */}

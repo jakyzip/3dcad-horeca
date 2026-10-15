@@ -166,7 +166,7 @@ export function RoomActionMenu({ room }: { room: RoomSelectionRecord }) {
     <div className="flex flex-col items-center gap-1">
       <NodeActionMenu
         deleteDisabledReason={deleteBlocked}
-        deleteLabel={mezzanine ? 'Delete mezzanine' : 'Delete room'}
+        deleteLabel={mezzanine ? 'Elimina soppalco' : 'Elimina stanza'}
         onDelete={(event) => {
           event.stopPropagation()
           requestRoomDeletion(zoneId)

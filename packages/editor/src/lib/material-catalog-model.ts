@@ -15,10 +15,10 @@ import { useEffect, useState, useSyncExternalStore } from 'react'
 
 export type MaterialSourceFilter = MaterialSource
 const SOURCE_FILTERS: { id: MaterialSourceFilter; label: string }[] = [
-  { id: 'pascal', label: 'Built-in' },
-  { id: 'mine', label: 'Mine' },
-  { id: 'workspace', label: 'Workspace' },
-  { id: 'community', label: 'Community' },
+  { id: 'pascal', label: 'Predefiniti' },
+  { id: 'mine', label: 'Miei' },
+  { id: 'workspace', label: 'Area di lavoro' },
+  { id: 'community', label: 'Comunità' },
 ]
 
 export function useMaterialCatalogModel(

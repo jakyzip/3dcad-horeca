@@ -19,14 +19,14 @@ export const useCornerSnapHint = create<{
 
 /** One line each, in the HUD's voice: what is in the way, not what to do about it. */
 export const CORNER_BLOCK_NOTES: Record<CornerBlockReason, string> = {
-  free_end: 'No wall meets here',
-  several_walls: 'Three or more walls meet here',
-  angle: 'The walls meet at too sharp or too flat an angle',
-  curved: 'A curved wall takes no corner window',
-  curtain: 'A curtain wall takes no corner window',
-  no_room: 'No room for the matching window on the other wall',
-  in_the_way: 'Another opening is in the way at the corner',
-  too_tall: 'The window waiting there is taller than this wall',
+  free_end: 'Qui non arriva nessun muro',
+  several_walls: 'Qui si incontrano tre o più muri',
+  angle: 'I muri si incontrano con un angolo troppo acuto o troppo piatto',
+  curved: 'Un muro curvo non accetta finestre d’angolo',
+  curtain: 'Una facciata continua non accetta finestre d’angolo',
+  no_room: 'Non c’è spazio per la finestra gemella sull’altro muro',
+  in_the_way: 'Un’altra apertura occupa l’angolo',
+  too_tall: 'La finestra già presente è più alta di questo muro',
 }
 
 export type CornerHintRow = { keys: string[]; label: string }
@@ -38,9 +38,9 @@ export function cornerHintRows(hint: CornerSnapHint): CornerHintRow[] {
     return [
       {
         keys: ['Left click'],
-        label: hint === 'join' ? 'Join as a corner window' : 'Corner window',
+        label: hint === 'join' ? 'Unisci come finestra d’angolo' : 'Finestra d’angolo',
       },
-      { keys: ['Alt'], label: 'Place without the corner snap' },
+      { keys: ['Alt'], label: 'Posiziona senza aggancio all’angolo' },
     ]
   // The HUD's notice row, as for a placement that does not fit: a note, not a key to press.
   return [{ keys: ['!'], label: CORNER_BLOCK_NOTES[hint] }]

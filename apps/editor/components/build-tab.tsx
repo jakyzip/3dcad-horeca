@@ -204,16 +204,16 @@ export function BuildTab() {
             if (!(editor.mode === 'build' && editor.tool === 'wall')) activateBuildTool('wall')
           }}
         />
-        <BuildPanelSection id="add" title="Add to rooms">
+        <BuildPanelSection id="add" title="Aggiungi alle stanze">
           <BuildToolGrid columns={4}>{typesIn('add').map(renderTile)}</BuildToolGrid>
         </BuildPanelSection>
-        <BuildPanelSection id="outdoor" title="Outdoor">
+        <BuildPanelSection id="outdoor" title="Esterno">
           <BuildToolGrid columns={4}>{typesIn('outdoor').map(renderTile)}</BuildToolGrid>
         </BuildPanelSection>
         <BuildPanelAdvancedSection
           containsActiveTool={advancedTypes.some(isTypeActive)}
-          description="Rooms already create their floor and ceiling. Use these for platforms and one-off structure."
-          hint="Slab, ceiling, column…"
+          description="Le stanze creano già pavimento e soffitto. Usa questi elementi per piattaforme e strutture particolari."
+          hint="Solaio, soffitto, pilastro…"
         >
           <BuildToolGrid columns={4}>{advancedTypes.map(renderTile)}</BuildToolGrid>
         </BuildPanelAdvancedSection>
@@ -226,7 +226,9 @@ export function BuildTab() {
       ) : mode === 'build' && (activeTool === 'roof' || isRoofFeatureActive) ? (
         <div className="flex flex-col gap-3 border-border/60 border-t pt-3">
           <div className="flex flex-col gap-2">
-            <div className="px-0.5 pt-1 font-medium text-muted-foreground text-xs">Roof type</div>
+            <div className="px-0.5 pt-1 font-medium text-muted-foreground text-xs">
+              Tipo di tetto
+            </div>
             <div className="grid grid-cols-2 gap-1.5">
               {ROOF_TYPE_OPTIONS.map((roofType) => {
                 const active = activeTool === 'roof' && activeRoofType === roofType.value
@@ -264,14 +266,14 @@ export function BuildTab() {
           />
           {activeRoofType === 'conical' && (
             <p className="border-border/50 border-t px-0.5 pt-3 text-[11px] text-muted-foreground leading-relaxed">
-              Select a curved wall to match its radius and arc.
+              Seleziona un muro curvo per riprenderne raggio e arco.
             </p>
           )}
 
           {roofFeatures.length > 0 ? (
             <div className="flex flex-col gap-2 border-border/50 border-t pt-3">
               <div className="px-0.5 font-medium text-muted-foreground text-xs">
-                Features & extensions
+                Elementi e ampliamenti
               </div>
               <TooltipProvider delayDuration={0} disableHoverableContent>
                 <div
@@ -320,28 +322,30 @@ export function BuildTab() {
         </div>
       ) : fenceContext ? (
         <div className="flex flex-col gap-3 border-border/50 border-t pt-3">
-          <div className="px-0.5 font-medium text-muted-foreground text-xs">Fence features</div>
+          <div className="px-0.5 font-medium text-muted-foreground text-xs">
+            Elementi della recinzione
+          </div>
           <BuildToolGrid columns={4}>
             {(['gate', 'opening'] as const).map((kind) => (
               <BuildToolTile
                 active={placingFenceFeature === kind}
                 iconSrc={kind === 'gate' ? '/icons/gate.webp' : '/icons/open-passage.webp'}
                 key={kind}
-                label={kind === 'gate' ? 'Gate' : 'Opening'}
+                label={kind === 'gate' ? 'Cancello' : 'Apertura'}
                 onClick={() => {
                   triggerSFX('sfx:menu-click')
                   activateFenceFeaturePlacement(kind)
                 }}
                 onMouseEnter={() => triggerSFX('sfx:menu-hover')}
-                title={kind === 'gate' ? 'Add Gate' : 'Add Open Passage'}
+                title={kind === 'gate' ? 'Aggiungi cancello' : 'Aggiungi passaggio aperto'}
               />
             ))}
           </BuildToolGrid>
           {selectedFenceFeature && (
             <label className="flex items-center justify-between text-xs">
-              Match fence style
+              Stile uguale alla recinzione
               <input
-                aria-label="Match fence style"
+                aria-label="Stile uguale alla recinzione"
                 type="checkbox"
                 checked={selectedFenceFeature.matchFenceStyle !== false}
                 onChange={(event) =>
@@ -355,7 +359,8 @@ export function BuildTab() {
           {!!placingFenceFeature && (
             <div className="space-y-2 text-xs">
               <p>
-                Hover a fence to preview. Click to place. Esc cancels. Leave room between openings.
+                Passa sopra una recinzione per l'anteprima. Fai clic per posizionare. Esc annulla.
+                Lascia spazio tra le aperture.
               </p>
               {typeof fenceDefaults?.featurePlacementFeedback === 'string' && (
                 <p role="status" className="text-amber-400">
@@ -363,7 +368,7 @@ export function BuildTab() {
                 </p>
               )}
               <label className="flex items-center justify-between">
-                Match fence style
+                Stile uguale alla recinzione
                 <input
                   type="checkbox"
                   checked={fenceDefaults?.featureMatchStyle !== false}
@@ -377,7 +382,7 @@ export function BuildTab() {
               </label>
               {fenceDefaults?.featureMatchStyle === false && placingFenceFeature === 'gate' && (
                 <label className="flex items-center justify-between">
-                  Gate style
+                  Stile del cancello
                   <select
                     className="rounded border bg-background p-1"
                     value={
@@ -392,16 +397,16 @@ export function BuildTab() {
                       })
                     }
                   >
-                    <option value="picket">Picket</option>
-                    <option value="slat">Vertical slats</option>
-                    <option value="horizontal">Horizontal boards</option>
-                    <option value="privacy">Solid privacy</option>
-                    <option value="rail">Open rails</option>
+                    <option value="picket">A paletti</option>
+                    <option value="slat">Doghe verticali</option>
+                    <option value="horizontal">Assi orizzontali</option>
+                    <option value="privacy">Pieno, schermante</option>
+                    <option value="rail">Traverse aperte</option>
                   </select>
                 </label>
               )}
               <label className="flex items-center justify-between">
-                Opening width (m)
+                Larghezza dell'apertura (m)
                 <input
                   className="w-20 rounded border bg-background p-1"
                   type="number"
@@ -425,7 +430,7 @@ export function BuildTab() {
               </label>
               {placingFenceFeature === 'gate' && (
                 <label className="flex items-center justify-between">
-                  Leaves
+                  Ante
                   <select
                     className="rounded border bg-background p-1"
                     value={fenceDefaults?.featureLeafType === 'double' ? 'double' : 'single'}
@@ -436,21 +441,21 @@ export function BuildTab() {
                       })
                     }
                   >
-                    <option value="single">Single gate</option>
-                    <option value="double">Double gate</option>
+                    <option value="single">Cancello a un'anta</option>
+                    <option value="double">Cancello a due ante</option>
                   </select>
                 </label>
               )}
             </div>
           )}
           <p className="px-0.5 text-[11px] text-muted-foreground">
-            Choose Gate or Open Passage, then click its position on any fence. Find placed gates and
-            openings under their fence in the scene graph.
+            Scegli Cancello o Passaggio aperto, poi fai clic sul punto della recinzione. Cancelli e
+            aperture posizionati si trovano sotto la loro recinzione nell'albero della scena.
           </p>
         </div>
       ) : isKitchenActive ? (
         <div className="flex flex-col gap-2 border-border/60 border-t pt-3">
-          <div className="px-0.5 pt-1 font-medium text-muted-foreground text-xs">Kitchen</div>
+          <div className="px-0.5 pt-1 font-medium text-muted-foreground text-xs">Cucina</div>
           <TooltipProvider delayDuration={0} disableHoverableContent>
             <div
               className="grid gap-1.5 px-0.5"
@@ -468,7 +473,7 @@ export function BuildTab() {
                     type="button"
                   >
                     <Image
-                      alt="Modular Cabinet"
+                      alt="Mobile modulare"
                       className="size-full object-contain transition-transform duration-200 group-hover:scale-110"
                       height={48}
                       src={MODULAR_CABINET_ICON}
@@ -477,7 +482,7 @@ export function BuildTab() {
                   </button>
                 </TooltipTrigger>
                 <TooltipContent className="pointer-events-none" side="top">
-                  Modular Cabinet
+                  Mobile modulare
                 </TooltipContent>
               </Tooltip>
             </div>
@@ -485,7 +490,7 @@ export function BuildTab() {
         </div>
       ) : isMepActive ? (
         <div className="flex flex-col gap-2 border-border/60 border-t pt-3">
-          <div className="px-0.5 pt-1 font-medium text-muted-foreground text-xs">MEP</div>
+          <div className="px-0.5 pt-1 font-medium text-muted-foreground text-xs">Impianti</div>
           <TooltipProvider delayDuration={0} disableHoverableContent>
             <div
               className="grid gap-1.5 px-0.5"
@@ -555,7 +560,7 @@ export function BuildTab() {
 
           {liquidLineContext ? (
             <div className="flex flex-col gap-1.5">
-              <span className="text-muted-foreground text-xs">Liquid Line</span>
+              <span className="text-muted-foreground text-xs">Linea del liquido</span>
               <button
                 className={cn(
                   'flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm transition-all duration-200',
@@ -568,13 +573,15 @@ export function BuildTab() {
                 onMouseEnter={() => triggerSFX('sfx:menu-hover')}
                 type="button"
               >
-                <span>Follow lineset</span>
-                <span className="text-muted-foreground text-xs">{follow ? 'On' : 'Off'}</span>
+                <span>Segui la linea frigorifera</span>
+                <span className="text-muted-foreground text-xs">
+                  {follow ? 'Attivo' : 'Disattivo'}
+                </span>
               </button>
               <span className="px-1 text-[11px] text-muted-foreground">
                 {follow
-                  ? 'Click a lineset to lay the line beside it.'
-                  : 'Trace a line alongside an existing lineset (F).'}
+                  ? 'Fai clic su una linea frigorifera per posare la linea accanto.'
+                  : 'Traccia una linea lungo una linea frigorifera esistente (F).'}
               </span>
             </div>
           ) : null}

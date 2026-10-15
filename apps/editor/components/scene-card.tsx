@@ -71,7 +71,7 @@ export function SceneCard({ scene }: { scene: SceneCardData }) {
         <div className="px-1.5 pt-2.5 pb-1">
           <h2 className="truncate pr-8 font-medium text-sm">{scene.name}</h2>
           <p className="mt-0.5 text-muted-foreground text-xs">
-            {scene.nodeCount} {scene.nodeCount === 1 ? 'node' : 'nodes'} · Updated{' '}
+            {scene.nodeCount} {scene.nodeCount === 1 ? 'elemento' : 'elementi'} · Modificato il{' '}
             <time dateTime={scene.updatedAt}>{scene.updatedLabel}</time>
           </p>
         </div>
@@ -81,7 +81,7 @@ export function SceneCard({ scene }: { scene: SceneCardData }) {
         <button
           aria-expanded={menuOpen}
           aria-haspopup="menu"
-          aria-label={`Actions for ${scene.name}`}
+          aria-label={`Azioni per ${scene.name}`}
           className={cn(
             'flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-background hover:text-foreground',
             menuOpen && 'bg-background text-foreground',
@@ -103,7 +103,7 @@ export function SceneCard({ scene }: { scene: SceneCardData }) {
               type="button"
             >
               <Pencil className="h-3.5 w-3.5 text-muted-foreground" />
-              Rename
+              Rinomina
             </button>
             <button
               className="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-destructive hover:bg-destructive/10"
@@ -112,7 +112,7 @@ export function SceneCard({ scene }: { scene: SceneCardData }) {
               type="button"
             >
               <Trash2 className="h-3.5 w-3.5" />
-              Delete
+              Elimina
             </button>
           </div>
         )}
@@ -124,7 +124,8 @@ export function SceneCard({ scene }: { scene: SceneCardData }) {
   )
 }
 
-const CONFLICT_MESSAGE = 'This project changed since the page loaded. Reload and try again.'
+const CONFLICT_MESSAGE =
+  'Il progetto è cambiato dopo il caricamento della pagina. Ricarica e riprova.'
 
 /** Opens a native modal dialog on mount; Escape, backdrop and Cancel all end in `onClose`. */
 function useModal(onClose: () => void) {
@@ -192,23 +193,23 @@ function RenameDialog({ scene, onClose }: { scene: SceneCardData; onClose: () =>
         return
       }
       if (!response.ok) {
-        setError(`Rename failed (${response.status})`)
+        setError(`Impossibile rinominare (${response.status})`)
         return
       }
       dialogRef.current?.close()
       router.refresh()
     } catch {
-      setError('Could not reach the editor.')
+      setError("Impossibile raggiungere l'editor.")
     } finally {
       setPending(false)
     }
   }
 
   return (
-    <ModalFrame dialogRef={dialogRef} title="Rename project">
+    <ModalFrame dialogRef={dialogRef} title="Rinomina progetto">
       <form className="mt-4 flex flex-col gap-3" onSubmit={handleSubmit}>
         <input
-          aria-label="Project name"
+          aria-label="Nome del progetto"
           // biome-ignore lint/a11y/noAutofocus: the dialog exists to edit this field
           autoFocus
           className="rounded-lg border border-input bg-accent px-3 py-2 text-sm outline-none focus:border-ring"
@@ -225,10 +226,10 @@ function RenameDialog({ scene, onClose }: { scene: SceneCardData; onClose: () =>
             onClick={() => dialogRef.current?.close()}
             type="button"
           >
-            Cancel
+            Annulla
           </button>
           <button className={PRIMARY_PILL} disabled={pending || !name.trim()} type="submit">
-            {pending ? 'Saving…' : 'Save'}
+            {pending ? 'Salvataggio…' : 'Salva'}
           </button>
         </div>
       </form>
@@ -255,27 +256,27 @@ function DeleteDialog({ scene, onClose }: { scene: SceneCardData; onClose: () =>
         return
       }
       if (!response.ok && response.status !== 404) {
-        setError(`Delete failed (${response.status})`)
+        setError(`Impossibile eliminare (${response.status})`)
         return
       }
       dialogRef.current?.close()
       router.refresh()
     } catch {
-      setError('Could not reach the editor.')
+      setError("Impossibile raggiungere l'editor.")
     } finally {
       setPending(false)
     }
   }
 
   return (
-    <ModalFrame dialogRef={dialogRef} title="Delete project?">
+    <ModalFrame dialogRef={dialogRef} title="Eliminare il progetto?">
       <p className="mt-2 text-muted-foreground text-sm">
-        “{scene.name}” will be removed from this editor, along with everything in it.
+        “{scene.name}” verrà rimosso da questo editor insieme a tutto il suo contenuto.
       </p>
       {error && <p className="mt-3 text-destructive text-xs">{error}</p>}
       <div className="mt-5 flex justify-end gap-2">
         <button className={SECONDARY_PILL} onClick={() => dialogRef.current?.close()} type="button">
-          Cancel
+          Annulla
         </button>
         <button
           className="inline-flex items-center justify-center rounded-lg bg-destructive px-4 py-1.5 font-medium text-sm text-white transition-colors hover:bg-destructive/90 disabled:opacity-50"
@@ -283,7 +284,7 @@ function DeleteDialog({ scene, onClose }: { scene: SceneCardData; onClose: () =>
           onClick={handleDelete}
           type="button"
         >
-          {pending ? 'Deleting…' : 'Delete'}
+          {pending ? 'Eliminazione…' : 'Elimina'}
         </button>
       </div>
     </ModalFrame>

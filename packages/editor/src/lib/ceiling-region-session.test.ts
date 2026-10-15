@@ -174,6 +174,6 @@ test('a ceiling draft ends when its ceiling goes; the hints name ceilings', () =
   const { [manual.id]: _, ...rest } = nodes
   expect(floorRegionRoomGone(rest)).toBe(true)
   expect(floorRegionRoomGone(nodes)).toBe(false)
-  expect(paintRegionHoverHint('polygon')).toBe('Hover a floor or ceiling')
-  expect(paintRegionHoverHint('rectangle')).toBe('Hover a wall, floor or ceiling')
+  expect(paintRegionHoverHint('polygon')).toBe('Passa sopra un pavimento o un soffitto')
+  expect(paintRegionHoverHint('rectangle')).toBe('Passa sopra un muro, un pavimento o un soffitto')
 })

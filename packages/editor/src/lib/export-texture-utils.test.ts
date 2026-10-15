@@ -157,7 +157,7 @@ describe('createExportTextureUtils', () => {
 
     await utils.decompress(compressedTexture('Color'))
     await utils.dispose()
-    await expect(utils.decompress(compressedTexture('Color'))).rejects.toThrow('abandoned')
+    await expect(utils.decompress(compressedTexture('Color'))).rejects.toThrow('interrotta')
     await utils.dispose()
 
     expect(starts).toBe(1)

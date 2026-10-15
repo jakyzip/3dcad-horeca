@@ -3,10 +3,10 @@ import { resolveRotateHandleHelpHints, resolveSelectModeHelpHints } from './cont
 
 test('rotation advertises Alt as the temporary free-rotation override', () => {
   expect(resolveRotateHandleHelpHints(false)).toEqual([
-    { keys: ['Alt'], label: 'Hold to rotate freely', active: false },
+    { keys: ['Alt'], label: 'Tieni premuto per ruotare liberamente', active: false },
   ])
   expect(resolveRotateHandleHelpHints(true)).toEqual([
-    { keys: ['Alt'], label: 'Rotating freely (no angle step)', active: true },
+    { keys: ['Alt'], label: 'Rotazione libera (senza passo angolare)', active: true },
   ])
 })
 
@@ -35,7 +35,7 @@ describe('resolveSelectModeHelpHints', () => {
     ).toEqual([
       {
         keys: [['Cmd/Ctrl', 'Shift'], 'Left click'],
-        label: 'Add or remove objects from the selection',
+        label: 'Aggiungi o togli oggetti dalla selezione',
         active: true,
       },
     ])
@@ -52,17 +52,17 @@ describe('resolveSelectModeHelpHints', () => {
 
     expect(hints).toContainEqual({
       keys: ['Left click'],
-      label: 'Drag selected movable object',
+      label: 'Trascina l’oggetto selezionato',
     })
     expect(hints).toContainEqual({
       keys: ['Cmd/Ctrl', 'Right click'],
-      label: 'Drag left or right to rotate selected object',
+      label: 'Trascina a sinistra o a destra per ruotare l’oggetto selezionato',
     })
     // Cmd/Ctrl and Shift click both toggle selection membership (3D selection
     // manager and 2D floorplan alike) — advertised as a single or-group row.
     expect(hints).toContainEqual({
       keys: [['Cmd/Ctrl', 'Shift'], 'Left click'],
-      label: 'Add or remove objects from the selection',
+      label: 'Aggiungi o togli oggetti dalla selezione',
       active: false,
     })
   })
@@ -79,23 +79,23 @@ describe('resolveSelectModeHelpHints', () => {
     expect(hints).toEqual([
       {
         keys: ['Left click'],
-        label: 'Click or drag the selection to move it as one',
+        label: 'Fai clic o trascina la selezione per spostarla tutta insieme',
       },
-      { keys: ['R / T'], label: 'Rotate the selection ±45°' },
+      { keys: ['R / T'], label: 'Ruota la selezione di ±45°' },
       {
         keys: ['Cmd/Ctrl', 'G'],
-        label: 'Group selection (session only)',
+        label: 'Raggruppa la selezione (solo in questa sessione)',
       },
       {
         keys: ['Cmd/Ctrl', 'Shift', 'G'],
-        label: 'Ungroup session selection',
+        label: 'Separa il gruppo della sessione',
       },
       {
         keys: [['Cmd/Ctrl', 'Shift'], 'Left click'],
-        label: 'Add or remove objects from the selection',
+        label: 'Aggiungi o togli oggetti dalla selezione',
         active: false,
       },
-      { keys: ['Esc'], label: 'Clear the selection (or click outside)' },
+      { keys: ['Esc'], label: 'Annulla la selezione (o fai clic fuori)' },
     ])
   })
 
@@ -113,15 +113,15 @@ describe('resolveSelectModeHelpHints', () => {
     expect(hints).toEqual([
       {
         keys: ['Left click'],
-        label: 'Drag selected movable object',
+        label: 'Trascina l’oggetto selezionato',
       },
       {
         keys: ['Cmd/Ctrl', 'Right click'],
-        label: 'Drag left or right to rotate selected object',
+        label: 'Trascina a sinistra o a destra per ruotare l’oggetto selezionato',
       },
       {
         keys: [['Cmd/Ctrl', 'Shift'], 'Left click'],
-        label: 'Add or remove objects from the selection',
+        label: 'Aggiungi o togli oggetti dalla selezione',
         active: true,
       },
     ])
@@ -139,7 +139,7 @@ describe('resolveSelectModeHelpHints', () => {
       }),
     ).toContainEqual({
       keys: ['Shift'],
-      label: 'Adjust one side’s corner radius',
+      label: 'Regola il raggio dell’angolo su un solo lato',
       active: false,
     })
   })

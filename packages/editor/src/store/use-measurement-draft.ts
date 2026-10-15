@@ -370,7 +370,7 @@ export const useMeasurementDraft = create<MeasurementDraftState>((set, get) => (
     if (state.stage !== 'collecting' || state.vertexDrag || (state.owner && state.owner !== owner))
       return false
     if (state.levelId && state.levelId !== activeLevelId) {
-      set({ error: 'The active level changed. Start a new measurement.' })
+      set({ error: 'Il piano attivo è cambiato. Inizia una nuova misura.' })
       return false
     }
     if (state.kind === 'distance' && state.points.length >= 2) return false
@@ -418,13 +418,13 @@ export const useMeasurementDraft = create<MeasurementDraftState>((set, get) => (
     }
 
     if (!areMeasurementPointsCoplanar(state.points, MEASUREMENT_PLANAR_TOLERANCE)) {
-      set({ error: 'Measurement points must be on one plane.' })
+      set({ error: 'I punti della misura devono stare su un unico piano.' })
       return false
     }
 
     let normal = measurementNormal(state.points)
     if (!normal) {
-      set({ error: 'Measurement points must enclose an area.' })
+      set({ error: 'I punti della misura devono racchiudere una superficie.' })
       return false
     }
     if (
@@ -532,7 +532,7 @@ export function commitMeasurementDraft(owner: MeasurementDraftOwner): Measuremen
 
   const { createNode, nodes } = useScene.getState()
   const count = Object.values(nodes).filter((node) => node.type === 'measurement').length
-  const node = MeasurementNode.parse({ name: `Measurement ${count + 1}`, measurement })
+  const node = MeasurementNode.parse({ name: `Misura ${count + 1}`, measurement })
   createNode(node, levelId)
   draft.reset()
   return node.id

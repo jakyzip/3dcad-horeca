@@ -60,10 +60,10 @@ export function EditorNavbar({ sceneId, name, onRename }: EditorNavbarProps) {
     <nav className="flex h-12 shrink-0 items-center gap-2 border-border/30 border-b bg-sidebar px-2 lg:px-3">
       <div className="flex min-w-0 items-center gap-1.5 lg:gap-2">
         <Link
-          aria-label="All projects"
+          aria-label="Tutti i progetti"
           className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors hover:bg-accent"
           href="/"
-          title="All projects"
+          title="Tutti i progetti"
         >
           <ProductMark />
         </Link>
@@ -73,7 +73,7 @@ export function EditorNavbar({ sceneId, name, onRename }: EditorNavbarProps) {
         <div className="min-w-0 max-w-40 lg:max-w-72">
           {editing ? (
             <input
-              aria-label="Project name"
+              aria-label="Nome del progetto"
               className="h-7 w-full rounded-md bg-accent/50 px-2 py-0 font-medium text-foreground text-sm outline-none ring-1 ring-primary/50 focus:ring-primary"
               maxLength={200}
               onBlur={commit}
@@ -86,7 +86,7 @@ export function EditorNavbar({ sceneId, name, onRename }: EditorNavbarProps) {
             <button
               className="group/title flex h-7 max-w-full items-center gap-1.5 rounded-md px-2 text-left transition-colors hover:bg-accent/50"
               onClick={startEditing}
-              title="Rename project"
+              title="Rinomina progetto"
               type="button"
             >
               <span className="truncate font-medium text-sm">{name}</span>
@@ -104,7 +104,7 @@ export function EditorNavbar({ sceneId, name, onRename }: EditorNavbarProps) {
         type="button"
       >
         <Eye className="h-4 w-4 shrink-0" />
-        <span className="hidden sm:inline">Preview</span>
+        <span className="hidden sm:inline">Anteprima</span>
       </button>
 
       <div className="relative" ref={shareAnchorRef}>
@@ -115,7 +115,7 @@ export function EditorNavbar({ sceneId, name, onRename }: EditorNavbarProps) {
           type="button"
         >
           <Share2 className="h-4 w-4 shrink-0" />
-          <span className="hidden sm:inline">Share</span>
+          <span className="hidden sm:inline">Condividi</span>
         </button>
         {shareOpen && (
           <SharePanel anchorRef={shareAnchorRef} onClose={closeShare} sceneId={sceneId} />

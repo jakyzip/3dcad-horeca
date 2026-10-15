@@ -6,6 +6,12 @@ import type { PanelRow } from './panel-rows'
 import { brushRadiusRange, flattenSite, resetSiteTerrain } from './terrain-sculpt'
 
 const TERRAIN_VERBS: TerrainVerb[] = ['raise', 'lower', 'flatten', 'smooth']
+const TERRAIN_VERB_LABELS: Record<TerrainVerb, string> = {
+  raise: 'Alza',
+  lower: 'Abbassa',
+  flatten: 'Livella',
+  smooth: 'Leviga',
+}
 
 export function useTerrainPanelRows(): PanelRow[] {
   const verb = useEditor((state) => state.terrainVerb)
@@ -33,15 +39,15 @@ export function useTerrainPanelRows(): PanelRow[] {
     {
       id: 'terrain-verb',
       kind: 'cycle',
-      label: 'Brush',
+      label: 'Pennello',
       next: () => cycleVerb(1),
       previous: () => cycleVerb(-1),
-      value: verb.charAt(0).toUpperCase() + verb.slice(1),
+      value: TERRAIN_VERB_LABELS[verb] ?? verb,
     },
     {
       id: 'terrain-radius',
       kind: 'stepper',
-      label: 'Size',
+      label: 'Dimensione',
       max: maxRadius,
       min: minRadius,
       onChange: (radius) => setBrush({ radius }),
@@ -52,7 +58,7 @@ export function useTerrainPanelRows(): PanelRow[] {
     {
       id: 'terrain-strength',
       kind: 'stepper',
-      label: 'Strength',
+      label: 'Intensità',
       max: 1,
       min: 0.05,
       onChange: (strength) => setBrush({ strength }),
@@ -62,7 +68,7 @@ export function useTerrainPanelRows(): PanelRow[] {
     {
       id: 'terrain-softness',
       kind: 'stepper',
-      label: 'Softness',
+      label: 'Morbidezza',
       max: 1,
       min: 0,
       onChange: (falloff) => setBrush({ falloff }),
@@ -72,16 +78,16 @@ export function useTerrainPanelRows(): PanelRow[] {
     {
       id: 'terrain-shape',
       kind: 'choice',
-      label: 'Shape',
+      label: 'Forma',
       onSelect: () => setBrush({ shape: brush.shape === 'round' ? 'square' : 'round' }),
-      value: brush.shape === 'round' ? 'Round' : 'Square',
+      value: brush.shape === 'round' ? 'Rotondo' : 'Quadrato',
     },
     ...(verb === 'flatten'
       ? ([
           {
             id: 'terrain-target',
             kind: 'stepper',
-            label: 'Target',
+            label: 'Quota obiettivo',
             max: 50,
             min: -50,
             onChange: setFlattenTarget,
@@ -92,25 +98,25 @@ export function useTerrainPanelRows(): PanelRow[] {
           {
             id: 'terrain-sampling',
             kind: 'choice',
-            label: 'Pick height',
+            label: 'Preleva altezza',
             onSelect: () => setSampling(!sampling),
-            value: sampling ? 'Armed' : 'Off',
+            value: sampling ? 'Attivo' : 'Disattivato',
           },
         ] satisfies PanelRow[])
       : []),
     {
       id: 'terrain-level-lot',
       kind: 'choice',
-      label: 'Whole lot',
+      label: 'Tutto il lotto',
       onSelect: site ? () => flattenSite(site, flattenTarget ?? 0) : undefined,
-      value: 'Level',
+      value: 'Livella',
     },
     {
       id: 'terrain-clear',
       kind: 'choice',
-      label: 'Terrain',
+      label: 'Terreno',
       onSelect: site?.terrain ? () => resetSiteTerrain(site) : undefined,
-      value: site?.terrain ? 'Clear' : 'Empty',
+      value: site?.terrain ? 'Azzera' : 'Vuoto',
     },
   ]
   return rows

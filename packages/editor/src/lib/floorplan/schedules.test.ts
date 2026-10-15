@@ -128,9 +128,9 @@ describe('doorSchedule', () => {
       sizeText: `3'-0" x 6'-9"`,
       roughOpening: `3'-2" x 6'-10"`,
       frame: `1 15/16" / 2 3/4"`,
-      hardware: 'Threshold',
+      hardware: 'Soglia',
       count: 1,
-      remarks: 'Exterior',
+      remarks: 'Esterno',
     })
     expect(rows[1]).toMatchObject({
       mark: 'D102',
@@ -184,6 +184,6 @@ describe('roomSchedule', () => {
     const nodes = fixture()
     ;(nodes.zone_1 as unknown as { roomNumber: string }).roomNumber = ''
     const { issues } = roomSchedule(nodes, 'level_1' as AnyNodeId)
-    expect(issues).toEqual(['Room Living has no room number'])
+    expect(issues).toEqual(['La stanza Living non ha un numero'])
   })
 })

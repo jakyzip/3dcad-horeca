@@ -90,7 +90,7 @@ export function collectPrintShellInput(source: THREE.Object3D): PrintShellInput 
       diagnostics.push({
         severity: 'error',
         code: 'missing_node_provenance',
-        message: 'A structural mesh has no Pascal node identity.',
+        message: 'A structural mesh has no scene node identity.',
         nodeIds: [],
       })
       return
@@ -198,7 +198,7 @@ export function compilePrintShellBaseline(source: THREE.Object3D): PrintShellCom
       severity: 'info',
       code: 'baseline_compiler',
       message:
-        'Compiled with the synchronous Pascal Three/CSG baseline; worker scheduling and face-level provenance remain pending.',
+        'Compiled with the synchronous Three/CSG baseline; worker scheduling and face-level provenance remain pending.',
       nodeIds: Array.from(sourceNodeIds).sort(),
     })
 

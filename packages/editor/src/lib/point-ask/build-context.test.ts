@@ -87,7 +87,7 @@ describe('targets', () => {
     expect(window).toMatchObject({
       id: 'window_north',
       type: 'window',
-      name: 'Window',
+      name: 'Finestra',
       parentId: 'wall_north',
       zoneId: 'zone_kitchen',
       hit,

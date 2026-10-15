@@ -102,6 +102,7 @@ export {
   prepareBrushForCSG,
   SUBTRACTION,
 } from './lib/csg-utils'
+export { BASIS_TRANSCODER_PATH, DRACO_DECODER_PATH } from './lib/decoder-paths'
 export type { DisplayState } from './lib/display-state'
 export { disposeObject3DResources } from './lib/dispose-object3d'
 export type { EdgeMode } from './lib/edge-style'

@@ -1480,7 +1480,7 @@ describe('prepareSceneForExport', () => {
         expect(message).toContain(kind)
         expect(message).toMatch(/\bGLB\b/)
         expect(message).toMatch(/\bUSDZ\b/)
-        expect(message).toMatch(/exclud/i)
+        expect(message).toMatch(/esclud/i)
         expect(sourceGeometryDisposals).toBe(0)
         expect(sourceMaterialDisposals).toBe(0)
         expect(root.children).toEqual([source])

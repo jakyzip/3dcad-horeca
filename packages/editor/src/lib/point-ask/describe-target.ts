@@ -55,8 +55,8 @@ const KINDS: Partial<Record<string, PointKind>> = {
 }
 
 const DEFAULT_NAMES: Partial<Record<string, string>> = {
-  slab: 'Floor',
-  ceiling: 'Ceiling',
+  slab: 'Pavimento',
+  ceiling: 'Soffitto',
 }
 
 const sentence = (type: string) => {
@@ -66,7 +66,9 @@ const sentence = (type: string) => {
 
 const metres = (value: number, unit: PointUnit) => {
   if (unit.unit === 'imperial') return formatLinearMeasurement(value, 'imperial')
-  return unit.metricNotation === 'millimeters' ? `${Math.round(value * 1000)}` : value.toFixed(2)
+  return unit.metricNotation === 'millimeters'
+    ? `${Math.round(value * 1000)}`
+    : value.toFixed(2).replace('.', ',')
 }
 
 /** "4.80 × 2.70 m", "3'11" × 4'7"", "1200 × 1400 mm". */
@@ -78,11 +80,11 @@ function dimensions(values: number[], unit: PointUnit): string {
 
 /** "2.10 m wide". */
 function wide(value: number, unit: PointUnit): string {
-  return `${dimensions([value], unit)} wide`
+  return `${dimensions([value], unit)} di larghezza`
 }
 
 function areaLabel(squareMetres: number, unit: PointUnit): string {
-  return `${squareMetersToAreaUnit(squareMetres, unit.unit).toFixed(1)} ${getAreaUnitLabel(unit.unit)}`
+  return `${squareMetersToAreaUnit(squareMetres, unit.unit).toFixed(1).replace('.', ',')} ${getAreaUnitLabel(unit.unit)}`
 }
 
 function extent(points: readonly (readonly number[])[], axis: 0 | 1): number {
@@ -138,7 +140,7 @@ export function describeTarget(node: AnyNode, nodes: Nodes, unit: PointUnit): De
     const squareMetres = area([{ outer: zone.polygon, holes: zone.holes }])
     return {
       ...base,
-      name: named('Room'),
+      name: named('Stanza'),
       size: areaLabel(squareMetres, unit),
       sizes: {
         area: squareMetres,
@@ -155,7 +157,7 @@ export function describeTarget(node: AnyNode, nodes: Nodes, unit: PointUnit): De
     const height = wallHeight(wall, nodes)
     return {
       ...base,
-      name: named(room ? `Wall · ${room.name?.trim() || 'Room'}` : 'Wall'),
+      name: named(room ? `Muro · ${room.name?.trim() || 'Stanza'}` : 'Muro'),
       size: dimensions([length, height], unit),
       sizes: { length, height, thickness: getWallThickness(wall) },
       ...(room ? { zoneId: room.id } : {}),
@@ -168,7 +170,7 @@ export function describeTarget(node: AnyNode, nodes: Nodes, unit: PointUnit): De
     const room = wallId ? roomOfWall(nodes, levelId, wallId) : undefined
     return {
       ...base,
-      name: named(node.type === 'window' ? 'Window' : 'Door'),
+      name: named(node.type === 'window' ? 'Finestra' : 'Porta'),
       size: dimensions([opening.width, opening.height], unit),
       sizes: {
         width: opening.width,
@@ -189,7 +191,7 @@ export function describeTarget(node: AnyNode, nodes: Nodes, unit: PointUnit): De
     const onItem = item.parentId && nodes[item.parentId]?.type === 'item'
     return {
       ...base,
-      name: named(item.asset.name?.trim() || 'Item'),
+      name: named(item.asset.name?.trim() || 'Oggetto'),
       size: wide(width, unit),
       sizes: { width, depth, height },
       ...(onItem ? { parentId: item.parentId as string } : {}),
@@ -201,7 +203,7 @@ export function describeTarget(node: AnyNode, nodes: Nodes, unit: PointUnit): De
     const { width, depth } = node as { width: number; depth: number }
     return {
       ...base,
-      name: named('Roof segment'),
+      name: named('Falda'),
       size: dimensions([width, depth], unit),
       sizes: { width, depth },
     }
@@ -211,7 +213,7 @@ export function describeTarget(node: AnyNode, nodes: Nodes, unit: PointUnit): De
     const stair = node as StairNode
     const sizes: Record<string, number> = { width: stair.width ?? 1 }
     if (stair.totalRise !== undefined) sizes.rise = stair.totalRise
-    return { ...base, name: named('Stair'), size: wide(sizes.width!, unit), sizes }
+    return { ...base, name: named('Scala'), size: wide(sizes.width!, unit), sizes }
   }
 
   if (node.type === 'slab' || node.type === 'ceiling') {

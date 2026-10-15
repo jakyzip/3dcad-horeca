@@ -31,7 +31,7 @@ export function PointAskButton() {
       data-guide-target="mode-point-ask"
       disabled={unavailable}
       isActive={active}
-      label="Point and ask"
+      label="Indica e chiedi"
       onClick={() => {
         if (active) leavePointMode()
         else if (canPoint()) enterPointMode(true)
@@ -39,7 +39,7 @@ export function PointAskButton() {
       shortcut="C"
       size="icon"
       tooltipContent={
-        unavailable ? <p>Point and ask works in the 3D view</p> : <p>Point and ask (C)</p>
+        unavailable ? <p>Indica e chiedi funziona nella vista 3D</p> : <p>Indica e chiedi (C)</p>
       }
       variant="ghost"
     >

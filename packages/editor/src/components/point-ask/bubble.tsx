@@ -382,7 +382,7 @@ function BubbleView({
 
   return (
     <div className="pa-bwrap" ref={wrap}>
-      <div aria-label="Ask the assistant" className="pa-bub" ref={bub} role="dialog">
+      <div aria-label="Chiedi all’assistente" className="pa-bub" ref={bub} role="dialog">
         <span className="pa-tail" ref={tail} />
         <div
           className="pa-ctx"
@@ -402,7 +402,7 @@ function BubbleView({
             window.addEventListener('pointermove', move)
             window.addEventListener('pointerup', up)
           }}
-          title="Drag to move it aside"
+          title="Trascina per spostarlo di lato"
         >
           {bubble.area ? (
             <span
@@ -413,7 +413,7 @@ function BubbleView({
               <i />
               <span>{regionLabel(bubble.area.ids.length + bubble.area.more)}</span>
               <button
-                aria-label="Remove the area"
+                aria-label="Togli l’area"
                 className="tx"
                 onClick={() => {
                   useViewer.getState().setPointedIds(null)
@@ -438,7 +438,7 @@ function BubbleView({
                 {t.size ? ` · ${t.size}` : ''}
               </span>
               <button
-                aria-label={`Remove ${t.name}`}
+                aria-label={`Togli ${t.name}`}
                 className="tx"
                 onClick={() => {
                   const rest = targets.filter((x) => x.id !== t.id)
@@ -456,9 +456,13 @@ function BubbleView({
           ))}
           {bubble.crop.state === 'ready' && bubble.crop.dataUrl ? (
             // biome-ignore lint/performance/noImgElement: a data URL the capture just made
-            <img alt="What the assistant will see" className="pa-thumb" src={bubble.crop.dataUrl} />
+            <img
+              alt="Quello che vedrà l’assistente"
+              className="pa-thumb"
+              src={bubble.crop.dataUrl}
+            />
           ) : bubble.crop.state === 'failed' ? (
-            <span className="pa-nopic">No picture</span>
+            <span className="pa-nopic">Nessuna immagine</span>
           ) : null}
         </div>
         <form
@@ -469,7 +473,7 @@ function BubbleView({
           }}
         >
           <textarea
-            aria-label="Ask the assistant"
+            aria-label="Chiedi all’assistente"
             onChange={(event) => patch({ draft: event.target.value, error: null })}
             onKeyDown={(event) => {
               if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
@@ -506,7 +510,7 @@ function BubbleView({
           />
           {isDictationSupported() ? (
             <button
-              aria-label={listening ? 'Stop dictating' : 'Dictate'}
+              aria-label={listening ? 'Interrompi la dettatura' : 'Detta'}
               aria-pressed={listening}
               className={`pa-dict${listening ? ' on' : ''}`}
               onClick={toggleDictation}
@@ -516,12 +520,12 @@ function BubbleView({
             </button>
           ) : null}
           <button
-            aria-label={busy ? 'Queue' : 'Send'}
+            aria-label={busy ? 'Metti in coda' : 'Invia'}
             className={`pa-send${busy ? ' queue' : ''}`}
             disabled={empty}
             type="submit"
           >
-            {busy ? 'Queue' : ARROW}
+            {busy ? 'In coda' : ARROW}
           </button>
         </form>
         {bubble.error ? <div className="pa-err">{bubble.error}</div> : null}

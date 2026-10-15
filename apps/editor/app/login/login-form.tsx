@@ -22,17 +22,17 @@ export function LoginForm({ next }: { next: string }) {
         body: JSON.stringify({ password }),
       })
       if (response.status === 429) {
-        setError('Too many attempts. Try again in a minute.')
+        setError('Troppi tentativi. Riprova tra un minuto.')
         return
       }
       if (!response.ok) {
-        setError('That password is not right.')
+        setError('La password non è corretta.')
         return
       }
       router.push(next)
       router.refresh()
     } catch {
-      setError('Could not reach the editor.')
+      setError("Impossibile raggiungere l'editor.")
     } finally {
       setSubmitting(false)
     }
@@ -58,7 +58,7 @@ export function LoginForm({ next }: { next: string }) {
         disabled={submitting || password.length === 0}
         type="submit"
       >
-        {submitting ? 'Signing in…' : 'Sign in'}
+        {submitting ? 'Accesso in corso…' : 'Accedi'}
       </button>
     </form>
   )

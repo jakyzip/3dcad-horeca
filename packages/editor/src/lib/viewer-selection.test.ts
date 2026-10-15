@@ -253,7 +253,7 @@ describe('viewer rooms by name', () => {
     const { nodes, kitchen } = scene()
     expect(viewerHoverLabel(sofa.id, nodes)).toBe('Sofa')
     expect(viewerHoverLabel(kitchen, nodes)).toBe('Kitchen')
-    expect(viewerHoverLabel('wall_shared', nodes)).toBe('Wall')
+    expect(viewerHoverLabel('wall_shared', nodes)).toBe('Muro')
     expect(viewerHoverLabel(null, nodes)).toBeNull()
   })
 })

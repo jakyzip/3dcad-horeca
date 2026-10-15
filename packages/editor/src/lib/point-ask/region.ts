@@ -112,7 +112,7 @@ export function rankInRegion(
 /** The region chip's words: "Area · 6 elements". */
 export function regionLabel(count: number): string {
   if (count <= 0) return 'Area'
-  return `Area · ${count} element${count === 1 ? '' : 's'}`
+  return `Area · ${count} element${count === 1 ? 'o' : 'i'}`
 }
 
 /**

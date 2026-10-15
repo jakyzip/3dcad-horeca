@@ -84,17 +84,17 @@ import { RegisteredToolHelper } from './registered-tool-helper'
 function reshapingHints(reshape: ReshapeKind): ContextualShortcutHint[] {
   const action =
     reshape === 'curve'
-      ? 'Curve'
+      ? 'Curva'
       : reshape === 'control-point'
-        ? 'Move control point'
+        ? 'Sposta punto di controllo'
         : reshape === 'tangent'
-          ? 'Move tangent'
+          ? 'Sposta tangente'
       : reshape === 'endpoint'
-        ? 'Move endpoint'
-        : 'Move corner'
+        ? 'Sposta estremo'
+        : 'Sposta vertice'
   return [
     { keys: ['Drag'], label: action },
-    { keys: ['Esc'], label: 'Cancel' },
+    { keys: ['Esc'], label: 'Annulla' },
   ]
 }
 
@@ -106,24 +106,24 @@ function reshapingHints(reshape: ReshapeKind): ContextualShortcutHint[] {
 function terrainSculptHints(verb: TerrainVerb, sampling: boolean): ContextualShortcutHint[] {
   if (sampling) {
     return [
-      { keys: ['Click'], label: 'Pick target height' },
-      { keys: ['Esc'], label: 'Cancel picking' },
+      { keys: ['Click'], label: 'Scegli l’altezza di riferimento' },
+      { keys: ['Esc'], label: 'Annulla la scelta' },
     ]
   }
   const action =
     verb === 'raise'
-      ? 'Raise ground'
+      ? 'Alza il terreno'
       : verb === 'lower'
-        ? 'Lower ground'
+        ? 'Abbassa il terreno'
         : verb === 'flatten'
-          ? 'Level ground'
-          : 'Smooth ground'
+          ? 'Livella il terreno'
+          : 'Leviga il terreno'
   return [
     { keys: ['Drag'], label: action },
     // Nested, so the two render as alternatives ("[ / ]") rather than a chord —
     // a flat `['[', ']']` joins with "+" and would read as "press both".
-    { keys: [['[', ']']], label: 'Brush size' },
-    { keys: ['Esc'], label: 'Cancel stroke' },
+    { keys: [['[', ']']], label: 'Dimensione pennello' },
+    { keys: ['Esc'], label: 'Annulla tratto' },
   ]
 }
 
@@ -141,12 +141,12 @@ const EMPTY_CONTEXTUAL_HINTS: ContextualShortcutHint[] = []
 export function paintHints(mode: PaintMode): ContextualShortcutHint[] {
   if (mode === 'pick')
     return [
-      { keys: ['Left click'], label: 'Paint with this material' },
-      { keys: ['Esc'], label: 'Cancel' },
+      { keys: ['Left click'], label: 'Dipingi con questo materiale' },
+      { keys: ['Esc'], label: 'Annulla' },
     ]
   if (mode === 'erase')
-    return [{ keys: ['Left click'], label: 'Remove a painted part, or reset a surface' }]
-  if (mode === 'surface') return [{ keys: [['Alt', 'Option']], label: 'Hold to pick a material' }]
+    return [{ keys: ['Left click'], label: 'Rimuovi una parte dipinta o ripristina una superficie' }]
+  if (mode === 'surface') return [{ keys: [['Alt', 'Option']], label: 'Tieni premuto per prelevare un materiale' }]
   return []
 }
 
@@ -156,21 +156,21 @@ export function paintRegionHints(
   hovering = true,
 ): ContextualShortcutHint[] {
   const gesture: Record<typeof mode, ContextualShortcutHint> = {
-    rectangle: { keys: ['Drag'], label: 'Press anywhere, drag to the opposite corner' },
-    polygon: { keys: ['Left click'], label: 'Add point · click the first to close' },
+    rectangle: { keys: ['Drag'], label: 'Premi in un punto e trascina fino al vertice opposto' },
+    polygon: { keys: ['Left click'], label: 'Aggiungi punto · fai clic sul primo per chiudere' },
   }
   // Off anything the sub-mode draws on, the HUD says where to go instead.
   if (!hovering)
     return [
       ...(notice ? [{ keys: ['!'], label: notice, active: true }] : []),
       { keys: ['Hover'], label: paintRegionHoverHint(mode), active: true },
-      { keys: ['Esc'], label: 'Cancel' },
+      { keys: ['Esc'], label: 'Annulla' },
     ]
   return [
     ...(notice ? [{ keys: ['!'], label: notice, active: true }] : []),
     gesture[mode],
-    ...(mode === 'polygon' ? [{ keys: ['Backspace'], label: 'Remove last point' }] : []),
-    { keys: ['Esc'], label: 'Cancel' },
+    ...(mode === 'polygon' ? [{ keys: ['Backspace'], label: 'Rimuovi l’ultimo punto' }] : []),
+    { keys: ['Esc'], label: 'Annulla' },
   ]
 }
 // "Add mezzanine": the outline gesture for the shape picked in the room panel,
@@ -178,21 +178,21 @@ export function paintRegionHints(
 export function mezzanineHints(shape: MezzanineShape): ContextualShortcutHint[] {
   return shape === 'rectangle'
     ? [
-        { keys: ['Left click'], label: 'Set one corner, then the opposite' },
-        { keys: ['Drag'], label: 'Draw the mezzanine' },
-        { keys: ['Esc'], label: 'Cancel' },
+        { keys: ['Left click'], label: 'Fissa un vertice, poi quello opposto' },
+        { keys: ['Drag'], label: 'Disegna il soppalco' },
+        { keys: ['Esc'], label: 'Annulla' },
       ]
     : [
-        { keys: ['Left click'], label: 'Add point · click the first to close' },
-        { keys: ['Backspace'], label: 'Remove last point' },
-        { keys: ['Enter'], label: 'Finish' },
-        { keys: ['Esc'], label: 'Cancel' },
+        { keys: ['Left click'], label: 'Aggiungi punto · fai clic sul primo per chiudere' },
+        { keys: ['Backspace'], label: 'Rimuovi l’ultimo punto' },
+        { keys: ['Enter'], label: 'Termina' },
+        { keys: ['Esc'], label: 'Annulla' },
       ]
 }
 /** "Cut opening": the outline gesture for the chosen shape, then Esc. */
 export function openingHints(shape: OpeningShape): ContextualShortcutHint[] {
   return mezzanineHints(shape).map((hint) =>
-    hint.label === 'Draw the mezzanine' ? { ...hint, label: 'Draw the opening' } : hint,
+    hint.label === 'Disegna il soppalco' ? { ...hint, label: 'Disegna l’apertura' } : hint,
   )
 }
 const TERRACE_CHIP_HINTS = [TERRACE_SHAPE_HINT]
@@ -200,22 +200,22 @@ const TERRACE_CHIP_HINTS = [TERRACE_SHAPE_HINT]
 export function terraceHints(shape: TerraceShape): ContextualShortcutHint[] {
   return shape === 'rectangle'
     ? [
-        { keys: ['Left click'], label: 'Set one corner, then the opposite' },
-        { keys: ['Drag'], label: 'Draw the terrace' },
-        { keys: ['Esc'], label: 'Done' },
+        { keys: ['Left click'], label: 'Fissa un vertice, poi quello opposto' },
+        { keys: ['Drag'], label: 'Disegna la terrazza' },
+        { keys: ['Esc'], label: 'Fine' },
       ]
     : [
-        { keys: ['Left click'], label: 'Add point · click the first to close' },
-        { keys: ['Backspace'], label: 'Remove last point' },
-        { keys: ['Enter'], label: 'Finish' },
-        { keys: ['Esc'], label: 'Done' },
+        { keys: ['Left click'], label: 'Aggiungi punto · fai clic sul primo per chiudere' },
+        { keys: ['Backspace'], label: 'Rimuovi l’ultimo punto' },
+        { keys: ['Enter'], label: 'Termina' },
+        { keys: ['Esc'], label: 'Fine' },
       ]
 }
 export const ROOM_DIVIDE_HINTS: ContextualShortcutHint[] = [
-  { keys: ['Left click'], label: 'Add point' },
-  { keys: ['Backspace'], label: 'Remove last point' },
-  { keys: ['Enter'], label: 'Finish at the edge' },
-  { keys: ['Esc'], label: 'Cancel' },
+  { keys: ['Left click'], label: 'Aggiungi punto' },
+  { keys: ['Backspace'], label: 'Rimuovi l’ultimo punto' },
+  { keys: ['Enter'], label: 'Termina sul bordo' },
+  { keys: ['Esc'], label: 'Annulla' },
 ]
 const NO_CONTEXTUAL_HELP_SUBSCRIPTION = () => () => {}
 
@@ -277,18 +277,18 @@ export function mezzanineGesture(
 
 export const MEZZANINE_GESTURE_HINTS: Record<MezzanineGesture, ContextualShortcutHint[]> = {
   raise: [
-    { keys: ['Drag'], label: 'Raise or lower' },
-    { keys: ['Esc'], label: 'Cancel' },
+    { keys: ['Drag'], label: 'Alza o abbassa' },
+    { keys: ['Esc'], label: 'Annulla' },
   ],
   resize: [
-    { keys: ['Drag'], label: 'Resize' },
-    { keys: ['Esc'], label: 'Cancel' },
+    { keys: ['Drag'], label: 'Ridimensiona' },
+    { keys: ['Esc'], label: 'Annulla' },
   ],
   move: [
-    { keys: ['Left click'], label: 'Place inside the room' },
-    { keys: [['R', 'T']], label: 'Rotate ±45°' },
-    { keys: ['Alt'], label: 'Free move' },
-    { keys: ['Esc'], label: 'Cancel' },
+    { keys: ['Left click'], label: 'Posiziona dentro la stanza' },
+    { keys: [['R', 'T']], label: 'Ruota di ±45°' },
+    { keys: ['Alt'], label: 'Spostamento libero' },
+    { keys: ['Esc'], label: 'Annulla' },
   ],
 }
 
@@ -417,7 +417,7 @@ export function HelperManager() {
   if (activeHandleDrag?.label === GROUP_MOVE_DRAG_LABEL) {
     return (
       <ContextualHelperPanel
-        hints={[{ keys: ['R / T'], label: 'Rotate the selection ±45°' }]}
+        hints={[{ keys: ['R / T'], label: 'Ruota la selezione di ±45°' }]}
         snapContext={snapContext}
         title={MOVE_SELECTION_HUD_TITLE}
       />
@@ -440,10 +440,10 @@ export function HelperManager() {
     return (
       <ContextualHelperPanel
         hints={[
-          { keys: ['Left click'], label: 'Place' },
-          { keys: [['R', 'T']], label: 'Rotate ±45°' },
-          { keys: ['Alt'], label: 'Free move · slide doors and windows' },
-          { keys: ['Esc'], label: 'Cancel' },
+          { keys: ['Left click'], label: 'Posiziona' },
+          { keys: [['R', 'T']], label: 'Ruota di ±45°' },
+          { keys: ['Alt'], label: 'Spostamento libero · fai scorrere porte e finestre' },
+          { keys: ['Esc'], label: 'Annulla' },
         ]}
         snapContext={snapContext}
         title={MOVE_ROOM_HUD_TITLE}
@@ -504,8 +504,8 @@ export function HelperManager() {
     return (
       <ContextualHelperPanel
         hints={[
-          { keys: ['Drag'], label: 'Resize' },
-          { keys: ['Esc'], label: 'Cancel' },
+          { keys: ['Drag'], label: 'Ridimensiona' },
+          { keys: ['Esc'], label: 'Annulla' },
         ]}
         snapContext={snapContext}
         title={RESIZE_HUD_TITLE}
@@ -522,7 +522,7 @@ export function HelperManager() {
       ? nodeRegistry.get(reshapingNode.type)?.affordanceHints?.[scope.reshape]
       : undefined
     const title = reshapingNode
-      ? nodeKindHudTitle(reshapingNode.type, scope.reshape === 'split' ? 'Split' : 'Edit')
+      ? nodeKindHudTitle(reshapingNode.type, scope.reshape === 'split' ? 'Dividi' : 'Modifica')
       : null
     if (hints) {
       return (
@@ -548,7 +548,7 @@ export function HelperManager() {
     // once/repeat continuation, exactly like the GLB item tool — but an existing
     // node being *moved* is not a placement, so it gets no continuation chip.
     const isFreshPlacement = isFreshPlacementMetadata(movingNode.metadata)
-    const movingTitle = nodeKindHudTitle(movingNode.type, isFreshPlacement ? undefined : 'Move')
+    const movingTitle = nodeKindHudTitle(movingNode.type, isFreshPlacement ? undefined : 'Sposta')
     if (movingNode.type === 'building') return <BuildingHelper showRotate title={movingTitle} />
     const movingContinuationContext = isFreshPlacement
       ? keyCyclableContinuationContext(continuationContextOf(movingNode.type))
@@ -611,7 +611,7 @@ export function HelperManager() {
       <ContextualHelperPanel
         hints={contextualEditHints}
         snapContext={snapContext}
-        title={contextualHelpNode ? nodeKindHudTitle(contextualHelpNode.type, 'Edit') : null}
+        title={contextualHelpNode ? nodeKindHudTitle(contextualHelpNode.type, 'Modifica') : null}
       />
     )
   }
@@ -639,9 +639,9 @@ export function HelperManager() {
     return (
       <ContextualHelperPanel
         hints={[
-          { keys: ['Hover'], label: 'Inspect surface dimensions' },
-          { keys: ['Click'], label: 'Pin measurement lens' },
-          { keys: ['Esc'], label: 'Exit smart measure' },
+          { keys: ['Hover'], label: 'Leggi le misure della superficie' },
+          { keys: ['Click'], label: 'Fissa la lente di misura' },
+          { keys: ['Esc'], label: 'Esci dalla misura intelligente' },
         ]}
         title={SMART_MEASURE_HUD_TITLE}
       />

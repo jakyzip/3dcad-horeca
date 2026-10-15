@@ -50,14 +50,14 @@ export type RoomConstructionResult =
 
 // Planner messages address callers ("Pass dropOpenings…"); the panel speaks to people.
 const CONFLICT_MESSAGES: Record<string, string> = {
-  'covered-existing-wall': 'A wall already runs along this edge.',
-  'segment-too-short': 'An edge is too short for a wall.',
-  'occupied-split': 'An opening sits where the wall would split.',
-  'overlapping-spans': 'The room changed. Try again.',
-  'invalid-span': 'The room changed. Try again.',
-  'stale-span': 'The room changed. Try again.',
-  'mixed-exterior-faces': 'A wall is outside on both faces. Divide it first.',
-  'junction-conflict': 'Locking would break a room on this floor.',
+  'covered-existing-wall': 'Lungo questo lato c’è già un muro.',
+  'segment-too-short': 'Un lato è troppo corto per un muro.',
+  'occupied-split': 'C’è un’apertura dove il muro verrebbe diviso.',
+  'overlapping-spans': 'La stanza è cambiata. Riprova.',
+  'invalid-span': 'La stanza è cambiata. Riprova.',
+  'stale-span': 'La stanza è cambiata. Riprova.',
+  'mixed-exterior-faces': 'Un muro è esterno su entrambe le facce. Prima dividilo.',
+  'junction-conflict': 'Il blocco romperebbe una stanza su questo piano.',
 }
 
 /** Clear floor area new walls may take before Add walls asks first, m². */
@@ -300,7 +300,7 @@ function alsoCovers(scene: StructureNodes, zoneId: string, ceilings: CeilingNode
     node.parentId === scene[zoneId]?.parentId &&
     area(intersection({ outer: node.polygon, holes: node.holes ?? [] }, outline)) >
       TRIVIAL_AREA_LOSS
-      ? [node.name.trim() || 'another room']
+      ? [node.name.trim() || "un'altra stanza"]
       : [],
   )
 }
@@ -630,13 +630,14 @@ export function floorHeightRefusalText(
   const { code, min, max } = result
   if (code === 'floor-sunken-depth' && typeof min === 'number')
     return min < 0
-      ? `Too low: the floor can sink at most ${length(-min)} here.`
-      : `Too low: the floor must stay at least ${length(min)} up.`
+      ? `Troppo basso: qui il pavimento può scendere al massimo di ${length(-min)}.`
+      : `Troppo basso: il pavimento deve restare alzato di almeno ${length(min)}.`
   if ((code === 'floor-headroom' || code === 'floor-opening-fit') && typeof max === 'number') {
-    const limit = max < 0 ? `sink at least ${length(-max)}` : `rise at most ${length(max)}`
+    const limit =
+      max < 0 ? `scendere di almeno ${length(-max)}` : `salire al massimo di ${length(max)}`
     return code === 'floor-headroom'
-      ? `Too high: the floor can ${limit} and keep headroom.`
-      : `Too high: the floor can ${limit} for the doors and windows to fit.`
+      ? `Troppo alto: il pavimento può ${limit} mantenendo l’altezza libera.`
+      : `Troppo alto: il pavimento può ${limit} perché porte e finestre ci stiano.`
   }
   return result.message
 }

@@ -242,7 +242,7 @@ describe('room structure controls', () => {
     previewRoomDivide([4, 7])
     expect(useInteractionScope.getState().scope).toMatchObject({
       valid: false,
-      message: 'Move to an edge',
+      message: 'Avvicinati a un bordo',
     })
     previewRoomDivide([2, 0])
     clickRoomDivide()
@@ -279,7 +279,7 @@ describe('room structure controls', () => {
     expect(useInteractionScope.getState().scope).toMatchObject({
       endKind: 'point',
       valid: false,
-      message: 'Crosses itself',
+      message: 'Si incrocia',
     })
     // Back on the boundary the live point finishes the cut.
     previewRoomDivide([5.1, 3.8])
@@ -344,7 +344,7 @@ describe('room structure controls', () => {
     previewRoomDivide([2, 0.1])
     expect(useInteractionScope.getState().scope).toMatchObject({
       valid: false,
-      message: 'Close the loop',
+      message: 'Chiudi il percorso',
     })
     for (const point of [
       [5, 1],
@@ -785,9 +785,9 @@ describe('room structure controls', () => {
       { ...request, room: { ...payload, opensZoneIds: [zoneId] } },
       nodes,
     )
-    expect(content.title).toBe(`Delete ${payload.name.trim() || 'this room'}?`)
-    expect(content.description).toContain('Removes 4 walls')
-    expect(content.description).toContain('Opens into Room.')
+    expect(content.title).toBe(`Eliminare ${payload.name.trim() || 'questa stanza'}?`)
+    expect(content.description).toContain('Rimuove 4 muri')
+    expect(content.description).toContain('Si apre su Room.')
     expect(content.description).not.toContain(zoneId)
     for (const id of payload.wallIds) expect(content.description).not.toContain(id)
     const merge = deleteConfirmationContent(
@@ -797,10 +797,10 @@ describe('room structure controls', () => {
       },
       nodes,
     )
-    expect(merge.description).toContain('Merges it back into')
-    expect(merge.description).toContain('removes the dividing line')
-    expect(merge.description).toContain('The walls stay')
-    expect(merge.description).not.toContain('item')
+    expect(merge.description).toContain("Riunisce l'area a")
+    expect(merge.description).toContain('rimuove la linea di divisione')
+    expect(merge.description).toContain('I muri restano')
+    expect(merge.description).not.toContain('oggett')
   })
   test('Keep items is offered only when the room holds items', () => {
     requestRoomDeletion(zoneId)
@@ -808,26 +808,28 @@ describe('room structure controls', () => {
     const nodes = useScene.getState().nodes
     expect(deleteConfirmationContent(empty, nodes)).toMatchObject({
       keepLabel: null,
-      confirmLabel: 'Delete',
+      confirmLabel: 'Elimina',
     })
-    expect(deleteConfirmationContent(empty, nodes).description).not.toContain('item')
+    expect(deleteConfirmationContent(empty, nodes).description).not.toContain('oggett')
     const furnished = { ...empty, room: { ...empty.room!, itemIds: ['item_a', 'item_b'] } }
     expect(deleteConfirmationContent(furnished, nodes)).toMatchObject({
-      keepLabel: 'Keep items',
-      confirmLabel: 'Delete all',
+      keepLabel: 'Tieni gli oggetti',
+      confirmLabel: 'Elimina tutto',
     })
-    expect(deleteConfirmationContent(furnished, nodes).description).toContain('2 items are inside')
+    expect(deleteConfirmationContent(furnished, nodes).description).toContain(
+      "2 oggetti sono all'interno",
+    )
     // A merged area's items stay whatever: no choice to offer, only a mention.
     const merged = { ...furnished, room: { ...furnished.room, mode: 'merge' as const } }
     expect(deleteConfirmationContent(merged, nodes)).toMatchObject({
       keepLabel: null,
-      confirmLabel: 'Delete',
+      confirmLabel: 'Elimina',
     })
     expect(deleteConfirmationContent(merged, nodes).description).toContain(
-      '2 items inside stay where they are',
+      "2 oggetti all'interno restano dove sono",
     )
     expect(deleteConfirmationContent({ count: 3, onConfirm: () => {} }, nodes)).toMatchObject({
-      title: 'Delete 3 elements?',
+      title: 'Eliminare 3 elementi?',
       keepLabel: null,
     })
   })
@@ -900,7 +902,7 @@ describe('room structure controls', () => {
       renderToStaticMarkup(
         createElement(NodeActionMenu, {
           deleteDisabledReason: reason,
-          deleteLabel: 'Delete room',
+          deleteLabel: 'Elimina stanza',
           onDelete: () => {},
           onDuplicate: () => {},
           onMove: () => {},
@@ -909,12 +911,18 @@ describe('room structure controls', () => {
         }),
       )
     const trash = (html: string) =>
-      html.match(/<button[^>]*aria-label="Delete room"[^>]*>/)?.[0] ?? ''
+      html.match(/<button[^>]*aria-label="Elimina stanza"[^>]*>/)?.[0] ?? ''
     expect(trash(pill(SHARED_WALLS_DELETE_MESSAGE))).toContain('aria-disabled="true"')
     expect(trash(pill())).not.toContain('aria-disabled')
     // Every pill button is named for the editor tooltip; none uses the browser's title.
     const html = pill()
-    for (const label of ['Move', 'Rotate left', 'Rotate right', 'Duplicate', 'Delete room'])
+    for (const label of [
+      'Sposta',
+      'Ruota a sinistra',
+      'Ruota a destra',
+      'Duplica',
+      'Elimina stanza',
+    ])
       expect(html).toContain(`aria-label="${label}"`)
     expect(html).not.toMatch(/<button[^>]* title=/)
   })

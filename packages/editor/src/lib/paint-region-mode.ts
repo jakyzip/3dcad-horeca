@@ -104,7 +104,9 @@ export function paintRegionTargets(mode: PaintMode): { wall: boolean; floor: boo
 
 /** What the HUD asks for while the pointer is over nothing the sub-mode draws on. */
 export function paintRegionHoverHint(mode: 'rectangle' | 'polygon'): string {
-  return mode === 'polygon' ? 'Hover a floor or ceiling' : 'Hover a wall, floor or ceiling'
+  return mode === 'polygon'
+    ? 'Passa sopra un pavimento o un soffitto'
+    : 'Passa sopra un muro, un pavimento o un soffitto'
 }
 
 /**

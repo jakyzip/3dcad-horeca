@@ -6,12 +6,12 @@ const zone = (id: string, name?: string) => ({ id, type: 'zone', name }) as unkn
 
 describe('nextZoneName', () => {
   test('room zones do not consume zone numbers', () => {
-    expect(nextZoneName({ a: zone('a', 'Room'), b: zone('b', 'Kitchen') })).toBe('Zone 1')
+    expect(nextZoneName({ a: zone('a', 'Room'), b: zone('b', 'Kitchen') })).toBe('Zona 1')
   })
 
   test('continues after the highest existing Zone N', () => {
-    expect(nextZoneName({ a: zone('a', 'Zone 1'), b: zone('b', 'Zone 4'), c: zone('c') })).toBe(
-      'Zone 5',
+    expect(nextZoneName({ a: zone('a', 'Zona 1'), b: zone('b', 'Zone 4'), c: zone('c') })).toBe(
+      'Zona 5',
     )
   })
 })

@@ -17,9 +17,9 @@ afterEach(() => {
 describe('Rooms variants', () => {
   test('are Rectangle, Polygon and Walls, in the Build panel order', () => {
     expect(WALL_DRAW_VARIANTS.map((variant) => [variant.id, variant.label, variant.mode])).toEqual([
-      ['rectangle', 'Rectangle', 'rectangle'],
-      ['polygon', 'Polygon', 'room'],
-      ['walls', 'Walls', 'single'],
+      ['rectangle', 'Rettangolo', 'rectangle'],
+      ['polygon', 'Poligono', 'room'],
+      ['walls', 'Muri', 'single'],
     ])
   })
 
@@ -61,11 +61,11 @@ describe('Rooms variants', () => {
 
   test('name the HUD after the variant in hand', () => {
     expect(toolHudTitle('wall', 'rectangle')).toEqual({
-      label: 'Rectangle room',
+      label: 'Stanza rettangolare',
       icon: { kind: 'url', src: '/icons/room.webp' },
       shortcut: 'B',
     })
-    expect(toolHudTitle('wall', 'room')?.label).toBe('Polygon room')
-    expect(toolHudTitle('wall', 'single')?.label).toBe('Walls')
+    expect(toolHudTitle('wall', 'room')?.label).toBe('Stanza poligonale')
+    expect(toolHudTitle('wall', 'single')?.label).toBe('Muri')
   })
 })

@@ -8,7 +8,7 @@ import { sceneThumbnailUrl } from '@/lib/scene-thumbnails'
 
 export const dynamic = 'force-dynamic'
 
-const dateFormat = new Intl.DateTimeFormat('en-US', {
+const dateFormat = new Intl.DateTimeFormat('it-IT', {
   month: 'short',
   day: 'numeric',
   year: 'numeric',
@@ -30,10 +30,10 @@ async function fetchScenes(): Promise<SceneCardData[]> {
   )
 }
 
-/** `Project #n`: one past the highest number still in use, never below the count. */
+/** `Progetto #n`: one past the highest number still in use, never below the count. Older scenes were named `Project #n`. */
 function nextProjectNumber(names: string[]): number {
   const highest = names.reduce((max, name) => {
-    const match = /^Project #(\d+)$/.exec(name.trim())
+    const match = /^(?:Progetto|Project) #(\d+)$/.exec(name.trim())
     return match ? Math.max(max, Number(match[1])) : max
   }, 0)
   return Math.max(highest, names.length) + 1
@@ -47,7 +47,12 @@ export default async function HomePage() {
     <AppShell>
       <AppHeader>
         <CreateProjectButton nextNumber={nextNumber} />
-        <Link aria-label="Settings" className={ICON_BUTTON} href="/settings" title="Settings">
+        <Link
+          aria-label="Impostazioni"
+          className={ICON_BUTTON}
+          href="/settings"
+          title="Impostazioni"
+        >
           <Settings className="h-4 w-4" />
         </Link>
       </AppHeader>
@@ -57,13 +62,13 @@ export default async function HomePage() {
           <div className="flex flex-col items-center justify-center gap-4 py-32 text-center">
             <ProductMark className="h-10 w-10" />
             <p className="max-w-xs text-muted-foreground text-sm">
-              Your projects live here. Start one to begin designing.
+              Qui trovi i tuoi progetti. Creane uno per iniziare a disegnare.
             </p>
             <CreateProjectButton nextNumber={nextNumber} />
           </div>
         ) : (
           <>
-            <h1 className="mb-6 font-semibold text-lg">Projects</h1>
+            <h1 className="mb-6 font-semibold text-lg">Progetti</h1>
             <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {scenes.map((scene) => (
                 <SceneCard key={scene.id} scene={scene} />

@@ -90,10 +90,10 @@ export async function sendGlbToLocalApp(
   if (meta.version) headers['X-Pascal-Version'] = meta.version
   const response = await fetchImpl(`${base}/pascal/import`, { method: 'POST', headers, body: blob })
   if (response.status === 403) {
-    throw new LocalAppError('refused', 'The app has not allowed this site to send scenes.')
+    throw new LocalAppError('refused', 'L’app non ha autorizzato questo sito a inviare scene.')
   }
   if (!response.ok) {
-    throw new LocalAppError('rejected', `The app rejected the scene (HTTP ${response.status}).`)
+    throw new LocalAppError('rejected', `L’app ha rifiutato la scena (HTTP ${response.status}).`)
   }
   return (await response.json()) as LocalImportStatus
 }
@@ -112,10 +112,13 @@ export async function waitForLocalImport(
       const status = (await response.json()) as LocalImportStatus
       if (status.state === 'done') return status
       if (status.state === 'failed') {
-        throw new LocalAppError('failed', status.error ?? 'The app could not import the scene.')
+        throw new LocalAppError(
+          'failed',
+          status.error ?? 'L’app non è riuscita a importare la scena.',
+        )
       }
     }
     await new Promise((resolve) => setTimeout(resolve, intervalMs))
   }
-  throw new LocalAppError('timeout', 'The app did not finish importing in time.')
+  throw new LocalAppError('timeout', 'L’app non ha finito l’importazione in tempo.')
 }

@@ -85,7 +85,7 @@ function appendMeshObject(lines: string[], name: string, parts: PlacedPrint3mfPa
 
 export function createPrint3mf(
   parts: Print3mfPart[],
-  title = 'Pascal print export',
+  title = 'Stampa 3D 3DCadHo.Re.Ca',
 ): Uint8Array<ArrayBuffer> {
   const placements: PlacedPrint3mfPart[] = []
   let cursorX = 0
@@ -114,7 +114,7 @@ export function createPrint3mf(
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<model unit="millimeter" xml:lang="en-US" xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02">',
     `  <metadata name="Title">${escapeXml(title)}</metadata>`,
-    '  <metadata name="Application">Pascal</metadata>',
+    '  <metadata name="Application">3DCadHo.Re.Ca</metadata>',
     `  <metadata name="Pascal.PartManifest">${escapeXml(JSON.stringify(partManifest))}</metadata>`,
     '  <resources>',
   ]
@@ -148,7 +148,7 @@ export function exportSceneToPrint3mf(
     prepared.report.bounds && prepared.report.invalidTriangleCount === 0
       ? [
           {
-            name: 'Pascal print model',
+            name: 'Modello di stampa',
             mesh: extractPreparedPrintMesh(prepared.scene),
             bounds: prepared.report.bounds,
           },

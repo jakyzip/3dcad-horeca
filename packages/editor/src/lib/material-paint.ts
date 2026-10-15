@@ -78,7 +78,7 @@ function getCatalogEntryForActivePaintMaterial(material: ActivePaintMaterial | n
 }
 
 export function getActivePaintMaterialLabel(material: ActivePaintMaterial | null | undefined) {
-  return getCatalogEntryForActivePaintMaterial(material)?.label ?? 'Custom'
+  return getCatalogEntryForActivePaintMaterial(material)?.label ?? 'Personalizzato'
 }
 
 export function buildRoofSurfaceMaterialPatch(

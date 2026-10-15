@@ -19,7 +19,7 @@ export const PLUGINS_VIEW_ID = 'plugins'
 
 const pluginsView: EditorViewDescriptor = {
   id: PLUGINS_VIEW_ID,
-  label: 'Plugins',
+  label: 'Plugin',
   icon: { kind: 'url', src: '/icons/plugins.webp' },
   component: () => import('./plugins-view').then((module) => ({ default: module.PluginsView })),
   workspaces: ['edit'],

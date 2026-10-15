@@ -68,7 +68,7 @@ describe('paint regions', () => {
     expect(first!.finish).toBe(second!.finish)
     expect(addWallRegion(wall.id, 'a', {}, {})).toEqual({
       ok: false,
-      message: 'Pick a material first',
+      message: 'Prima scegli un materiale',
     })
   })
 
@@ -137,11 +137,11 @@ describe('paint region sub-mode', () => {
 
   test('off anything it draws on, the HUD says where to go: a floor for Polygon', () => {
     expect(paintRegionHints('polygon', null, false).map((hint) => hint.label)).toEqual([
-      'Hover a floor or ceiling',
-      'Cancel',
+      'Passa sopra un pavimento o un soffitto',
+      'Annulla',
     ])
     expect(paintRegionHints('rectangle', null, false)[0]).toMatchObject({
-      label: 'Hover a wall, floor or ceiling',
+      label: 'Passa sopra un muro, un pavimento o un soffitto',
       active: true,
     })
     expect(paintRegionHints('rectangle', null, true)[0]!.keys).toEqual(['Drag'])
@@ -159,8 +159,8 @@ describe('paint region sub-mode', () => {
 test('the whole-surface HUD says what a click does; only painting teaches the held eyedropper', () => {
   const labels = (mode: Parameters<typeof paintHints>[0]) =>
     paintHints(mode).map((hint) => hint.label)
-  expect(labels('surface')).toEqual(['Hold to pick a material'])
-  expect(labels('erase')).toEqual(['Remove a painted part, or reset a surface'])
-  expect(labels('erase').some((label) => /pick|colour|color|paint with/i.test(label))).toBe(false)
-  expect(labels('pick')).toEqual(['Paint with this material', 'Cancel'])
+  expect(labels('surface')).toEqual(['Tieni premuto per prelevare un materiale'])
+  expect(labels('erase')).toEqual(['Rimuovi una parte dipinta o ripristina una superficie'])
+  expect(labels('erase').some((label) => /prelev|colore|dipingi con/i.test(label))).toBe(false)
+  expect(labels('pick')).toEqual(['Dipingi con questo materiale', 'Annulla'])
 })

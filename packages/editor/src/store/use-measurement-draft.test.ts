@@ -92,7 +92,7 @@ describe('measurement draft ownership', () => {
 
     expect(draft.addPoint('3d', point(1, 0, 0))).toBe(false)
     expect(useMeasurementDraft.getState().error).toBe(
-      'The active level changed. Start a new measurement.',
+      'Il piano attivo è cambiato. Inizia una nuova misura.',
     )
     expect(commitMeasurementDraft('3d')).toBeNull()
     expect(
@@ -165,7 +165,9 @@ describe('measurement draft transitions', () => {
     draft.addPoint('3d', point(0, 1, 2))
 
     expect(draft.closeBase('3d')).toBe(false)
-    expect(useMeasurementDraft.getState().error).toBe('Measurement points must be on one plane.')
+    expect(useMeasurementDraft.getState().error).toBe(
+      'I punti della misura devono stare su un unico piano.',
+    )
 
     draft.removeLast('3d')
     draft.addPoint('3d', point(0, 0, 2))

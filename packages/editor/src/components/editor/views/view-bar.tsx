@@ -63,10 +63,10 @@ function SplitControls() {
     <div className={GROUP}>
       {split && (
         <button
-          aria-label="Swap panes"
+          aria-label="Scambia i riquadri"
           className={cn(SEGMENT, IDLE, 'px-2')}
           onClick={() => useEditor.getState().swapPanes()}
-          title="Swap panes"
+          title="Scambia i riquadri"
           type="button"
         >
           <ArrowLeftRight className="h-3 w-3" />
@@ -76,11 +76,11 @@ function SplitControls() {
         aria-pressed={split}
         className={cn(SEGMENT, split ? ACTIVE : IDLE)}
         onClick={() => useEditor.getState().toggleSplit()}
-        title={split ? 'Close split (\\)' : 'Split (\\)'}
+        title={split ? 'Chiudi la divisione (\\)' : 'Dividi (\\)'}
         type="button"
       >
         <Columns2 className="h-3 w-3" />
-        <span>Split</span>
+        <span>Dividi</span>
       </button>
     </div>
   )
@@ -163,12 +163,12 @@ function MoreViewsMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button aria-label="More views" className={cn(SEGMENT, IDLE, 'px-2')} type="button">
+        <button aria-label="Altre viste" className={cn(SEGMENT, IDLE, 'px-2')} type="button">
           <MoreHorizontal className="h-3.5 w-3.5" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-64">
-        <DropdownMenuLabel className="text-muted-foreground text-xs">Views</DropdownMenuLabel>
+        <DropdownMenuLabel className="text-muted-foreground text-xs">Viste</DropdownMenuLabel>
         {listed.map((view) => {
           const pinned = isViewPinned(view, pinnedViews)
           return (
@@ -194,7 +194,7 @@ function MoreViewsMenu({
                     setViewPinned(view.id, !pinned)
                   }}
                   onPointerDown={(event) => event.stopPropagation()}
-                  title={pinned ? 'Unpin from the view bar' : 'Pin to the view bar'}
+                  title={pinned ? 'Togli dalla barra delle viste' : 'Fissa nella barra delle viste'}
                   type="button"
                 >
                   {pinned ? <PinOff className="h-3.5 w-3.5" /> : <Pin className="h-3.5 w-3.5" />}
@@ -211,7 +211,7 @@ function MoreViewsMenu({
               onSelect={() => setPaneView(pane, PLUGINS_VIEW_ID)}
             >
               <img alt="" className="h-4 w-4 object-contain" src="/icons/plugins.webp" />
-              <span>Browse plugins</span>
+              <span>Sfoglia i plugin</span>
             </DropdownMenuItem>
           </>
         )}

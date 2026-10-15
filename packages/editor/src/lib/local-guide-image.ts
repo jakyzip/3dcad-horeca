@@ -8,11 +8,11 @@ import {
 } from '@pascal-app/core'
 
 export function getGuideImageName(filename: string) {
-  return getAssetName(filename, 'Guide image')
+  return getAssetName(filename, 'Immagine di riferimento')
 }
 
 export function getScanName(filename: string) {
-  return getAssetName(filename, 'Scan')
+  return getAssetName(filename, 'Scansione')
 }
 
 function getAssetName(filename: string, fallback: string) {

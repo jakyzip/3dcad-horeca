@@ -78,7 +78,7 @@ export function separatorMergePlan(nodes: StructureNodes, separatorId: string): 
         {
           code: 'separator-room-count',
           nodeIds: [separatorId],
-          message: 'Select a separator between exactly two rooms.',
+          message: 'Seleziona un separatore tra esattamente due stanze.',
         },
       ],
     }

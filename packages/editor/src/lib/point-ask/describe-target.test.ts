@@ -22,7 +22,7 @@ describe('a room', () => {
       type: 'zone',
       kind: 'room',
       name: 'Kitchen',
-      size: '12.0 m²',
+      size: '12,0 m²',
       levelId: 'level_0',
     })
     expect(room.sizes).toEqual({ area: 12, width: 4, depth: 3 })
@@ -32,7 +32,7 @@ describe('a room', () => {
   test('a room with no name is "Room"', () => {
     const unnamed = { ...nodes.zone_kitchen, name: '' } as AnyNode
 
-    expect(describeTarget(unnamed, { ...nodes, zone_kitchen: unnamed }, metric).name).toBe('Room')
+    expect(describeTarget(unnamed, { ...nodes, zone_kitchen: unnamed }, metric).name).toBe('Stanza')
   })
 })
 
@@ -40,17 +40,17 @@ describe('a wall', () => {
   test('says which room it bounds, its length by its height, and the room it is in', () => {
     const wall = at('wall_north')
 
-    expect(wall).toMatchObject({ kind: 'wall', name: 'Wall · Kitchen', zoneId: 'zone_kitchen' })
+    expect(wall).toMatchObject({ kind: 'wall', name: 'Muro · Kitchen', zoneId: 'zone_kitchen' })
     expect(wall.sizes.length).toBeCloseTo(4, 6)
     expect(wall.sizes.thickness).toBeGreaterThan(0)
-    expect(wall.size).toBe(`4.00 × ${wall.sizes.height!.toFixed(2)} m`)
+    expect(wall.size).toBe(`4,00 × ${wall.sizes.height!.toFixed(2).replace('.', ',')} m`)
   })
 
   test('a wall bounding no room is just "Wall"', () => {
     const { zone_kitchen: _gone, ...without } = nodes
     const wall = describeTarget(nodes.wall_north as AnyNode, without as typeof nodes, metric)
 
-    expect(wall.name).toBe('Wall')
+    expect(wall.name).toBe('Muro')
     expect(wall.zoneId).toBeUndefined()
   })
 })
@@ -61,8 +61,8 @@ describe('a window and a door', () => {
 
     expect(window).toMatchObject({
       kind: 'window',
-      name: 'Window',
-      size: '1.20 × 1.40 m',
+      name: 'Finestra',
+      size: '1,20 × 1,40 m',
       parentId: 'wall_north',
       zoneId: 'zone_kitchen',
     })
@@ -74,7 +74,7 @@ describe('a window and a door', () => {
   test('a door stands on the floor: sill 0', () => {
     const door = at('door_front')
 
-    expect(door).toMatchObject({ kind: 'door', name: 'Door', size: '0.90 × 2.10 m' })
+    expect(door).toMatchObject({ kind: 'door', name: 'Porta', size: '0,90 × 2,10 m' })
     expect(door.sizes.sill).toBeCloseTo(0, 6)
   })
 })
@@ -86,7 +86,7 @@ describe('an item', () => {
     expect(sofa).toMatchObject({
       kind: 'item',
       name: 'Sofa',
-      size: '2.10 m wide',
+      size: '2,10 m di larghezza',
       zoneId: 'zone_kitchen',
     })
     expect(sofa.parentId).toBeUndefined()
@@ -102,7 +102,7 @@ describe('an item', () => {
       name: undefined,
       asset: { ...(nodes.item_sofa as never as { asset: object }).asset, name: '' },
     } as AnyNode
-    expect(describeTarget(bare, nodes, metric).name).toBe('Item')
+    expect(describeTarget(bare, nodes, metric).name).toBe('Oggetto')
   })
 })
 
@@ -110,9 +110,9 @@ describe('units', () => {
   test('imperial reads in feet, inches and square feet', () => {
     const imperial = { unit: 'imperial' } as const
 
-    expect(at('zone_kitchen', imperial).size).toBe('129.2 ft²')
+    expect(at('zone_kitchen', imperial).size).toBe('129,2 ft²')
     expect(at('window_north', imperial).size).toBe(`3'11" × 4'7"`)
-    expect(at('item_sofa', imperial).size).toBe(`6'11" wide`)
+    expect(at('item_sofa', imperial).size).toBe(`6'11" di larghezza`)
     // The context stays in metres whatever the viewer shows.
     expect(at('window_north', imperial).sizes.width).toBeCloseTo(1.2, 6)
   })
@@ -121,7 +121,7 @@ describe('units', () => {
     const mm = { unit: 'metric', metricNotation: 'millimeters' } as const
 
     expect(at('window_north', mm).size).toBe('1200 × 1400 mm')
-    expect(at('item_sofa', mm).size).toBe('2100 mm wide')
+    expect(at('item_sofa', mm).size).toBe('2100 mm di larghezza')
   })
 })
 

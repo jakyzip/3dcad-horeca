@@ -5,11 +5,11 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 export const DRAWING_TYPE_OPTIONS = [
-  { id: 'floor-plan', label: 'Floor plan' },
-  { id: 'foundation-plan', label: 'Foundation plan' },
-  { id: 'reflected-ceiling-plan', label: 'Reflected ceiling plan' },
-  { id: 'roof-plan', label: 'Roof plan' },
-  { id: 'site-plan', label: 'Site plan' },
+  { id: 'floor-plan', label: 'Pianta' },
+  { id: 'foundation-plan', label: 'Pianta delle fondazioni' },
+  { id: 'reflected-ceiling-plan', label: 'Pianta dei soffitti' },
+  { id: 'roof-plan', label: 'Pianta delle coperture' },
+  { id: 'site-plan', label: 'Planimetria del lotto' },
 ] as const satisfies readonly { id: ConstructionDrawingType; label: string }[]
 
 export type DrawingAnnotationLayoutOverride = {
@@ -31,8 +31,8 @@ export type DrawingAnnotationLayoutOverrides = Record<string, DrawingAnnotationL
 export type EditorDrawingType = Extract<ConstructionDrawingType, 'floor-plan' | 'site-plan'>
 
 export const EDITOR_DRAWING_TYPE_OPTIONS = [
-  { id: 'floor-plan', label: 'Floor plan' },
-  { id: 'site-plan', label: 'Site plan' },
+  { id: 'floor-plan', label: 'Pianta' },
+  { id: 'site-plan', label: 'Planimetria del lotto' },
 ] as const satisfies readonly { id: EditorDrawingType; label: string }[]
 
 type DrawingViewState = {

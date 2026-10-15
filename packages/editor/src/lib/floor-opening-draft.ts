@@ -42,9 +42,9 @@ import { sfxEmitter } from './sfx-bus'
 // or Delete returns to the room.
 
 export const OPENING_DRAFT_HANDLE = 'floor-opening-draft'
-export const OPENING_OUTSIDE_MESSAGE = 'Draw the opening inside the room.'
-export const OPENING_TOO_SMALL_MESSAGE = 'Too small for an opening.'
-export const OPENING_FAILED_MESSAGE = "Can't cut an opening here."
+export const OPENING_OUTSIDE_MESSAGE = 'Disegna l’apertura dentro la stanza.'
+export const OPENING_TOO_SMALL_MESSAGE = 'Troppo piccola per un’apertura.'
+export const OPENING_FAILED_MESSAGE = 'Qui non si può ritagliare un’apertura.'
 /** Smallest opening worth cutting, m². */
 const MIN_OPENING_AREA = 0.04
 

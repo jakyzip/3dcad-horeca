@@ -24,7 +24,7 @@ export function FollowPascalPill() {
           transition={reduced ? { duration: 0.12 } : { type: 'spring', bounce: 0, duration: 0.3 }}
           type="button"
         >
-          Resume following
+          Riprendi a seguire
         </motion.button>
       ) : null}
     </AnimatePresence>

@@ -85,7 +85,7 @@ export function collectElevationSnapTargets(
       id: `${source.levelId}:level`,
       elevation: 0,
       anchor: source.anchor,
-      label: 'Level',
+      label: 'Piano',
     },
   ]
   // Sculpted ground under the thing being dragged. A separate target rather than
@@ -104,7 +104,7 @@ export function collectElevationSnapTargets(
       id: `${source.levelId}:ground`,
       elevation: groundElevation,
       anchor: source.anchor,
-      label: 'Ground',
+      label: 'Terreno',
     })
   }
   const level = nodes[source.levelId as AnyNodeId]
@@ -122,14 +122,14 @@ export function collectElevationSnapTargets(
         id: `${node.id}:top`,
         elevation: top,
         anchor: center,
-        label: 'Slab top',
+        label: 'Estradosso solaio',
       })
       if (!node.recessed) {
         targets.push({
           id: `${node.id}:base`,
           elevation: top - (node.thickness ?? 0.05),
           anchor: center,
-          label: 'Slab underside',
+          label: 'Intradosso solaio',
         })
       }
       continue
@@ -140,7 +140,7 @@ export function collectElevationSnapTargets(
         id: `${node.id}:ceiling`,
         elevation: resolveCeilingHeight(node, nodes as Record<AnyNodeId, AnyNode>),
         anchor: polygonCenter(node.polygon),
-        label: 'Ceiling',
+        label: 'Soffitto',
       })
       continue
     }
@@ -152,13 +152,13 @@ export function collectElevationSnapTargets(
         id: `${node.id}:base`,
         elevation: base,
         anchor: center,
-        label: 'Wall base',
+        label: 'Base muro',
       })
       targets.push({
         id: `${node.id}:top`,
         elevation: base + getWallEffectiveHeightForNodes(node, nodes),
         anchor: center,
-        label: 'Wall top',
+        label: 'Sommità muro',
       })
       continue
     }
@@ -170,13 +170,13 @@ export function collectElevationSnapTargets(
         id: `${node.id}:base`,
         elevation: base,
         anchor: center,
-        label: 'Fence base',
+        label: 'Base recinzione',
       })
       targets.push({
         id: `${node.id}:top`,
         elevation: base + (node.height ?? 1.8),
         anchor: center,
-        label: 'Fence top',
+        label: 'Sommità recinzione',
       })
     }
   }

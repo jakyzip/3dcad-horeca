@@ -28,8 +28,8 @@ const end = (overrides: Partial<OpenWallEnd>): OpenWallEnd => ({
 
 describe('open wall end labels', () => {
   test('name the problem with the distance a person would say', () => {
-    expect(openWallEndLabel(end({ reason: 'gap', gap: 0.04 }), 'metric')).toBe('4 cm gap')
-    expect(openWallEndLabel(end({ reason: 'gap', gap: 0.004 }), 'metric')).toBe('4 mm gap')
+    expect(openWallEndLabel(end({ reason: 'gap', gap: 0.04 }), 'metric')).toBe('Distacco di 4 cm')
+    expect(openWallEndLabel(end({ reason: 'gap', gap: 0.004 }), 'metric')).toBe('Distacco di 4 mm')
     expect(
       openWallEndLabel(
         end({
@@ -39,11 +39,11 @@ describe('open wall end labels', () => {
         }),
         'metric',
       ),
-    ).toBe('Overlaps by 12 cm')
+    ).toBe('Si sovrappone di 12 cm')
     expect(openWallEndLabel(end({ reason: 'parallel', gap: 0.05 }), 'metric')).toBe(
-      'Parallel, 5 cm apart',
+      'Parallelo, a 5 cm di distanza',
     )
-    expect(openWallEndLabel(end({ reason: 'rejected' }), 'metric')).toBe('Not joined')
+    expect(openWallEndLabel(end({ reason: 'rejected' }), 'metric')).toBe('Non collegato')
     expect(openWallEndLabel(end({ reason: 'isolated' }), 'metric')).toBeNull()
   })
 
@@ -52,7 +52,7 @@ describe('open wall end labels', () => {
       end({ reason: 'gap', candidate: { wallId: 'wall_b', point: [0, 0.03], kind: 'endpoint' } }),
       'metric',
     )
-    expect(label).toBe('3 cm gap')
+    expect(label).toBe('Distacco di 3 cm')
   })
 
   test('imperial distances read in inches below a foot', () => {
@@ -85,7 +85,9 @@ describe('which open ends the floor plan marks', () => {
 
   test('a summary only when something is left to join', () => {
     expect(openWallEndsSummary(0)).toBeNull()
-    expect(openWallEndsSummary(2)).toBe("2 wall ends aren't joined — rooms can't close")
+    expect(openWallEndsSummary(2)).toBe(
+      '2 estremità di muri non sono collegate: le stanze non si chiudono',
+    )
   })
 })
 
@@ -163,13 +165,15 @@ test('Join emits one scene commit and one undo step, restoring both wall endpoin
     })
     expect(useScene.getState().nodes[target.id]).toEqual(target)
     commits.length = 0
-    expect(joinOpenWallEnd({ ...diagnostic, point: [1, 0] })).toBe('This wall end has changed')
+    expect(joinOpenWallEnd({ ...diagnostic, point: [1, 0] })).toBe(
+      'Questa estremità del muro è cambiata',
+    )
     expect(joinOpenWallEnd({ ...diagnostic, candidate: undefined })).toBe(
-      'The other wall has moved or is no longer available',
+      'L’altro muro è stato spostato o non c’è più',
     )
     expect(commits).toHaveLength(0)
     useScene.setState({ readOnly: true })
-    expect(joinOpenWallEnd(diagnostic)).toBe('This scene is read-only')
+    expect(joinOpenWallEnd(diagnostic)).toBe('Questa scena è di sola lettura')
     expect(useScene.getState().nodes[source.id]).toMatchObject({ end: source.end })
     expect(commits).toHaveLength(0)
   } finally {

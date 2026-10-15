@@ -37,7 +37,7 @@ export function JoinWallsPill({
         type="button"
       >
         <Link2 className="h-3.5 w-3.5" />
-        Join walls
+        Unisci i muri
       </button>
     </div>
   )

@@ -53,7 +53,7 @@ const useFloorplanMode = create<FloorplanModeState>()(
                   id: ++nextNoticeId,
                   kind: 'info',
                   message:
-                    'Default mode hides Expert annotations. Your saved work was not deleted.',
+                    'La modalità base nasconde le annotazioni della modalità Esperto. Il lavoro salvato non è stato eliminato.',
                 }
               : state.notice,
           }
@@ -71,7 +71,7 @@ const useFloorplanMode = create<FloorplanModeState>()(
           notice: {
             id: ++nextNoticeId,
             kind: 'switch-to-expert',
-            message: `${toolLabel} is available in Expert mode.`,
+            message: `${toolLabel} è disponibile nella modalità Esperto.`,
           },
         }),
       showNotice: (message) =>

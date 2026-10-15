@@ -161,7 +161,7 @@ function OpenWallEndMarker({
       />
       {/* Hit target larger than the dot so it is easy to catch at any zoom. */}
       <circle
-        aria-label={label ?? 'Wall end not joined'}
+        aria-label={label ?? 'Estremità del muro non collegata'}
         cx={x}
         cy={z}
         data-open-wall-end=""

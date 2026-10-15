@@ -156,7 +156,7 @@ export function FloorplanDimensionEditOverlay(): React.ReactElement | null {
     if (!target) return
     const nextLength = parseDimensionInput(draft, unit)
     if (nextLength === null) {
-      setError(`Cannot read "${draft.trim()}"`)
+      setError(`Valore non valido: "${draft.trim()}"`)
       return
     }
     const outcome = commitDimensionValue({ target, nextLength, unit })
@@ -238,7 +238,7 @@ export function commitDimensionValue(args: {
     // node can carry an override — anything else has nowhere to put it.
     const owner = nodes[args.target.ownerNodeId]
     if (owner?.type !== 'construction-dimension') {
-      return { ok: false, reason: `Not drivable — ${resolution.reason}` }
+      return { ok: false, reason: `Quota non modificabile: ${resolution.reason}` }
     }
     store.updateNode(args.target.ownerNodeId, {
       textOverride: formatScheduleLength(args.nextLength, args.unit ?? 'imperial'),
@@ -252,7 +252,7 @@ export function commitDimensionValue(args: {
     currentLength: args.target.value,
     nextLength: args.nextLength,
   })
-  if (!plan) return { ok: false, reason: 'Value would collapse the geometry' }
+  if (!plan) return { ok: false, reason: 'Con questo valore la geometria si annullerebbe' }
   if (plan.updates.length === 0) return { ok: true }
 
   const changes = plan.updates.map((update) => ({

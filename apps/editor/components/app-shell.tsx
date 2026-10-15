@@ -53,7 +53,7 @@ export function AppHeader({ children }: { children?: ReactNode }) {
     <header className="sticky top-0 z-20 border-border/50 border-b bg-sidebar">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-6">
         <Link
-          aria-label={`${PRODUCT_NAME} home`}
+          aria-label={`${PRODUCT_NAME}, pagina iniziale`}
           className="-mx-2 flex items-center rounded-lg px-2 py-1.5 transition-colors hover:bg-accent"
           href="/"
         >

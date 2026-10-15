@@ -29,7 +29,7 @@ import {
 // `WallRegionHit` and renders `preview`.
 
 export const WALL_PAINT_REGION_HANDLE = 'paint-region'
-export const PICK_MATERIAL_MESSAGE = 'Pick a material first'
+export const PICK_MATERIAL_MESSAGE = 'Prima scegli un materiale'
 
 /** The pointer on one wall face. `u` / `v` are raw (unsnapped) face coordinates. */
 export type WallRegionHit = {

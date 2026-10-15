@@ -34,7 +34,8 @@ export function useVisibleToolHints(hints: readonly ToolHint[] = []) {
   useSyncExternalStore(store.subscribe, store.getSnapshot, store.getSnapshot)
   return hints.filter(
     (hint) =>
-      !(hint.key === 'Shift' && hint.label === 'Cycle snapping mode') &&
+      // The snapping chip already teaches Shift; the label may be English or translated.
+      !(hint.key === 'Shift' && /snapping|aggancio/i.test(hint.label)) &&
       (hint.visible?.value() ?? true) &&
       (hint.minDraftVertices == null || draftVertexCount >= hint.minDraftVertices),
   )

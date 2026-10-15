@@ -17,9 +17,9 @@ export function formatMeasurement(
 type MeasurePart = 'height' | 'length' | 'thickness'
 
 const PART_ORDER: { key: MeasurePart; prefix: string }[] = [
-  { key: 'height', prefix: 'H' },
+  { key: 'height', prefix: 'A' },
   { key: 'length', prefix: 'L' },
-  { key: 'thickness', prefix: 'T' },
+  { key: 'thickness', prefix: 'S' },
 ]
 
 export interface DimensionPillPart {

@@ -8,7 +8,7 @@ import { resolvePublicUrl } from '@/lib/public-url'
 import { resolveAuthMode } from '@/lib/self-host-auth'
 
 export const dynamic = 'force-dynamic'
-export const metadata: Metadata = { title: `Settings · ${PRODUCT_NAME}` }
+export const metadata: Metadata = { title: `Impostazioni · ${PRODUCT_NAME}` }
 
 /** Server components see headers, not a Request; the auth helpers want the latter. */
 async function currentRequest(): Promise<Request> {
@@ -33,50 +33,54 @@ export default async function SettingsPage() {
           href="/"
         >
           <ArrowLeft className="h-4 w-4" />
-          All projects
+          Tutti i progetti
         </Link>
-        <h1 className="mt-4 mb-8 font-semibold text-lg">Settings</h1>
+        <h1 className="mt-4 mb-8 font-semibold text-lg">Impostazioni</h1>
 
         <div className="flex flex-col gap-6">
-          <Section title="Instance">
-            <Row label="Public URL">
+          <Section title="Installazione">
+            <Row label="URL pubblico">
               <code className="font-mono">{publicUrl}</code>
             </Row>
-            <Row label="Version">{process.env.PASCAL_RUNTIME_VERSION || 'development'}</Row>
-            <Row label="Data directory">
+            <Row label="Versione">{process.env.PASCAL_RUNTIME_VERSION || 'sviluppo'}</Row>
+            <Row label="Cartella dei dati">
               <code className="font-mono">{process.env.PASCAL_DATA_DIR || '~/.pascal/data'}</code>
             </Row>
           </Section>
 
-          <Section title="Connect an agent">
-            <Row label="Scene API">
+          <Section title="Collega un agente">
+            <Row label="API delle scene">
               <code className="font-mono">{publicUrl}/api/scenes</code>
             </Row>
-            <Row label="Agent token">{agentTokenConfigured ? 'Configured' : 'Not configured'}</Row>
+            <Row label="Token dell'agente">
+              {agentTokenConfigured ? 'Configurato' : 'Non configurato'}
+            </Row>
             <p className="px-4 py-3 text-muted-foreground text-xs">
               {agentTokenConfigured
-                ? 'Agents and scripts send the PASCAL_SCENE_API_TOKEN value in an Authorization: Bearer header.'
-                : 'Set PASCAL_SCENE_API_TOKEN on this instance, then send it in an Authorization: Bearer header from agents and scripts.'}
+                ? "Agenti e script inviano il valore di PASCAL_SCENE_API_TOKEN in un'intestazione Authorization: Bearer."
+                : "Imposta PASCAL_SCENE_API_TOKEN su questa installazione, poi invialo da agenti e script in un'intestazione Authorization: Bearer."}
             </p>
           </Section>
 
           {authMode === 'password' && (
             <Section title="Account">
               <div className="flex items-center justify-between gap-4 px-4 py-3">
-                <p className="text-muted-foreground text-sm">Signed in as the instance admin.</p>
+                <p className="text-muted-foreground text-sm">
+                  Hai effettuato l'accesso come amministratore.
+                </p>
                 <form action="/api/auth/logout" method="post">
                   <button className={SECONDARY_PILL} type="submit">
-                    Sign out
+                    Esci
                   </button>
                 </form>
               </div>
             </Section>
           )}
 
-          <Section title="About">
+          <Section title="Informazioni">
             <ExternalRow
               href="https://github.com/pascalorg/editor"
-              label="Based on pascalorg/editor (MIT)"
+              label="Basato su pascalorg/editor (MIT)"
             />
           </Section>
         </div>

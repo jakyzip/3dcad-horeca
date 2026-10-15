@@ -121,15 +121,15 @@ export function roomPivot(rings: Point[][]): Point {
 // resolve (crossings split, collinear walls merge), so only an opening in the
 // way, a deck resting on the room, or an open room can stop a placement.
 const TRANSFORM_MESSAGES: Record<string, string> = {
-  'open-room': 'Room is open',
-  'occupied-split': 'Door or window in the way · Alt slides it',
-  'deck-reference': 'A deck rests on this room',
+  'open-room': 'La stanza è aperta',
+  'occupied-split': 'Una porta o finestra è d’intralcio · Alt la fa scorrere',
+  'deck-reference': 'Su questa stanza poggia un pavimento esterno',
 }
 export function roomTransformMessage(code?: string, force = false) {
-  if (code === 'occupied-split' && force) return 'No room to slide the opening'
+  if (code === 'occupied-split' && force) return 'Non c’è spazio per far scorrere l’apertura'
   const mezzanine = mezzanineConflictMessage(code)
   if (mezzanine) return mezzanine
-  return (code && TRANSFORM_MESSAGES[code]) || "Can't place here"
+  return (code && TRANSFORM_MESSAGES[code]) || 'Qui non si può posizionare'
 }
 
 export function planRoomTransform(
@@ -169,7 +169,7 @@ export function planRoomTransform(
       moved ?? {
         code: 'overlaps-mezzanine',
         nodeIds: [zone.id],
-        message: 'Mezzanines must not overlap.',
+        message: 'I soppalchi non possono sovrapporsi.',
       },
     ],
   }

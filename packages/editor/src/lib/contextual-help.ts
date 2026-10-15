@@ -33,7 +33,9 @@ export function resolveRotateHandleHelpHints(altPressed: boolean): ContextualSho
   return [
     {
       keys: [ALT_KEY],
-      label: altPressed ? 'Rotating freely (no angle step)' : 'Hold to rotate freely',
+      label: altPressed
+        ? 'Rotazione libera (senza passo angolare)'
+        : 'Tieni premuto per ruotare liberamente',
       active: altPressed,
     },
   ]
@@ -77,7 +79,7 @@ export function resolveSelectModeHelpHints({
 
     hints.push({
       keys: [[COMMAND_KEY, SHIFT_KEY], LEFT_CLICK],
-      label: 'Add or remove objects from the selection',
+      label: 'Aggiungi o togli oggetti dalla selezione',
       active: true,
     })
     return hints
@@ -89,23 +91,23 @@ export function resolveSelectModeHelpHints({
   if (selectedCount > 1) {
     hints.push({
       keys: [LEFT_CLICK],
-      label: 'Click or drag the selection to move it as one',
+      label: 'Fai clic o trascina la selezione per spostarla tutta insieme',
     })
-    hints.push({ keys: [ROTATE_KEYS], label: 'Rotate the selection ±45°' })
+    hints.push({ keys: [ROTATE_KEYS], label: 'Ruota la selezione di ±45°' })
     hints.push({
       keys: [COMMAND_KEY, 'G'],
-      label: 'Group selection (session only)',
+      label: 'Raggruppa la selezione (solo in questa sessione)',
     })
     hints.push({
       keys: [COMMAND_KEY, SHIFT_KEY, 'G'],
-      label: 'Ungroup session selection',
+      label: 'Separa il gruppo della sessione',
     })
     hints.push({
       keys: [[COMMAND_KEY, SHIFT_KEY], LEFT_CLICK],
-      label: 'Add or remove objects from the selection',
+      label: 'Aggiungi o togli oggetti dalla selezione',
       active: commandPressed || shiftPressed,
     })
-    hints.push({ keys: [ESC_KEY], label: 'Clear the selection (or click outside)' })
+    hints.push({ keys: [ESC_KEY], label: 'Annulla la selezione (o fai clic fuori)' })
     return hints
   }
 
@@ -115,12 +117,18 @@ export function resolveSelectModeHelpHints({
   // detaches the joint mid-drag; a fitting's cluster adds rotate arcs, with
   // R / T (and Alt to switch axis) for keyboard rotation.
   if (mepSelection === 'run') {
-    hints.push({ keys: [CLICK], label: 'Click a handle dot to show move arrows' })
-    hints.push({ keys: [ALT_KEY], label: 'Detach the joint while dragging an arrow' })
+    hints.push({
+      keys: [CLICK],
+      label: 'Fai clic su un punto di controllo per mostrare le frecce di spostamento',
+    })
+    hints.push({ keys: [ALT_KEY], label: 'Stacca il giunto mentre trascini una freccia' })
   } else if (mepSelection === 'fitting') {
-    hints.push({ keys: [CLICK], label: 'Click the handle dot to show move + rotate handles' })
-    hints.push({ keys: [ROTATE_KEYS], label: 'Rotate ±45°' })
-    hints.push({ keys: [ALT_KEY], label: 'Switch the rotation axis (Y → X → Z)' })
+    hints.push({
+      keys: [CLICK],
+      label: 'Fai clic sul punto di controllo per mostrare i comandi di spostamento e rotazione',
+    })
+    hints.push({ keys: [ROTATE_KEYS], label: 'Ruota di ±45°' })
+    hints.push({ keys: [ALT_KEY], label: 'Cambia l’asse di rotazione (Y → X → Z)' })
   }
 
   // The rows are the same whatever modifier is held — guides/snapping are
@@ -130,28 +138,28 @@ export function resolveSelectModeHelpHints({
   if (hasMovableSelection) {
     hints.push({
       keys: [LEFT_CLICK],
-      label: 'Drag selected movable object',
+      label: 'Trascina l’oggetto selezionato',
     })
   }
 
   if (hasRotatableSelection) {
     hints.push({
       keys: [COMMAND_KEY, RIGHT_CLICK],
-      label: 'Drag left or right to rotate selected object',
+      label: 'Trascina a sinistra o a destra per ruotare l’oggetto selezionato',
     })
   }
 
   if (hasOpeningRadiusSelection) {
     hints.push({
       keys: [SHIFT_KEY],
-      label: 'Adjust one side’s corner radius',
+      label: 'Regola il raggio dell’angolo su un solo lato',
       active: shiftPressed,
     })
   }
 
   hints.push({
     keys: [[COMMAND_KEY, SHIFT_KEY], LEFT_CLICK],
-    label: 'Add or remove objects from the selection',
+    label: 'Aggiungi o togli oggetti dalla selezione',
     active: commandPressed || shiftPressed,
   })
 

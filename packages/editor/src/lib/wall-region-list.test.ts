@@ -35,26 +35,26 @@ function nodesOf(walls: WallNode[]) {
 
 describe('bounds text', () => {
   test('reads each axis in the viewer unit; absent bounds run to the edge', () => {
-    expect(formatRegionBounds({ v1: 0.9 }, 'metric')).toBe('0–0.90 m high')
-    expect(formatRegionBounds({ u0: 1.2, u1: 2.4 }, 'metric')).toBe('1.20–2.40 m along')
+    expect(formatRegionBounds({ v1: 0.9 }, 'metric')).toBe('0–0,90 m in altezza')
+    expect(formatRegionBounds({ u0: 1.2, u1: 2.4 }, 'metric')).toBe('1,20–2,40 m in lunghezza')
     expect(formatRegionBounds({ u0: 1.2, u1: 2.4, v0: 0.9, v1: 2.1 }, 'metric')).toBe(
-      '1.20–2.40 m along, 0.90–2.10 m high',
+      '1,20–2,40 m in lunghezza, 0,90–2,10 m in altezza',
     )
-    expect(formatRegionBounds({ v0: 0.9 }, 'metric')).toBe('Above 0.90 m')
-    expect(formatRegionBounds({ u0: 1.5 }, 'metric')).toBe('From 1.50 m along')
-    expect(formatRegionBounds({}, 'metric')).toBe('Whole face')
+    expect(formatRegionBounds({ v0: 0.9 }, 'metric')).toBe('Sopra 0,90 m')
+    expect(formatRegionBounds({ u0: 1.5 }, 'metric')).toBe('Da 1,50 m in lunghezza')
+    expect(formatRegionBounds({}, 'metric')).toBe('Tutta la faccia')
   })
 
   test('imperial converts to feet', () => {
-    expect(formatRegionBounds({ v1: 0.9144 }, 'imperial')).toBe('0–3.00 ft high')
+    expect(formatRegionBounds({ v1: 0.9144 }, 'imperial')).toBe('0–3,00 ft in altezza')
   })
 })
 
 describe('face labels', () => {
   test('a lone wall reads Face A / Face B', () => {
     const lone = wall('wall_lone', [0, 0], [4, 0])
-    expect(wallRegionFaceLabels(nodesOf([lone]), lone.id)).toEqual({ a: 'Face A', b: 'Face B' })
-    expect(wallRegionFaceLabels({}, 'wall_missing')).toEqual({ a: 'Face A', b: 'Face B' })
+    expect(wallRegionFaceLabels(nodesOf([lone]), lone.id)).toEqual({ a: 'Faccia A', b: 'Faccia B' })
+    expect(wallRegionFaceLabels({}, 'wall_missing')).toEqual({ a: 'Faccia A', b: 'Faccia B' })
   })
 
   test('a room wall names its inside and outside faces', () => {
@@ -65,9 +65,9 @@ describe('face labels', () => {
       wall('wall_w', [0, 3], [0, 0]),
     ]
     const labels = wallRegionFaceLabels(nodesOf(walls), 'wall_s')
-    expect(new Set(Object.values(labels))).toEqual(new Set(['Inside', 'Outside']))
+    expect(new Set(Object.values(labels))).toEqual(new Set(['Interno', 'Esterno']))
     // Drawn counter-clockwise, the room sits on the left: face a.
-    expect(labels.a).toBe('Inside')
+    expect(labels.a).toBe('Interno')
   })
 })
 
@@ -80,9 +80,9 @@ describe('finish', () => {
   })
 
   test('unknown refs fall back to a neutral swatch', () => {
-    expect(describeRegionFinish('scene:missing', {}).name).toBe('Custom finish')
-    expect(describeRegionFinish('not-a-ref', {}).name).toBe('Custom finish')
-    expect(describeRegionFinish('library:no-such-material', {}).name).toBe('Library finish')
+    expect(describeRegionFinish('scene:missing', {}).name).toBe('Finitura personalizzata')
+    expect(describeRegionFinish('not-a-ref', {}).name).toBe('Finitura personalizzata')
+    expect(describeRegionFinish('library:no-such-material', {}).name).toBe('Finitura di libreria')
   })
 })
 
@@ -94,8 +94,8 @@ describe('rows', () => {
     ]
     const rows = wallRegionRows({ faceRegions }, { a: 'Inside', b: 'Outside' }, materials, 'metric')
     expect(rows.map(({ id, faceLabel, boundsText }) => ({ id, faceLabel, boundsText }))).toEqual([
-      { id: 'r2', faceLabel: 'Inside', boundsText: '1.20–2.40 m along' },
-      { id: 'r1', faceLabel: 'Outside', boundsText: '0–0.90 m high' },
+      { id: 'r2', faceLabel: 'Inside', boundsText: '1,20–2,40 m in lunghezza' },
+      { id: 'r1', faceLabel: 'Outside', boundsText: '0–0,90 m in altezza' },
     ])
     expect(rows[0]!.finish.name).toBe('Sage green')
   })
@@ -110,10 +110,10 @@ describe('rows', () => {
     const labels = { a: 'Face A', b: 'Face B' }
     expect(wallRegionCapNotice({ faceRegions: full('a').slice(1) }, labels)).toBeNull()
     expect(wallRegionCapNotice({ faceRegions: full('b') }, labels)).toBe(
-      `Face B is full: up to ${WALL_FACE_REGION_LIMIT} regions per face`,
+      `Face B: raggiunto il limite di ${WALL_FACE_REGION_LIMIT} zone per faccia`,
     )
     expect(wallRegionCapNotice({ faceRegions: [...full('a'), ...full('b')] }, labels)).toBe(
-      `Up to ${WALL_FACE_REGION_LIMIT} regions per face`,
+      `Al massimo ${WALL_FACE_REGION_LIMIT} zone per faccia`,
     )
   })
 })

@@ -8,17 +8,17 @@ import {
 import { formatLinearMeasurement, type LinearUnit } from '../measurements'
 
 const JOIN_REFUSALS: Record<Extract<WallJoinResult, { ok: false }>['reason'], string> = {
-  'covered-existing-wall': 'An existing wall already covers this span',
-  'segment-too-short': 'Joining would make the wall too short',
-  'stale-end': 'This wall end has changed',
-  'no-target': 'The other wall has moved or is no longer available',
-  'attachment-outside-wall': 'A door or window is in the way',
-  'attachment-straddles-junction': 'A door or window is in the way',
+  'covered-existing-wall': 'Questo tratto è già coperto da un muro',
+  'segment-too-short': 'Unendolo il muro diventerebbe troppo corto',
+  'stale-end': 'Questa estremità del muro è cambiata',
+  'no-target': 'L’altro muro è stato spostato o non c’è più',
+  'attachment-outside-wall': 'Una porta o una finestra è d’intralcio',
+  'attachment-straddles-junction': 'Una porta o una finestra è d’intralcio',
 }
 
 export function joinOpenWallEnd(end: OpenWallEnd): string | null {
   const scene = useScene.getState()
-  if (scene.readOnly) return 'This scene is read-only'
+  if (scene.readOnly) return 'Questa scena è di sola lettura'
   const result = planJoinOpenWallEnd(scene.nodes, end)
   if (!result.ok) return JOIN_REFUSALS[result.reason]
   runAsSingleSceneHistoryStep(useScene, () =>
@@ -55,19 +55,19 @@ export function openWallEndLabel(end: OpenWallEnd, unit: LinearUnit): string | n
   const gap = end.gap ?? candidateDistance(end)
   switch (end.reason) {
     case 'gap':
-      return gap === null ? 'Not joined' : `${formatOpenWallEndDistance(gap, unit)} gap`
+      return gap === null ? 'Non collegato' : `Distacco di ${formatOpenWallEndDistance(gap, unit)}`
     case 'crosses': {
       const overlap = candidateDistance(end)
       return overlap === null
-        ? 'Walls cross'
-        : `Overlaps by ${formatOpenWallEndDistance(overlap, unit)}`
+        ? 'I muri si incrociano'
+        : `Si sovrappone di ${formatOpenWallEndDistance(overlap, unit)}`
     }
     case 'parallel':
       return gap === null
-        ? 'Runs alongside a wall'
-        : `Parallel, ${formatOpenWallEndDistance(gap, unit)} apart`
+        ? 'Corre accanto a un muro'
+        : `Parallelo, a ${formatOpenWallEndDistance(gap, unit)} di distanza`
     case 'rejected':
-      return 'Not joined'
+      return 'Non collegato'
     case 'isolated':
       return null
   }
@@ -157,6 +157,6 @@ export function collapseMutualOpenWallEnds(
 export function openWallEndsSummary(joinableCount: number): string | null {
   if (joinableCount === 0) return null
   return joinableCount === 1
-    ? "1 wall end isn't joined — a room can't close"
-    : `${joinableCount} wall ends aren't joined — rooms can't close`
+    ? '1 estremità di muro non è collegata: la stanza non si chiude'
+    : `${joinableCount} estremità di muri non sono collegate: le stanze non si chiudono`
 }

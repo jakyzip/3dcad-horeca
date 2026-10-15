@@ -58,10 +58,10 @@ function nodeOffersRoomScope(node: AnyNode): boolean {
 const isFloorPlate = (node: AnyNode): boolean => node.type === 'slab' && node.boundary === 'auto'
 
 const FOOTPRINT_FACE_LABELS: Record<string, string> = {
-  edge: 'Floor edge · all around this floor',
-  riser: 'Riser · all around this floor',
-  underside: 'Underside · all of this floor',
-  foundation: 'Foundation · all around this floor',
+  edge: 'Bordo del pavimento · tutto intorno',
+  riser: 'Alzata · tutto intorno al pavimento',
+  underside: 'Lato inferiore · tutto il pavimento',
+  foundation: 'Fondazione · tutto intorno al pavimento',
 }
 
 /**
@@ -79,10 +79,13 @@ export function platePaintScopes(
   if (parseFloorStepRole(role))
     return {
       scopes: ['single', 'room'],
-      labels: { single: 'This step', room: 'All steps in this room' },
+      labels: { single: 'Questo gradino', room: 'Tutti i gradini della stanza' },
     }
   if (parseRoomFinishRole(role))
-    return { scopes: ['single', 'room'], labels: { single: 'This surface', room: 'Whole room' } }
+    return {
+      scopes: ['single', 'room'],
+      labels: { single: 'Questa superficie', room: 'Tutta la stanza' },
+    }
   const fixed = node.plateRole === 'base' ? FOOTPRINT_FACE_LABELS[role] : undefined
   return { scopes: ['single'], labels: fixed ? { single: fixed } : {} }
 }
@@ -137,13 +140,13 @@ export function paintScopeLabel(scope: PaintScope, info: PaintHoverInfo): string
   if (own) return own
   switch (scope) {
     case 'object':
-      return `Whole ${info.nodeNoun}`
+      return 'Tutto l’oggetto'
     case 'matching':
-      return 'All matching'
+      return 'Tutti quelli uguali'
     case 'room':
-      return 'Room'
+      return 'Stanza'
     default:
-      return info.slotLabel || 'This surface'
+      return info.slotLabel || 'Questa superficie'
   }
 }
 
@@ -164,7 +167,7 @@ export function nodeSlotRoles(node: AnyNode, meshSlotRoles: (node: AnyNode) => s
  * "Face" (the narrow scope), a trim its own name, anything else its slot.
  */
 export function paintSurfaceLabel(node: AnyNode, role: string): string {
-  if (node.type === 'wall' && !WALL_TRIM_ROLE.test(role)) return 'Face'
+  if (node.type === 'wall' && !WALL_TRIM_ROLE.test(role)) return 'Faccia'
   return slotDisplayLabel(node, role)
 }
 
@@ -673,7 +676,7 @@ export function commitPaintScopeFanout(
       const id = generateSceneMaterialId()
       newSceneMaterial = {
         id,
-        name: `Material ${Object.keys(state.materials).length + 1}`,
+        name: `Materiale ${Object.keys(state.materials).length + 1}`,
         material,
       }
       ref = toSceneMaterialRef(id)

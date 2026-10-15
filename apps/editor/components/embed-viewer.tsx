@@ -212,8 +212,8 @@ class ViewerErrorBoundary extends Component<{ children: ReactNode }, { failed: b
     return (
       <div className="flex h-full w-full items-center justify-center p-6 text-center">
         <p className="max-w-sm text-neutral-600 text-sm">
-          This project could not be shown in 3D here. Try a browser with hardware acceleration
-          turned on.
+          Non è possibile mostrare questo progetto in 3D qui. Prova con un browser con
+          l&apos;accelerazione hardware attiva.
         </p>
       </div>
     )

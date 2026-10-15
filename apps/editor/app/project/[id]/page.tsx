@@ -23,12 +23,12 @@ export default async function ScenePage({ params }: { params: Promise<{ id: stri
   if (!scene) {
     return (
       <AppCard>
-        <h1 className="mt-6 font-semibold text-lg">Project not found</h1>
+        <h1 className="mt-6 font-semibold text-lg">Progetto non trovato</h1>
         <p className="mt-1 text-muted-foreground text-sm">
-          There is no project with id <code className="font-mono">{id}</code> on this editor.
+          Su questo editor non esiste un progetto con id <code className="font-mono">{id}</code>.
         </p>
         <Link className={cn(PRIMARY_PILL, 'mt-5')} href="/">
-          All projects
+          Tutti i progetti
         </Link>
       </AppCard>
     )

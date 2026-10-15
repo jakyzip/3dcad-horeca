@@ -39,11 +39,11 @@ export function ItemHelper({
       notice={notice}
       hints={[
         // Where a click does something else (joining a corner), that row says so instead.
-        ...(replacesPlace ? [] : [{ keys: ['Left click'], label: 'Place' }]),
+        ...(replacesPlace ? [] : [{ keys: ['Left click'], label: 'Posiziona' }]),
         ...extraHints,
-        { keys: ['R', 'T'], label: 'Rotate' },
-        ...(showForce ? [{ keys: ['Alt'], label: 'Force place' }] : []),
-        { keys: [showEsc ? 'Esc' : 'Right click'], label: 'Cancel' },
+        { keys: ['R', 'T'], label: 'Ruota' },
+        ...(showForce ? [{ keys: ['Alt'], label: 'Forza il posizionamento' }] : []),
+        { keys: [showEsc ? 'Esc' : 'Right click'], label: 'Annulla' },
       ]}
       snapContext={snapContext}
       title={title}

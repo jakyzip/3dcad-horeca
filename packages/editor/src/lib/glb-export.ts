@@ -127,7 +127,7 @@ export function withExportDeadline<Result>(
       onTimeout?.()
       reject(
         new Error(
-          `${format} export timed out after ${Math.max(1, Math.round(timeoutMs / 1000))} s. Try again with “Visible nodes only” to shrink the scene, or reload the page if it keeps failing.`,
+          `L’esportazione ${format} ha superato il tempo massimo di ${Math.max(1, Math.round(timeoutMs / 1000))} s. Riprova esportando solo gli elementi visibili per alleggerire la scena, oppure ricarica la pagina se il problema si ripete.`,
         ),
       )
     }, timeoutMs)
@@ -648,7 +648,7 @@ function replaceBakeGeometrySync(preparation: SceneExportPreparation): void {
     if (!cloned || !isDescendantOf(cloned, preparation.scene)) continue
     if (preparation.options.requireSynchronousBake && builders.async && !builders.sync) {
       throw new Error(
-        `Node kind "${node.type}" can only bake geometry asynchronously. Choose GLB/USDZ or exclude it from the export.`,
+        `Gli elementi di tipo "${node.type}" possono generare la geometria solo in modo asincrono. Scegli GLB/USDZ oppure escludili dall’esportazione.`,
       )
     }
     if (!builders.sync) continue

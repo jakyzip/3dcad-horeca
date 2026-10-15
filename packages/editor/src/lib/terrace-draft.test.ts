@@ -101,7 +101,7 @@ describe('terrace tool', () => {
     if (!('plan' in result)) return
     applyRoomPlan(result.plan)
     const terrace = nodes()[result.plan.zoneId] as ZoneNode
-    expect(terrace).toMatchObject({ name: 'Terrace', spaceRole: 'room', hasCeiling: false })
+    expect(terrace).toMatchObject({ name: 'Terrazza', spaceRole: 'room', hasCeiling: false })
     expect(Object.values(nodes()).filter((n) => n.type === 'wall')).toHaveLength(walls)
     // Three new sides are separators; the fourth is the house wall it shares.
     expect(Object.values(nodes()).filter((n) => n.type === 'separator')).toHaveLength(3)
@@ -129,7 +129,7 @@ describe('terrace tool', () => {
       zones()
         .map((zone) => zone.name)
         .sort(),
-    ).toEqual(['Living room', 'Terrace'])
+    ).toEqual(['Living room', 'Terrazza'])
     expect(history()).toBe(1)
     expect(useTerraceDraft.getState().host).not.toBeNull()
     // An outline over the house is refused in place; nothing is written.

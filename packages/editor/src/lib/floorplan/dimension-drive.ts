@@ -147,11 +147,11 @@ export type DimensionDriveQuery = {
 export function resolveDimensionDrive(query: DimensionDriveQuery): DimensionDriveResolution {
   const { nodes, ownerNodeId } = query
   const owner = nodes[ownerNodeId]
-  if (!owner) return { drivable: false, reason: 'unknown node' }
-  if (isNodeLocked(owner)) return { drivable: false, reason: 'node is locked' }
+  if (!owner) return { drivable: false, reason: 'elemento sconosciuto' }
+  if (isNodeLocked(owner)) return { drivable: false, reason: 'l’elemento è bloccato' }
 
   const dimDirection = unit(subtract(query.end, query.start))
-  if (!dimDirection) return { drivable: false, reason: 'degenerate dimension' }
+  if (!dimDirection) return { drivable: false, reason: 'quota degenere' }
 
   if (owner.type === 'door' || owner.type === 'window') {
     return resolveOpeningDrive(query, owner as DoorNode | WindowNode, dimDirection)
@@ -162,7 +162,7 @@ export function resolveDimensionDrive(query: DimensionDriveQuery): DimensionDriv
   if (owner.type === 'construction-dimension') {
     return resolveConstructionDimensionDrive(query, owner, dimDirection)
   }
-  return { drivable: false, reason: `${owner.type} dimensions are not drivable` }
+  return { drivable: false, reason: `le quote di tipo ${owner.type} non sono modificabili` }
 }
 
 function resolveWallDrive(
@@ -171,12 +171,12 @@ function resolveWallDrive(
   dimDirection: DimensionPlanPoint,
 ): DimensionDriveResolution {
   const wallDirection = unit(subtract(wall.end, wall.start))
-  if (!wallDirection) return { drivable: false, reason: 'degenerate wall' }
+  if (!wallDirection) return { drivable: false, reason: 'muro degenere' }
   if (Math.abs(cross(wallDirection, dimDirection)) > PARALLEL_TOLERANCE) {
-    return { drivable: false, reason: 'dimension is not along the wall' }
+    return { drivable: false, reason: 'la quota non è lungo il muro' }
   }
   if ((wall as { curvature?: number }).curvature) {
-    return { drivable: false, reason: 'curved walls are not drivable yet' }
+    return { drivable: false, reason: 'i muri curvi non sono ancora modificabili' }
   }
 
   // Prefer moving an opening: it is the cheaper, more local edit and it is
@@ -198,11 +198,11 @@ function resolveWallDrive(
   // Otherwise the wall's own length: the endpoint the dimension runs TOWARD
   // moves, the one it starts from is the datum.
   const endpoint = nearestWallEndpoint(wall, query.end)
-  if (!endpoint) return { drivable: false, reason: 'dimension does not end on this wall' }
+  if (!endpoint) return { drivable: false, reason: 'la quota non termina su questo muro' }
   const fixed = endpoint === 'end' ? wall.start : wall.end
   const moving = endpoint === 'end' ? wall.end : wall.start
   const direction = unit(subtract(moving as DimensionPlanPoint, fixed as DimensionPlanPoint))
-  if (!direction) return { drivable: false, reason: 'degenerate wall' }
+  if (!direction) return { drivable: false, reason: 'muro degenere' }
   return {
     drivable: true,
     target: { kind: 'wall-endpoint', wallId: wall.id as AnyNodeId, endpoint, direction },
@@ -215,12 +215,13 @@ function resolveOpeningDrive(
   dimDirection: DimensionPlanPoint,
 ): DimensionDriveResolution {
   const wall = opening.wallId ? query.nodes[opening.wallId] : undefined
-  if (wall?.type !== 'wall') return { drivable: false, reason: 'opening has no host wall' }
-  if (isNodeLocked(wall)) return { drivable: false, reason: 'host wall is locked' }
+  if (wall?.type !== 'wall')
+    return { drivable: false, reason: 'l’apertura non ha un muro che la ospita' }
+  if (isNodeLocked(wall)) return { drivable: false, reason: 'il muro che la ospita è bloccato' }
   const wallDirection = unit(subtract((wall as WallNode).end, (wall as WallNode).start))
-  if (!wallDirection) return { drivable: false, reason: 'degenerate wall' }
+  if (!wallDirection) return { drivable: false, reason: 'muro degenere' }
   if (Math.abs(cross(wallDirection, dimDirection)) > PARALLEL_TOLERANCE) {
-    return { drivable: false, reason: 'dimension is not along the host wall' }
+    return { drivable: false, reason: 'la quota non è lungo il muro che la ospita' }
   }
   if (measuresOpeningWidth(query, opening, wall as WallNode, wallDirection)) {
     return {
@@ -275,7 +276,8 @@ function resolveConstructionDimensionDrive(
     const reference = (anchor as { reference?: { nodeId?: string } }).reference
     const referenced = reference?.nodeId ? query.nodes[reference.nodeId] : undefined
     if (!referenced) continue
-    if (isNodeLocked(referenced)) return { drivable: false, reason: 'anchored node is locked' }
+    if (isNodeLocked(referenced))
+      return { drivable: false, reason: 'l’elemento agganciato è bloccato' }
     if (referenced.type === 'door' || referenced.type === 'window') {
       return resolveOpeningDrive(query, referenced as DoorNode | WindowNode, dimDirection)
     }
@@ -283,7 +285,7 @@ function resolveConstructionDimensionDrive(
       return resolveWallDrive(query, referenced as WallNode, dimDirection)
     }
   }
-  return { drivable: false, reason: 'dimension anchors are free points' }
+  return { drivable: false, reason: 'gli estremi della quota sono punti liberi' }
 }
 
 function wallOpenings(

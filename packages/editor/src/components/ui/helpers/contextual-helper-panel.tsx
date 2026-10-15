@@ -39,6 +39,27 @@ const FLOATING_CLASS = 'fixed top-1/2 right-4 z-40 -translate-y-1/2'
 
 const TOKEN_CLASS = 'h-5 px-1.5 text-[10px]'
 
+// Hint keys are shared identifiers (kinds compare them, e.g. `key === 'Shift'`),
+// so they are translated only when printed.
+const KEY_LABELS: Record<string, string> = {
+  Enter: 'Invio',
+  Escape: 'Esc',
+  Space: 'Spazio',
+  Delete: 'Canc',
+  Drag: 'Trascina',
+  Hover: 'Passa sopra',
+  Release: 'Rilascia',
+  Wheel: 'Rotella',
+  Option: 'Opzione',
+  'Click again': 'Clic di nuovo',
+  'Double click': 'Doppio clic',
+  'Alt + drag': 'Alt + trascina',
+}
+
+function HintKey({ className, value }: { className?: string; value: string }) {
+  return <ShortcutToken className={className} displayValue={KEY_LABELS[value]} value={value} />
+}
+
 // Each row spans both columns as its own subgrid, inheriting the container's
 // tracks so its key/label cells land on the shared column lines.
 const ROW_CLASS = 'col-span-2 grid grid-cols-subgrid'
@@ -72,7 +93,7 @@ function ShortcutSequence({
                 {altIndex > 0 ? (
                   <span className="text-[9px] text-muted-foreground/70">/</span>
                 ) : null}
-                <ShortcutToken
+                <HintKey
                   className={cn(TOKEN_CLASS, active &&
                       'border-foreground bg-foreground text-background shadow-sm dark:border-white dark:bg-white dark:text-black')}
                   value={alternative}
@@ -80,7 +101,7 @@ function ShortcutSequence({
               </Fragment>
             ))
           ) : (
-            <ShortcutToken
+            <HintKey
               className={cn(TOKEN_CLASS, active &&
                       'border-foreground bg-foreground text-background shadow-sm dark:border-white dark:bg-white dark:text-black')}
               value={entry}
@@ -121,7 +142,7 @@ function ChipRow({
   const body = (
     <>
       <span className={KEY_CELL_CLASS}>
-        {shortcut ? <ShortcutToken className={TOKEN_CLASS} value={shortcut} /> : null}
+        {shortcut ? <HintKey className={TOKEN_CLASS} value={shortcut} /> : null}
       </span>
       <span className="flex min-w-0 items-center gap-1.5 text-muted-foreground text-xs">
         {icon ? <Icon className="shrink-0" height={13} icon={icon} width={13} /> : null}
@@ -169,10 +190,10 @@ const SNAPPING_MODE_ICONS = {
 } as const
 
 const SNAPPING_MODE_LABELS = {
-  grid: 'Grid',
-  lines: 'Lines',
-  angles: 'Angles',
-  off: 'Off',
+  grid: 'Griglia',
+  lines: 'Linee',
+  angles: 'Angoli',
+  off: 'Disattivato',
 } as const
 
 const GRID_SNAP_STEPS: GridSnapStep[] = [0.5, 0.25, 0.1, 0.05]
@@ -195,28 +216,28 @@ function SnappingChips({ context }: { context: SnapContext }) {
   return (
     <>
       <ChipRow
-        ariaLabel={`Snapping: ${SNAPPING_MODE_LABELS[snappingMode]}`}
+        ariaLabel={`Aggancio: ${SNAPPING_MODE_LABELS[snappingMode]}`}
         guideTarget="snap-mode"
         icon={SNAPPING_MODE_ICONS[snappingMode]}
-        label={`Snapping: ${SNAPPING_MODE_LABELS[snappingMode]}`}
+        label={`Aggancio: ${SNAPPING_MODE_LABELS[snappingMode]}`}
         onClick={() => {
           setSnappingMode(context, cycleSnappingModeIn(context, snappingMode))
           sfxEmitter.emit('sfx:grid-snap')
         }}
         shortcut="Shift"
-        tooltip="Snapping mode — click or press Shift to cycle"
+        tooltip="Modalità di aggancio: fai clic o premi Maiusc per cambiare"
       />
       {gridActive ? (
         <ChipRow
-          ariaLabel={`Grid step: ${gridSnapStep.toFixed(2)} m`}
+          ariaLabel={`Passo della griglia: ${gridSnapStep.toFixed(2).replace('.', ',')} m`}
           guideTarget="snap-grid-step"
-          label={`Grid: ${gridSnapStep.toFixed(2)} m`}
+          label={`Griglia: ${gridSnapStep.toFixed(2).replace('.', ',')} m`}
           onClick={() => {
             setGridSnapStep(nextGridSnapStep(gridSnapStep))
             sfxEmitter.emit('sfx:grid-snap')
           }}
           shortcut="Ctrl"
-          tooltip="Grid step — click or tap Ctrl to cycle"
+          tooltip="Passo della griglia: fai clic o premi Ctrl per cambiare"
         />
       ) : null}
     </>
@@ -252,12 +273,12 @@ function ContinuationChip({ context }: { context: ContinuationContext }) {
 
   return (
     <ChipRow
-      ariaLabel={`Continuation: ${label}`}
+      ariaLabel={`Inserimento: ${label}`}
       icon={icon}
       label={label}
       onClick={() => cycleContinuation(context)}
       shortcut="C"
-      tooltip="Continuation — click or press C to cycle"
+      tooltip="Inserimento: fai clic o premi C per cambiare"
     />
   )
 }
@@ -270,7 +291,7 @@ function FenceContinuationChips() {
   const isCurved = mode === 'curved'
   const isFreehand = mode === 'freehand'
   const straightMode = isCurved ? 'continuous' : mode
-  const typeLabel = isFreehand ? 'Type: Freehand' : isCurved ? 'Type: Curved' : 'Type: Straight'
+  const typeLabel = isFreehand ? 'Tipo: a mano libera' : isCurved ? 'Tipo: curva' : 'Tipo: dritta'
   const typeIcon = isFreehand ? 'lucide:line-squiggle' : isCurved ? 'lucide:spline' : 'lucide:minus'
   const nextType =
     mode === 'continuous' || mode === 'single'
@@ -282,18 +303,18 @@ function FenceContinuationChips() {
   return (
     <>
       <ChipRow
-        ariaLabel={`Fence type: ${typeLabel.replace('Type: ', '')}`}
+        ariaLabel={`Tipo di recinzione: ${typeLabel.replace('Tipo: ', '')}`}
         icon={typeIcon}
         label={typeLabel}
         onClick={() => setContinuation('fence', nextType)}
         shortcut="T"
-        tooltip="Fence type — click or press T to switch between straight, curved and freehand"
+        tooltip="Tipo di recinzione: fai clic o premi T per passare tra dritta, curva e a mano libera"
       />
       <ChipRow
-        ariaLabel={`Fence continuation: ${straightMode === 'single' ? 'Single' : 'Continuous'}`}
+        ariaLabel={`Inserimento recinzione: ${straightMode === 'single' ? 'singola' : 'continua'}`}
         disabled={isCurved || isFreehand}
         icon={straightMode === 'single' ? 'lucide:minus' : 'lucide:waypoints'}
-        label={straightMode === 'single' ? 'Straight: Single' : 'Straight: Continuous'}
+        label={straightMode === 'single' ? 'Dritta: singola' : 'Dritta: continua'}
         onClick={
           isCurved || isFreehand
             ? undefined
@@ -302,8 +323,8 @@ function FenceContinuationChips() {
         shortcut="C"
         tooltip={
           isCurved || isFreehand
-            ? 'Straight continuation is unavailable for curved or freehand fences'
-            : 'Straight fence continuation — click or press C to toggle'
+            ? 'Singola o continua non è disponibile per le recinzioni curve o a mano libera'
+            : 'Recinzione dritta singola o continua: fai clic o premi C per cambiare'
         }
       />
       {/* Curved fences are committed by a closing gesture rather than per-click,
@@ -312,7 +333,7 @@ function FenceContinuationChips() {
       {(isCurved || isFreehand) && curveStarted ? (
         <ChipRow
           icon="lucide:circle-check"
-          label={isFreehand ? 'Drag to draw fence' : 'Finish curve (or double-click)'}
+          label={isFreehand ? 'Trascina per disegnare la recinzione' : 'Termina la curva (o doppio clic)'}
           shortcut={isFreehand ? 'Release' : 'Enter'}
         />
       ) : null}
@@ -349,12 +370,12 @@ function PaintScopeChip() {
   const paintMode = usePaintRegionMode((s) => s.mode)
   const paintEraser = paintMode === 'erase'
   const picking = paintMode === 'pick'
-  const verb = picking ? 'Pick' : paintEraser ? 'Erase' : 'Paint'
+  const verb = picking ? 'Preleva' : paintEraser ? 'Cancella' : 'Dipingi'
 
   // Nothing to paint with yet (no material picked, not erasing) → the first step
   // is choosing a material, so say that before anything about scope or hovering.
   if (!(paintEraser || picking || hasActivePaintMaterial(activePaintMaterial))) {
-    return <ChipRow icon="lucide:palette" label="Select a material to paint" />
+    return <ChipRow icon="lucide:palette" label="Scegli un materiale da applicare" />
   }
 
   // Not over anything paintable → guide the user to hover, still teaching Shift.
@@ -364,10 +385,10 @@ function PaintScopeChip() {
         icon="lucide:mouse-pointer-click"
         label={
           picking
-            ? 'Hover a surface to pick its material'
+            ? 'Passa sopra una superficie per prelevarne il materiale'
             : paintEraser
-              ? 'Hover a painted surface to erase'
-              : 'Hover a surface to paint'
+              ? 'Passa sopra una superficie dipinta per cancellarla'
+              : 'Passa sopra una superficie per dipingerla'
         }
         shortcut={picking ? undefined : 'Shift'}
       />
@@ -392,12 +413,12 @@ function PaintScopeChip() {
 
   return (
     <ChipRow
-      ariaLabel={`${verb} scope: ${paintScopeLabel(effective, paintHover)}`}
+      ariaLabel={`${verb}, ambito: ${paintScopeLabel(effective, paintHover)}`}
       icon={PAINT_SCOPE_ICONS[effective]}
       label={`${verb}: ${paintScopeLabel(effective, paintHover)}`}
       onClick={() => cyclePaintScope()}
       shortcut="Shift"
-      tooltip={`${verb} scope — click or press Shift to cycle`}
+      tooltip="Ambito: fai clic o premi Maiusc per cambiare"
     />
   )
 }
@@ -417,7 +438,7 @@ function HudHeader({ title }: { title: HudTitle }) {
       <span className="min-w-0 flex-1 truncate font-medium text-[13px] text-foreground leading-tight">
         {title.label}
       </span>
-      {title.shortcut ? <ShortcutToken className={TOKEN_CLASS} value={title.shortcut} /> : null}
+      {title.shortcut ? <HintKey className={TOKEN_CLASS} value={title.shortcut} /> : null}
     </div>
   )
 }
@@ -480,8 +501,8 @@ export function ContextualHelperPanel({
   if (fenceFeature === 'gate' || fenceFeature === 'opening') return (
     <div className={cn(CARD_CLASS, !inStack && FLOATING_CLASS)} data-hud-card>
       {title ? <HudHeader title={title} /> : null}
-      <ChipRow shortcut="Left click" label={fenceFeature === 'gate' ? 'Place gate on a fence' : 'Place passage on a fence'} />
-      <ChipRow shortcut="Esc" label="Cancel placement" />
+      <ChipRow shortcut="Left click" label={fenceFeature === 'gate' ? 'Posiziona il cancello su una recinzione' : 'Posiziona il passaggio su una recinzione'} />
+      <ChipRow shortcut="Esc" label="Annulla posizionamento" />
     </div>
   )
   if (hints.length === 0 && !hasChips && !notice) return null

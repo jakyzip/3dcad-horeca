@@ -59,7 +59,7 @@ export function ModePill() {
   if (!shown) return null
   return (
     <div className="pa-pill" ref={el} role="status">
-      <b>Point at anything to ask the assistant</b> · Esc to leave
+      <b>Indica qualunque cosa per chiedere all’assistente</b> · Esc per uscire
     </div>
   )
 }
@@ -86,7 +86,7 @@ export function BeforeTag() {
   return (
     <div className="pa-before" ref={el} role="status">
       <i />
-      Before
+      Prima
     </div>
   )
 }

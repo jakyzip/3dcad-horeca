@@ -21,12 +21,24 @@ import {
   DialogTitle,
 } from '../ui/primitives/dialog'
 
-const count = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`
+const count = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
+
+/** Italian singular/plural of the hosted kinds `hostedKind` returns. */
+const KIND_NOUNS: Record<string, [string, string]> = {
+  door: ['porta', 'porte'],
+  window: ['finestra', 'finestre'],
+  light: ['luce', 'luci'],
+  item: ['oggetto', 'oggetti'],
+}
 
 function sentenceList(parts: string[]) {
   if (parts.length <= 1) return parts.join('')
-  return `${parts.slice(0, -1).join(', ')} and ${parts.at(-1)}`
+  return `${parts.slice(0, -1).join(', ')} e ${parts.at(-1)}`
 }
+
+/** "lo"/"li" endings for the object pronoun attached to an infinitive. */
+const objectPronoun = (one: boolean, feminine = false) =>
+  feminine ? (one ? 'la' : 'le') : one ? 'lo' : 'li'
 
 /**
  * A mezzanine takes its own plate (with its railing) and the ceiling core
@@ -38,14 +50,16 @@ function mezzanineDeletionDescription(room: DeleteZonePayload, nodes: StructureN
   )
   const sentences = [
     hasCeiling
-      ? 'Removes the mezzanine floor, its railing and the ceiling over it.'
-      : 'Removes the mezzanine floor and its railing.',
+      ? 'Rimuove il soppalco, il suo parapetto e il soffitto sopra di esso.'
+      : 'Rimuove il soppalco e il suo parapetto.',
   ]
   const items = room.itemIds.length
-  if (items)
+  if (items) {
+    const pr = objectPronoun(items === 1)
     sentences.push(
-      `${count(items, 'item')} ${items === 1 ? 'is' : 'are'} on it. Keep ${items === 1 ? 'it' : 'them'} on the floor below, or delete ${items === 1 ? 'it' : 'them'} too.`,
+      `${count(items, 'oggetto è', 'oggetti sono')} sul soppalco. Puoi tener${pr} al piano di sotto o eliminar${pr}.`,
     )
+  }
   return sentences.join(' ')
 }
 
@@ -55,14 +69,16 @@ function mezzanineDeletionDescription(room: DeleteZonePayload, nodes: StructureN
  */
 function mergeDescription(room: DeleteZonePayload, nodes: StructureNodes) {
   const into = nodes[room.mergedIntoZoneId ?? '']?.name?.trim()
-  const lines = room.separatorIds.length === 1 ? 'dividing line' : 'dividing lines'
+  const lines = room.separatorIds.length === 1 ? 'la linea di divisione' : 'le linee di divisione'
   const sentences = [
-    `Merges it back into ${into || 'the room next to it'}: removes the ${lines} and its floor finish. The walls stay.`,
+    `Riunisce l'area ${into ? `a ${into}` : 'alla stanza accanto'}: rimuove ${lines} e la finitura del suo pavimento. I muri restano.`,
   ]
   const items = room.itemIds.length
   if (items)
     sentences.push(
-      `${count(items, 'item')} inside ${items === 1 ? 'stays where it is' : 'stay where they are'}.`,
+      items === 1
+        ? "1 oggetto all'interno resta dov'è."
+        : `${items} oggetti all'interno restano dove sono.`,
     )
   return sentences.join(' ')
 }
@@ -74,27 +90,30 @@ function roomDeletionDescription(room: DeleteZonePayload, nodes: StructureNodes)
   const typeCount = (type: string) =>
     room.openingIds.filter((id) => nodes[id]?.type === type).length
   const removed = [
-    room.wallIds.length ? count(room.wallIds.length, 'wall') : '',
-    room.separatorIds.length ? count(room.separatorIds.length, 'separator') : '',
-    typeCount('door') ? count(typeCount('door'), 'door') : '',
-    typeCount('window') ? count(typeCount('window'), 'window') : '',
+    room.wallIds.length ? count(room.wallIds.length, 'muro', 'muri') : '',
+    room.separatorIds.length ? count(room.separatorIds.length, 'separatore', 'separatori') : '',
+    typeCount('door') ? count(typeCount('door'), 'porta', 'porte') : '',
+    typeCount('window') ? count(typeCount('window'), 'finestra', 'finestre') : '',
   ].filter(Boolean)
   sentences.push(
     removed.length
-      ? `Removes ${sentenceList(removed)}, with the floor finish and ceiling.`
-      : 'Removes the floor finish and ceiling.',
+      ? `Rimuove ${sentenceList(removed)}, con la finitura del pavimento e il soffitto.`
+      : 'Rimuove la finitura del pavimento e il soffitto.',
   )
   if (room.keptSharedWallIds.length + room.keptSharedSeparatorIds.length > 0)
-    sentences.push('Walls shared with other rooms stay.')
+    sentences.push('I muri in comune con altre stanze restano.')
   if (room.opensZoneIds.length) {
-    const names = room.opensZoneIds.map((id) => nodes[id]?.name?.trim() || 'the next room')
-    sentences.push(`Opens into ${sentenceList(names)}.`)
+    const names = room.opensZoneIds.map((id) => nodes[id]?.name?.trim() || 'la stanza accanto')
+    sentences.push(`Si apre su ${sentenceList(names)}.`)
   }
   const items = room.itemIds.length
-  if (items)
+  if (items) {
+    const one = items === 1
+    const pr = objectPronoun(one)
     sentences.push(
-      `${count(items, 'item')} ${items === 1 ? 'is' : 'are'} inside. Keep ${items === 1 ? 'it' : 'them'} where ${items === 1 ? 'it is' : 'they are'}, or delete ${items === 1 ? 'it' : 'them'} too.`,
+      `${count(items, 'oggetto è', 'oggetti sono')} all'interno. Puoi lasciar${pr} dove ${one ? 'si trova' : 'si trovano'} o eliminar${pr}.`,
     )
+  }
   return sentences.join(' ')
 }
 
@@ -115,7 +134,7 @@ function shownNames(names: string[]) {
   return named.slice(0, 3).join(', ') + (named.length > 3 ? ', …' : '')
 }
 
-/** "1 door (Front door), 2 windows and 1 light": counts per kind, a few names, no ids. */
+/** "1 porta (Ingresso), 2 finestre e 1 luce": counts per kind, a few names, no ids. */
 export function hostedSummary(ids: readonly string[], nodes: StructureNodes) {
   const groups = new Map<string, string[]>()
   for (const id of ids) {
@@ -125,15 +144,11 @@ export function hostedSummary(ids: readonly string[], nodes: StructureNodes) {
   return sentenceList(
     [...groups].map(([kind, names]) => {
       const shown = shownNames(names)
-      return `${count(names.length, kind)}${shown ? ` (${shown})` : ''}`
+      const [one, many] = KIND_NOUNS[kind] ?? KIND_NOUNS.item!
+      return `${count(names.length, one, many)}${shown ? ` (${shown})` : ''}`
     }),
   )
 }
-
-const pronouns = (one: boolean) =>
-  one
-    ? { it: 'it', is: 'is', its: 'its', verb: (v: string) => `${v}s` }
-    : { it: 'them', is: 'are', its: 'their', verb: (v: string) => v }
 
 function ceilingContent(
   change: RoomConstructionChange,
@@ -142,37 +157,38 @@ function ceilingContent(
   canKeep: boolean,
 ): DeleteConfirmationContent {
   const ids = change.hostedIds
-  const p = pronouns(ids.length === 1)
+  const one = ids.length === 1
   const manual = change.manualCeilings ?? []
   const sentences: string[] = []
   if (manual.length) {
     const names = shownNames(manual)
     sentences.push(
       manual.length === 1
-        ? `Removes the hand-drawn ceiling${names ? ` (${names})` : ''}.`
-        : `Removes ${manual.length} hand-drawn ceilings${names ? ` (${names})` : ''}.`,
+        ? `Rimuove il soffitto disegnato a mano${names ? ` (${names})` : ''}.`
+        : `Rimuove ${manual.length} soffitti disegnati a mano${names ? ` (${names})` : ''}.`,
     )
     if (change.alsoCovers?.length)
       sentences.push(
-        `${manual.length === 1 ? 'It also covers' : 'They also cover'} ${sentenceList(change.alsoCovers)}.`,
+        `${manual.length === 1 ? 'Copre' : 'Coprono'} anche ${sentenceList(change.alsoCovers)}.`,
       )
   }
   // Lights are known from their light effect; anything else reads as an item.
   const lights = ids.length > 0 && ids.every((id) => hostedKind(nodes[id]) === 'light')
   if (ids.length) {
     const names = shownNames(ids.map((id) => hostedName(nodes[id])))
+    const pr = objectPronoun(one, lights)
     sentences.push(
       lights
-        ? `${hostedSummary(ids, nodes)} ${p.verb('hang')} from it.`
-        : `${count(ids.length, 'item')} ${p.is} on the ceiling${names ? ` (${names})` : ''}.`,
-      `Keep ${p.it} in place, or delete ${p.it} too.`,
+        ? `${hostedSummary(ids, nodes)} ${one ? 'è appesa' : 'sono appese'} al soffitto.`
+        : `${count(ids.length, 'oggetto è', 'oggetti sono')} sul soffitto${names ? ` (${names})` : ''}.`,
+      `Puoi lasciar${pr} ${one ? "dov'è" : 'dove sono'} o eliminar${pr}.`,
     )
   }
   return {
-    title: `Remove the ceiling from ${room}?`,
-    description: sentences.length ? sentences.join(' ') : 'Removes the ceiling.',
-    keepLabel: ids.length && canKeep ? (lights ? 'Keep lights' : 'Keep items') : null,
-    confirmLabel: ids.length ? 'Remove all' : 'Remove',
+    title: `Rimuovere il soffitto da ${room}?`,
+    description: sentences.length ? sentences.join(' ') : 'Rimuove il soffitto.',
+    keepLabel: ids.length && canKeep ? (lights ? 'Tieni le luci' : 'Tieni gli oggetti') : null,
+    confirmLabel: ids.length ? 'Rimuovi tutto' : 'Rimuovi',
     destructive: true,
   }
 }
@@ -182,43 +198,44 @@ function constructionContent(
   nodes: StructureNodes,
   canKeep: boolean,
 ): DeleteConfirmationContent {
-  const room = change.roomName.trim() || 'this room'
+  const room = change.roomName.trim() || 'questa stanza'
   const hosted = hostedSummary(change.hostedIds, nodes)
-  const p = pronouns(change.hostedIds.length === 1)
+  const one = change.hostedIds.length === 1
   if (change.part === 'walls' && change.action === 'add') {
     return {
-      title: `Add walls to ${room}?`,
-      description: `Adds ${count(change.wallCount ?? 0, 'wall')} · the room loses ${(change.areaLoss ?? 0).toFixed(2)} m² of floor.`,
+      title: `Aggiungere i muri a ${room}?`,
+      description: `Aggiunge ${count(change.wallCount ?? 0, 'muro', 'muri')} · la stanza perde ${(change.areaLoss ?? 0).toFixed(2).replace('.', ',')} m² di pavimento.`,
       keepLabel: null,
-      confirmLabel: 'Add walls',
+      confirmLabel: 'Aggiungi i muri',
       destructive: false,
     }
   }
   if (change.part === 'walls') {
-    const walls = count(change.wallCount ?? 0, 'wall')
+    const walls = count(change.wallCount ?? 0, 'muro', 'muri')
     return {
-      title: `Remove walls from ${room}?`,
+      title: `Rimuovere i muri da ${room}?`,
       description: [
         hosted
-          ? `Turns ${walls} into separators and removes ${hosted}.`
-          : `Turns ${walls} into separators.`,
-        change.sharedWalls ? 'Shared walls remain.' : '',
+          ? `Trasforma ${walls} in separatori e rimuove ${hosted}.`
+          : `Trasforma ${walls} in separatori.`,
+        change.sharedWalls ? 'I muri in comune restano.' : '',
       ]
         .filter(Boolean)
         .join(' '),
       keepLabel: null,
-      confirmLabel: 'Remove walls',
+      confirmLabel: 'Rimuovi i muri',
       destructive: true,
     }
   }
   if (change.part === 'floor') {
+    const pr = objectPronoun(one)
     return {
-      title: `Remove the floor from ${room}?`,
+      title: `Rimuovere il pavimento da ${room}?`,
       description: hosted
-        ? `${hosted} ${p.verb('stand')} on it. Keep ${p.it} at ${p.its} height, or delete ${p.it} too.`
-        : 'Removes the floor.',
-      keepLabel: hosted && canKeep ? 'Keep items' : null,
-      confirmLabel: hosted ? 'Delete items' : 'Remove',
+        ? `${hosted} ${one ? 'poggia' : 'poggiano'} sul pavimento. Puoi lasciar${pr} alla stessa altezza o eliminar${pr}.`
+        : 'Rimuove il pavimento.',
+      keepLabel: hosted && canKeep ? 'Tieni gli oggetti' : null,
+      confirmLabel: hosted ? 'Elimina gli oggetti' : 'Rimuovi',
       destructive: true,
     }
   }
@@ -250,21 +267,21 @@ export function deleteConfirmationContent(
   const room = request.room
   if (!room)
     return {
-      title: `Delete ${count(request.count, 'element')}?`,
+      title: `Eliminare ${count(request.count, 'elemento', 'elementi')}?`,
       description:
-        'This removes every selected element. You can undo the deletion while it remains in the editor history.',
+        "Elimina tutti gli elementi selezionati. Puoi annullare l'eliminazione finché resta nella cronologia dell'editor.",
       keepLabel: null,
-      confirmLabel: 'Delete',
+      confirmLabel: 'Elimina',
       destructive: true,
     }
   const merge = room.mode === 'merge'
   // A merged area's items always stay, so there is nothing to choose.
   const hasItems = room.itemIds.length > 0 && !merge
   return {
-    title: `Delete ${room.name.trim() || (isMezzanine(room, nodes) ? 'this mezzanine' : merge ? 'this area' : 'this room')}?`,
+    title: `Eliminare ${room.name.trim() || (isMezzanine(room, nodes) ? 'questo soppalco' : merge ? "quest'area" : 'questa stanza')}?`,
     description: roomDeletionDescription(room, nodes),
-    keepLabel: hasItems && request.onKeepContents ? 'Keep items' : null,
-    confirmLabel: hasItems ? 'Delete all' : 'Delete',
+    keepLabel: hasItems && request.onKeepContents ? 'Tieni gli oggetti' : null,
+    confirmLabel: hasItems ? 'Elimina tutto' : 'Elimina',
     destructive: true,
   }
 }
@@ -308,7 +325,7 @@ export function DeleteConfirmationDialog() {
             onClick={cancel}
             type="button"
           >
-            Cancel
+            Annulla
           </button>
           {content?.keepLabel && (
             <button

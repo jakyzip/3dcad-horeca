@@ -196,7 +196,7 @@ function commitStairPlacement(
   if (!placementLevelId) return
 
   const stairCount = Object.values(nodes).filter((n) => n.type === 'stair').length
-  const name = `Staircase ${stairCount + 1}`
+  const name = `Scala ${stairCount + 1}`
   const storeyRise = getLevelFloorToFloorHeight(placementLevelId, nodes)
   if (!(storeyRise > 0)) return
   const seed = createSeedStairSegment(storeyRise)
@@ -346,7 +346,7 @@ export const StairTool: React.FC = () => {
       if (!(storeyRise > 0)) return null
       const seed = createSeedStairSegment(storeyRise)
       const stair = createDefaultStairNode({
-        name: 'Staircase Preview',
+        name: 'Anteprima scala',
         levelId: placementLevelId,
         nextLevelId,
         position,

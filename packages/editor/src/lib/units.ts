@@ -132,7 +132,7 @@ export function zoneUnits(
 export function addZoneToNewUnit(zoneId: ZoneNode['id']): UnitNode['id'] | null {
   const { buildingId, units } = zoneUnits(useScene.getState().nodes, zoneId)
   if (!buildingId) return null
-  const unit = UnitNode.parse({ name: `Unit ${units.length + 1}` })
+  const unit = UnitNode.parse({ name: `Unità ${units.length + 1}` })
   runAsSingleSceneHistoryStep(useScene, () => {
     useScene.getState().createNode(unit, buildingId)
     assignZoneToUnit(zoneId, unit.id)
@@ -243,7 +243,7 @@ export function createUnitInBuilding(buildingId: BuildingNode['id']): UnitNode['
   const building = scene.nodes[buildingId]
   if (building?.type !== 'building') return null
   const unitCount = building.children.filter((id) => scene.nodes[id]?.type === 'unit').length
-  const unit = UnitNode.parse({ name: `Unit ${unitCount + 1}` })
+  const unit = UnitNode.parse({ name: `Unità ${unitCount + 1}` })
   scene.createNode(unit, buildingId)
   enterUnitFocus(unit.id)
   return unit.id

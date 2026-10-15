@@ -151,7 +151,7 @@ describe('resolveMarks', () => {
     ;(nodes.d_n1 as unknown as { mark: string }).mark = 'D101'
     ;(nodes.d_n2 as unknown as { mark: string }).mark = 'D101'
     const resolution = resolveMarkDetail(nodes, 'level_1' as AnyNodeId)
-    expect(resolution.issues).toEqual(['Duplicate door mark D101 (2 instances)'])
+    expect(resolution.issues).toEqual(['Sigla porta D101 duplicata (2 occorrenze)'])
   })
 
   test('numbering is stable under insertion once persisted', () => {

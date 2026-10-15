@@ -162,7 +162,9 @@ export function ExportManager() {
               )
             }
             if (options.printBase === 'plinth') {
-              throw new Error('Plinth generation is available only for per-level print packages.')
+              throw new Error(
+                'Lo zoccolo si può generare solo con i pacchetti di stampa per piano.',
+              )
             }
             const compiled = compileShells
               ? await compileSemanticPrintShellWithManifold(exportScene, nodes)

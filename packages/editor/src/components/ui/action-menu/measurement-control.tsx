@@ -29,10 +29,10 @@ import { ActionButton } from './action-button'
 import { useActionMenuPopupSide } from './placement'
 
 const measurementOptions = [
-  { kind: 'distance', label: 'Distance', icon: Ruler },
-  { kind: 'angle', label: 'Angle', icon: Triangle },
-  { kind: 'area', label: 'Area', icon: Square },
-  { kind: 'perimeter', label: 'Perimeter', icon: Waypoints },
+  { kind: 'distance', label: 'Distanza', icon: Ruler },
+  { kind: 'angle', label: 'Angolo', icon: Triangle },
+  { kind: 'area', label: 'Superficie', icon: Square },
+  { kind: 'perimeter', label: 'Perimetro', icon: Waypoints },
   { kind: 'volume', label: 'Volume', icon: Box },
 ] as const satisfies readonly {
   kind: CreatableMeasurementKind
@@ -41,20 +41,20 @@ const measurementOptions = [
 }[]
 
 const measurementMenuOptions = [
-  { kind: 'smart', label: 'Smart', icon: ScanSearch },
+  { kind: 'smart', label: 'Automatica', icon: ScanSearch },
   ...measurementOptions,
 ] as const
 
 const constructionDimensionOptions = [
-  { mode: 'linear', chainMode: 'point-to-point', label: 'Linear dimension', icon: Ruler },
-  { mode: 'linear', chainMode: 'continuous', label: 'Continuous dimension', icon: Waypoints },
-  { mode: 'radius', chainMode: 'point-to-point', label: 'Radius dimension', icon: CircleIcon },
-  { mode: 'diameter', chainMode: 'point-to-point', label: 'Diameter dimension', icon: CircleIcon },
-  { mode: 'center-mark', chainMode: 'point-to-point', label: 'Center mark', icon: Crosshair },
-  { mode: 'chord', chainMode: 'point-to-point', label: 'Chord dimension', icon: Minus },
-  { mode: 'arc-length', chainMode: 'point-to-point', label: 'Arc length', icon: CircleIcon },
-  { mode: 'angular', chainMode: 'point-to-point', label: 'Angular dimension', icon: Triangle },
-  { mode: 'coordinate', chainMode: 'continuous', label: 'Coordinate dimensions', icon: Grid2X2 },
+  { mode: 'linear', chainMode: 'point-to-point', label: 'Quota lineare', icon: Ruler },
+  { mode: 'linear', chainMode: 'continuous', label: 'Quota continua', icon: Waypoints },
+  { mode: 'radius', chainMode: 'point-to-point', label: 'Quota del raggio', icon: CircleIcon },
+  { mode: 'diameter', chainMode: 'point-to-point', label: 'Quota del diametro', icon: CircleIcon },
+  { mode: 'center-mark', chainMode: 'point-to-point', label: 'Segno di centro', icon: Crosshair },
+  { mode: 'chord', chainMode: 'point-to-point', label: 'Quota della corda', icon: Minus },
+  { mode: 'arc-length', chainMode: 'point-to-point', label: "Lunghezza dell'arco", icon: CircleIcon },
+  { mode: 'angular', chainMode: 'point-to-point', label: 'Quota angolare', icon: Triangle },
+  { mode: 'coordinate', chainMode: 'continuous', label: 'Quote a coordinate', icon: Grid2X2 },
 ] as const satisfies readonly {
   mode: ConstructionDimensionMode
   chainMode: ConstructionDimensionChainMode
@@ -99,9 +99,9 @@ export function MeasurementControl() {
       ? ScanSearch
       : selectedOption.icon
   const selectedLabel = isConstructionDimensionActive
-    ? (activeConstructionDimensionOption?.label ?? 'Linear dimension')
+    ? (activeConstructionDimensionOption?.label ?? 'Quota lineare')
     : isSmartActive
-      ? 'Smart'
+      ? 'Automatica'
       : selectedOption.label
 
   const activateMeasurement = (kind: CreatableMeasurementKind) => {
@@ -130,7 +130,7 @@ export function MeasurementControl() {
     chainMode: ConstructionDimensionChainMode,
   ) => {
     if (useFloorplanMode.getState().mode !== 'expert') {
-      useFloorplanMode.getState().showExpertModeNotice('Construction Dimension')
+      useFloorplanMode.getState().showExpertModeNotice('Quota di costruzione')
       return
     }
     showView(VIEW_2D)
@@ -143,7 +143,7 @@ export function MeasurementControl() {
     <Popover onOpenChange={setIsOpen} open={isOpen}>
       <div className="flex items-center">
         <ActionButton
-          aria-label={`Measure: ${selectedLabel}`}
+          aria-label={`Misura: ${selectedLabel}`}
           aria-pressed={isControlActive}
           className={cn(
             'rounded-r-none p-0 text-muted-foreground',
@@ -151,7 +151,7 @@ export function MeasurementControl() {
               ? 'bg-cyan-500/20 text-cyan-700 hover:bg-cyan-500/20 dark:text-cyan-400 dark:hover:text-accent-foreground'
               : 'hover:bg-cyan-500/15 hover:text-cyan-700 dark:hover:text-cyan-400',
           )}
-          label={`Measure: ${selectedLabel}`}
+          label={`Misura: ${selectedLabel}`}
           onClick={handlePrimaryClick}
           shortcut="M"
           size="icon"
@@ -164,7 +164,7 @@ export function MeasurementControl() {
           <button
             aria-expanded={isOpen}
             aria-haspopup="menu"
-            aria-label="Measurement options"
+            aria-label="Opzioni di misura"
             className={cn(
               'flex h-11 w-6 items-center justify-center rounded-r-lg text-muted-foreground transition-colors',
               isOpen
@@ -187,7 +187,7 @@ export function MeasurementControl() {
         side={popupSide}
         sideOffset={14}
       >
-        <div aria-label="Measurement type" className="space-y-1" role="menu">
+        <div aria-label="Tipo di misura" className="space-y-1" role="menu">
           {measurementMenuOptions.map((option) => {
             const OptionIcon = option.icon
             const isSmart = option.kind === 'smart'
@@ -223,7 +223,7 @@ export function MeasurementControl() {
             <>
               <div className="my-1.5 h-px bg-border/60" />
               <div className="px-2.5 pt-1 pb-0.5 font-semibold text-[10px] text-muted-foreground uppercase tracking-wider">
-                Floor plan
+                Pianta
               </div>
 
               {constructionDimensionOptions.map((option) => {

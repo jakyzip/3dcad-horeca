@@ -170,7 +170,7 @@ describe('withExportDeadline', () => {
   test('names the format and the wait in the timeout error', async () => {
     const pending = new Promise<never>(() => {})
     await expect(withExportDeadline(pending, 10, 'USDZ')).rejects.toThrow(
-      /USDZ export timed out after \d+ s/,
+      /esportazione USDZ ha superato il tempo massimo di \d+ s/,
     )
   })
 
@@ -199,7 +199,7 @@ describe('exportSceneToGlb', () => {
           timeoutMs: 50,
         },
       ),
-    ).rejects.toThrow('GLB export timed out')
+    ).rejects.toThrow('esportazione GLB ha superato il tempo massimo')
   })
 
   test('exports a live scene through a caller-owned decompressor without disposing it', async () => {
@@ -249,7 +249,7 @@ describe('exportSceneToGlb', () => {
 
       await expect(
         exportSceneToGlb(root, nodes, { textureUtils: passthroughUtils(), timeoutMs: 50 }),
-      ).rejects.toThrow('GLB export timed out')
+      ).rejects.toThrow('esportazione GLB ha superato il tempo massimo')
     } finally {
       restoreRegistry()
     }

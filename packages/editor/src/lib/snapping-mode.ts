@@ -49,10 +49,10 @@ export function resolveSnapFlags(mode: SnappingMode): SnapFlags {
 }
 
 const SNAPPING_MODE_LABELS: Record<SnappingMode, string> = {
-  grid: 'Grid',
-  lines: 'Lines',
-  angles: 'Angles',
-  off: 'Off',
+  grid: 'Griglia',
+  lines: 'Linee',
+  angles: 'Angoli',
+  off: 'Disattivato',
 }
 
 export function getSnappingModeLabel(mode: SnappingMode): string {

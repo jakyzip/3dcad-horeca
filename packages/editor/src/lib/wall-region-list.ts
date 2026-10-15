@@ -37,14 +37,14 @@ export function wallRegionFaceLabels(
     const sides = roomSideFaces(nodes as Parameters<typeof roomSideFaces>[0], wallId)
     if (sides.inside && sides.outside) {
       return {
-        [sides.inside]: 'Inside',
-        [sides.outside]: 'Outside',
+        [sides.inside]: 'Interno',
+        [sides.outside]: 'Esterno',
       } as Record<WallFace, string>
     }
   } catch {
     // Not a wall (any more): fall through to the neutral labels.
   }
-  return { a: 'Face A', b: 'Face B' }
+  return { a: 'Faccia A', b: 'Faccia B' }
 }
 
 /** Name and swatch for a region's finish ref (library or scene material). */
@@ -56,7 +56,7 @@ export function describeRegionFinish(
   if (parsed?.kind === 'scene') {
     const scene = materials[parsed.id as SceneMaterialId]
     return {
-      name: scene?.name ?? 'Custom finish',
+      name: scene?.name ?? 'Finitura personalizzata',
       color: scene?.material.properties?.color ?? FALLBACK_SWATCH_COLOR,
       ...(scene?.material.texture?.url ? { imageUrl: scene.material.texture.url } : {}),
     }
@@ -65,21 +65,23 @@ export function describeRegionFinish(
     const item = getCatalogMaterialById(parsed.id)
     const imageUrl = item?.previewThumbnailUrl ?? item?.preset.maps.albedoMap
     return {
-      name: item?.label ?? 'Library finish',
+      name: item?.label ?? 'Finitura di libreria',
       color: item?.previewColor ?? item?.preset.mapProperties.color ?? FALLBACK_SWATCH_COLOR,
       ...(imageUrl ? { imageUrl } : {}),
     }
   }
-  return { name: 'Custom finish', color: FALLBACK_SWATCH_COLOR }
+  return { name: 'Finitura personalizzata', color: FALLBACK_SWATCH_COLOR }
 }
 
 function range(low: number | undefined, high: number | undefined, unit: LinearUnit, axis: string) {
-  const value = (meters: number) => metersToLinearUnit(meters, unit).toFixed(2)
+  const value = (meters: number) => metersToLinearUnit(meters, unit).toFixed(2).replace('.', ',')
   const label = getLinearUnitLabel(unit)
   if (low === undefined && high === undefined) return null
   if (low === undefined) return `0–${value(high!)} ${label} ${axis}`
   if (high === undefined)
-    return axis === 'high' ? `Above ${value(low)} ${label}` : `From ${value(low)} ${label} along`
+    return axis === 'in altezza'
+      ? `Sopra ${value(low)} ${label}`
+      : `Da ${value(low)} ${label} in lunghezza`
   return `${value(low)}–${value(high)} ${label} ${axis}`
 }
 
@@ -89,10 +91,10 @@ export function formatRegionBounds(
   unit: LinearUnit,
 ): string {
   const parts = [
-    range(region.u0, region.u1, unit, 'along'),
-    range(region.v0, region.v1, unit, 'high'),
+    range(region.u0, region.u1, unit, 'in lunghezza'),
+    range(region.v0, region.v1, unit, 'in altezza'),
   ].filter((part): part is string => part !== null)
-  return parts.length > 0 ? parts.join(', ') : 'Whole face'
+  return parts.length > 0 ? parts.join(', ') : 'Tutta la faccia'
 }
 
 export function wallRegionRows(
@@ -129,8 +131,7 @@ export function wallRegionCapNotice(
   faceLabels: Record<WallFace, string>,
 ): string | null {
   const full = fullWallFaces(wall)
-  const cap = `up to ${WALL_FACE_REGION_LIMIT} regions per face`
   if (full.length === 0) return null
-  if (full.length === 2) return `Up to ${WALL_FACE_REGION_LIMIT} regions per face`
-  return `${faceLabels[full[0]!]} is full: ${cap}`
+  if (full.length === 2) return `Al massimo ${WALL_FACE_REGION_LIMIT} zone per faccia`
+  return `${faceLabels[full[0]!]}: raggiunto il limite di ${WALL_FACE_REGION_LIMIT} zone per faccia`
 }

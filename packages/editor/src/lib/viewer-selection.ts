@@ -453,7 +453,7 @@ export type ViewerCrumb = {
 }
 
 export function zoneLabel(zone: ZoneNode): string {
-  return zone.name?.trim() || (zone.spaceRole === 'room' ? 'Room' : 'Zone')
+  return zone.name?.trim() || (zone.spaceRole === 'room' ? 'Stanza' : 'Zona')
 }
 
 /**
@@ -474,7 +474,7 @@ export function viewerBreadcrumb(
   const buildingId = selection.buildingId ?? buildingOfLevel(levelId, nodes)
   const building = buildingId ? nodes[buildingId] : undefined
   if (building?.type === 'building') {
-    crumbs.push({ kind: 'building', id: building.id, label: building.name || 'Building' })
+    crumbs.push({ kind: 'building', id: building.id, label: building.name || 'Edificio' })
   }
   const level = levelId ? nodes[levelId] : undefined
   if (level?.type !== 'level') return crumbs

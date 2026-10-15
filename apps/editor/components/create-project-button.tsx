@@ -28,16 +28,16 @@ export function CreateProjectButton({ nextNumber }: { nextNumber: number }) {
       const response = await fetch('/api/scenes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: `Project #${nextNumber}`, graph: EMPTY_GRAPH }),
+        body: JSON.stringify({ name: `Progetto #${nextNumber}`, graph: EMPTY_GRAPH }),
       })
       if (!response.ok) {
-        setError(`Failed to create project (${response.status})`)
+        setError(`Impossibile creare il progetto (${response.status})`)
         return
       }
       const meta = (await response.json()) as { id: string }
       router.push(`/project/${meta.id}`)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create project')
+      setError(err instanceof Error ? err.message : 'Impossibile creare il progetto')
     } finally {
       setIsCreating(false)
     }
@@ -48,7 +48,7 @@ export function CreateProjectButton({ nextNumber }: { nextNumber: number }) {
       {error && <span className="text-destructive text-xs">{error}</span>}
       <button className={PRIMARY_PILL} disabled={isCreating} onClick={handleCreate} type="button">
         <Plus className="h-4 w-4" />
-        {isCreating ? 'Creating…' : 'New project'}
+        {isCreating ? 'Creazione…' : 'Nuovo progetto'}
       </button>
     </div>
   )

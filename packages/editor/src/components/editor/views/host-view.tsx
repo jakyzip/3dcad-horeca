@@ -38,8 +38,8 @@ export function HostView({ view }: { view: EditorViewDescriptor | undefined }) {
   if (!view?.component) {
     return (
       <ViewMessage
-        body="Its plugin isn't installed in this project. Pick another view above."
-        title="This view isn't available"
+        body="Il suo plugin non è installato in questo progetto. Scegli un'altra vista qui sopra."
+        title="Questa vista non è disponibile"
       />
     )
   }
@@ -48,12 +48,12 @@ export function HostView({ view }: { view: EditorViewDescriptor | undefined }) {
     <ErrorBoundary
       fallback={
         <ViewMessage
-          body="This view hit an error and was unloaded for this session. Reload to try again."
-          title={`"${view.label}" crashed`}
+          body="Questa vista ha avuto un errore ed è stata chiusa per questa sessione. Ricarica per riprovare."
+          title={`"${view.label}" si è bloccata`}
         />
       }
     >
-      <Suspense fallback={<ViewMessage body="" title="Loading…" />}>
+      <Suspense fallback={<ViewMessage body="" title="Caricamento…" />}>
         <Component />
       </Suspense>
     </ErrorBoundary>

@@ -6,9 +6,9 @@ export type RoofFeatureIdentity = {
 }
 
 const ROOF_FOOTPRINT_SOURCES = [
-  { label: 'Room', value: 'room' },
-  { label: 'Wall', value: 'walls' },
-  { label: 'Draw', value: 'draw' },
+  { label: 'Stanza', value: 'room' },
+  { label: 'Muro', value: 'walls' },
+  { label: 'Disegna', value: 'draw' },
 ] as const
 
 export type RoofFootprintSource = (typeof ROOF_FOOTPRINT_SOURCES)[number]['value']
@@ -31,14 +31,14 @@ export function getRoofFootprintSource(roofType: RoofType, value: unknown): Roof
 }
 
 export const ROOF_TYPE_OPTIONS: ReadonlyArray<{ label: string; value: RoofType }> = [
-  { label: 'Hip', value: 'hip' },
-  { label: 'Gable', value: 'gable' },
-  { label: 'Shed', value: 'shed' },
-  { label: 'Flat', value: 'flat' },
-  { label: 'Gambrel', value: 'gambrel' },
-  { label: 'Dutch', value: 'dutch' },
-  { label: 'Mansard', value: 'mansard' },
-  { label: 'Conical', value: 'conical' },
+  { label: 'A padiglione', value: 'hip' },
+  { label: 'A capanna', value: 'gable' },
+  { label: 'A una falda', value: 'shed' },
+  { label: 'Piano', value: 'flat' },
+  { label: 'A capanna spezzata', value: 'gambrel' },
+  { label: 'Padiglione con timpano', value: 'dutch' },
+  { label: 'A mansarda', value: 'mansard' },
+  { label: 'Conico', value: 'conical' },
 ]
 
 export function getActiveRoofFeatureId(

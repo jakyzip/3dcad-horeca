@@ -44,7 +44,7 @@ import { roomFloorElevation } from './room-handle-drag'
 // (3D canvas, 2D plan) resolve pointers into plan points and call the actions
 // below.
 
-export const PICK_MATERIAL_MESSAGE = 'Pick a material first'
+export const PICK_MATERIAL_MESSAGE = 'Prima scegli un materiale'
 
 export type FloorDraftCommit = { ok: true } | { ok: false; message: string }
 

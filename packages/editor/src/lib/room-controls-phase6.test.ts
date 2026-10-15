@@ -278,7 +278,7 @@ describe('room pick-up (Move / Duplicate / Rotate)', () => {
     previewRoomTransform([9, 0], 0)
     const blocked = useRoomTransform.getState().session!
     expect(blocked.valid).toBe(false)
-    expect(blocked.message).toBe('Door or window in the way · Alt slides it')
+    expect(blocked.message).toBe('Una porta o finestra è d’intralcio · Alt la fa scorrere')
     expect(commitRoomTransform()).toBe(false)
     previewRoomTransform([9, 0], 0, true)
     expect(useRoomTransform.getState().session).toMatchObject({ valid: true, force: true })
@@ -296,7 +296,7 @@ describe('room pick-up (Move / Duplicate / Rotate)', () => {
     expect(outcome.ok).toBe(false)
     expect(useRoomTransform.getState().notice).toEqual({
       zoneId: 'zone_missing',
-      message: "Can't place here",
+      message: 'Qui non si può posizionare',
     })
     expect(rotateRoom({ zoneId, levelId: LEVEL }, 'right').ok).toBe(true)
     expect(useRoomTransform.getState().notice).toBeNull()

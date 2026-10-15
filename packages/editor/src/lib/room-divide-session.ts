@@ -61,7 +61,7 @@ function topologyRevision(
 export function roomDivideContext(nodes: StructureNodes, zoneId: string) {
   if (cached?.nodes === nodes && cached.zoneId === zoneId) return cached.context
   const zone = nodes[zoneId]
-  if (zone?.type !== 'zone') throw Error('The selected room no longer exists.')
+  if (zone?.type !== 'zone') throw Error('La stanza selezionata non esiste più.')
   const revision = topologyRevision(nodes, zone)
   const context =
     cached?.zoneId === zoneId && cached.revision === revision
@@ -86,19 +86,19 @@ export function roomDivideTopologyChanged(nodes: StructureNodes) {
 // Short cursor-side wording, the way the wall tool labels a draft it cannot
 // build. Keyed by the planner's conflict codes; anything else is generic.
 const DIVIDE_MESSAGES: Record<string, string> = {
-  'snap-distance': 'Move to an edge',
-  'boundary-overlap': 'Already an edge',
-  'short-cut': 'Too short',
-  'outside-room': 'Leaves the room',
-  'open-room': 'Room is open',
-  'self-cross': 'Crosses itself',
-  'self-intersection': 'Crosses itself',
-  'small-island': 'Too small',
-  'wall-clearance': 'Too close to a wall',
-  'close-loop': 'Close the loop',
+  'snap-distance': 'Avvicinati a un bordo',
+  'boundary-overlap': 'È già un bordo',
+  'short-cut': 'Troppo corto',
+  'outside-room': 'Esce dalla stanza',
+  'open-room': 'La stanza è aperta',
+  'self-cross': 'Si incrocia',
+  'self-intersection': 'Si incrocia',
+  'small-island': 'Troppo piccola',
+  'wall-clearance': 'Troppo vicino a un muro',
+  'close-loop': 'Chiudi il percorso',
 }
 export function roomDivideMessage(code?: string) {
-  return (code && DIVIDE_MESSAGES[code]) || "Can't divide here"
+  return (code && DIVIDE_MESSAGES[code]) || 'Qui non si può dividere'
 }
 
 // A floor pointer this close to the boundary lands on it; a boundary surface

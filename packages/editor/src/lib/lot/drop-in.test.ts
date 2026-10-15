@@ -321,6 +321,6 @@ test('without a parcel provider the drop-in says so and writes nothing', async (
   useScene.setState({ nodes: {}, rootNodeIds: [], dirtyNodes: new Set() } as never)
   const r = await dropInLot({ address: LAKELAND })
   expect(r.ok).toBe(false)
-  expect(r.message).toBe('No parcel service is available.')
+  expect(r.message).toBe('Nessun servizio catastale disponibile.')
   expect(useScene.getState().rootNodeIds).toEqual([])
 })

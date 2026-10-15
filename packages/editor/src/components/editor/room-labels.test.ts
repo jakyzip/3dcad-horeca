@@ -110,8 +110,8 @@ describe('room label pills', () => {
   })
 
   test('read the area in the active unit system', () => {
-    expect(formatRoomArea(33, 'metric')).toBe('33.0 m²')
-    expect(formatRoomArea(10, 'imperial')).toBe('107.6 ft²')
+    expect(formatRoomArea(33, 'metric')).toBe('33,0 m²')
+    expect(formatRoomArea(10, 'imperial')).toBe('107,6 ft²')
   })
 
   test('a pill is placed centred on where its anchor lands', () => {

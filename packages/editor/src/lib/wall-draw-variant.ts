@@ -26,40 +26,40 @@ export const WALL_DRAW_VARIANTS: readonly WallDrawVariantInfo[] = [
   {
     id: 'rectangle',
     mode: 'rectangle',
-    label: 'Rectangle',
-    title: 'Rectangle room',
+    label: 'Rettangolo',
+    title: 'Stanza rettangolare',
     iconSrc: '/icons/room.webp',
     caption: {
-      lead: 'Click two corners',
-      rest: 'on the grid. Walls, floor and ceiling are created together.',
+      lead: 'Fai clic su due vertici',
+      rest: 'sulla griglia. Muri, pavimento e soffitto vengono creati insieme.',
     },
   },
   {
     id: 'polygon',
     mode: 'room',
-    label: 'Polygon',
-    title: 'Polygon room',
+    label: 'Poligono',
+    title: 'Stanza poligonale',
     iconSrc: '/icons/polygon-room.webp',
     caption: {
-      lead: 'Click each corner,',
-      rest: 'then the first one again to close. For L-shapes and angled rooms.',
+      lead: 'Fai clic su ogni vertice,',
+      rest: 'poi di nuovo sul primo per chiudere. Per stanze a L e con angoli obliqui.',
     },
   },
   {
     id: 'walls',
     mode: 'single',
-    label: 'Walls',
-    title: 'Walls',
+    label: 'Muri',
+    title: 'Muri',
     iconSrc: '/icons/wall.webp',
     caption: {
-      lead: 'Draw one wall at a time.',
-      rest: 'Close a loop and it becomes a room; leave it open for partitions.',
+      lead: 'Disegna un muro alla volta.',
+      rest: 'Chiudi il giro e diventa una stanza; lascialo aperto per i tramezzi.',
     },
   },
 ]
 
 export const WALL_DRAW_IDLE_CAPTION =
-  'Pick a shape to start. Every room brings its own walls, floor and ceiling.'
+  'Scegli una forma per iniziare. Ogni stanza ha i suoi muri, pavimento e soffitto.'
 
 export function getWallDrawVariantInfo(variant: WallDrawVariant): WallDrawVariantInfo {
   return WALL_DRAW_VARIANTS.find((info) => info.id === variant) ?? WALL_DRAW_VARIANTS[1]!

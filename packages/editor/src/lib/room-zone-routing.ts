@@ -114,9 +114,9 @@ export function useZoneSelected(zoneId: string): boolean {
   return asRoom || asZone
 }
 
-/** The user word for a zone: rooms are "Room", every other area stays "Zone". */
-export function zoneKindLabel(zone: Pick<ZoneNode, 'spaceRole'> | undefined): 'Room' | 'Zone' {
-  return zone?.spaceRole === 'room' ? 'Room' : 'Zone'
+/** The user word for a zone: rooms are "Stanza", every other area stays "Zona". */
+export function zoneKindLabel(zone: Pick<ZoneNode, 'spaceRole'> | undefined): 'Stanza' | 'Zona' {
+  return zone?.spaceRole === 'room' ? 'Stanza' : 'Zona'
 }
 
 /** Where a one-shot action on a drilled element started: its room, and a point inside it. */

@@ -696,14 +696,14 @@ function FloorplanExtrusionControl({
           }}
         >
           <label className="sr-only" htmlFor="measurement-extrusion-height">
-            Extrusion height
+            Altezza di estrusione
           </label>
           <div className="relative min-w-0 flex-1">
             <span className="pointer-events-none absolute inset-y-0 left-2 flex items-center font-medium text-muted-foreground text-xs">
               H
             </span>
             <input
-              aria-label="Extrusion height"
+              aria-label="Altezza di estrusione"
               className="h-8 w-full rounded-md border border-border bg-background pr-7 pl-6 text-sm outline-none focus:border-cyan-400"
               id="measurement-extrusion-height"
               inputMode="decimal"
@@ -744,7 +744,7 @@ function FloorplanExtrusionControl({
             onClick={commit}
             type="button"
           >
-            Create
+            Crea
           </button>
         </div>
       </foreignObject>

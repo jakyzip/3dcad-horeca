@@ -37,9 +37,9 @@ export type ViewerSceneHeaderProps = {
 }
 
 const SECTION_TITLES: Record<ViewerSidebarSection['kind'], string> = {
-  units: 'Units',
-  rooms: 'Rooms',
-  zones: 'Zones',
+  units: 'Unità',
+  rooms: 'Stanze',
+  zones: 'Zone',
 }
 
 const parametricObject = (id: string) => sceneRegistry.nodes.get(id)
@@ -113,7 +113,7 @@ export const ViewerSceneHeader = ({
         <div className="flex items-center gap-3 px-3 py-2.5">
           {onBack ? (
             <button
-              aria-label="Back"
+              aria-label="Indietro"
               className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md transition-colors hover:bg-white/10"
               onClick={onBack}
               type="button"
@@ -122,7 +122,7 @@ export const ViewerSceneHeader = ({
             </button>
           ) : backHref === null ? null : (
             <Link
-              aria-label="Back"
+              aria-label="Indietro"
               className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md transition-colors hover:bg-white/10"
               href={backHref}
               prefetch={false}
@@ -132,7 +132,7 @@ export const ViewerSceneHeader = ({
           )}
           <div className="min-w-0 flex-1">
             <div className="truncate font-medium text-foreground text-sm">
-              {projectName || 'Untitled'}
+              {projectName || 'Senza titolo'}
             </div>
             {owner?.username && (
               <Link
@@ -151,7 +151,7 @@ export const ViewerSceneHeader = ({
 
         {crumbs.length > 0 && (
           <nav
-            aria-label="Selection"
+            aria-label="Selezione"
             className="flex flex-wrap items-center gap-x-1.5 gap-y-1 border-border/40 border-t px-3 py-2 text-xs"
             data-testid="viewer-breadcrumb"
           >
@@ -186,7 +186,7 @@ export const ViewerSceneHeader = ({
       {levels.length > 0 && (
         <div className="corner-smooth pointer-events-auto flex min-h-0 w-56 flex-col overflow-hidden rounded-2xl border border-border/40 bg-background/95 py-1 shadow-elevation-4 backdrop-blur-xl transition-colors duration-200 ease-out">
           <span className="px-3 py-2 font-medium text-[10px] text-muted-foreground uppercase tracking-wider">
-            Levels
+            Piani
           </span>
           <div className="flex min-h-0 flex-col overflow-y-auto">
             {levels.map((lvl) => {

@@ -2,31 +2,36 @@ import type { Metadata } from 'next'
 import { AppCard, PRODUCT_NAME } from '@/components/app-shell'
 
 export const dynamic = 'force-dynamic'
-export const metadata: Metadata = { title: `Set up · ${PRODUCT_NAME}` }
+export const metadata: Metadata = { title: `Configurazione · ${PRODUCT_NAME}` }
 
 const VARIABLES = [
-  ['PASCAL_ADMIN_PASSWORD', 'The password that unlocks this editor. Required on a network host.'],
+  [
+    'PASCAL_ADMIN_PASSWORD',
+    'La password che sblocca questo editor. Obbligatoria su un server in rete.',
+  ],
   [
     'PASCAL_PUBLIC_URL',
-    'The address people use to reach it, for example https://pascal.example.com.',
+    "L'indirizzo con cui gli utenti lo raggiungono, per esempio https://cad.example.com.",
   ],
   [
     'PASCAL_SCENE_API_TOKEN',
-    'Optional. A bearer token for agents and scripts calling the scene API.',
+    "Facoltativo. Un token bearer per agenti e script che usano l'API delle scene.",
   ],
   [
     'PASCAL_AUTH=proxy',
-    'Alternative to a password when a reverse proxy already authenticates every request.',
+    'Alternativa alla password quando un reverse proxy autentica già ogni richiesta.',
   ],
 ] as const
 
 export default function SetupPage() {
   return (
     <AppCard className="max-w-lg">
-      <h1 className="mt-6 font-semibold text-lg">This editor is reachable but not protected yet</h1>
+      <h1 className="mt-6 font-semibold text-lg">
+        Questo editor è raggiungibile ma non ancora protetto
+      </h1>
       <p className="mt-2 text-muted-foreground text-sm">
-        Set an admin password in the environment and restart. Until then, nothing is served from
-        this address.
+        Imposta una password di amministratore nell'ambiente e riavvia. Fino ad allora questo
+        indirizzo non mostra nulla.
       </p>
       <dl className="mt-5 flex flex-col divide-y divide-border/50 rounded-xl border border-border/50">
         {VARIABLES.map(([name, description]) => (

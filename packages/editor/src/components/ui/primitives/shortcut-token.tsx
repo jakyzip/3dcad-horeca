@@ -6,23 +6,23 @@ import { cn } from '../../../lib/utils'
 const MOUSE_SHORTCUTS = {
   Click: {
     icon: 'ph:mouse-left-click-fill',
-    label: 'Left click',
+    label: 'Clic sinistro',
   },
   'Left click': {
     icon: 'ph:mouse-left-click-fill',
-    label: 'Left click',
+    label: 'Clic sinistro',
   },
   'Middle click': {
     icon: 'qlementine-icons:mouse-middle-button-16',
-    label: 'Middle click',
+    label: 'Clic centrale',
   },
   'Right click': {
     icon: 'ph:mouse-right-click-fill',
-    label: 'Right click',
+    label: 'Clic destro',
   },
   Scroll: {
     icon: 'ph:mouse-scroll-fill',
-    label: 'Scroll',
+    label: 'Rotella',
   },
 } as const
 
@@ -50,12 +50,17 @@ const IS_MAC =
 const KEY_DISPLAY_MAP: Record<string, string> = {
   'Arrow Down': '↓',
   'Arrow Up': '↑',
+  Space: 'Spazio',
+  Enter: 'Invio',
+  Escape: 'Esc',
+  Delete: 'Canc',
+  Shift: 'Maiusc',
 }
 
 /** The glyph to print for a shortcut key on the current platform. */
 function shortcutDisplayValue(value: string): string {
   if (COMMAND_VALUES.has(value)) return IS_MAC ? '⌘' : 'Ctrl'
-  if (value === 'Delete / Backspace') return IS_MAC ? 'Delete' : 'Backspace'
+  if (value === 'Delete / Backspace') return IS_MAC ? 'Canc' : 'Backspace'
   return KEY_DISPLAY_MAP[value] ?? value
 }
 
@@ -70,20 +75,20 @@ function ShortcutToken({ className, displayValue, value, ...props }: ShortcutTok
   const isCommand = COMMAND_VALUES.has(value)
   const isShift = value === 'Shift'
   const commandDisplay = IS_MAC ? '⌘' : 'Ctrl'
-  const commandLabel = IS_MAC ? 'Command' : 'Control'
+  const commandLabel = IS_MAC ? 'Cmd' : 'Ctrl'
 
   return (
     <kbd
       aria-label={
         mouseShortcut?.label ??
-        (isCommand ? commandLabel : isShift ? 'Shift' : (displayValue ?? value))
+        (isCommand ? commandLabel : isShift ? 'Maiusc' : (displayValue ?? shortcutDisplayValue(value)))
       }
       className={cn(
         'inline-flex h-6 items-center rounded border border-border bg-muted px-2 font-medium font-mono text-[11px] text-muted-foreground',
         (mouseShortcut || isShift) && 'justify-center px-1.5',
         className,
       )}
-      title={mouseShortcut?.label ?? (isCommand ? commandLabel : isShift ? 'Shift' : value)}
+      title={mouseShortcut?.label ?? (isCommand ? commandLabel : isShift ? 'Maiusc' : value)}
       {...props}
     >
       {mouseShortcut ? (
@@ -110,14 +115,14 @@ function ShortcutToken({ className, displayValue, value, ...props }: ShortcutTok
             icon="ph:arrow-fat-up"
             width={13}
           />
-          <span className="sr-only">Shift</span>
+          <span className="sr-only">Maiusc</span>
         </>
       ) : isCommand ? (
         // The ⌘ glyph reads small next to letters at the same font size, so bump
         // it up a touch on Mac. "Ctrl" stays at the token's normal size.
         <span className={IS_MAC ? 'text-[13px] leading-none' : undefined}>{commandDisplay}</span>
       ) : (
-        (displayValue ?? value)
+        (displayValue ?? shortcutDisplayValue(value))
       )}
     </kbd>
   )

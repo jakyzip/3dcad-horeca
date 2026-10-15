@@ -3338,7 +3338,7 @@ function FloorplanReferenceScaleDraftLine({
     <FloorplanReferenceScaleLine
       end={cursor}
       isDraft
-      label={`Ref ${formatMeasurement(
+      label={`Rif. ${formatMeasurement(
         Math.hypot(cursor[0] - start[0], cursor[1] - start[1]),
         unit,
         null,
@@ -3504,7 +3504,7 @@ function FloorplanGuideHandleHint({
             rotationModifierPressed ? 'opacity-40' : 'opacity-100',
           )}
         >
-          <span className="font-medium text-[11px] lowercase leading-none">resize</span>
+          <span className="font-medium text-[11px] lowercase leading-none">ridimensiona</span>
           <Icon
             aria-hidden="true"
             className="h-3.5 w-3.5 shrink-0"
@@ -3519,7 +3519,7 @@ function FloorplanGuideHandleHint({
             rotationModifierPressed ? 'opacity-100' : 'opacity-40',
           )}
         >
-          <span className="font-medium text-[11px] lowercase leading-none">rotate</span>
+          <span className="font-medium text-[11px] lowercase leading-none">ruota</span>
           {isMacPlatform ? (
             <Command aria-hidden="true" className="h-3.5 w-3.5 shrink-0" strokeWidth={2.2} />
           ) : (
@@ -3535,9 +3535,9 @@ function FloorplanGuideHandleHint({
 
         {showScaleHint && (
           <div className="flex items-center gap-1.5 opacity-40">
-            <span className="font-medium text-[11px] lowercase leading-none">set scale</span>
+            <span className="font-medium text-[11px] lowercase leading-none">imposta la scala</span>
             <Ruler aria-hidden="true" className="h-3.5 w-3.5 shrink-0" strokeWidth={2.2} />
-            <span className="font-medium text-[11px] lowercase leading-none">panel</span>
+            <span className="font-medium text-[11px] lowercase leading-none">pannello</span>
           </div>
         )}
       </div>
@@ -8009,7 +8009,7 @@ export function FloorplanPanel({
       const defaults = useEditor.getState().toolDefaults.slab ?? {}
       const authored = SlabNodeSchema.parse({
         ...defaults,
-        name: `Slab ${slabCount + 1}`,
+        name: `Solaio ${slabCount + 1}`,
         polygon: points.map(([x, z]) => [x, z] as [number, number]),
       })
       const slab = {
@@ -8034,7 +8034,7 @@ export function FloorplanPanel({
       const defaults = useEditor.getState().toolDefaults.ceiling ?? {}
       const ceiling = CeilingNodeSchema.parse({
         ...defaults,
-        name: `Ceiling ${ceilingCount + 1}`,
+        name: `Soffitto ${ceilingCount + 1}`,
         polygon: points.map(([x, z]) => [x, z] as [number, number]),
       })
       createNode(ceiling, levelId)
@@ -11231,12 +11231,12 @@ export function FloorplanPanel({
       : null
   const referenceScaleInputError =
     referenceScaleValue.trim() === ''
-      ? 'Enter the real length of the line.'
+      ? 'Inserisci la lunghezza reale della linea.'
       : Number.isNaN(pendingReferenceDisplayLength)
-        ? `Enter a length like 3.5, 180cm or 5'11".`
+        ? `Inserisci una lunghezza come 3,5, 180cm o 5'11".`
         : pendingReferenceDisplayLength > 0
           ? null
-          : 'Length must be greater than 0.'
+          : 'La lunghezza deve essere maggiore di 0.'
   const referenceScaleHint = referenceScaleInputError
     ? null
     : referenceScaleLengthHint(referenceScaleValue, referenceScaleUnit)
@@ -11302,8 +11302,8 @@ export function FloorplanPanel({
         {referenceScaleDraft && (
           <div className="pointer-events-none absolute top-3 left-1/2 z-30 -translate-x-1/2 rounded-md border bg-background/95 px-3 py-2 text-center text-sm shadow-sm">
             {referenceScaleDraft.start
-              ? 'Click the other end of that distance'
-              : 'Click one end of a distance you know — e.g. a dimension printed on the plan'}
+              ? "Fai clic sull'altro estremo di quella distanza"
+              : 'Fai clic su un estremo di una distanza che conosci, per esempio una quota stampata sulla pianta'}
           </div>
         )}
 
@@ -11329,17 +11329,17 @@ export function FloorplanPanel({
                 <Ruler className="h-4 w-4 text-foreground/80" />
               </div>
               <div className="min-w-0">
-                <div className="font-medium text-sm">Set overlay scale</div>
+                <div className="font-medium text-sm">Imposta la scala dell'immagine</div>
                 <div className="mt-0.5 text-muted-foreground text-xs leading-4">
-                  Enter the real-world length of the line you just drew. The image will resize to
-                  match it.
+                  Inserisci la lunghezza reale della linea che hai appena disegnato. L'immagine si
+                  ridimensionerà di conseguenza.
                 </div>
               </div>
             </div>
 
             <div className="mb-3 rounded-xl border border-border/70 bg-black/4 dark:bg-white/5 px-3 py-2">
               <div className="text-[11px] text-muted-foreground uppercase tracking-wide">
-                Drawn line
+                Linea disegnata
               </div>
               <div className="mt-1 font-medium text-sm">
                 {formatMeasurement(
@@ -11353,7 +11353,7 @@ export function FloorplanPanel({
 
             <label className="block">
               <span className="mb-1.5 block font-medium text-muted-foreground text-xs">
-                Real length
+                Lunghezza reale
               </span>
               <div className="grid grid-cols-[1fr_8.25rem] gap-2">
                 <input
@@ -11363,7 +11363,7 @@ export function FloorplanPanel({
                     referenceScaleInputError ? 'border-destructive/60' : 'border-border',
                   )}
                   onChange={(event) => setReferenceScaleValue(event.target.value)}
-                  placeholder={`e.g. 3.5, 180cm or 5'11"`}
+                  placeholder={`es. 3,5, 180cm o 5'11"`}
                   type="text"
                   value={referenceScaleValue}
                 />
@@ -11374,10 +11374,10 @@ export function FloorplanPanel({
                   }
                   value={referenceScaleUnit}
                 >
-                  <option value="meters">Meters</option>
-                  <option value="centimeters">Centimeters</option>
-                  <option value="feet">Feet</option>
-                  <option value="inches">Inches</option>
+                  <option value="meters">Metri</option>
+                  <option value="centimeters">Centimetri</option>
+                  <option value="feet">Piedi</option>
+                  <option value="inches">Pollici</option>
                 </select>
               </div>
               <span
@@ -11388,14 +11388,14 @@ export function FloorplanPanel({
               >
                 {referenceScaleInputError ??
                   referenceScaleHint ??
-                  'Any decimal works. Use the known real length, not the drawn value.'}
+                  'Vanno bene anche i decimali. Usa la lunghezza reale nota, non quella disegnata.'}
               </span>
             </label>
 
             <div className="mt-3 rounded-lg bg-muted/45 px-3 py-2 text-muted-foreground text-xs">
               {pendingReferenceImageScaleFactor
-                ? `Image will scale ${formatNumber(pendingReferenceImageScaleFactor, 3)}x from the first point.`
-                : 'Enter a length greater than 0.'}
+                ? `L'immagine sarà scalata di ${formatNumber(pendingReferenceImageScaleFactor, 3).replace('.', ',')}x dal primo punto.`
+                : 'Inserisci una lunghezza maggiore di 0.'}
             </div>
 
             <div className="mt-4 flex justify-end gap-2">
@@ -11404,14 +11404,14 @@ export function FloorplanPanel({
                 onClick={() => setPendingReferenceScale(null)}
                 type="button"
               >
-                Cancel
+                Annulla
               </button>
               <button
                 className="h-8 rounded-lg bg-foreground px-3 font-medium text-background text-xs transition hover:bg-foreground/90 disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={!pendingReferenceMetersPerUnit}
                 type="submit"
               >
-                Save Scale
+                Salva la scala
               </button>
             </div>
           </form>
@@ -11419,7 +11419,7 @@ export function FloorplanPanel({
 
         {levelNode?.type !== 'level' && !hasAmbientBuildingLevel ? (
           <div className="flex h-full items-center justify-center px-6 text-center text-muted-foreground text-sm">
-            Switch to a building level to view and edit the floorplan.
+            Passa a un piano dell'edificio per vedere e modificare la pianta.
           </div>
         ) : isFloorplanOpen ? (
           // The panel stays mounted in 3D mode (display:none) to keep the

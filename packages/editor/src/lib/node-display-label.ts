@@ -9,28 +9,28 @@ export function nodeDisplayLabel(node: AnyNode): string {
   if (node.name) return node.name
   switch (node.type) {
     case 'item':
-      return (node as { asset?: { name?: string } }).asset?.name || 'Item'
+      return (node as { asset?: { name?: string } }).asset?.name || 'Oggetto'
     case 'wall':
-      return 'Wall'
+      return 'Muro'
     case 'door':
-      return 'Door'
+      return 'Porta'
     case 'window':
-      return 'Window'
+      return 'Finestra'
     case 'cabinet':
     case 'cabinet-module':
-      return 'Cabinet'
+      return 'Mobile'
     case 'slab':
-      return 'Slab'
+      return 'Solaio'
     case 'ceiling':
-      return 'Ceiling'
+      return 'Soffitto'
     case 'roof':
-      return 'Roof'
+      return 'Tetto'
     case 'fence':
-      return 'Fence'
+      return 'Recinzione'
     case 'column':
-      return 'Column'
+      return 'Pilastro'
     case 'stair':
-      return 'Stairs'
+      return 'Scala'
     default:
       return node.type
   }

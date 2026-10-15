@@ -437,7 +437,7 @@ describe('per-level print STL export', () => {
 
     expect(Object.keys(files)).toEqual(['[Content_Types].xml', '_rels/.rels', '3D/3dmodel.model'])
     expect(model.unit).toBe('millimeter')
-    expect(object.name).toBe('Level parts')
+    expect(object.name).toBe('Parti per piano')
     expect(partManifest.map((part) => part.name)).toEqual([
       '00 Plinth',
       '01 Ground & Entry',

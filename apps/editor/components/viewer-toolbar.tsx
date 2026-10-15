@@ -85,52 +85,62 @@ function ToolbarTooltip({ children, label }: { children: ReactNode; label: strin
 
 const levelModeOrder = ['stacked', 'exploded', 'solo'] as const
 const levelModeLabels: Record<string, string> = {
-  manual: 'Stack',
-  stacked: 'Stack',
-  exploded: 'Exploded',
-  solo: 'Solo',
+  manual: 'Impilati',
+  stacked: 'Impilati',
+  exploded: 'Esplosi',
+  solo: 'Singolo',
 }
 
 const wallModeOrder = ['cutaway', 'up', 'down', 'translucent'] as const
 const wallModeConfig: Record<string, { icon: string; label: string }> = {
-  up: { icon: '/icons/room.webp', label: 'Full height' },
-  cutaway: { icon: '/icons/wallcut.webp', label: 'Cutaway' },
-  down: { icon: '/icons/walllow.webp', label: 'Low' },
-  translucent: { icon: '/icons/wall.webp', label: 'Translucent' },
+  up: { icon: '/icons/room.webp', label: 'Altezza piena' },
+  cutaway: { icon: '/icons/wallcut.webp', label: 'Sezionati' },
+  down: { icon: '/icons/walllow.webp', label: 'Bassi' },
+  translucent: { icon: '/icons/wall.webp', label: 'Trasparenti' },
 }
 
 const SHADING_OPTIONS = [
-  { id: 'solid', name: 'Solid', detail: 'Flat and fast — no ambient occlusion', icon: Box },
-  { id: 'rendered', name: 'Rendered', detail: 'Full ambient occlusion', icon: Sparkles },
+  {
+    id: 'solid',
+    name: 'Solido',
+    detail: 'Piatto e veloce, senza occlusione ambientale',
+    icon: Box,
+  },
+  {
+    id: 'rendered',
+    name: 'Renderizzato',
+    detail: 'Occlusione ambientale completa',
+    icon: Sparkles,
+  },
 ] as const
 
 const FLOORPLAN_ANNOTATION_OPTIONS = [
-  { id: 'automaticDimensions', name: 'Automatic dimensions', icon: Ruler },
-  { id: 'manualDimensions', name: 'Manual dimensions', icon: Ruler },
-  { id: 'measurements', name: 'Measurements', icon: ScanLine },
-  { id: 'openingMarks', name: 'Door/window marks', icon: Tag },
-  { id: 'structuralGrids', name: 'Structural grids & column centers', icon: Grid2X2 },
-  { id: 'roomLabels', name: 'Room labels', icon: SquareUserRound },
-  { id: 'stairAnnotations', name: 'Stair annotations', icon: Footprints },
+  { id: 'automaticDimensions', name: 'Quote automatiche', icon: Ruler },
+  { id: 'manualDimensions', name: 'Quote manuali', icon: Ruler },
+  { id: 'measurements', name: 'Misure', icon: ScanLine },
+  { id: 'openingMarks', name: 'Sigle di porte e finestre', icon: Tag },
+  { id: 'structuralGrids', name: 'Griglie strutturali e assi dei pilastri', icon: Grid2X2 },
+  { id: 'roomLabels', name: 'Etichette delle stanze', icon: SquareUserRound },
+  { id: 'stairAnnotations', name: 'Annotazioni delle scale', icon: Footprints },
 ] as const
 
 const FLOORPLAN_MODE_OPTIONS = [
   {
     id: 'default',
-    name: 'Default',
-    detail: 'Clean plan; dimensions appear with selection',
+    name: 'Base',
+    detail: 'Pianta pulita; le quote compaiono con la selezione',
   },
   {
     id: 'expert',
-    name: 'Expert',
-    detail: 'Full documentation and annotation controls',
+    name: 'Esperto',
+    detail: 'Documentazione completa e controllo delle annotazioni',
   },
 ] as const
 
 const FLOORPLAN_WALL_DIMENSION_REFERENCE_OPTIONS = [
-  { id: 'finished-faces', name: 'Finished faces', detail: 'Full wall thickness' },
-  { id: 'centerline', name: 'Wall centerline', detail: 'Single wall axis' },
-  { id: 'stud-faces', name: 'Face of stud', detail: 'Structural core face' },
+  { id: 'finished-faces', name: 'Facce finite', detail: 'Spessore completo del muro' },
+  { id: 'centerline', name: 'Asse del muro', detail: "Solo l'asse del muro" },
+  { id: 'stud-faces', name: 'Faccia della struttura', detail: 'Faccia del nucleo strutturale' },
 ] as const
 
 function CollapseSidebarButton() {
@@ -143,9 +153,11 @@ function CollapseSidebarButton() {
 
   return (
     <div className={TOOLBAR_CONTAINER}>
-      <ToolbarTooltip label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}>
+      <ToolbarTooltip
+        label={isCollapsed ? 'Espandi la barra laterale' : 'Comprimi la barra laterale'}
+      >
         <button
-          aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          aria-label={isCollapsed ? 'Espandi la barra laterale' : 'Comprimi la barra laterale'}
           className={TOOLBAR_BTN}
           onClick={toggle}
           type="button"
@@ -177,7 +189,7 @@ function LevelModeToggle() {
     if (next) setLevelMode(next)
   }
 
-  const label = `Levels: ${levelMode === 'manual' ? 'Manual' : (levelModeLabels[levelMode] ?? 'Stack')}`
+  const label = `Piani: ${levelMode === 'manual' ? 'Manuale' : (levelModeLabels[levelMode] ?? 'Impilati')}`
 
   return (
     <ToolbarTooltip label={label}>
@@ -197,7 +209,7 @@ function LevelModeToggle() {
         ) : (
           <IconifyIcon height={14} icon="charm:stack-push" width={14} />
         )}
-        <span className="font-medium text-xs">{levelModeLabels[levelMode] ?? 'Stack'}</span>
+        <span className="font-medium text-xs">{levelModeLabels[levelMode] ?? 'Impilati'}</span>
       </button>
     </ToolbarTooltip>
   )
@@ -215,7 +227,7 @@ function WallModeToggle() {
   }
 
   return (
-    <ToolbarTooltip label={`Walls: ${config.label}`}>
+    <ToolbarTooltip label={`Muri: ${config.label}`}>
       <button
         className={cn(
           TOOLBAR_BTN,
@@ -238,9 +250,9 @@ function WallModeToggle() {
 // camera projection, units, render mode, edges and scene theme.
 
 const EDGE_OPTIONS = [
-  { id: 'off', name: 'Off', detail: 'No edge lines' },
-  { id: 'soft', name: 'Soft', detail: 'Faint outline of major creases' },
-  { id: 'strong', name: 'Strong', detail: 'Crisp, opaque edge lines' },
+  { id: 'off', name: 'Nessuno', detail: 'Nessuna linea di spigolo' },
+  { id: 'soft', name: 'Leggeri', detail: 'Contorno tenue degli spigoli principali' },
+  { id: 'strong', name: 'Marcati', detail: 'Linee di spigolo nette e opache' },
 ] as const satisfies readonly { id: EdgeMode; name: string; detail: string }[]
 
 const SUBMENU_CONTENT_CLASS = 'min-w-56 rounded-xl border-border/45 bg-popover/95 backdrop-blur-xl'
@@ -291,15 +303,15 @@ function DisplayMenu() {
 
   return (
     <DropdownMenu>
-      <ToolbarTooltip label="Display settings">
+      <ToolbarTooltip label="Impostazioni di visualizzazione">
         <DropdownMenuTrigger asChild>
           <button
-            aria-label="Display settings"
+            aria-label="Impostazioni di visualizzazione"
             className={cn(TOOLBAR_BTN, 'w-auto gap-1.5 px-2.5 text-foreground/90')}
             type="button"
           >
             <SlidersHorizontal className="h-3.5 w-3.5 shrink-0" />
-            <span className="font-medium text-xs">Display</span>
+            <span className="font-medium text-xs">Visualizza</span>
           </button>
         </DropdownMenuTrigger>
       </ToolbarTooltip>
@@ -311,7 +323,7 @@ function DisplayMenu() {
       >
         <DropdownMenuItem onSelect={(e) => keepOpen(e, () => setShowGrid(!showGrid))}>
           <Grid2X2 className="h-4 w-4" />
-          <span>Grid</span>
+          <span>Griglia</span>
           {showGrid ? (
             <Eye className="ml-auto h-4 w-4 text-foreground" />
           ) : (
@@ -323,7 +335,7 @@ function DisplayMenu() {
             onSelect={(e) => keepOpen(e, () => setShowMeasurements(!showMeasurements))}
           >
             <Ruler className="h-4 w-4" />
-            <span>{scene === 'split' ? '3D measurements' : 'Measurements'}</span>
+            <span>{scene === 'split' ? 'Misure 3D' : 'Misure'}</span>
             {showMeasurements ? (
               <Eye className="ml-auto h-4 w-4 text-foreground" />
             ) : (
@@ -336,9 +348,9 @@ function DisplayMenu() {
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <Layers3 className="h-4 w-4" />
-                <span>Floor plan mode</span>
+                <span>Modalità della pianta</span>
                 <span className="ml-auto text-muted-foreground text-xs">
-                  {floorplanMode === 'default' ? 'Default' : 'Expert'}
+                  {floorplanMode === 'default' ? 'Base' : 'Esperto'}
                 </span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent className={SUBMENU_CONTENT_CLASS}>
@@ -360,7 +372,7 @@ function DisplayMenu() {
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger>
                     <Layers3 className="h-4 w-4" />
-                    <span>Floor plan annotations</span>
+                    <span>Annotazioni della pianta</span>
                   </DropdownMenuSubTrigger>
                   <DropdownMenuSubContent className={SUBMENU_CONTENT_CLASS}>
                     {FLOORPLAN_ANNOTATION_OPTIONS.map((option) => {
@@ -388,7 +400,7 @@ function DisplayMenu() {
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger>
                     <Ruler className="h-4 w-4" />
-                    <span>Wall dimensions</span>
+                    <span>Quote dei muri</span>
                     <span className="ml-auto text-muted-foreground text-xs">
                       {
                         FLOORPLAN_WALL_DIMENSION_REFERENCE_OPTIONS.find(
@@ -422,15 +434,17 @@ function DisplayMenu() {
         ) : null}
         <DropdownMenuItem onSelect={(e) => keepOpen(e, () => setMagneticSnap(!magneticSnap))}>
           <Magnet className="h-4 w-4" />
-          <span>Magnetic snap</span>
+          <span>Aggancio magnetico</span>
           <span className="ml-auto text-muted-foreground text-xs">
-            {magneticSnap ? 'On' : 'Off'}
+            {magneticSnap ? 'Attivo' : 'Disattivo'}
           </span>
         </DropdownMenuItem>
         <DropdownMenuItem onSelect={(e) => keepOpen(e, () => setShadows(!shadows))}>
           <Contrast className="h-4 w-4" />
-          <span>Shadows</span>
-          <span className="ml-auto text-muted-foreground text-xs">{shadows ? 'On' : 'Off'}</span>
+          <span>Ombre</span>
+          <span className="ml-auto text-muted-foreground text-xs">
+            {shadows ? 'Attive' : 'Disattive'}
+          </span>
         </DropdownMenuItem>
         <DropdownMenuItem
           onSelect={(e) =>
@@ -444,9 +458,9 @@ function DisplayMenu() {
             icon={cameraMode === 'perspective' ? 'icon-park-outline:perspective' : 'vaadin:grid'}
             width={16}
           />
-          <span>Camera</span>
+          <span>Vista</span>
           <span className="ml-auto text-muted-foreground text-xs">
-            {cameraMode === 'perspective' ? 'Perspective' : 'Orthographic'}
+            {cameraMode === 'perspective' ? 'Prospettica' : 'Ortogonale'}
           </span>
         </DropdownMenuItem>
         <DropdownMenuSub>
@@ -454,13 +468,13 @@ function DisplayMenu() {
             <span className="flex h-4 w-4 items-center justify-center font-semibold text-[10px]">
               {unit === 'imperial' ? 'ft' : metricNotation === 'millimeters' ? 'mm' : 'm'}
             </span>
-            <span>Units</span>
+            <span>Unità</span>
             <span className="ml-auto text-muted-foreground text-xs">
               {unit === 'imperial'
-                ? 'Feet & inches'
+                ? 'Piedi e pollici'
                 : metricNotation === 'millimeters'
-                  ? 'Millimeters'
-                  : 'Meters'}
+                  ? 'Millimetri'
+                  : 'Metri'}
             </span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent className={SUBMENU_CONTENT_CLASS}>
@@ -468,7 +482,7 @@ function DisplayMenu() {
               <span className="flex h-4 w-4 items-center justify-center font-semibold text-[10px]">
                 m
               </span>
-              <span>Meters</span>
+              <span>Metri</span>
               {unit === 'metric' && metricNotation === 'meters' ? (
                 <Check className="ml-auto h-4 w-4 text-foreground" />
               ) : null}
@@ -477,7 +491,7 @@ function DisplayMenu() {
               <span className="flex h-4 w-4 items-center justify-center font-semibold text-[10px]">
                 mm
               </span>
-              <span>Millimeters</span>
+              <span>Millimetri</span>
               {unit === 'metric' && metricNotation === 'millimeters' ? (
                 <Check className="ml-auto h-4 w-4 text-foreground" />
               ) : null}
@@ -486,7 +500,7 @@ function DisplayMenu() {
               <span className="flex h-4 w-4 items-center justify-center font-semibold text-[10px]">
                 ft
               </span>
-              <span>Feet & inches</span>
+              <span>Piedi e pollici</span>
               {unit === 'imperial' ? <Check className="ml-auto h-4 w-4 text-foreground" /> : null}
             </DropdownMenuItem>
           </DropdownMenuSubContent>
@@ -522,7 +536,7 @@ function DisplayMenu() {
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <PenLine className="h-4 w-4" />
-            <span>Edges</span>
+            <span>Spigoli</span>
             <span className="ml-auto text-muted-foreground text-xs">{activeEdges.name}</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent className={SUBMENU_CONTENT_CLASS}>
@@ -541,7 +555,7 @@ function DisplayMenu() {
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <SwatchBook className="h-4 w-4" />
-            <span>Scene theme</span>
+            <span>Tema della scena</span>
             <span className="ml-auto truncate text-muted-foreground text-xs">
               {activeTheme.name}
             </span>
@@ -589,7 +603,7 @@ function WalkthroughButton() {
   }, [isFirstPersonMode, setFirstPersonMode])
 
   return (
-    <ToolbarTooltip label="Walkthrough">
+    <ToolbarTooltip label="Visita">
       <button
         className={cn(
           TOOLBAR_BTN,
@@ -606,14 +620,14 @@ function WalkthroughButton() {
 
 function PreviewButton() {
   return (
-    <ToolbarTooltip label="Preview mode">
+    <ToolbarTooltip label="Modalità anteprima">
       <button
         className="flex items-center gap-1.5 px-2.5 font-medium text-muted-foreground/80 text-xs transition-colors hover:bg-white/8 hover:text-foreground/90"
         onClick={() => useEditor.getState().setPreviewMode(true)}
         type="button"
       >
         <Eye className="h-3.5 w-3.5 shrink-0" />
-        <span>Preview</span>
+        <span>Anteprima</span>
       </button>
     </ToolbarTooltip>
   )
@@ -662,7 +676,7 @@ export function EditorViewerToolbarRight({
   vrButton,
   vrActive = false,
   vrDisabled = false,
-  vrLabel = vrActive ? 'Exit VR' : 'Enter VR',
+  vrLabel = vrActive ? 'Esci dalla VR' : 'Entra in VR',
 }: {
   onVRToggle?: () => void
   vrButton?: ReactNode

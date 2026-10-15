@@ -210,7 +210,7 @@ function LevelRow({
         >
           <button
             {...dragHandleProps}
-            aria-label={`Reorder ${getLevelDisplayName(level)}`}
+            aria-label={`Riordina ${getLevelDisplayName(level)}`}
             className={cn(
               'ml-0.5 flex h-6 w-4 shrink-0 cursor-grab touch-none items-center justify-center rounded-md text-muted-foreground/35 opacity-0 transition-colors hover:bg-black/4 dark:hover:bg-white/5 hover:text-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/50 group-hover/level:opacity-100',
               isDragging && 'cursor-grabbing opacity-100',
@@ -220,7 +220,7 @@ function LevelRow({
               dragHandleProps?.onClick?.(e)
             }}
             ref={dragHandleRef}
-            title="Drag to reorder"
+            title="Trascina per riordinare"
             type="button"
           >
             <GripVertical className="h-3.5 w-3.5" />
@@ -241,7 +241,7 @@ function LevelRow({
               <span
                 className="ml-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
                 style={{ backgroundColor: unitDotColor }}
-                title="Focused unit has zones here"
+                title="L'unità isolata ha zone su questo piano"
               />
             )}
           </button>
@@ -252,7 +252,7 @@ function LevelRow({
               <button
                 className="mr-0.5 shrink-0 whitespace-nowrap rounded px-1 py-0.5 font-mono text-[10px] text-muted-foreground tabular-nums transition-colors hover:bg-black/4 hover:text-foreground dark:text-muted-foreground/50 dark:hover:bg-white/5 dark:hover:text-foreground"
                 onClick={(e) => e.stopPropagation()}
-                title="Level height"
+                title="Altezza del piano"
                 type="button"
               >
                 {storeyHeightLabel}
@@ -266,7 +266,7 @@ function LevelRow({
               sideOffset={8}
             >
               <SliderControl
-                label="Level height"
+                label="Altezza del piano"
                 max={20}
                 min={1}
                 onChange={(v) => updateNode(level.id, { height: v })}
@@ -309,7 +309,7 @@ function LevelRow({
                 type="button"
               >
                 <Copy className="h-3 w-3" />
-                Duplicate level
+                Duplica piano
               </button>
               <button
                 className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-muted-foreground text-xs transition-colors hover:bg-black/6 dark:hover:bg-white/10 hover:text-foreground"
@@ -320,7 +320,7 @@ function LevelRow({
                 type="button"
               >
                 <Copy className="h-3 w-3" />
-                Duplicate with options...
+                Duplica con opzioni...
               </button>
               {onPaste && (
                 <button
@@ -332,7 +332,7 @@ function LevelRow({
                   type="button"
                 >
                   <ClipboardPaste className="h-3 w-3" />
-                  Paste copied selection
+                  Incolla la selezione copiata
                 </button>
               )}
               <button
@@ -342,11 +342,11 @@ function LevelRow({
                   e.stopPropagation()
                   onRequestDelete()
                 }}
-                title={canDeleteLevel ? 'Delete level' : 'The ground level cannot be deleted'}
+                title={canDeleteLevel ? 'Elimina piano' : 'Il piano terra non si può eliminare'}
                 type="button"
               >
                 <Trash2 className="h-3 w-3" />
-                Delete level
+                Elimina piano
               </button>
             </PopoverContent>
           </Popover>
@@ -438,12 +438,12 @@ function UnitFocusChip() {
         className="h-2 w-2 shrink-0 rounded-full"
         style={{ backgroundColor: focusedUnit.color }}
       />
-      <span className="truncate">{focusedUnit.name || 'Unit'}</span>
+      <span className="truncate">{focusedUnit.name || 'Unità'}</span>
       <button
-        aria-label="Exit unit focus"
+        aria-label="Esci dall'unità isolata"
         className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-black/6 dark:hover:bg-white/10 hover:text-foreground"
         onClick={() => leaveUnitFocus()}
-        title="Exit unit focus"
+        title="Esci dall'unità isolata"
         type="button"
       >
         <X className="h-3 w-3" />
@@ -651,7 +651,7 @@ export function FloatingLevelSelector() {
               // read only from outside: nothing here depends on it.
               data-guide-target="level-add"
               onClick={handleAddAbove}
-              title={topIsRoofLevel ? 'Add a floor under the roof' : 'Add level above'}
+              title={topIsRoofLevel ? 'Aggiungi un piano sotto il tetto' : 'Aggiungi piano sopra'}
               type="button"
             >
               <Plus className="h-2.5 w-2.5" />
@@ -663,7 +663,7 @@ export function FloatingLevelSelector() {
             <button
               className={cn(addButtonClass, 'bottom-0 translate-y-1/2')}
               onClick={handleAddBelow}
-              title="Add level below"
+              title="Aggiungi piano sotto"
               type="button"
             >
               <Plus className="h-2.5 w-2.5" />
@@ -720,7 +720,7 @@ export function FloatingLevelSelector() {
                         <button
                           className={cn(addButtonClass, 'bottom-0 translate-y-1/2')}
                           onClick={() => handleInsertBetween(sortedIndex - 1)}
-                          title="Insert level here"
+                          title="Inserisci un piano qui"
                           type="button"
                         >
                           <Plus className="h-2.5 w-2.5" />
@@ -740,11 +740,11 @@ export function FloatingLevelSelector() {
       <Dialog onOpenChange={(open) => !open && setDeletingLevel(null)} open={!!deletingLevel}>
         <DialogContent showCloseButton={false}>
           <DialogHeader>
-            <DialogTitle>Delete level</DialogTitle>
+            <DialogTitle>Elimina piano</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete{' '}
-              <strong>{deletingLevel ? getLevelDisplayName(deletingLevel) : ''}</strong>? All
-              walls, floors, and objects on this level will be permanently removed.
+              Vuoi davvero eliminare{' '}
+              <strong>{deletingLevel ? getLevelDisplayName(deletingLevel) : ''}</strong>? Tutti i
+              muri, i pavimenti e gli oggetti di questo piano saranno eliminati definitivamente.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -753,14 +753,14 @@ export function FloatingLevelSelector() {
               onClick={() => setDeletingLevel(null)}
               type="button"
             >
-              Cancel
+              Annulla
             </button>
             <button
               className="rounded-full bg-red-600 px-4 py-2 text-sm text-white transition-colors hover:bg-red-700"
               onClick={handleConfirmDelete}
               type="button"
             >
-              Delete
+              Elimina
             </button>
           </DialogFooter>
         </DialogContent>

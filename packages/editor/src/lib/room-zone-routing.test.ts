@@ -123,8 +123,8 @@ describe('a room is the room from every route (point 1)', () => {
       expect(useViewer.getState().selection.zoneId).toBe(zone.id)
       expect(useEditor.getState().room).toBeNull()
     }
-    expect(zoneKindLabel(lawn)).toBe('Zone')
-    expect(zoneKindLabel(open)).toBe('Room')
+    expect(zoneKindLabel(lawn)).toBe('Zona')
+    expect(zoneKindLabel(open)).toBe('Stanza')
   })
 
   test('while a unit is focused, a room stays a zone so arranging the unit keeps working', () => {
@@ -140,7 +140,7 @@ describe('a room is the room from every route (point 1)', () => {
     const created = addZoneToNewUnit(zoneId as ZoneNode['id'])!
     expect(useScene.temporal.getState().pastStates).toHaveLength(1)
     expect(zoneUnits(nodes(), zoneId).current?.id).toBe(created)
-    expect(zoneUnits(nodes(), zoneId).current?.name).toBe('Unit 1')
+    expect(zoneUnits(nodes(), zoneId).current?.name).toBe('Unità 1')
     const other = UnitNode.parse({ name: 'Flat B' })
     useScene.getState().createNode(other, BUILDING as AnyNodeId)
     assignZoneToUnit(zoneId as ZoneNode['id'], other.id)

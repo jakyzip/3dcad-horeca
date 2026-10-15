@@ -858,8 +858,8 @@ export async function sendBubble(
   const label = area
     ? regionLabel(area.ids.length + area.more)
     : bubble.targets.length > 1
-      ? `${first?.name} and ${bubble.targets.length - 1} more`
-      : (first?.name ?? 'Selection')
+      ? `${first?.name} e altri ${bubble.targets.length - 1}`
+      : (first?.name ?? 'Selezione')
   state.addPin({
     model,
     anchor: bubble.anchor,

@@ -147,8 +147,8 @@ export function OpenRoomPanel({ zoneId, onClose }: { zoneId: string; onClose: ()
     >
       <div className="flex flex-col px-4 pt-3 pb-4 text-sm" data-open-room-panel={zoneId}>
         <p className="text-muted-foreground text-xs">
-          {formatAreaLabel(area([{ outer: zone.polygon, holes: zone.holes }]), unit, 2)} · Close
-          its walls to build its floor and ceiling.
+          {formatAreaLabel(area([{ outer: zone.polygon, holes: zone.holes }]), unit, 2)} · Chiudi
+          i suoi muri per costruire pavimento e soffitto.
         </p>
         <RoomUnitRow zoneId={zoneId} />
         <button
@@ -157,7 +157,7 @@ export function OpenRoomPanel({ zoneId, onClose }: { zoneId: string; onClose: ()
           onClick={() => requestRoomDeletion(zoneId)}
           type="button"
         >
-          Delete room
+          Elimina stanza
         </button>
       </div>
     </PanelWrapper>

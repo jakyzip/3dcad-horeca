@@ -81,7 +81,7 @@ export function OpenWallEndsHint({
         }}
         type="button"
       >
-        Show
+        Mostra
       </button>
     </div>,
     document.body,

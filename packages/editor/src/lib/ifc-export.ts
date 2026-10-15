@@ -194,7 +194,7 @@ export function exportPreparedSceneToIfc(
   const warnings =
     missing > 0
       ? [
-          `${missing} ${missing === 1 ? 'object has' : 'objects have'} no exportable geometry and ${missing === 1 ? 'was' : 'were'} left out of the IFC file.`,
+          `${missing} ${missing === 1 ? 'oggetto non ha' : 'oggetti non hanno'} geometria esportabile ${missing === 1 ? 'ed è stato escluso' : 'e sono stati esclusi'} dal file IFC.`,
         ]
       : []
   return { data: ifc, warnings }

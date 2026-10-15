@@ -65,7 +65,7 @@ export function NodeActionMenu({
   onPointerEnter,
   onPointerLeave,
   children,
-  deleteLabel = 'Delete',
+  deleteLabel = 'Elimina',
   deleteDisabledReason,
 }: NodeActionMenuProps) {
   return (
@@ -77,58 +77,58 @@ export function NodeActionMenu({
       onPointerUp={onPointerUp}
     >
       {onFind && (
-        <ActionMenuButton label="Find in catalog" onClick={onFind}>
+        <ActionMenuButton label="Trova nel catalogo" onClick={onFind}>
           <Search className="h-4 w-4" />
         </ActionMenuButton>
       )}
       {onMove && (
-        <ActionMenuButton label="Move" onClick={onMove}>
+        <ActionMenuButton label="Sposta" onClick={onMove}>
           <Move className="h-4 w-4" />
         </ActionMenuButton>
       )}
       {onEditMesh && (
-        <ActionMenuButton label="Edit mesh" onClick={onEditMesh}>
+        <ActionMenuButton label="Modifica mesh" onClick={onEditMesh}>
           <PencilRuler className="h-4 w-4" />
         </ActionMenuButton>
       )}
       {onGroup && (
-        <ActionMenuButton keys={['Cmd/Ctrl', 'G']} label="Group selection" onClick={onGroup}>
+        <ActionMenuButton keys={['Cmd/Ctrl', 'G']} label="Raggruppa la selezione" onClick={onGroup}>
           <Group className="h-4 w-4" />
         </ActionMenuButton>
       )}
       {onUngroup && (
         <ActionMenuButton
           keys={['Cmd/Ctrl', 'Shift', 'G']}
-          label="Ungroup selection"
+          label="Separa il gruppo"
           onClick={onUngroup}
         >
           <Ungroup className="h-4 w-4" />
         </ActionMenuButton>
       )}
       {onCurve && (
-        <ActionMenuButton label="Curve" onClick={onCurve}>
+        <ActionMenuButton label="Curva" onClick={onCurve}>
           <Spline className="h-4 w-4" />
         </ActionMenuButton>
       )}
       {onRotateLeft && (
-        <ActionMenuButton label="Rotate left" onClick={onRotateLeft}>
+        <ActionMenuButton label="Ruota a sinistra" onClick={onRotateLeft}>
           <RotateCcw className="h-4 w-4" />
         </ActionMenuButton>
       )}
       {onRotateRight && (
-        <ActionMenuButton label="Rotate right" onClick={onRotateRight}>
+        <ActionMenuButton label="Ruota a destra" onClick={onRotateRight}>
           <RotateCw className="h-4 w-4" />
         </ActionMenuButton>
       )}
       <RegistryActionContributions />
       {children}
       {onDuplicate && (
-        <ActionMenuButton label="Duplicate" onClick={onDuplicate}>
+        <ActionMenuButton label="Duplica" onClick={onDuplicate}>
           <Copy className="h-4 w-4" />
         </ActionMenuButton>
       )}
       {onAddHole && (
-        <ActionMenuButton label="Cut out" onClick={onAddHole}>
+        <ActionMenuButton label="Ritaglia" onClick={onAddHole}>
           <Icon height={16} icon="carbon:cut-out" width={16} />
         </ActionMenuButton>
       )}
