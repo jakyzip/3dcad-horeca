@@ -44,6 +44,17 @@ describe('readProductRef', () => {
     expect(readProductRef({ product: 'TAV' })).toEqual({ kind: 'invalid' })
   })
 
+  test('an article with a code but no CRM id is local: drawn and listed, never sent', () => {
+    expect(
+      readProductRef({ product: { item_id: '', code: ' FRY-1 ', name: 'Friggitrice' } }),
+    ).toEqual({ kind: 'local', ref: { item_id: '', code: 'FRY-1', name: 'Friggitrice' } })
+    expect(readProductRef({ product: { code: 'FRY-1' } })).toEqual({
+      kind: 'local',
+      ref: { item_id: '', code: 'FRY-1', name: '' },
+    })
+    expect(readProductRef({ product: { item_id: '', code: '  ' } })).toEqual({ kind: 'invalid' })
+  })
+
   test('code and name may be missing', () => {
     expect(readProductRef({ product: { item_id: A } })).toEqual({
       kind: 'article',
@@ -88,6 +99,18 @@ describe('buildDistinta', () => {
       ),
     )
     expect(distinta.rows).toEqual([{ item_id: B, code: 'TAV', name: 'Tavolo', quantity: 1 }])
+  })
+
+  test('local articles are counted by code, apart from the CRM rows', () => {
+    const fry = { code: 'FRY-1', name: 'Friggitrice' }
+    const distinta = buildDistinta(
+      byId(node(fry), node(fry), node({ code: 'ABB', name: 'Abbattitore' }), node({ item_id: A })),
+    )
+    expect(distinta.rows).toEqual([{ item_id: A, code: '', name: '', quantity: 1 }])
+    expect(distinta.local).toEqual([
+      { item_id: '', code: 'ABB', name: 'Abbattitore', quantity: 1 },
+      { item_id: '', code: 'FRY-1', name: 'Friggitrice', quantity: 2 },
+    ])
   })
 
   test('counts invalid product data apart', () => {
@@ -150,6 +173,7 @@ describe('inviaDistintaPayload', () => {
   test('refuses what the CRM would refuse', async () => {
     const tooMany = {
       rows: [{ item_id: A, code: 'CEL', name: 'Cella', quantity: 10_001 }],
+      local: [],
       invalid: 0,
     }
     expect(await inviaDistintaPayload(drawing, tooMany)).toEqual({
@@ -162,11 +186,11 @@ describe('inviaDistintaPayload', () => {
       name: 'X',
       quantity: 1,
     }))
-    expect(await inviaDistintaPayload(drawing, { rows, invalid: 0 })).toEqual({
+    expect(await inviaDistintaPayload(drawing, { rows, local: [], invalid: 0 })).toEqual({
       ok: false,
       error: 'La distinta ha 2001 righe: il CRM ne accetta al massimo 2000.',
     })
-    expect(await inviaDistintaPayload(drawing, { rows: [], invalid: 0 })).toEqual({
+    expect(await inviaDistintaPayload(drawing, { rows: [], local: [], invalid: 0 })).toEqual({
       ok: false,
       error: 'La distinta è vuota.',
     })
@@ -174,9 +198,19 @@ describe('inviaDistintaPayload', () => {
 })
 
 describe('distintaCsv', () => {
+  test('lists local articles too, with an empty CRM id', () => {
+    const csv = distintaCsv({
+      rows: [{ item_id: A, code: 'CEL', name: 'Cella', quantity: 1 }],
+      local: [{ item_id: '', code: 'FRY-1', name: 'Friggitrice', quantity: 2 }],
+      invalid: 0,
+    })
+    expect(csv.split('\r\n').slice(1, 3)).toEqual([`CEL;Cella;1;${A}`, 'FRY-1;Friggitrice;2;'])
+  })
+
   test('semicolon separated with a BOM, quoting where needed', () => {
     const csv = distintaCsv({
       rows: [{ item_id: A, code: 'TAV;2', name: 'Tavolo "inox"', quantity: 3 }],
+      local: [],
       invalid: 0,
     })
     expect(csv).toBe(`﻿Codice;Articolo;Quantità;ID articolo\r\n"TAV;2";"Tavolo ""inox""";3;${A}\r\n`)

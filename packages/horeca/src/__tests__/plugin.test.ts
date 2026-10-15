@@ -9,10 +9,13 @@ import {
   CELLA_FRIGO,
   CellaFrigoNode,
   type DistintaNode,
+  GENERICO,
+  GenericoNode,
   horecaPlugin,
   LAVELLO,
   LavelloNode,
 } from '../index'
+import { reshapeNode } from '../shape-field'
 
 const TAV = { item_id: 'b0000000-0000-4000-8000-000000000002', code: 'BF-150', name: 'Banco frigo' }
 const CEL = { item_id: 'a0000000-0000-4000-8000-000000000001', code: 'CEL-20', name: 'Cella 2×2' }
@@ -37,6 +40,10 @@ function scene() {
       metadata: { product: TAV },
     }),
     BancoFrigoNode.parse({ ...nodeRegistry.get(BANCO_FRIGO)!.defaults() }),
+    BancoFrigoNode.parse({
+      ...nodeRegistry.get(BANCO_FRIGO)!.defaults(),
+      metadata: { product: { code: 'BF-X', name: 'Banco da listino' } },
+    }),
     CellaFrigoNode.parse({
       ...nodeRegistry.get(CELLA_FRIGO)!.defaults(),
       metadata: { product: CEL },
@@ -51,8 +58,8 @@ function scene() {
 }
 
 describe('horeca plugin', () => {
-  test('registers the three equipment kinds', () => {
-    for (const kind of [BANCO_FRIGO, CELLA_FRIGO, LAVELLO]) {
+  test('registers the equipment kinds', () => {
+    for (const kind of [BANCO_FRIGO, CELLA_FRIGO, LAVELLO, GENERICO]) {
       expect(nodeRegistry.get(kind)?.kind).toBe(kind)
     }
   })
@@ -62,6 +69,7 @@ describe('horeca plugin', () => {
       [BANCO_FRIGO, BancoFrigoNode],
       [CELLA_FRIGO, CellaFrigoNode],
       [LAVELLO, LavelloNode],
+      [GENERICO, GenericoNode],
     ] as const) {
       const def = nodeRegistry.get(kind)!
       const node = schema.parse(def.defaults())
@@ -86,6 +94,7 @@ describe('horeca plugin', () => {
     expect(schedules.map((s) => s.title).sort()).toEqual(['Banchi frigo', 'Celle frigo'])
     expect(cells('Banchi frigo')).toEqual([
       { code: 'BF-150', name: 'Banco frigo', quantity: '2' },
+      { code: 'BF-X', name: 'Banco da listino (non nel CRM)', quantity: '1' },
       { code: '—', name: 'Senza articolo', quantity: '1' },
     ])
     expect(cells('Celle frigo')).toEqual([{ code: 'CEL-20', name: 'Cella 2×2', quantity: '1' }])
@@ -107,5 +116,28 @@ describe('horeca plugin', () => {
       DistintaNode
     >
     expect(buildDistinta(saved).rows.map((r) => r.quantity)).toEqual([2, 1])
+  })
+
+  test('changing shape keeps place, size, name and article under a new id', () => {
+    const banco = BancoFrigoNode.parse({
+      ...nodeRegistry.get(BANCO_FRIGO)!.defaults(),
+      name: 'Banco bar',
+      position: [2, 0, 3],
+      rotation: Math.PI / 2,
+      width: 2.5,
+      metadata: { product: TAV },
+    })
+    const block = reshapeNode(banco, GENERICO)!
+    expect(block.type).toBe(GENERICO)
+    expect(block.id).not.toBe(banco.id)
+    expect(block).toMatchObject({
+      name: 'Banco bar',
+      position: [2, 0, 3],
+      rotation: Math.PI / 2,
+      width: 2.5,
+      depth: banco.depth,
+      metadata: { product: TAV },
+    })
+    expect(reshapeNode(banco, BANCO_FRIGO)).toBeNull()
   })
 })

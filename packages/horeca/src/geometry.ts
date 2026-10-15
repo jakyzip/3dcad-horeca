@@ -6,7 +6,7 @@ import {
   Mesh,
   MeshStandardMaterial,
 } from 'three'
-import type { BancoFrigoNode, CellaFrigoNode, LavelloNode } from './schema'
+import type { BancoFrigoNode, CellaFrigoNode, GenericoNode, LavelloNode } from './schema'
 
 // Medium-quality looks (see CLAUDE.md): flat PBR colours, no textures.
 const STAINLESS = { color: '#c9ccd1', metalness: 0.75, roughness: 0.35 }
@@ -153,5 +153,17 @@ export function buildLavelloGeometry(node: LavelloNode): Group {
   spout.position.set(0, H + 0.29, -D / 2 + frontD / 2 + 0.08)
   spout.name = 'lavello-spout'
   group.add(spout)
+  return group
+}
+
+/** Generic article: a plain steel block on a plinth, sized like the article. */
+export function buildGenericoGeometry(node: GenericoNode): Group {
+  const group = new Group()
+  const { width: W, depth: D, height: H } = node
+  const steel = new MeshStandardMaterial(STAINLESS)
+  const gasket = new MeshStandardMaterial(GASKET)
+  const plinth = Math.min(PLINTH, H * 0.2)
+  addBox(group, { w: W * 0.97, h: plinth, d: D * 0.9, y: plinth / 2 }, gasket, 'generico-plinth')
+  addBox(group, { w: W, h: H - plinth, d: D, y: plinth + (H - plinth) / 2 }, steel, 'generico-body')
   return group
 }

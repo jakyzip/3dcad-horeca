@@ -9,8 +9,20 @@ import type { FloorplanNodeExtension } from '@pascal-app/editor'
 import type { Object3D } from 'three'
 import type { ZodObject, ZodType } from 'zod'
 import type { DistintaNode } from './distinta'
-import { bancoMarks, cellaMarks, equipmentFloorplan, lavelloMarks } from './floorplan'
-import { buildBancoFrigoGeometry, buildCellaFrigoGeometry, buildLavelloGeometry } from './geometry'
+import {
+  bancoMarks,
+  cellaMarks,
+  equipmentFloorplan,
+  genericoMarks,
+  lavelloMarks,
+} from './floorplan'
+import {
+  buildBancoFrigoGeometry,
+  buildCellaFrigoGeometry,
+  buildGenericoGeometry,
+  buildLavelloGeometry,
+} from './geometry'
+import { readProductRef } from './product'
 import { ProductField } from './product-field'
 import { equipmentSchedule } from './schedule'
 import {
@@ -19,9 +31,12 @@ import {
   CELLA_FRIGO,
   CellaFrigoNode,
   type EquipmentNode,
+  GENERICO,
+  GenericoNode,
   LAVELLO,
   LavelloNode,
 } from './schema'
+import { ShapeField } from './shape-field'
 
 type EquipmentSpec<S extends ZodObject> = {
   kind: string
@@ -34,6 +49,8 @@ type EquipmentSpec<S extends ZodObject> = {
   size: { width: number; depth: number; height: number }
   build: (node: EquipmentNode) => Object3D
   marks: (hw: number, hd: number) => Array<[number, number, number, number]>
+  /** Text written inside the plan footprint. */
+  planLabel?: (node: EquipmentNode) => string | undefined
   paletteOrder: number
 }
 
@@ -56,7 +73,15 @@ const parametrics: ParametricDescriptor<EquipmentNode> = {
     {
       label: 'Articolo',
       defaultExpanded: true,
-      fields: [{ key: 'product', kind: 'custom', component: ProductField }],
+      fields: [
+        { key: 'product', kind: 'custom', component: ProductField },
+        {
+          key: 'shape',
+          kind: 'custom',
+          // Every equipment kind, read lazily: the list is complete only once all are defined.
+          component: ({ node }) => <ShapeField kinds={EQUIPMENT_KINDS} node={node} />,
+        },
+      ],
     },
     {
       label: 'Dimensioni',
@@ -93,7 +118,10 @@ function defineEquipment<S extends ZodObject>(spec: EquipmentSpec<S>): AnyNodeDe
       const n = node as unknown as EquipmentNode
       return JSON.stringify([n.width, n.depth, n.height])
     },
-    floorplan: (node, ctx) => equipmentFloorplan(node as unknown as EquipmentNode, ctx, spec.marks),
+    floorplan: (node, ctx) => {
+      const n = node as unknown as EquipmentNode
+      return equipmentFloorplan(n, ctx, spec.marks, spec.planLabel?.(n))
+    },
     tool: () =>
       import('./tool').then(({ placementToolFor }) => ({
         default: placementToolFor({
@@ -167,5 +195,31 @@ export const lavelloDefinition = defineEquipment({
   paletteOrder: 30,
 })
 
-export const EQUIPMENT_DEFINITIONS = [bancoFrigoDefinition, cellaFrigoDefinition, lavelloDefinition]
-export const EQUIPMENT_KINDS: readonly string[] = [BANCO_FRIGO, CELLA_FRIGO, LAVELLO]
+/** The article code, else its name, else the node name. */
+function articleLabel(node: EquipmentNode): string | undefined {
+  const read = readProductRef(node.metadata)
+  if (read.kind === 'article' || read.kind === 'local') return read.ref.code || read.ref.name
+  return node.name
+}
+
+export const genericoDefinition = defineEquipment({
+  kind: GENERICO,
+  schema: GenericoNode,
+  label: 'Attrezzatura generica',
+  plural: 'Altre attrezzature',
+  description: 'Blocco con le misure dell’articolo, per le categorie senza una forma dedicata.',
+  icon: '/icons/horeca/generico.svg',
+  size: { width: 0.6, depth: 0.6, height: 0.85 },
+  build: buildGenericoGeometry as (node: EquipmentNode) => Object3D,
+  marks: genericoMarks,
+  planLabel: articleLabel,
+  paletteOrder: 90,
+})
+
+export const EQUIPMENT_DEFINITIONS = [
+  bancoFrigoDefinition,
+  cellaFrigoDefinition,
+  lavelloDefinition,
+  genericoDefinition,
+]
+export const EQUIPMENT_KINDS: readonly string[] = [BANCO_FRIGO, CELLA_FRIGO, LAVELLO, GENERICO]

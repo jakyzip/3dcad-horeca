@@ -85,7 +85,25 @@ Punti aperti emersi:
 
 ## Fase 2: catalogo Ho.Re.Ca
 
-Modelli GLB da fonti CC0 o proprie, ognuno con riga in `ASSETS.md`. Per ogni elemento: dimensioni reali, ingombro 2D, codice articolo. Nome dei file e tag coerenti con `AssetInput` (`packages/core/src/schema/nodes/item.ts`).
+Rivista il 2026-10-15 con l'utente. Il catalogo vero sta nel CRM (`catalog_items`, misure in mm, nessun modello 3D per ora); le forme sono parametriche da codice, non GLB. Il catalogo "padrone" è quello dell'app Preventivatore (`app_id` obbligatorio): il CAD lo legge, non lo scrive. L'import di un listino nel catalogo vero va fatto nel Preventivatore o nel CRM (lavoro separato in quei progetti).
+
+### 2a. Catalogo da file (fatto, provato dall'utente il 2026-10-15)
+- `catalog.ts`: lettura CSV (`;` o `,`, intestazioni in italiano o inglese, decimali con la virgola) e JSON (elenco o `{ items }`), errori per riga.
+- `catalog-store.ts`: catalogo e associazione categoria → forma salvati nel browser (localStorage); un nuovo file sostituisce gli articoli da file, non quelli dal CRM.
+- Articoli senza ID CRM ("non nel CRM"): disegnati, nel CSV e nel PDF, mai nel JSON per il CRM.
+- Nuova forma "Attrezzatura generica" (blocco con le misure, codice scritto in pianta) per le categorie senza forma.
+- Pannello: importa file, cerca e inserisci articolo (misure e dati già compilati), forma per categoria. Inspector: "Forma" cambia la forma di un elemento già piazzato in un solo passo annullabile.
+- File di prova: `docs/progetto/esempio-catalogo.csv` (attrezzature di un laboratorio di gelateria, codici inventati).
+
+### 2b. Catalogo dal CRM (fatto, da provare con un utente vero)
+- `crm.ts`: login Supabase (email e password, la password non si salva), rinnovo della sessione, lettura di `catalog_items` a pagine da 1000 con i nomi da `catalog_categories`; dalla seconda volta solo le modifiche (`updated_at`) e le cancellazioni (`deleted_rows`); articoli disattivati tolti. Stesse richieste del CAD in Rust.
+- Gli articoli del CRM entrano nello stesso catalogo locale (sorgente `crm`); quelli da file restano.
+- Configurazione in `.env.local` (esclusa da git): `NEXT_PUBLIC_CRM_SUPABASE_URL`, `NEXT_PUBLIC_CRM_SUPABASE_KEY` (chiave publishable). Verificato senza credenziali: il CRM risponde, accetta richieste dal browser e senza login non mostra il catalogo (RLS).
+- Pannello: sezione CRM con accesso, "Aggiorna catalogo dal CRM" ed esci.
+
+### 2c. Forme nuove (da fare, ordine proposto dal render di riferimento)
+1. Tavolo su gambe (con o senza ripiano). 2. Pensile ante scorrevoli, anche con gocciolatoio (appeso: serve "altezza da terra"). 3. Lava-mani a parete. 4. Lavastoviglie e abbattitore. 5. Mantecatore e pastorizzatore. 6. Frigorifero verticale. 7. Tramoggia su ruote.
+Inoltre, emersi dal render: rivestimento pareti in piastrelle (servono texture CC0), etichette con il nome delle attrezzature nel 3D.
 
 ## Fase 3: rilievo e DXF
 

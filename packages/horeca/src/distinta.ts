@@ -13,8 +13,10 @@ export const MAX_QUANTITY = 10_000
 export type DistintaRow = { item_id: string; code: string; name: string; quantity: number }
 
 export type Distinta = {
-  /** Sorted by code, then item_id. */
+  /** CRM articles, sorted by code, then item_id. The only rows sent to the CRM. */
   rows: DistintaRow[]
+  /** Articles not in the CRM catalog (empty item_id), counted by code and sorted by it. */
+  local: DistintaRow[]
   /** Nodes with product data that cannot be read (e.g. an id that is not a uuid). */
   invalid: number
 }
@@ -44,6 +46,7 @@ const compare = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0)
 /** Count the articles placed in the scene: one per visible node carrying product data. */
 export function buildDistinta(nodes: Readonly<Record<string, DistintaNode>>): Distinta {
   const rows = new Map<string, DistintaRow>()
+  const local = new Map<string, DistintaRow>()
   let invalid = 0
   for (const node of Object.values(nodes)) {
     const read = readProductRef(node.metadata)
@@ -52,16 +55,15 @@ export function buildDistinta(nodes: Readonly<Record<string, DistintaNode>>): Di
       invalid++
       continue
     }
-    const row = rows.get(read.ref.item_id)
+    const [bucket, key] =
+      read.kind === 'article' ? [rows, read.ref.item_id] : [local, read.ref.code]
+    const row = bucket.get(key)
     if (row) row.quantity++
-    else rows.set(read.ref.item_id, { ...read.ref, quantity: 1 })
+    else bucket.set(key, { ...read.ref, quantity: 1 })
   }
-  return {
-    rows: [...rows.values()].sort(
-      (a, b) => compare(a.code, b.code) || compare(a.item_id, b.item_id),
-    ),
-    invalid,
-  }
+  const byCode = (a: DistintaRow, b: DistintaRow) =>
+    compare(a.code, b.code) || compare(a.item_id, b.item_id)
+  return { rows: [...rows.values()].sort(byCode), local: [...local.values()].sort(byCode), invalid }
 }
 
 /**
@@ -131,7 +133,7 @@ function csvField(value: string | number): string {
 export function distintaCsv(distinta: Distinta): string {
   const lines = [
     ['Codice', 'Articolo', 'Quantità', 'ID articolo'],
-    ...distinta.rows.map((r) => [r.code, r.name, r.quantity, r.item_id]),
+    ...[...distinta.rows, ...distinta.local].map((r) => [r.code, r.name, r.quantity, r.item_id]),
   ]
   return `﻿${lines.map((line) => line.map(csvField).join(';')).join('\r\n')}\r\n`
 }

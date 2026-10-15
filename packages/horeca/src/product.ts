@@ -6,7 +6,8 @@ import { z } from 'zod'
  * and `name` are copies for display, so a drawing reads well without the catalog at hand.
  */
 export const ProductRef = z.object({
-  item_id: z.string(),
+  // Empty for an article not (yet) in the CRM catalog, e.g. one imported from a file.
+  item_id: z.string().default(''),
   code: z.string().default(''),
   name: z.string().default(''),
 })
@@ -18,6 +19,8 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 export type ProductRead =
   | { kind: 'article'; ref: ProductRef }
+  /** An article with a code but no CRM id: drawn and listed, never sent to the CRM. */
+  | { kind: 'local'; ref: ProductRef }
   /** Product data is there but unusable (e.g. an id edited by hand): reported, never counted. */
   | { kind: 'invalid' }
   | { kind: 'none' }
@@ -29,13 +32,10 @@ export function readProductRef(metadata: Record<string, unknown> | undefined): P
   const parsed = ProductRef.safeParse(raw)
   if (!parsed.success) return { kind: 'invalid' }
   const item_id = parsed.data.item_id.trim()
+  const code = parsed.data.code.trim()
+  const name = parsed.data.name.trim()
+  if (!item_id)
+    return code ? { kind: 'local', ref: { item_id: '', code, name } } : { kind: 'invalid' }
   if (!UUID.test(item_id)) return { kind: 'invalid' }
-  return {
-    kind: 'article',
-    ref: {
-      item_id: item_id.toLowerCase(),
-      code: parsed.data.code.trim(),
-      name: parsed.data.name.trim(),
-    },
-  }
+  return { kind: 'article', ref: { item_id: item_id.toLowerCase(), code, name } }
 }

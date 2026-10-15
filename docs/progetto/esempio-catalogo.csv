@@ -1,0 +1,11 @@
+Codice;Nome;Categoria;Larghezza mm;Profondità mm;Altezza mm;ID CRM
+LAV-120;Lavello inox con gocciolatoio 120;Lavelli;1200;700;900;
+LVM-40;Lava-mani a parete;Lavelli;400;350;300;
+LVS-60;Lavastoviglie sottobanco;Lavaggio;600;600;850;
+MAN-12;Mantecatore 12 kg;Macchine gelato;550;700;1400;
+PAS-60;Pastorizzatore 60 l;Macchine gelato;500;800;1300;
+TAV-140;Tavolo inox su gambe 140;Tavoli;1400;700;900;
+ABB-5;Abbattitore 5 teglie;Refrigerazione;750;740;880;
+FRI-60;Frigorifero verticale;Refrigerazione;600;650;1850;
+TRA-1;Tramoggia su ruote;Contenitori;400;600;700;
+BF-150;Banco frigo 150;Banchi refrigerati;1500;700;850;

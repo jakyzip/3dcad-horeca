@@ -9,6 +9,7 @@ export function equipmentFloorplan(
   node: EquipmentNode,
   ctx: GeometryContext,
   marks: (hw: number, hd: number) => Array<[number, number, number, number]>,
+  label?: string,
 ): FloorplanGeometry {
   const [cx, , cz] = node.position
   const cos = Math.cos(node.rotation)
@@ -50,6 +51,20 @@ export function equipmentFloorplan(
       opacity: 0.7,
     })
   }
+  if (label) {
+    children.push({
+      kind: 'text',
+      x: cx,
+      y: cz,
+      text: label,
+      // Fits the shorter side, within readable plan sizes.
+      fontSize: Math.max(0.06, Math.min(0.15, Math.min(node.width, node.depth) / 4)),
+      fill: '#1f2937',
+      textAnchor: 'middle',
+      dominantBaseline: 'central',
+      upright: true,
+    })
+  }
   if (selected) children.push({ kind: 'move-handle', point: [cx, cz] })
   return { kind: 'group', children }
 }
@@ -76,3 +91,6 @@ export const lavelloMarks = (hw: number, hd: number): Array<[number, number, num
     [-bw, bd, -bw, -bd],
   ]
 }
+
+/** Generic block: no mark, the article code is written inside instead. */
+export const genericoMarks = (): Array<[number, number, number, number]> => []

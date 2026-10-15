@@ -12,12 +12,19 @@ export function equipmentSchedule(
 ): FloorplanSchedule | null {
   if (siblings.length === 0) return null
   const distinta = buildDistinta(Object.fromEntries(siblings.map((node) => [node.id, node])))
-  const counted = distinta.rows.reduce((sum, row) => sum + row.quantity, 0)
+  const listed = [...distinta.rows, ...distinta.local]
+  const counted = listed.reduce((sum, row) => sum + row.quantity, 0)
   const withoutArticle = siblings.length - counted - distinta.invalid
-  const rows = distinta.rows.map((row) => ({
-    id: row.item_id,
-    cells: { code: row.code, name: row.name, quantity: String(row.quantity) },
-  }))
+  const rows = [
+    ...distinta.rows.map((row) => ({
+      id: row.item_id,
+      cells: { code: row.code, name: row.name, quantity: String(row.quantity) },
+    })),
+    ...distinta.local.map((row) => ({
+      id: `locale:${row.code}`,
+      cells: { code: row.code, name: `${row.name} (non nel CRM)`, quantity: String(row.quantity) },
+    })),
+  ]
   if (withoutArticle > 0) {
     rows.push({
       id: 'senza-articolo',

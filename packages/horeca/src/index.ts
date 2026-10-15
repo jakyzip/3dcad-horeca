@@ -26,11 +26,14 @@ export const horecaHostPanel: EditorHostPanel = {
   summary: 'Attrezzature e distinta',
 }
 
+export { type CatalogArticle, type CatalogParseResult, parseCatalogFile } from './catalog'
+export { placementFor, type ShapeMap, shapeForCategory, useHorecaCatalog } from './catalog-store'
 export {
   bancoFrigoDefinition,
   cellaFrigoDefinition,
   EQUIPMENT_DEFINITIONS,
   EQUIPMENT_KINDS,
+  genericoDefinition,
   lavelloDefinition,
 } from './definitions'
 export {
@@ -54,6 +57,8 @@ export {
   CELLA_FRIGO,
   CellaFrigoNode,
   type EquipmentNode,
+  GENERICO,
+  GenericoNode,
   HORECA_PLUGIN_ID,
   LAVELLO,
   LavelloNode,
