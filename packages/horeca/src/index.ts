@@ -1,13 +1,14 @@
 import type { Plugin } from '@pascal-app/core'
 import type { EditorHostPanel } from '@pascal-app/editor'
 import { EQUIPMENT_DEFINITIONS, EQUIPMENT_KINDS } from './definitions'
+import { RILIEVO, rilievoDefinition } from './rilievo'
 import { HORECA_PLUGIN_ID } from './schema'
 
 /** The Ho.Re.Ca node pack. Load it with `extendPluginDiscovery(async () => [horecaPlugin])`. */
 export const horecaPlugin: Plugin = {
   id: HORECA_PLUGIN_ID,
   apiVersion: 1,
-  nodes: EQUIPMENT_DEFINITIONS,
+  nodes: [...EQUIPMENT_DEFINITIONS, rilievoDefinition],
 }
 
 /**
@@ -19,7 +20,7 @@ export const horecaHostPanel: EditorHostPanel = {
   label: 'Ho.Re.Ca',
   icon: { kind: 'url', src: '/icons/horeca/banco-frigo.svg' },
   component: () => import('./panel'),
-  kinds: EQUIPMENT_KINDS,
+  kinds: [...EQUIPMENT_KINDS, RILIEVO],
   pluginId: HORECA_PLUGIN_ID,
   defaultInstalled: true,
   description: 'Attrezzature Ho.Re.Ca e distinta materiali per il CRM.',
@@ -49,7 +50,9 @@ export {
   MAX_QUANTITY,
   MAX_ROWS,
 } from './distinta'
+export { parseDxfRilievo, type RilievoData } from './dxf-import'
 export { PRODUCT_METADATA_KEY, type ProductRead, ProductRef, readProductRef } from './product'
+export { RILIEVO, RilievoNode, rilievoDefinition } from './rilievo'
 export { equipmentSchedule } from './schedule'
 export {
   ABBATTITORE,

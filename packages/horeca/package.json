@@ -46,5 +46,9 @@
     "@react-three/fiber": "9.8.1",
     "zustand": "^5.0.15"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@tarikjabiri/dxf": "2.9.0",
+    "dxf": "5.3.1"
+  }
 }

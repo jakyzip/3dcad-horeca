@@ -114,11 +114,28 @@ Dal render di riferimento (laboratorio di gelateria): tavolo su gambe (ripiano s
 ### 2e. Etichette 3D (fatto, da provare nell'editor)
 Sopra ogni attrezzatura, nella vista 3D, compare il nome: quello dell'articolo, altrimenti il nome dato all'oggetto, altrimenti il tipo ("Mantecatore"). Si accendono e spengono dal pannello Ho.Re.Ca ("Mostra i nomi delle attrezzature nel 3D"); la scelta resta salvata nel browser. Le etichette seguono l'oggetto quando lo sposti e spariscono se lo nascondi. Non finiscono negli export GLB/PDF (sono testo della pagina, non geometria). Codice: `packages/horeca/src/labels.ts` e `labels-3d.tsx`.
 
-Stato al 2026-10-15: forme 2c e piastrelle 2d committate (`1a999d5`); etichette 2e committate sul branch `fase-2c-forme`. Catalogo dal CRM (2b) provato dall'utente con un account vero: funziona. `bun run ci` passa. Prova a mano nell'editor ancora da fare per 2c, 2d e 2e.
+Stato al 2026-10-15: forme 2c e piastrelle 2d committate (`1a999d5`); etichette 2e committate sul branch `fase-2c-forme`. Fase 3a (import DXF) committata sul branch `fase-3-dxf`; 3b (export DXF) in corso. Catalogo dal CRM (2b) provato dall'utente con un account vero: funziona. `bun run ci` passa. Prova a mano nell'editor ancora da fare per 2c, 2d e 2e.
 
 ## Fase 3: rilievo e DXF
 
-Importare un DXF come riferimento 2D (esiste il nodo `guide` per le immagini da ricalcare) ed esportare la pianta in DXF. Nessuna delle due cose è nel codice oggi. Scegliere la libreria dopo aver controllato la licenza.
+Librerie scelte con l'utente (2026-10-15), entrambe MIT come le loro dipendenze: `dxf` 5.3.1 per leggere, `@tarikjabiri/dxf` 2.9.0 per scrivere.
+
+**DWG**: non si legge direttamente. L'unico lettore libero (LibreDWG, anche nella versione per browser) è GPL-3 e renderebbe GPL tutto il progetto; le alternative (ODA) non sono ridistribuibili. L'utente salva il DWG come DXF da AutoCAD, oppure lo converte con ODA File Converter (gratuito, installato da lui, non incluso nell'app). Se si sceglie un `.dwg`, il pannello lo spiega.
+
+### 3a. Import del rilievo (fatto, da provare nell'editor)
+Pannello Ho.Re.Ca → "Importa rilievo DXF". Il disegno diventa un oggetto "Rilievo DXF" sul piano attivo (`packages/horeca/src/dxf-import.ts`, `rilievo.tsx`):
+- linee, polilinee, archi, cerchi, ellissi, spline e blocchi (anche annidati) come linee vettoriali nella pianta, nitide a ogni zoom; nel 3D come linee a terra;
+- testi (TEXT e MTEXT, ripuliti dalla formattazione) con altezza e rotazione;
+- quote lineari e allineate disegnate con lo stile quote dell'editor e la misura ricalcolata in metri; le altre quote (angoli, raggi) come linee e testi del loro blocco;
+- unità di misura letta dal file (`$INSUNITS`), altrimenti dedotta dall'ingombro; si corregge nelle proprietà ("Il disegno è in");
+- layer accendibili uno per uno (quelli spenti o congelati nel DXF partono spenti), opacità, rotazione in gradi; si sposta trascinando la cornice tratteggiata;
+- resta fuori dalla distinta e dagli export (GLB, PDF).
+Esempio per provare: `docs/progetto/esempio-rilievo.dxf` (laboratorio inventato 7 × 5 m, rigenerabile con `bun packages/horeca/scripts/genera-esempio-dxf.ts`).
+
+Da fare dopo la prova: trasformare le quote del DXF in quote dell'editor (nodo `measurement`, che però non ha scostamento né testo forzato); muri dal rilievo (scegliere due linee → muro).
+
+### 3b. Export della pianta in DXF (da fare)
+Muri, attrezzature (con codice articolo), testi e quote. Attenzione: `@tarikjabiri/dxf` 2.9.0 sbaglia la posizione della linea di quota nelle quote allineate (`addAlignedDim`); le lineari (`addLinearDim`, anche con angolo) sono giuste. Per le quote oblique serve scrivere l'entità a mano o aggirare il problema.
 
 ## Fase 4: collegamento al CRM
 

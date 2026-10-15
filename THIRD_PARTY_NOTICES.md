@@ -27,6 +27,16 @@ Stato rilevato sul `bun.lock` di upstream; da riverificare dopo aver rigenerato 
 | `@img/sharp-*` e librerie `libvips` | LGPL-3.0, Apache-2.0 | Solo se si distribuiscono binari: testo della licenza e codice | Da verificare se serve |
 | `lightningcss` | MPL-2.0 | Strumento di build, non incluso nell'app | Nessuna azione prevista |
 
+## Aggiunte da questo progetto
+
+Licenze lette nel file LICENSE di ciascun pacchetto. Serve solo conservare la nota di copyright MIT, che è dentro i pacchetti stessi.
+
+| Componente | Licenza | Copyright | Usato per |
+|---|---|---|---|
+| `dxf` 5.3.1 (dipendenze `lodash`, `vecks`, `commander`: MIT) | MIT | © 2014-2018 Ben Nortier | Lettura del rilievo DXF (fase 3) |
+| `@tarikjabiri/dxf` 2.9.0 | MIT | © 2021-present EL JABIRI Tarik | Scrittura DXF (esempio di rilievo, export della fase 3b) |
+| `@react-three/drei` (già presente in upstream) | MIT | © 2020 react-spring | Etichette 3D delle attrezzature (fase 2e) |
+
 ## Eliminate nella fase 0
 
 Non fanno più parte del progetto (né di `package.json` né di `bun.lock`): `agentation` (PolyForm Shield 1.0.0, non open source), `blob-stream` e `blob` (senza licenza; l'export PDF ora usa il `Blob` nativo), i 7 plugin di terzi e `@react-three/xr`.

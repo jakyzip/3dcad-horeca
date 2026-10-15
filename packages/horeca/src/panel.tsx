@@ -22,7 +22,9 @@ import {
   distintaCsv,
   distintaHash,
 } from './distinta'
+import { parseDxfRilievo } from './dxf-import'
 import { useHorecaLabels } from './labels'
+import { RilievoNode } from './rilievo'
 
 function armTool(kind: string, defaults: Record<string, unknown> | null = null) {
   const editor = useEditor.getState()
@@ -59,6 +61,87 @@ const BUTTON =
 const INPUT =
   'h-8 w-full rounded-md border border-border/60 bg-background px-2 text-foreground text-xs outline-none focus:border-ring'
 const HEADING = 'font-medium text-xs uppercase tracking-wide opacity-60'
+
+/** Above this a DXF is likely a whole building with furniture: still read, but slowly. */
+const BIG_DXF_BYTES = 30 * 1024 * 1024
+
+function RilievoSection() {
+  const levelId = useViewer((s) => s.selection.levelId)
+  const [message, setMessage] = useState<{ text: string; error: boolean } | null>(null)
+  const [busy, setBusy] = useState(false)
+  const fileInput = useRef<HTMLInputElement>(null)
+
+  const onFile = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    if (!file) return
+    if (/\.dwg$/i.test(file.name)) {
+      setMessage({
+        text: 'I file DWG non si possono leggere direttamente: salvalo come DXF (da AutoCAD "Salva con nome", oppure con ODA File Converter, gratuito) e importa il DXF.',
+        error: true,
+      })
+      return
+    }
+    if (!levelId) {
+      setMessage({ text: 'Apri prima un piano dell’edificio.', error: true })
+      return
+    }
+    setBusy(true)
+    setMessage(
+      file.size > BIG_DXF_BYTES
+        ? { text: 'File grande: la lettura può richiedere un po’…', error: false }
+        : null,
+    )
+    try {
+      const data = parseDxfRilievo(await file.text())
+      const node = RilievoNode.parse({
+        parentId: levelId,
+        name: file.name.replace(/\.dxf$/i, ''),
+        source: file.name,
+        unit: data.unit,
+        size: data.size,
+        layers: data.layers,
+        texts: data.texts,
+        dimensions: data.dimensions,
+      })
+      useScene.getState().createNode(node as never, levelId)
+      useViewer.getState().setSelection({ selectedIds: [node.id] })
+      const segments = data.layers.reduce((n, l) => n + l.segments.length / 4, 0)
+      setMessage({
+        text: `Importati ${segments} tratti, ${data.texts.length} testi e ${data.dimensions.length} quote su ${data.layers.length} layer.${
+          data.unitGuessed
+            ? ' Il file non dice l’unità di misura: l’ho dedotta, controllala nelle proprietà del rilievo.'
+            : ''
+        }`,
+        error: false,
+      })
+    } catch (error) {
+      setMessage({ text: error instanceof Error ? error.message : String(error), error: true })
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <section className="flex flex-col gap-2">
+      <h3 className={HEADING}>Rilievo</h3>
+      <input accept=".dxf,.dwg" className="hidden" onChange={onFile} ref={fileInput} type="file" />
+      <button
+        className={BUTTON}
+        disabled={busy}
+        onClick={() => fileInput.current?.click()}
+        type="button"
+      >
+        {busy ? 'Lettura in corso…' : 'Importa rilievo DXF'}
+      </button>
+      {message && (
+        <p className={`text-xs ${message.error ? 'text-amber-500' : 'opacity-80'}`}>
+          {message.text}
+        </p>
+      )}
+    </section>
+  )
+}
 
 function CatalogSection() {
   const articles = useHorecaCatalog((s) => s.articles)
@@ -402,6 +485,7 @@ function LabelsToggle() {
 export default function HorecaPanel() {
   return (
     <div className="flex flex-col gap-5 p-3 text-sidebar-foreground text-sm">
+      <RilievoSection />
       <CrmSection />
       <CatalogSection />
       <ShapesSection />
