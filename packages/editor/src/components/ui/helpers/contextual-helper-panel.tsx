@@ -271,7 +271,7 @@ function FenceContinuationChips() {
   const isFreehand = mode === 'freehand'
   const straightMode = isCurved ? 'continuous' : mode
   const typeLabel = isFreehand ? 'Type: Freehand' : isCurved ? 'Type: Curved' : 'Type: Straight'
-  const typeIcon = isFreehand ? 'lucide:scribble' : isCurved ? 'lucide:spline' : 'lucide:minus'
+  const typeIcon = isFreehand ? 'lucide:line-squiggle' : isCurved ? 'lucide:spline' : 'lucide:minus'
   const nextType =
     mode === 'continuous' || mode === 'single'
       ? 'curved'

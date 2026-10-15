@@ -37,6 +37,7 @@ Licenze lette nel file LICENSE di ciascun pacchetto. Serve solo conservare la no
 | `@tarikjabiri/dxf` 2.9.0 | MIT | © 2021-present EL JABIRI Tarik | Scrittura DXF (esempio di rilievo, export della fase 3b) |
 | `@react-three/drei` (già presente in upstream) | MIT | © 2020 react-spring | Etichette 3D delle attrezzature (fase 2e) |
 | `electron` 44.7.2 | MIT | © Electron contributors, © 2013-2020 GitHub Inc. | App desktop (fase 6). Include Chromium e Node.js: le loro licenze viaggiano nell'app (`LICENSE` e `LICENSES.chromium.html`, aggiunti da Electron stesso) |
+| Icone Iconify (52, copiate in `packages/editor/src/lib/offline-icons/icons.json` da `@iconify-json/*`, solo per generarle): Lucide (ISC, © Lucide Contributors), Material Design Icons (Apache-2.0, © Pictogrammers), Phosphor (MIT, © Phosphor Icons), Carbon (Apache-2.0, © IBM), Charm (MIT, © Jay Newey), IconPark Outline (Apache-2.0, © ByteDance), Qlementine (MIT, © Olivier Cléro), Vaadin (Apache-2.0, © Vaadin) | ISC, MIT, Apache-2.0 | Vedi colonna a sinistra | Icone dell'editor anche senza internet (fase 6b); prima l'editor le scaricava da api.iconify.design. ISC equivale alla MIT. Per le Apache-2.0 il testo della licenza va distribuito con l'app (fase 7) |
 | `electron-builder` 26.15.3 (solo per creare gli installatori, non è dentro l'app) | MIT | © 2015 Loopline Systems | Installatori dmg / exe / AppImage (fase 6) |
 
 ## Eliminate nella fase 0

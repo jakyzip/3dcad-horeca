@@ -43,6 +43,7 @@ import { useSaveShortcut } from '../../hooks/use-save-shortcut'
 import { useCeilingEditSessionOwner } from '../../lib/ceiling-edit-session'
 import { showsWholeBuilding, useEditorLevelDisplay } from '../../lib/editor-level-display'
 import { isSceneView } from '../../lib/editor-views'
+import '../../lib/offline-icons'
 import { useGestureLifecycleOwner } from '../../lib/gesture-lifecycle'
 import { shouldShowEditingControls } from '../../lib/interaction/overlay-policy'
 import {

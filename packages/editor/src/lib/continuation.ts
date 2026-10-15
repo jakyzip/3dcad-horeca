@@ -38,7 +38,7 @@ export const CONTINUATION_PROFILES: Record<
       continuous: 'lucide:waypoints',
       single: 'lucide:minus',
       curved: 'lucide:spline',
-      freehand: 'lucide:scribble',
+      freehand: 'lucide:line-squiggle',
     },
   },
   point: {

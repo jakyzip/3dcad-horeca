@@ -185,7 +185,16 @@ Scelta dell'utente (2026-10-15): **Electron** (niente server: chi usa l'app, per
 - comandi: `bun run start` (prova), `bun run dist:mac|win|linux`.
 Verificato: in sviluppo e impacchettata (Mac arm64) l'app avvia il server, apre l'editor, crea un progetto con la scena 3D (WebGPU disponibile); chiudendo la finestra si spegne anche il server. Creati `3DCadHo.Re.Ca-0.1.0-arm64.dmg` (~149 MB) e la versione Intel.
 Fatto anche: `executableName: 3dcadhoreca` per Linux (l'AppImage falliva per il nome del pacchetto), note di licenza di Electron in `THIRD_PARTY_NOTICES.md`, icona in `ASSETS.md`; `bun run ci` passa.
-**In attesa (scelta dell'utente, 2026-10-15)**: installatori Linux (AppImage) e Windows (nsis), da creare e provare più avanti (anche con la CI della fase 7). Aperti: firma del codice (Apple 99 $/anno, Windows), icone iconify scaricate da internet (offline mancano), aggiornamenti automatici.
+**In attesa (scelta dell'utente, 2026-10-15)**: installatori Linux (AppImage) e Windows (nsis), da creare e provare più avanti (anche con la CI della fase 7). Aperti: firma del codice (Apple 99 $/anno, Windows), aggiornamenti automatici.
+
+### 6b. Icone senza internet (fatta)
+Le 52 icone Iconify usate dall'editor (8 set, licenze MIT, ISC, Apache-2.0) sono copiate in `packages/editor/src/lib/offline-icons/icons.json` e registrate all'avvio dell'editor: niente più richieste a api.iconify.design. Dopo aver aggiunto un'icona: `bun scripts/offline-icons.ts` in `packages/editor` (il test `offline-icons.test.ts` fallisce finché non lo fai). Corretta anche `lucide:scribble`, che non esiste (icona vuota anche online), con `lucide:line-squiggle`. Verificato in Chrome: nessuna richiesta verso host esterni all'apertura di un progetto.
+
+### 6c. Firma per il Mac (in attesa del certificato)
+L'utente è iscritto all'Apple Developer Program, ma nel Portachiavi ci sono solo "Apple Development" e "Apple Distribution": per distribuire il dmg fuori dall'App Store serve "Developer ID Application" (Xcode → Impostazioni → Account → Gestisci certificati), più una password specifica per app per la notarizzazione, che l'utente salva da sé nel Portachiavi (`xcrun notarytool store-credentials`).
+
+### Traduzione in italiano (scelta dell'utente, 2026-10-15: solo italiano, direttamente nel codice)
+Circa 2.700 testi in inglese nell'editor ereditato. A blocchi con un commit ciascuno: menu e barre, pannelli, proprietà degli oggetti. Le descrizioni per l'assistente AI (MCP) restano in inglese. Più lingue: forse in futuro.
 
 ## Fase 7: rilascio
 
