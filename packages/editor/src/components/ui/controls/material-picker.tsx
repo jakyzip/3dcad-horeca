@@ -102,7 +102,7 @@ export function MaterialPicker({
               <Plus className="size-5 text-muted-foreground group-hover:text-foreground" />
             </div>
             <span className="truncate px-0.5 text-left font-medium text-[11px] text-muted-foreground group-hover:text-foreground">
-              New material
+              Nuovo materiale
             </span>
           </button>
         ) : null}

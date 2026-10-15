@@ -52,7 +52,7 @@ import {
 } from './room-construction-rows'
 import { type RoomNameOption, roomNameOptions } from './room-name-options'
 
-/** "Room · Ground floor", "Mezzanine · in Kitchen", "Room · not enclosed". */
+/** "Stanza · Ground floor", "Soppalco · in Cucina", "Stanza · non chiusa". */
 export function roomKicker(
   nodes: Record<string, AnyNode>,
   zoneId: string,
@@ -62,11 +62,11 @@ export function roomKicker(
   if (options.mezzanine && zone?.type === 'zone') {
     const host = zone.hostZoneId ? nodes[zone.hostZoneId] : undefined
     const hostName = host?.type === 'zone' ? host.name?.trim() : ''
-    return hostName ? `Mezzanine · in ${hostName}` : 'Mezzanine'
+    return hostName ? `Soppalco · in ${hostName}` : 'Soppalco'
   }
-  if (options.open) return 'Room · not enclosed'
+  if (options.open) return 'Stanza · non chiusa'
   const level = zone?.parentId ? nodes[zone.parentId] : undefined
-  return level?.type === 'level' ? `Room · ${getLevelDisplayName(level)}` : 'Room'
+  return level?.type === 'level' ? `Stanza · ${getLevelDisplayName(level)}` : 'Stanza'
 }
 
 export function RoomPanel({
@@ -88,7 +88,7 @@ export function RoomPanel({
     <PanelWrapper
       kicker={roomKicker(nodes, room.zoneId, { mezzanine })}
       onClose={onClose}
-      title={name.trim() || (mezzanine ? 'Mezzanine' : 'Room')}
+      title={name.trim() || (mezzanine ? 'Soppalco' : 'Stanza')}
       titleContent={
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <RoomColorDot zoneId={room.zoneId} />
@@ -131,7 +131,7 @@ export function OpenRoomPanel({ zoneId, onClose }: { zoneId: string; onClose: ()
     <PanelWrapper
       kicker={roomKicker(nodes, zoneId, { open: true })}
       onClose={onClose}
-      title={name.trim() || 'Room'}
+      title={name.trim() || 'Stanza'}
       titleContent={
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <RoomColorDot zoneId={zoneId} />
@@ -171,11 +171,11 @@ export function RoomUnitRow({ zoneId }: { zoneId: string }) {
   if (!buildingId) return null
   return (
     <div className="mt-3 flex min-h-8 items-center justify-between gap-3" data-room-unit={zoneId}>
-      <span className="text-muted-foreground text-xs">Unit</span>
+      <span className="text-muted-foreground text-xs">Unità</span>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
-            aria-label="Unit"
+            aria-label="Unità"
             className="flex min-w-0 items-center gap-1.5 rounded-full border border-border/50 px-2.5 py-0.5 text-xs transition-colors hover:bg-accent"
             type="button"
           >
@@ -187,7 +187,7 @@ export function RoomUnitRow({ zoneId }: { zoneId: string }) {
               />
             )}
             <span className="truncate">
-              {current ? current.name || 'Unit' : units.length ? 'None' : 'Add to a unit'}
+              {current ? current.name || 'Unità' : units.length ? 'Nessuna' : "Aggiungi a un'unità"}
             </span>
             <ChevronDown className="size-3 shrink-0 text-muted-foreground" />
           </button>
@@ -203,17 +203,17 @@ export function RoomUnitRow({ zoneId }: { zoneId: string }) {
                 className="size-2 shrink-0 rounded-full"
                 style={{ backgroundColor: unit.color }}
               />
-              <span className="flex-1 truncate">{unit.name || 'Unit'}</span>
+              <span className="flex-1 truncate">{unit.name || 'Unità'}</span>
               {unit.id === current?.id && <Check className="size-3.5" />}
             </DropdownMenuItem>
           ))}
           {units.length > 0 && <DropdownMenuSeparator />}
           <DropdownMenuItem onSelect={() => addZoneToNewUnit(zoneId as ZoneNode['id'])}>
-            New unit
+            Nuova unità
           </DropdownMenuItem>
           {current && (
             <DropdownMenuItem onSelect={() => assignZoneToUnit(zoneId as ZoneNode['id'], null)}>
-              Remove from {current.name || 'unit'}
+              Togli da {current.name || "quest'unità"}
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>
@@ -222,9 +222,9 @@ export function RoomUnitRow({ zoneId }: { zoneId: string }) {
   )
 }
 
-const count = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`
+const count = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
 
-/** "2 doors · 3 windows" (the level is in the kicker). */
+/** "2 porte · 3 finestre" (the level is in the kicker). */
 function RoomSubline({ room }: { room: RoomSelectionRecord }) {
   const text = useScene((scene) => {
     const walls = new Set(room.boundaryWallIds)
@@ -237,7 +237,7 @@ function RoomSubline({ room }: { room: RoomSelectionRecord }) {
       if (node.type === 'door') doors++
       else windows++
     }
-    return `${count(doors, 'door')} · ${count(windows, 'window')}`
+    return `${count(doors, 'porta', 'porte')} · ${count(windows, 'finestra', 'finestre')}`
   })
   return (
     <p className="text-muted-foreground text-xs" data-room-subline>
@@ -268,10 +268,10 @@ function RoomStats({ room }: { room: RoomSelectionRecord }) {
       : 0
   const { height } = roomInsideHeight(room, nodes)
   const stats = [
-    { label: 'Area', value: formatAreaLabel(room.area, unit, 2) },
-    { label: 'Perimeter', value: formatLinearMeasurement(perimeter, unit, metricNotation) },
+    { label: 'Superficie', value: formatAreaLabel(room.area, unit, 2) },
+    { label: 'Perimetro', value: formatLinearMeasurement(perimeter, unit, metricNotation) },
     {
-      label: 'Height',
+      label: 'Altezza',
       value: height === null ? '—' : formatLinearMeasurement(height, unit, metricNotation),
     },
   ]
@@ -320,13 +320,13 @@ function MezzanineRows({ room }: { room: RoomSelectionRecord }) {
     setExpanded((current) => (current === part ? null : part))
   return (
     <div className="flex flex-col" data-mezzanine-rows={zoneId}>
-      <h3 className="mt-4 mb-1.5 font-medium text-muted-foreground text-xs">Built with</h3>
+      <h3 className="mt-4 mb-1.5 font-medium text-muted-foreground text-xs">Costruito con</h3>
       <div className="flex flex-col gap-1">
         <ConstructionPart
           expanded={expanded === 'floor'}
           icon="/icons/floor.webp"
-          label="Floor"
-          meta={`${length(elevation)} up`}
+          label="Pavimento"
+          meta={`${length(elevation)} più in alto`}
           on
           onToggleExpanded={toggle('floor')}
           part="floor"
@@ -345,13 +345,13 @@ function MezzanineRows({ room }: { room: RoomSelectionRecord }) {
               }}
               type="button"
             >
-              Add stairs
+              Aggiungi scala
             </button>
           }
           expanded={false}
           icon="/icons/stairs.webp"
-          label="Stairs"
-          meta="Up from the floor below"
+          label="Scala"
+          meta="Sale dal pavimento sotto"
           on
           onToggleExpanded={() => {}}
           part="stairs"
@@ -359,22 +359,22 @@ function MezzanineRows({ room }: { room: RoomSelectionRecord }) {
         <ConstructionPart
           expanded={expanded === 'ceiling'}
           icon="/icons/ceiling.webp"
-          label="Ceiling"
+          label="Soffitto"
           meta={
             hasCeiling
               ? ceiling === null
-                ? 'Over the mezzanine'
-                : `${length(ceiling)} headroom`
-              : 'Not enough headroom'
+                ? 'Sopra il soppalco'
+                : `${length(ceiling)} di altezza libera`
+              : 'Altezza libera insufficiente'
           }
           on
           onToggleExpanded={toggle('ceiling')}
           part="ceiling"
         >
           {hasCeiling ? (
-            <PartField label="Shape">
+            <PartField label="Forma">
               <button className={pill} onClick={() => startCeilingEdit(zoneId)} type="button">
-                Edit shape
+                Modifica la forma
               </button>
             </PartField>
           ) : undefined}
@@ -401,7 +401,7 @@ function RoomColorDot({ zoneId }: { zoneId: string }) {
   return (
     <ColorDot
       color={color ?? '#3b82f6'}
-      label="Room colour — used in the plan and labels"
+      label="Colore della stanza: usato nella pianta e nelle etichette"
       onChange={(next) => useScene.getState().updateNode(zoneId as AnyNodeId, { color: next })}
       side="bottom"
     />
@@ -559,9 +559,9 @@ function RoomName({
         ) : used > 0 ? (
           <span
             className="shrink-0 whitespace-nowrap font-mono text-[11px] text-muted-foreground"
-            title="Picking it adds a number"
+            title="Se lo scegli, viene aggiunto un numero"
           >
-            {used} on this level
+            {used} su questo piano
           </span>
         ) : null}
       </div>
@@ -580,19 +580,19 @@ function RoomName({
           )}
           data-guide-target="room-name"
           data-room-name-combobox
-          title={name.trim() ? `${name.trim()} · Rename` : 'Rename'}
+          title={name.trim() ? `${name.trim()} · Rinomina` : 'Rinomina'}
         >
           <input
             aria-activedescendant={activeId}
             aria-autocomplete="list"
             aria-controls={expanded ? listId : undefined}
             aria-expanded={expanded}
-            aria-label={mezzanine ? 'Mezzanine name' : 'Room name'}
+            aria-label={mezzanine ? 'Nome del soppalco' : 'Nome della stanza'}
             autoComplete="off"
             className="min-w-0 flex-1 text-ellipsis bg-transparent p-0 font-semibold text-foreground text-sm leading-snug tracking-tight outline-none placeholder:text-foreground"
             data-room-name
             maxLength={40}
-            placeholder={mezzanine ? 'Mezzanine' : 'Room'}
+            placeholder={mezzanine ? 'Soppalco' : 'Stanza'}
             ref={inputRef}
             role="combobox"
             spellCheck={false}
@@ -624,7 +624,7 @@ function RoomName({
             }}
           />
           <button
-            aria-label={mezzanine ? 'Show mezzanine names' : 'Show room names'}
+            aria-label={mezzanine ? 'Mostra i nomi dei soppalchi' : 'Mostra i nomi delle stanze'}
             className="grid size-6 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             data-room-name-open
             tabIndex={-1}
@@ -647,7 +647,7 @@ function RoomName({
       </PopoverAnchor>
       <PopoverContent
         align="start"
-        aria-label={mezzanine ? 'Mezzanine names' : 'Room names'}
+        aria-label={mezzanine ? 'Nomi dei soppalchi' : 'Nomi delle stanze'}
         className="flex max-h-85 w-(--radix-popover-trigger-width) min-w-60 flex-col overflow-hidden p-0"
         id={listId}
         role="listbox"
@@ -687,9 +687,9 @@ function RoomName({
         <div className="flex shrink-0 flex-wrap gap-x-3 gap-y-1 border-border border-t px-3 py-2 text-[11px] text-muted-foreground">
           {(
             [
-              [['↑', '↓'], 'Browse'],
-              [['Enter'], 'Pick'],
-              [['Esc'], 'Revert'],
+              [['↑', '↓'], 'Scorri'],
+              [['Enter'], 'Scegli'],
+              [['Esc'], 'Ripristina'],
             ] as const
           ).map(([keys, action]) => (
             <span className="flex items-center gap-1" key={action}>
@@ -709,7 +709,7 @@ function RoomNameOptionLabel({ option }: { option: RoomNameOption }) {
   if (option.kind === 'typed') {
     return (
       <span className="min-w-0 flex-1 truncate">
-        <span className="text-muted-foreground">Use </span>“{option.value}”
+        <span className="text-muted-foreground">Usa </span>“{option.value}”
       </span>
     )
   }

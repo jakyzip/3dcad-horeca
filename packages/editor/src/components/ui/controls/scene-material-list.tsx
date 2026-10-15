@@ -103,7 +103,7 @@ function SceneMaterialRow({
   const duplicateMaterial = () => {
     addSceneMaterial({
       id: generateSceneMaterialId(),
-      name: `${sceneMaterial.name} copy`,
+      name: `${sceneMaterial.name} (copia)`,
       material: structuredClone(sceneMaterial.material) as MaterialSchema,
     })
   }
@@ -139,13 +139,13 @@ function SceneMaterialRow({
 
       <div className="mt-2 flex items-center justify-between gap-2">
         <span className="text-muted-foreground text-xs">
-          Used by {usageCount} {usageCount === 1 ? 'part' : 'parts'}
+          Usato da {usageCount} {usageCount === 1 ? 'parte' : 'parti'}
         </span>
         <div className="flex items-center gap-1">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                aria-label="Paint with"
+                aria-label="Dipingi con questo materiale"
                 onClick={() =>
                   armMaterialPaint({
                     materialPreset: toSceneMaterialRef(id),
@@ -159,12 +159,12 @@ function SceneMaterialRow({
                 <Paintbrush />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Paint with</TooltipContent>
+            <TooltipContent>Dipingi con questo materiale</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                aria-label="Edit"
+                aria-label="Modifica"
                 aria-pressed={isEditingMaterial}
                 onClick={() => setIsEditingMaterial((value) => !value)}
                 size="icon-sm"
@@ -174,12 +174,12 @@ function SceneMaterialRow({
                 <Pencil />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Edit</TooltipContent>
+            <TooltipContent>Modifica</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                aria-label="Duplicate"
+                aria-label="Duplica"
                 onClick={duplicateMaterial}
                 size="icon-sm"
                 type="button"
@@ -188,12 +188,12 @@ function SceneMaterialRow({
                 <Copy />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Duplicate</TooltipContent>
+            <TooltipContent>Duplica</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                aria-label="Delete"
+                aria-label="Elimina"
                 onClick={() => removeSceneMaterial(id)}
                 size="icon-sm"
                 type="button"
@@ -202,7 +202,7 @@ function SceneMaterialRow({
                 <Trash2 />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Delete</TooltipContent>
+            <TooltipContent>Elimina</TooltipContent>
           </Tooltip>
         </div>
       </div>

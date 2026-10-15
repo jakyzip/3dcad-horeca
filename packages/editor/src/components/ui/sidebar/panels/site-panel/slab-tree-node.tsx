@@ -49,7 +49,7 @@ export const SlabTreeNode = memo(function SlabTreeNode({
   const handleStartEditing = useCallback(() => setIsEditing(true), [])
   const handleStopEditing = useCallback(() => setIsEditing(false), [])
 
-  const defaultName = `Slab (${formatAreaLabel(calculatePolygonArea(polygon), unit)})`
+  const defaultName = `Solaio (${formatAreaLabel(calculatePolygonArea(polygon), unit)})`
 
   return (
     <TreeNodeWrapper

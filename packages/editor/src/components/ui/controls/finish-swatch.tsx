@@ -17,7 +17,7 @@ type Swatch = { label: string; color: string | null; image: string | null }
 /** How a finish reference reads in a panel: its catalog tile, its colour, or its scene material. */
 function useFinishSwatch(ref: string | undefined, fallback: string): Swatch {
   const materials = useScene((state) => state.materials)
-  if (!ref) return { ...describe(fallback, materials), label: 'Default' }
+  if (!ref) return { ...describe(fallback, materials), label: 'Predefinito' }
   return describe(ref, materials)
 }
 
@@ -33,7 +33,7 @@ function describe(ref: string, materials: ReturnType<typeof useScene.getState>['
   const scene = sceneId ? materials[sceneId as keyof typeof materials] : undefined
   if (scene) return { label: scene.name, color: scene.material.properties?.color ?? null, image: null }
   if (ref.startsWith('#')) return { label: ref.toUpperCase(), color: ref, image: null }
-  return { label: 'Default', color: null, image: null }
+  return { label: 'Predefinito', color: null, image: null }
 }
 
 /**

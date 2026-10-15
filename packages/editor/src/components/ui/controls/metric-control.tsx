@@ -237,7 +237,7 @@ export function MetricControl({
         })
       : null
     if (stored === null) {
-      const numValue = Number.parseFloat(inputValue)
+      const numValue = Number.parseFloat(inputValue.replace(',', '.'))
       stored = Number.isFinite(numValue) ? toStoredValue(numValue) : null
     }
     if (stored === null) {
@@ -363,7 +363,7 @@ export function MetricControl({
             onClick={handleValueClick}
           >
             <span className="font-mono tabular-nums tracking-tight">
-              {Number(displayValue.toFixed(precision)).toFixed(precision)}
+              {Number(displayValue.toFixed(precision)).toFixed(precision).replace('.', ',')}
             </span>
             {displayUnit && <span className="ml-[1px] text-muted-foreground">{displayUnit}</span>}
           </div>

@@ -62,31 +62,35 @@ function mergeRefusalNote(
   const reach = length(limit ?? 0)
   const blocking = nodes[blockingId ?? '']
   const blockingKind = !blocking
-    ? 'something'
+    ? 'qualcosa'
     : blocking.type === 'item'
-      ? 'an item'
-      : `a ${blocking.type}`
+      ? 'un oggetto'
+      : blocking.type === 'door'
+        ? 'una porta'
+        : blocking.type === 'window'
+          ? 'una finestra'
+          : 'un altro elemento'
   switch (refusal.code) {
     case 'window_already_joined':
-      return 'One of them already wraps another corner. Unwrap it first.'
+      return "Una delle due gira già intorno a un altro angolo. Prima separala."
     case 'window_not_on_wall':
-      return 'A roof or dormer window cannot join another window.'
+      return "Una finestra sul tetto o in un abbaino non può unirsi a un'altra finestra."
     case 'windows_not_adjacent':
-      return `They are too far apart. Windows merge with at most ${reach} between them.`
+      return `Sono troppo distanti. Le finestre si uniscono se tra loro ci sono al massimo ${reach}.`
     case 'opening_between':
-      return `There is ${blockingKind} between them.`
+      return `Tra le due c'è ${blockingKind}.`
     case 'walls_not_meeting':
-      return 'Their walls do not meet at a corner.'
+      return 'I loro muri non si incontrano in un angolo.'
     case 'corner_angle':
-      return 'Their walls meet at too sharp or too flat an angle for a corner window.'
+      return "I loro muri formano un angolo troppo acuto o troppo piatto per una finestra d'angolo."
     case 'window_not_at_corner':
-      return `One of them is too far from the corner. A window joins one within ${reach} of it.`
+      return `Una delle due è troppo lontana dall'angolo. Una finestra si unisce se dista al massimo ${reach} dall'angolo.`
     case 'height_exceeds_wall':
-      return 'The window selected first is taller than the other wall. Select the other one first.'
+      return "La finestra selezionata per prima è più alta dell'altro muro. Seleziona prima l'altra."
     case 'opening_overlap':
-      return `Sliding them to the corner would overlap ${blockingKind}.`
+      return `Spostandole fino all'angolo si sovrapporrebbero a ${blockingKind}.`
     default:
-      return 'These windows cannot be merged.'
+      return 'Queste finestre non si possono unire.'
   }
 }
 
@@ -110,7 +114,7 @@ function MergeWindowsAction() {
         className="basis-full whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-40"
         disabled={readOnly}
         icon={<Split className="h-4 w-4" />}
-        label="Unwrap the corner"
+        label="Separa l'angolo"
         onClick={() => {
           writeWindowChanges({
             create: null,
@@ -119,7 +123,7 @@ function MergeWindowsAction() {
           })
           triggerSFX('sfx:structure-build')
         }}
-        title="Unwrap the corner: both windows stay, each framed at the corner"
+        title="Separa l'angolo: restano entrambe le finestre, ciascuna con il proprio telaio all'angolo"
       />
     )
   const { merge } = offer
@@ -134,7 +138,7 @@ function MergeWindowsAction() {
         className="basis-full whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-40"
         disabled={readOnly || !merge}
         icon={<Merge className="h-4 w-4" />}
-        label="Merge windows"
+        label="Unisci le finestre"
         onClick={() => {
           if (!merge) return
           runAsSingleSceneHistoryStep(useScene, () =>
@@ -150,8 +154,8 @@ function MergeWindowsAction() {
         title={
           note ??
           (merge?.kind === 'corner'
-            ? 'Merge windows into a corner window: both take the height, sill and type of the one you selected first'
-            : 'Merge windows into one across both: it keeps the type and style of the one you selected first')
+            ? "Unisci le finestre in una finestra d'angolo: entrambe prendono altezza, davanzale e tipo di quella selezionata per prima"
+            : "Unisci le finestre in una sola che le copre entrambe: mantiene tipo e stile di quella selezionata per prima")
         }
       />
       {note ? <p className="basis-full px-1 text-muted-foreground text-xs">{note}</p> : null}
@@ -182,39 +186,39 @@ export function MultiSelectionActions() {
         <ActionButton
           className="basis-full whitespace-nowrap"
           icon={<Building2 className="h-4 w-4" />}
-          label="Select building"
+          label="Seleziona l'edificio"
           onClick={() => selectBuilding(buildingId)}
-          title="Select the whole building to move all its levels"
+          title="Seleziona tutto l'edificio per spostarne tutti i piani"
         />
       )}
       {showGroup && (
         <ActionButton
           className="min-w-20 px-2"
           icon={<Group className="h-4 w-4" />}
-          label="Group"
+          label="Raggruppa"
           onClick={() => groupCurrentSelection()}
-          title="Group (Ctrl/Cmd+G)"
+          title="Raggruppa (Ctrl/Cmd+G)"
         />
       )}
       {showUngroup && (
         <ActionButton
           className="min-w-20 px-2"
           icon={<Ungroup className="h-4 w-4" />}
-          label="Ungroup"
+          label="Separa il gruppo"
           onClick={() => ungroupCurrentSelection()}
-          title="Ungroup (Ctrl/Cmd+Shift+G)"
+          title="Separa il gruppo (Ctrl/Cmd+Maiusc+G)"
         />
       )}
       <ActionButton
         className="min-w-20 px-2"
         icon={<Copy className="h-4 w-4" />}
-        label="Duplicate"
+        label="Duplica"
         onClick={() => duplicateSelectionAndPickUp()}
       />
       <ActionButton
         className="min-w-20 px-2 border-red-500/40 text-red-700 dark:text-red-200 hover:bg-red-500/15"
         icon={<Trash2 className="h-4 w-4 text-red-600 dark:text-red-400" />}
-        label="Delete"
+        label="Elimina"
         onClick={() => deleteSelection()}
       />
     </ActionGroup>
@@ -246,15 +250,15 @@ export function MultiSelectionPanel({ footer }: { footer?: React.ReactNode }) {
       title={
         matchedGroup
           ? `${matchedGroup.label} · ${selectedIds.length}`
-          : `${selectedIds.length} selected`
+          : `${selectedIds.length} ${selectedIds.length === 1 ? 'selezionato' : 'selezionati'}`
       }
       width={320}
     >
       {breakdown && <div className="px-3 py-3 text-muted-foreground text-xs">{breakdown}</div>}
       {matchedGroup && (
         <div className="border-border/50 border-t px-3 py-2 text-muted-foreground text-xs">
-          {matchedGroup.label} (session only). Plain click reselects all members. Not saved with the
-          project.
+          {matchedGroup.label} (solo in questa sessione). Un clic semplice riseleziona tutti gli
+          elementi del gruppo. Non viene salvato nel progetto.
         </div>
       )}
       <div className="border-border/50 border-t p-3">

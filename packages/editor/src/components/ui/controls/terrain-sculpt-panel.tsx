@@ -15,17 +15,17 @@ import { SegmentedControl } from './segmented-control'
 import { SliderControl } from './slider-control'
 
 const VERB_OPTIONS: Array<{ value: TerrainVerb; iconSrc: string; hint: string }> = [
-  { value: 'raise', iconSrc: '/icons/terrain-raise.webp', hint: 'Raise' },
-  { value: 'lower', iconSrc: '/icons/terrain-lower.webp', hint: 'Lower' },
-  { value: 'flatten', iconSrc: '/icons/terrain-flatten.webp', hint: 'Flatten' },
-  { value: 'smooth', iconSrc: '/icons/terrain-smooth.webp', hint: 'Smooth' },
+  { value: 'raise', iconSrc: '/icons/terrain-raise.webp', hint: 'Alza' },
+  { value: 'lower', iconSrc: '/icons/terrain-lower.webp', hint: 'Abbassa' },
+  { value: 'flatten', iconSrc: '/icons/terrain-flatten.webp', hint: 'Livella' },
+  { value: 'smooth', iconSrc: '/icons/terrain-smooth.webp', hint: 'Leviga' },
 ]
 
 const VERB_HINTS: Record<TerrainVerb, string> = {
-  raise: `Drag to raise the ground. One pass moves it up to ${RAISE_METRES_PER_STROKE} m — release and drag again to go further.`,
-  lower: `Drag to lower the ground. One pass moves it down to ${RAISE_METRES_PER_STROKE} m.`,
-  flatten: 'Drag to level the ground toward the target height. It never overshoots.',
-  smooth: 'Drag to soften slopes and remove ridges. Flat ground stays flat.',
+  raise: `Trascina per alzare il terreno. Ogni passata lo alza al massimo di ${RAISE_METRES_PER_STROKE} m: rilascia e trascina di nuovo per salire ancora.`,
+  lower: `Trascina per abbassare il terreno. Ogni passata lo abbassa al massimo di ${RAISE_METRES_PER_STROKE} m.`,
+  flatten: 'Trascina per livellare il terreno verso la quota obiettivo, senza mai superarla.',
+  smooth: 'Trascina per addolcire i pendii e togliere le creste. Il terreno piano resta piano.',
 }
 
 /**
@@ -92,7 +92,7 @@ export function TerrainSculptPanel() {
           under it lands between samples and paints nothing at all.
         */}
         <SliderControl
-          label="Size"
+          label="Dimensione"
           max={maxRadius}
           min={minRadius}
           onChange={(radius) => setTerrainBrush({ radius })}
@@ -102,7 +102,7 @@ export function TerrainSculptPanel() {
           value={brush.radius}
         />
         <SliderControl
-          label="Strength"
+          label="Intensità"
           max={1}
           min={0.05}
           onChange={(strength) => setTerrainBrush({ strength })}
@@ -111,7 +111,7 @@ export function TerrainSculptPanel() {
           value={brush.strength}
         />
         <SliderControl
-          label="Softness"
+          label="Morbidezza"
           max={1}
           min={0}
           onChange={(falloff) => setTerrainBrush({ falloff })}
@@ -122,8 +122,8 @@ export function TerrainSculptPanel() {
         <SegmentedControl
           onChange={(shape) => setTerrainBrush({ shape })}
           options={[
-            { value: 'round', label: 'Round' },
-            { value: 'square', label: 'Square' },
+            { value: 'round', label: 'Rotondo' },
+            { value: 'square', label: 'Quadrato' },
           ]}
           value={brush.shape}
         />
@@ -134,7 +134,7 @@ export function TerrainSculptPanel() {
           <div className="flex items-center gap-2">
             <div className="min-w-0 flex-1">
               <SliderControl
-                label="Target"
+                label="Quota obiettivo"
                 max={50}
                 min={-50}
                 onChange={setTerrainFlattenTarget}
@@ -145,7 +145,7 @@ export function TerrainSculptPanel() {
               />
             </div>
             <Button
-              aria-label="Pick target height from the ground"
+              aria-label="Preleva la quota obiettivo dal terreno"
               aria-pressed={sampling}
               onClick={() => setTerrainSampling(!sampling)}
               size="icon-sm"
@@ -157,10 +157,10 @@ export function TerrainSculptPanel() {
           </div>
           <p className="px-0.5 text-muted-foreground text-xs">
             {sampling
-              ? 'Click the ground to pick its height as the target.'
+              ? 'Fai clic sul terreno per usarne l’altezza come quota obiettivo.'
               : flattenTarget === null
-                ? 'No target yet — the first click samples the ground under it.'
-                : 'Every flatten stroke levels toward this height.'}
+                ? 'Nessuna quota obiettivo: il primo clic preleva l’altezza del terreno sotto il cursore.'
+                : 'Ogni passata di livellamento porta il terreno verso questa altezza.'}
           </p>
         </div>
       )}
@@ -175,7 +175,7 @@ export function TerrainSculptPanel() {
           variant="outline"
         >
           <Mountain />
-          Level lot
+          Livella il lotto
         </Button>
         <Button
           className="flex-1"
@@ -185,7 +185,7 @@ export function TerrainSculptPanel() {
           type="button"
           variant="outline"
         >
-          Clear terrain
+          Azzera il terreno
         </Button>
       </div>
     </div>

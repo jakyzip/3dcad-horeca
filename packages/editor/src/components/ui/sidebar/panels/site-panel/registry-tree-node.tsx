@@ -72,7 +72,7 @@ export const RegistryTreeNode = memo(function RegistryTreeNode({
     )
   const snapTarget = resolveNodeSnapTarget(node)
   const defaultName =
-    node ? tree?.label?.(node, useScene.getState().nodes) || node.name || presentation?.label || 'Node' : 'Node'
+    node ? tree?.label?.(node, useScene.getState().nodes) || node.name || presentation?.label || 'Elemento' : 'Elemento'
   const hasChildren = children.length > 0 || hasHostChildren
 
   useEffect(() => {

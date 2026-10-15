@@ -10,6 +10,20 @@ import { focusTreeNode, handleTreeSelection, TreeNode, TreeNodeWrapper } from '.
 import { TreeNodeActions } from './tree-node-actions'
 import { DropIndicatorLine, useTreeNodeDrag } from './tree-node-drag'
 
+const ROOF_TYPE_LABEL: Record<RoofSegmentNode['roofType'], string> = {
+  hip: 'A padiglione',
+  gable: 'A capanna',
+  shed: 'A una falda',
+  gambrel: 'A capanna spezzata',
+  dutch: 'A padiglione con frontone',
+  mansard: 'A mansarda',
+  flat: 'Piano',
+  conical: 'Conico',
+}
+
+const formatSize = (a: number, b: number) =>
+  `${a.toFixed(1).replace('.', ',')}×${b.toFixed(1).replace('.', ',')} m`
+
 interface RoofTreeNodeProps {
   nodeId: AnyNodeId
   depth: number
@@ -84,7 +98,7 @@ export const RoofTreeNode = memo(function RoofTreeNode({
   }, [isDropTarget, expanded])
 
   const segmentCount = segments.length
-  const defaultName = `Roof (${segmentCount} segment${segmentCount !== 1 ? 's' : ''})`
+  const defaultName = `Tetto (${segmentCount} ${segmentCount !== 1 ? 'falde' : 'falda'})`
 
   // Hide the dragged segment from every roof while dragging
   const visibleSegments = drag ? segments.filter((seg) => seg.id !== drag.nodeId) : segments
@@ -206,7 +220,7 @@ function RoofSegmentTreeNode({
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
       if (e.button !== 0) return
-      const label = `${node.roofType.charAt(0).toUpperCase() + node.roofType.slice(1)} (${node.width.toFixed(1)}×${node.depth.toFixed(1)}m)`
+      const label = `${ROOF_TYPE_LABEL[node.roofType] ?? node.roofType} (${formatSize(node.width, node.depth)})`
       startDrag(node.id, node.type, node.parentId as string, label, e.clientX, e.clientY)
     },
     [node.id, node.type, node.parentId, node.roofType, node.width, node.depth, startDrag],
@@ -215,7 +229,7 @@ function RoofSegmentTreeNode({
   const handleStartEditing = useCallback(() => setIsEditing(true), [])
   const handleStopEditing = useCallback(() => setIsEditing(false), [])
 
-  const defaultName = `${node.roofType.charAt(0).toUpperCase() + node.roofType.slice(1)} (${node.width.toFixed(1)}x${node.depth.toFixed(1)}m)`
+  const defaultName = `${ROOF_TYPE_LABEL[node.roofType] ?? node.roofType} (${formatSize(node.width, node.depth)})`
 
   const hasAccessories = accessoryIds.length > 0
 

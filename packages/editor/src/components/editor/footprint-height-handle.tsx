@@ -184,7 +184,7 @@ function FootprintHeightArrows({ plate }: { plate: SlabNode }) {
             {shown !== null && (
               <div className={PILL}>
                 <span className="font-medium text-foreground">
-                  {upper ? 'Floor top' : 'Foundation'}
+                  {upper ? 'Pavimento finito' : 'Fondazione'}
                 </span>
                 <span className="text-muted-foreground">
                   {formatLinearMeasurement(shown, unit, metricNotation)}

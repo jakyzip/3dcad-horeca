@@ -161,7 +161,7 @@ describe('simple 3D print export', () => {
     })
 
     await expect(preparePrintExport(modelExport, false, 'print-3mf')).rejects.toThrow(
-      'did not return a valid file',
+      'non ha restituito un file valido',
     )
   })
 })

@@ -38,7 +38,7 @@ export const ColumnTreeNode = memo(function ColumnTreeNode({
     [nodeId, setSelection],
   )
 
-  const defaultName = node?.name || 'Column'
+  const defaultName = node?.name || 'Pilastro'
 
   return (
     <TreeNodeWrapper

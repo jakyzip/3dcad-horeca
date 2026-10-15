@@ -15,7 +15,7 @@ test('motion controls and one Lights switch route to independent commands', () =
     (partId) => commands.push(partId),
     () => commands.push('lights'),
   )
-  expect(controls.map((control) => control.control.label)).toEqual(['Door', 'Lights'])
+  expect(controls.map((control) => control.control.label)).toEqual(['Door', 'Luci'])
   expect(controls.map((control) => control.value)).toEqual([false, true])
   for (const control of controls) control.onChange(false)
   expect(commands).toEqual(['door', 'lights'])

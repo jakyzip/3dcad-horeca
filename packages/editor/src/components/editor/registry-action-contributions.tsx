@@ -70,7 +70,7 @@ export function MechanismButton({
   mechanism: MechanismCapability
   running: boolean
 }) {
-  const label = mechanism.icon ? (running ? 'Close' : 'Open') : running ? 'Stop' : 'Play'
+  const label = mechanism.icon ? (running ? 'Chiudi' : 'Apri') : running ? 'Ferma' : 'Avvia'
   return (
     <ActionMenuButton
       keys={['E']}

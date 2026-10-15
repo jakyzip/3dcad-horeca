@@ -24,7 +24,7 @@ export function proceduralControlDescriptors(
   if (recipe.parts.some((part) => part.light))
     controls.push({
       key: 'lights',
-      control: { kind: 'toggle', label: 'Lights' },
+      control: { kind: 'toggle', label: 'Luci' },
       value: state?.lightsOn ?? lampDefault,
       onChange: toggleLights,
     })

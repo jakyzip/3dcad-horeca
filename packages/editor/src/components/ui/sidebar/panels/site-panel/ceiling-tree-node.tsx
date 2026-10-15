@@ -77,7 +77,7 @@ export const CeilingTreeNode = memo(function CeilingTreeNode({
   const handleStartEditing = useCallback(() => setIsEditing(true), [])
   const handleStopEditing = useCallback(() => setIsEditing(false), [])
 
-  const defaultName = `Ceiling (${formatAreaLabel(calculatePolygonArea(polygon), unit)})`
+  const defaultName = `Soffitto (${formatAreaLabel(calculatePolygonArea(polygon), unit)})`
 
   return (
     <TreeNodeWrapper

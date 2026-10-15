@@ -98,32 +98,32 @@ export function FloorSection({
   const left = 64
   const right = 164
   const labels: { y: number; text: string; key: string }[] = [
-    { key: 'top', y: bandTop - 9, text: 'Floor top' },
+    { key: 'top', y: bandTop - 9, text: 'Pavimento finito' },
     {
       key: 'plate',
       y: bandTop + band / 2,
-      text: supported ? `Floor plate · ${thicknessLabel}` : `Slab · ${thicknessLabel}`,
+      text: `Solaio · ${thicknessLabel}`,
     },
     ...(foundation
       ? [
           {
             key: 'foundation',
             y: bandBottom + foundation / 2,
-            text: foundationLabel ? `Foundation · ${foundationLabel}` : 'Foundation',
+            text: foundationLabel ? `Fondazione · ${foundationLabel}` : 'Fondazione',
           },
         ]
       : []),
-    { key: 'base', y: base + 9, text: supported ? 'Walls below' : 'Ground' },
+    { key: 'base', y: base + 9, text: supported ? 'Muri sotto' : 'Terreno' },
   ]
   return (
     <figure className="flex flex-col gap-1" data-floor-section>
       <svg
         aria-label={
           supported
-            ? `Floor plate ${thicknessLabel} thick, resting on the walls below`
+            ? `Solaio spesso ${thicknessLabel}, appoggiato sui muri sottostanti`
             : raised
-              ? `Slab ${thicknessLabel} thick on a ${foundationLabel} foundation, floor top ${topLabel ?? ''} above the ground`
-              : `Slab ${thicknessLabel} thick on the ground, floor top ${topLabel ?? ''} above the ground`
+              ? `Solaio spesso ${thicknessLabel} su una fondazione di ${foundationLabel}, pavimento finito a ${topLabel ?? ''} dal terreno`
+              : `Solaio spesso ${thicknessLabel} a terra, pavimento finito a ${topLabel ?? ''} dal terreno`
         }
         className="h-auto w-full text-muted-foreground"
         role="img"
@@ -259,7 +259,7 @@ export function FloorSection({
         ))}
       </svg>
       <figcaption className="text-right text-[10px] text-muted-foreground/70">
-        Not to scale
+        Non in scala
       </figcaption>
     </figure>
   )
@@ -272,11 +272,11 @@ type Notice = {
 }
 
 export function moveTogetherLabel(count: number, lower: boolean) {
-  const verb = lower ? 'Lower' : 'Raise'
-  return count === 2 ? `${verb} both` : `${verb} all ${count}`
+  const verb = lower ? 'Abbassa' : 'Alza'
+  return count === 2 ? `${verb} entrambi` : `${verb} tutti e ${count}`
 }
 
-/** "Floor plate · Ground floor", upstairs "Floor plate · Floor 1 · rests on Ground floor". */
+/** "Solaio · Ground floor", upstairs "Solaio · Floor 1 · poggia su Ground floor". */
 export function floorPlateKicker(nodes: Record<string, AnyNode>, plate: SlabNode): string {
   const level = plate.parentId ? nodes[plate.parentId] : undefined
   const levelName = level?.type === 'level' ? ` · ${getLevelDisplayName(level)}` : ''
@@ -291,8 +291,8 @@ export function floorPlateKicker(nodes: Record<string, AnyNode>, plate: SlabNode
         (!below || node.level > below.level)
       )
         below = node
-  const restsOn = below ? ` · rests on ${getLevelDisplayName(below)}` : ''
-  return `Floor plate${levelName}${restsOn}`
+  const restsOn = below ? ` · poggia su ${getLevelDisplayName(below)}` : ''
+  return `Solaio${levelName}${restsOn}`
 }
 
 /**
@@ -407,13 +407,13 @@ export function FloorFoundationPanel({ node, onClose }: { node: SlabNode; onClos
         />
         <section className="flex flex-col gap-1.5" data-floor-plate-group>
           <h3 className="font-medium text-muted-foreground text-xs">
-            {upper ? 'Floor plate' : 'Slab'}
+            Solaio
           </h3>
           {upper ? (
-            <div title="A thicker floor grows upward: the rooms below keep their height.">
+            <div title="Un solaio più spesso cresce verso l'alto: le stanze sotto mantengono la loro altezza.">
               <MetricControl
                 className="h-9 text-xs"
-                label="Floor thickness"
+                label="Spessore del solaio"
                 max={Math.max(MIN_SLAB_THICKNESS, maxHeight - underside)}
                 min={Math.max(MIN_SLAB_THICKNESS, minHeight - underside)}
                 onChange={(next) => previewHeight(underside + next)}
@@ -426,10 +426,10 @@ export function FloorFoundationPanel({ node, onClose }: { node: SlabNode; onClos
               />
             </div>
           ) : (
-            <div title="The slab sits on the foundation (or the ground): a thicker slab raises the floor top and everything on it.">
+            <div title="Il solaio poggia sulla fondazione (o sul terreno): un solaio più spesso alza il pavimento finito e tutto ciò che vi sta sopra.">
               <MetricControl
                 className="h-9 text-xs"
-                label="Slab thickness"
+                label="Spessore del solaio"
                 max={1}
                 min={minThickness}
                 onChange={(next) => {
@@ -454,13 +454,13 @@ export function FloorFoundationPanel({ node, onClose }: { node: SlabNode; onClos
           )}
           {upper && (
             <p className="px-0.5 text-muted-foreground text-xs" data-floor-top>
-              Floor top +{length(floorTop)}
+              Pavimento finito +{length(floorTop)}
             </p>
           )}
           <FinishSwatch
             fallback={EDGE_DEFAULT}
-            hint="The floor's outside edge, all around the footprint."
-            label="Edge finish"
+            hint="Il bordo esterno del pavimento, lungo tutto il perimetro."
+            label="Finitura del bordo"
             node={plate}
             role="edge"
             value={plate.slots?.edge}
@@ -473,7 +473,7 @@ export function FloorFoundationPanel({ node, onClose }: { node: SlabNode; onClos
         </section>
         {underFloor && (
           <section className="flex flex-col gap-1.5" data-under-floor-group>
-            <h3 className="font-medium text-muted-foreground text-xs">Under the floor</h3>
+            <h3 className="font-medium text-muted-foreground text-xs">Sotto il pavimento</h3>
             <SegmentedControl
               onChange={(next: FootprintPreset) => {
                 if (next === preset) return
@@ -481,17 +481,17 @@ export function FloorFoundationPanel({ node, onClose }: { node: SlabNode; onClos
                 report(applyFloorFoundation(plate.id, patch), patch)
               }}
               options={[
-                { label: 'On the ground', value: 'ground' },
-                { label: 'Raised on a foundation', value: 'raised' },
+                { label: 'A terra', value: 'ground' },
+                { label: 'Rialzato su fondazione', value: 'raised' },
               ]}
               value={preset}
             />
             {preset === 'raised' && (
               <>
-                <div title="The foundation stands on the ground; the slab sits on it.">
+                <div title="La fondazione poggia sul terreno; il solaio poggia sulla fondazione.">
                   <MetricControl
                     className="h-9 text-xs"
-                    label="Foundation height"
+                    label="Altezza della fondazione"
                     max={Math.max(0.05, maxHeight)}
                     min={minHeight}
                     onChange={previewHeight}
@@ -505,7 +505,7 @@ export function FloorFoundationPanel({ node, onClose }: { node: SlabNode; onClos
                 </div>
                 <FinishSwatch
                   fallback={FOUNDATION_DEFAULT}
-                  label="Foundation finish"
+                  label="Finitura della fondazione"
                   node={plate}
                   role="foundation"
                   value={
@@ -517,7 +517,7 @@ export function FloorFoundationPanel({ node, onClose }: { node: SlabNode; onClos
               </>
             )}
             <p className="px-0.5 text-muted-foreground text-xs" data-floor-top>
-              Floor top {length(floorTop)}
+              Pavimento finito {length(floorTop)}
             </p>
           </section>
         )}

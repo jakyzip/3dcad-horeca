@@ -50,17 +50,17 @@ type StatRow = {
 function statsRows(stats: BuildStats): StatRow[] {
   return (
     [
-      { icon: MapPin, label: 'Sites', count: stats.byType.site ?? 0 },
-      { icon: Building2, label: 'Buildings', count: stats.byType.building ?? 0 },
-      { icon: Layers, label: 'Levels', count: stats.byType.level ?? 0 },
-      { icon: Square, label: 'Walls', count: stats.byType.wall ?? 0 },
-      { icon: DoorOpen, label: 'Doors', count: stats.byType.door ?? 0 },
-      { icon: AppWindow, label: 'Windows', count: stats.byType.window ?? 0 },
-      { icon: Box, label: 'Items', count: stats.byType.item ?? 0 },
-      { icon: Square, label: 'Slabs', count: stats.byType.slab ?? 0 },
-      { icon: Square, label: 'Ceilings', count: stats.byType.ceiling ?? 0 },
-      { icon: Square, label: 'Zones', count: stats.byType.zone ?? 0 },
-      { icon: Scan, label: 'Scans', count: stats.byType.scan ?? 0 },
+      { icon: MapPin, label: 'Lotti', count: stats.byType.site ?? 0 },
+      { icon: Building2, label: 'Edifici', count: stats.byType.building ?? 0 },
+      { icon: Layers, label: 'Piani', count: stats.byType.level ?? 0 },
+      { icon: Square, label: 'Muri', count: stats.byType.wall ?? 0 },
+      { icon: DoorOpen, label: 'Porte', count: stats.byType.door ?? 0 },
+      { icon: AppWindow, label: 'Finestre', count: stats.byType.window ?? 0 },
+      { icon: Box, label: 'Oggetti', count: stats.byType.item ?? 0 },
+      { icon: Square, label: 'Solai', count: stats.byType.slab ?? 0 },
+      { icon: Square, label: 'Soffitti', count: stats.byType.ceiling ?? 0 },
+      { icon: Square, label: 'Zone', count: stats.byType.zone ?? 0 },
+      { icon: Scan, label: 'Scansioni', count: stats.byType.scan ?? 0 },
     ] satisfies StatRow[]
   ).filter((row) => row.count > 0)
 }
@@ -82,15 +82,15 @@ function groupSchemaIssuesByType(
 
 function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1).replace('.', ',')} KB`
+  return `${(bytes / (1024 * 1024)).toFixed(1).replace('.', ',')} MB`
 }
 
 function formatFloorArea(m2: number, unit: LinearUnit): string {
   if (m2 === 0) return '—'
   const value = squareMetersToAreaUnit(m2, unit)
   const label = getAreaUnitLabel(unit)
-  return `${value < 10 ? value.toFixed(2) : value.toFixed(1)} ${label}`
+  return `${(value < 10 ? value.toFixed(2) : value.toFixed(1)).replace('.', ',')} ${label}`
 }
 
 export function LoadBuildDialog({ pending, onCancel, onConfirm }: Props) {
@@ -122,11 +122,11 @@ export function LoadBuildDialog({ pending, onCancel, onConfirm }: Props) {
             ) : (
               <XCircle className="size-5 text-red-600" />
             )}
-            {ok ? 'Ready to import' : 'Cannot import this file'}
+            {ok ? "Pronto per l'importazione" : 'Impossibile importare questo file'}
           </DialogTitle>
           <DialogDescription>
-            {fileName} · {formatFileSize(fileSizeBytes)} · {stats.total} node
-            {stats.total === 1 ? '' : 's'}
+            {fileName} · {formatFileSize(fileSizeBytes)} · {stats.total}{' '}
+            {stats.total === 1 ? 'elemento' : 'elementi'}
           </DialogDescription>
         </DialogHeader>
 
@@ -135,7 +135,7 @@ export function LoadBuildDialog({ pending, onCancel, onConfirm }: Props) {
             <div className="space-y-2 rounded-md border border-red-200 bg-red-50 p-3">
               <div className="flex items-center gap-2 font-medium text-red-800 text-sm">
                 <XCircle className="size-4" />
-                {errors.length} error{errors.length === 1 ? '' : 's'}
+                {errors.length} {errors.length === 1 ? 'errore' : 'errori'}
               </div>
               <ul className="space-y-1 text-red-700 text-xs">
                 {errors.map((e) => (
@@ -148,7 +148,7 @@ export function LoadBuildDialog({ pending, onCancel, onConfirm }: Props) {
           {stats.total > 0 && (
             <div className="rounded-md border bg-card">
               <div className="border-b px-3 py-2 font-medium text-muted-foreground text-xs uppercase">
-                Structure
+                Struttura
               </div>
               {rows.length > 0 ? (
                 <div>
@@ -171,7 +171,7 @@ export function LoadBuildDialog({ pending, onCancel, onConfirm }: Props) {
                   })}
                   {stats.floorAreaM2 > 0 && (
                     <div className="flex items-center justify-between border-t px-3 py-2">
-                      <span className="text-muted-foreground text-sm">Floor area</span>
+                      <span className="text-muted-foreground text-sm">Superficie</span>
                       <span className="font-medium text-sm">
                         {formatFloorArea(stats.floorAreaM2, unit)}
                       </span>
@@ -180,7 +180,7 @@ export function LoadBuildDialog({ pending, onCancel, onConfirm }: Props) {
                 </div>
               ) : (
                 <div className="px-3 py-4 text-center text-muted-foreground text-xs">
-                  The file contains no recognised nodes.
+                  Il file non contiene elementi riconosciuti.
                 </div>
               )}
             </div>
@@ -190,7 +190,7 @@ export function LoadBuildDialog({ pending, onCancel, onConfirm }: Props) {
             <div className="space-y-2 rounded-md border border-amber-200 bg-amber-50 p-3">
               <div className="flex items-center gap-2 font-medium text-amber-800 text-sm">
                 <AlertTriangle className="size-4" />
-                {warnings.length} warning{warnings.length === 1 ? '' : 's'}
+                {warnings.length} {warnings.length === 1 ? 'avviso' : 'avvisi'}
               </div>
               <ul className="space-y-1 text-amber-700 text-xs">
                 {visibleWarnings.map((w, i) => (
@@ -203,7 +203,7 @@ export function LoadBuildDialog({ pending, onCancel, onConfirm }: Props) {
                   onClick={() => setShowAllWarnings(true)}
                   type="button"
                 >
-                  Show {hiddenWarningCount} more
+                  Mostra altri {hiddenWarningCount}
                 </button>
               )}
             </div>
@@ -217,11 +217,11 @@ export function LoadBuildDialog({ pending, onCancel, onConfirm }: Props) {
                 type="button"
               >
                 <span className="font-medium text-muted-foreground text-xs uppercase">
-                  Schema details ({schemaIssueCount} node
-                  {schemaIssueCount === 1 ? '' : 's'})
+                  Dettagli dello schema ({schemaIssueCount}{' '}
+                  {schemaIssueCount === 1 ? 'elemento' : 'elementi'})
                 </span>
                 <span className="text-muted-foreground text-xs">
-                  {showSchemaIssues ? 'Hide' : 'Show'}
+                  {showSchemaIssues ? 'Nascondi' : 'Mostra'}
                 </span>
               </button>
               {showSchemaIssues && (
@@ -250,7 +250,7 @@ export function LoadBuildDialog({ pending, onCancel, onConfirm }: Props) {
 
         <DialogFooter>
           <Button onClick={onCancel} variant="outline">
-            Cancel
+            Annulla
           </Button>
           <Button
             disabled={!ok || !parsed}
@@ -258,7 +258,7 @@ export function LoadBuildDialog({ pending, onCancel, onConfirm }: Props) {
               if (parsed) onConfirm(parsed)
             }}
           >
-            Replace current scene
+            Sostituisci la scena attuale
           </Button>
         </DialogFooter>
       </DialogContent>

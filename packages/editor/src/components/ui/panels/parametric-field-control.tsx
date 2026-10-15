@@ -88,7 +88,7 @@ export function ParametricFieldControl({
           >
             {mixed && (
               <option disabled value="">
-                Mixed
+                Vari
               </option>
             )}
             {field.options.map((opt) => (
@@ -122,7 +122,7 @@ export function ParametricFieldControl({
               className="w-20 rounded-md border border-border/50 bg-black/4 dark:bg-[#2C2C2E] px-2 py-1 text-foreground text-xs focus:outline-none focus:ring-1 focus:ring-foreground/30"
               onChange={(e) => apply(e.target.value)}
               type="text"
-              value={mixed ? 'Mixed' : str}
+              value={mixed ? 'Vari' : str}
             />
           </div>
         </div>

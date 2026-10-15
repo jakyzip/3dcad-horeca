@@ -102,3 +102,15 @@ L'interfaccia è solo in italiano (scelta dell'utente, 2026-10-15), tradotta dir
 | Command palette | Tavolozza dei comandi |
 | Plugins | Plugin |
 | On / Off | Attivo / Disattivo |
+| Roof types: hip / gable / shed / gambrel / dutch / mansard / flat | A padiglione / A capanna / A una falda / A capanna spezzata / A padiglione con frontone / A mansarda / Piano |
+| Mixed (multi-selection) | Vari |
+| Floor top | Pavimento finito |
+| Collection | Raccolta |
+| Done | Fatto |
+| Lock / Unlock | Blocca / Sblocca |
+| Hatch | Botola |
+| Flight / Landing (stairs) | Rampa / Pianerottolo |
+| Chimney / Dormer / Gutter / Solar panel | Comignolo / Abbaino / Grondaia / Pannello solare |
+| Property line | Confine del lotto |
+| Roughness / Metalness / Opacity | Ruvidità / Metallicità / Opacità |
+| Theme: System / Light / Dark | Sistema / Chiaro / Scuro |

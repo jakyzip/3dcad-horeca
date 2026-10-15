@@ -30,7 +30,7 @@ import type { ExtraPanel } from './icon-rail'
 // unrelated panel open beside it. `component` serves the v1 sidebar.
 const pluginsManagerPanel: ExtraPanel = {
   id: 'plugins',
-  label: 'Plugins',
+  label: 'Plugin',
   icon: <img alt="" className="size-8 object-contain" src="/icons/plugins.webp" />,
   component: PluginsView,
   noPanel: true,
@@ -65,10 +65,10 @@ function renderIconRef(ref: IconRef): ReactNode {
 function PluginPanelCrashed({ label }: { label: string }) {
   return (
     <div className="flex flex-col gap-2 p-4 text-sm">
-      <p className="font-medium text-sidebar-foreground">"{label}" plugin crashed</p>
+      <p className="font-medium text-sidebar-foreground">Il plugin "{label}" si è bloccato</p>
       <p className="text-sidebar-foreground/50 text-xs">
-        This panel hit an error and was unloaded for this session. The rest of the editor is
-        unaffected — reload to try again.
+        Questo pannello ha avuto un errore ed è stato chiuso per questa sessione. Il resto
+        dell'editor funziona normalmente: ricarica la pagina per riprovare.
       </p>
     </div>
   )

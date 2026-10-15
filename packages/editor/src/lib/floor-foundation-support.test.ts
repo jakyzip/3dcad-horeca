@@ -97,9 +97,9 @@ describe('Floor & foundation support class (point 5)', () => {
   })
 
   test('the kicker says where the plate is and what it rests on', () => {
-    expect(floorPlateKicker(nodes(), plateOf(GROUND, 'Living'))).toBe('Floor plate · Ground floor')
+    expect(floorPlateKicker(nodes(), plateOf(GROUND, 'Living'))).toBe('Solaio · Ground floor')
     expect(floorPlateKicker(nodes(), plateOf(UPPER, 'Bedroom'))).toBe(
-      'Floor plate · Floor 1 · rests on Ground floor',
+      'Solaio · Floor 1 · poggia su Ground floor',
     )
   })
 
@@ -182,7 +182,7 @@ describe('Floor & foundation panel (point 5)', () => {
     expect(ground).toMatchObject({ upper: false, preset: 'ground', underFloor: true, minHeight: 0 })
     const upper = floorFoundationModel(nodes(), plateOf(UPPER, 'Bedroom'))
     expect(upper).toMatchObject({ upper: true, underFloor: false, thickFloor: false })
-    expect(upper.kicker).toBe('Floor plate · Floor 1 · rests on Ground floor')
+    expect(upper.kicker).toBe('Solaio · Floor 1 · poggia su Ground floor')
   })
 
   test('on the ground the two inputs are slab thickness and foundation height; the top follows', () => {
@@ -263,8 +263,8 @@ describe('Floor & foundation panel (point 5)', () => {
       foundationLabel: '0.50 m',
       topLabel: '0.70 m',
     })
-    const order = ['Floor top', 'Slab · 0.20 m', 'Foundation · 0.50 m', 'Ground'].map((label) =>
-      raised.indexOf(`>${label}<`),
+    const order = ['Pavimento finito', 'Solaio · 0.20 m', 'Fondazione · 0.50 m', 'Terreno'].map(
+      (label) => raised.indexOf(`>${label}<`),
     )
     expect(order.every((at) => at >= 0)).toBe(true)
     expect([...order].sort((a, b) => a - b)).toEqual(order)
@@ -273,11 +273,11 @@ describe('Floor & foundation panel (point 5)', () => {
     const onGround = section({ topLabel: '0.20 m' })
     expect(onGround).not.toContain('data-section-foundation')
     expect(onGround).toContain('>0.20 m<')
-    expect(raised).toContain('Not to scale')
+    expect(raised).toContain('Non in scala')
     const upstairs = section({ supported: true, lift: 0.25, liftLabel: '+0.25 m' })
-    expect(upstairs).toContain('>Walls below<')
-    expect(upstairs).not.toContain('>Foundation<')
-    expect(upstairs).not.toContain('>Ground<')
+    expect(upstairs).toContain('>Muri sotto<')
+    expect(upstairs).not.toContain('>Fondazione<')
+    expect(upstairs).not.toContain('>Terreno<')
     expect(section({})).not.toContain('Floor edge band')
   })
 })

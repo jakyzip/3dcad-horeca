@@ -41,7 +41,7 @@ export function MaterialPropertiesEditor({
     <div className="space-y-3">
       <div className="space-y-2">
         <label className="block font-medium text-muted-foreground text-xs uppercase tracking-[0.12em]">
-          Color
+          Colore
         </label>
         <div className="flex items-center gap-2">
           <input
@@ -58,7 +58,7 @@ export function MaterialPropertiesEditor({
       </div>
 
       <SliderControl
-        label="Roughness"
+        label="Ruvidità"
         max={1}
         min={0}
         onChange={(value) => updateMaterial({ roughness: value })}
@@ -68,7 +68,7 @@ export function MaterialPropertiesEditor({
       />
 
       <SliderControl
-        label="Metalness"
+        label="Metallicità"
         max={1}
         min={0}
         onChange={(value) => updateMaterial({ metalness: value })}
@@ -78,7 +78,7 @@ export function MaterialPropertiesEditor({
       />
 
       <SliderControl
-        label="Opacity"
+        label="Opacità"
         max={1}
         min={0}
         onChange={(value) => updateMaterial({ opacity: value }, value < 1 || currentProps.transparent)}
@@ -89,7 +89,7 @@ export function MaterialPropertiesEditor({
 
       <div className="space-y-2">
         <label className="block font-medium text-muted-foreground text-xs uppercase tracking-[0.12em]">
-          Side
+          Lato
         </label>
         <select
           className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 dark:bg-input/30"
@@ -98,9 +98,9 @@ export function MaterialPropertiesEditor({
           }
           value={currentProps.side}
         >
-          <option value="front">Front</option>
-          <option value="back">Back</option>
-          <option value="double">Double</option>
+          <option value="front">Fronte</option>
+          <option value="back">Retro</option>
+          <option value="double">Entrambi</option>
         </select>
       </div>
     </div>

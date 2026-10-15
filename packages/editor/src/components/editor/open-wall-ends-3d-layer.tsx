@@ -245,7 +245,7 @@ function OpenWallEndMarker3D({
             ) : null}
           </div>
           <button
-            aria-label={label ?? 'Wall end not joined'}
+            aria-label={label ?? 'Estremità del muro non collegata'}
             className={cn(
               'h-3.5 w-3.5 rounded-full border-2 border-white shadow-sm transition-transform',
               interactive

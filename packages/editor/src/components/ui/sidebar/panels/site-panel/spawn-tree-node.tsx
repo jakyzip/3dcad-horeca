@@ -60,7 +60,7 @@ export const SpawnTreeNode = memo(function SpawnTreeNode({
       isVisible={isVisible}
       label={
         <InlineRenameInput
-          defaultName="Spawn Point"
+          defaultName="Punto di partenza"
           isEditing={isEditing}
           nodeId={nodeId}
           onStartEditing={() => setIsEditing(true)}

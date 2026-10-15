@@ -38,7 +38,7 @@ export function MobileSelectionBar({
   return (
     <div className="pointer-events-auto absolute right-3 bottom-6 left-3 z-50 flex h-12 items-stretch gap-1 rounded-2xl border border-border/50 bg-background/95 px-2 shadow-2xl backdrop-blur-xl">
       <button
-        aria-label={`Edit ${resolvedLabel}`}
+        aria-label={`Modifica ${resolvedLabel}`}
         className={cn(
           'flex min-w-0 flex-1 items-center gap-2 rounded-lg px-2 text-left transition-colors hover:bg-black/5 dark:hover:bg-white/8',
         )}
@@ -57,7 +57,7 @@ export function MobileSelectionBar({
 
       <div className="flex items-center gap-0.5 border-border/40 border-l pl-1">
         <button
-          aria-label="Move"
+          aria-label="Sposta"
           className={ACTION_BTN}
           onClick={(e) => {
             stop(e)
@@ -68,7 +68,7 @@ export function MobileSelectionBar({
           <Move className="h-4 w-4" />
         </button>
         <button
-          aria-label="Duplicate"
+          aria-label="Duplica"
           className={ACTION_BTN}
           onClick={(e) => {
             stop(e)
@@ -79,7 +79,7 @@ export function MobileSelectionBar({
           <Copy className="h-4 w-4" />
         </button>
         <button
-          aria-label="Delete"
+          aria-label="Elimina"
           className={cn(
             ACTION_BTN,
             'hover:bg-red-500/15 hover:text-red-600 dark:hover:bg-red-500/15 dark:hover:text-red-400',
@@ -93,7 +93,7 @@ export function MobileSelectionBar({
           <Trash2 className="h-4 w-4" />
         </button>
         <button
-          aria-label="Edit properties"
+          aria-label="Modifica le proprietà"
           className={ACTION_BTN}
           onClick={(e) => {
             stop(e)

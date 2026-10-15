@@ -36,7 +36,7 @@ export const ROOF_TYPE_OPTIONS: ReadonlyArray<{ label: string; value: RoofType }
   { label: 'A una falda', value: 'shed' },
   { label: 'Piano', value: 'flat' },
   { label: 'A capanna spezzata', value: 'gambrel' },
-  { label: 'Padiglione con timpano', value: 'dutch' },
+  { label: 'A padiglione con frontone', value: 'dutch' },
   { label: 'A mansarda', value: 'mansard' },
   { label: 'Conico', value: 'conical' },
 ]

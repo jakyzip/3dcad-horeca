@@ -5,21 +5,21 @@ import useConstructionReveal from '../../../../../store/use-construction-reveal'
 import { SegmentedControl } from '../../../controls/segmented-control'
 
 const OPTIONS: { label: string; value: ConstructionRevealLevel; title: string }[] = [
-  { label: 'Off', value: 'off', title: 'What the AI builds appears at once.' },
+  { label: 'Disattivo', value: 'off', title: "Ciò che costruisce l'AI compare subito." },
   {
-    label: 'Simple',
+    label: 'Semplice',
     value: 'simple',
-    title: 'Walls rise and the rest grows in, piece by piece. No falls, no dust, no sound.',
+    title: 'I muri salgono e il resto compare pezzo per pezzo, senza cadute, polvere o suoni.',
   },
   {
-    label: 'Full',
+    label: 'Completa',
     value: 'full',
-    title: 'Pieces drop into place with dust, the roof assembles, one sound per phase.',
+    title: 'I pezzi cadono al loro posto con la polvere, il tetto si monta, un suono per fase.',
   },
   {
-    label: 'Framing',
+    label: 'Ossatura',
     value: 'framing',
-    title: 'Full, plus the framing members dropping in first, where the framing plugin draws them.',
+    title: "Come Completa, ma prima cadono gli elementi dell'ossatura, dove il plugin dell'ossatura li disegna.",
   },
 ]
 
@@ -31,11 +31,11 @@ export function ConstructionAnimationSetting() {
   return (
     <div className="space-y-2 py-1">
       <div className="space-y-0.5">
-        <p className="font-medium text-sm">Construction animation</p>
+        <p className="font-medium text-sm">Animazione di costruzione</p>
         <p className="text-muted-foreground text-xs">{current?.title}</p>
       </div>
       <SegmentedControl
-        aria-label="Construction animation"
+        aria-label="Animazione di costruzione"
         onChange={setLevel}
         options={OPTIONS}
         value={level}

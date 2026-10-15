@@ -8,13 +8,13 @@ const pressedLabels = (html: string) =>
 describe('Interface theme setting', () => {
   test("the row shows the host's value pressed", () => {
     const html = renderToStaticMarkup(<InterfaceThemeRow onChange={() => {}} value="light" />)
-    expect(html).toContain('Interface theme')
-    expect(pressedLabels(html)).toEqual(['Light'])
+    expect(html).toContain('Tema dell’interfaccia')
+    expect(pressedLabels(html)).toEqual(['Chiaro'])
   })
 
   test('Settings shows the row a host passes, and none without it', () => {
     const row = <InterfaceThemeRow onChange={() => {}} value="system" />
-    expect(renderToStaticMarkup(<SettingsPanel preferences={row} />)).toContain('Interface theme')
-    expect(renderToStaticMarkup(<SettingsPanel />)).not.toContain('Interface theme')
+    expect(renderToStaticMarkup(<SettingsPanel preferences={row} />)).toContain('Tema dell’interfaccia')
+    expect(renderToStaticMarkup(<SettingsPanel />)).not.toContain('Tema dell’interfaccia')
   })
 })

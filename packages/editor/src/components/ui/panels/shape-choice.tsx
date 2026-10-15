@@ -6,8 +6,8 @@ import { cn } from '../../../lib/utils'
 export type OutlineShape = 'rectangle' | 'polygon'
 
 const SHAPES = [
-  { id: 'rectangle', label: 'Rectangle', Icon: Square },
-  { id: 'polygon', label: 'Polygon', Icon: Pentagon },
+  { id: 'rectangle', label: 'Rettangolo', Icon: Square },
+  { id: 'polygon', label: 'Poligono', Icon: Pentagon },
 ] as const
 
 const pill =

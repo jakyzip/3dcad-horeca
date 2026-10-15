@@ -58,7 +58,7 @@ export const CollectionsSection = memo(function CollectionsSection() {
         icon={<Layers className="h-3.5 w-3.5" />}
         label={
           <span className="flex items-center gap-1.5">
-            Collections
+            Raccolte
             <span className="text-muted-foreground text-xs">{collectionIds.length}</span>
           </span>
         }
@@ -147,7 +147,7 @@ const CollectionTreeNode = memo(function CollectionTreeNode({
             event.stopPropagation()
             deleteCollection(collectionId)
           }}
-          title="Delete collection"
+          title="Elimina la raccolta"
           type="button"
         >
           <Trash2 className="h-3 w-3" />
@@ -159,7 +159,7 @@ const CollectionTreeNode = memo(function CollectionTreeNode({
       icon={
         <ColorDot
           color={color ?? '#6366f1'}
-          label="Collection colour"
+          label="Colore della raccolta"
           onChange={(next) => updateCollection(collectionId, { color: next })}
         />
       }
@@ -169,7 +169,7 @@ const CollectionTreeNode = memo(function CollectionTreeNode({
       label={
         <span className="flex min-w-0 items-center gap-1.5">
           <InlineRenameField
-            defaultName="Collection"
+            defaultName="Raccolta"
             isEditing={isEditing}
             name={name}
             onRename={handleRename}

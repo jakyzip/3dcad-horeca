@@ -78,11 +78,11 @@ export function RoomFloorHeightStepper({ zoneId }: { zoneId: string }) {
       onPointerDown={(event) => event.stopPropagation()}
       onPointerUp={(event) => event.stopPropagation()}
     >
-      <span className="mr-1 text-muted-foreground text-xs">Floor height</span>
+      <span className="mr-1 text-muted-foreground text-xs">Quota del pavimento</span>
       <ActionMenuButton
         disabled={down === null}
-        disabledReason="The floor can't go lower here"
-        label="Lower the floor"
+        disabledReason="Qui il pavimento non può scendere di più"
+        label="Abbassa il pavimento"
         onClick={step(down)}
       >
         <Minus className="h-4 w-4" />
@@ -95,8 +95,8 @@ export function RoomFloorHeightStepper({ zoneId }: { zoneId: string }) {
       </span>
       <ActionMenuButton
         disabled={up === null}
-        disabledReason="The floor can't go higher here"
-        label="Raise the floor"
+        disabledReason="Qui il pavimento non può salire di più"
+        label="Alza il pavimento"
         onClick={step(up)}
       >
         <Plus className="h-4 w-4" />

@@ -69,8 +69,8 @@ export function MultiParametricInspector({ footer }: { footer?: React.ReactNode 
     <PanelWrapper footer={footer} icon={display.icon} onClose={handleClose} title={title} width={320}>
       {matchedGroup && (
         <div className="border-border/50 border-b px-3 py-2 text-muted-foreground text-xs">
-          {matchedGroup.label} (session only). Plain click reselects all members. Not saved with the
-          project.
+          {matchedGroup.label} (solo in questa sessione). Un clic semplice riseleziona tutti gli
+          elementi del gruppo. Non viene salvato nel progetto.
         </div>
       )}
       {parametrics.groups.map((group, gi) => (

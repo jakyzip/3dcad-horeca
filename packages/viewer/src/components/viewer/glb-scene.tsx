@@ -854,12 +854,19 @@ export function GlbScene({
           ? part.kind === 'spin'
           : (clips?.every((clip) => clip.endsWith(': loop')) ?? false)
         const label = lightOnly
-          ? (extras.label ?? 'Lights')
-          : (part?.partId.replaceAll('_', ' ') ?? extras.label ?? 'Item')
+          ? (extras.label ?? 'le luci')
+          : (part?.partId.replaceAll('_', ' ') ?? extras.label ?? 'l’oggetto')
         door = {
           label,
           isOpen,
-          verb: lightOnly || isSpin ? (isOpen ? 'turn off' : 'turn on') : isOpen ? 'close' : 'open',
+          verb:
+            lightOnly || isSpin
+              ? isOpen
+                ? 'spegnere'
+                : 'accendere'
+              : isOpen
+                ? 'chiudere'
+                : 'aprire',
         }
         doorId = `${extras.pascalId}:${part?.partId ?? 'all'}`
       } else if (node && item) {
@@ -870,12 +877,16 @@ export function GlbScene({
       } else if (node && extras?.openable && extras.clips?.length) {
         doorNode = { hit: hit.object, node }
         doorId = extras.pascalId as string
-        door = { label: extras.label ?? 'Door', isOpen: openIds.current.has(doorId) }
+        door = { label: extras.label ?? 'la porta', isOpen: openIds.current.has(doorId) }
       } else if (node && extras?.pascalId && loopMechanisms.has(extras.pascalId)) {
         doorNode = { hit: hit.object, node }
         doorId = extras.pascalId
         const isOpen = Boolean(useInteractive.getState().mechanisms[doorId as AnyNodeId])
-        door = { label: extras.label ?? 'Item', isOpen, verb: isOpen ? 'turn off' : 'turn on' }
+        door = {
+          label: extras.label ?? 'l’oggetto',
+          isOpen,
+          verb: isOpen ? 'spegnere' : 'accendere',
+        }
       }
     }
     walkDoorRef.current = doorNode

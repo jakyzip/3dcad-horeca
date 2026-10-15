@@ -35,7 +35,7 @@ export function FloorplanModeCoordinator() {
     useEditor.getState().setMode('select')
     if (priorFloorplanMode === 'expert') {
       showNotice(
-        `Switched to Default. The unfinished ${toolLabel} draft was canceled; saved Expert annotations are hidden, not deleted.`,
+        `Sei passato alla modalità Base. La bozza in corso (${toolLabel}) è stata annullata; le annotazioni salvate in modalità Esperto sono nascoste, non eliminate.`,
       )
     } else {
       showExpertModeNotice(toolLabel)
@@ -66,11 +66,11 @@ export function FloorplanModeCoordinator() {
           }}
           type="button"
         >
-          Switch to Expert
+          Passa a Esperto
         </button>
       ) : null}
       <button
-        aria-label="Dismiss"
+        aria-label="Chiudi"
         className="shrink-0 rounded p-1 text-muted-foreground hover:bg-black/6 dark:hover:bg-white/10 hover:text-foreground"
         onClick={dismissNotice}
         type="button"

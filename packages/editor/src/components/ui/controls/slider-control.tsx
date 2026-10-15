@@ -270,7 +270,7 @@ export function SliderControl({
             system: isImperial ? 'us' : 'metric',
           })
         : null
-      const bare = Number(text)
+      const bare = Number(text.replace(',', '.'))
       const stored = parsed ?? (text.trim() && Number.isFinite(bare) ? toStored(bare) : null)
       return stored === null
         ? null
@@ -406,7 +406,7 @@ export function SliderControl({
             className="flex cursor-text items-center text-muted-foreground transition-colors hover:text-foreground"
             onClick={handleValueClick}
           >
-            <span className="font-mono tracking-tight">Mixed</span>
+            <span className="font-mono tracking-tight">Vari</span>
           </div>
         ) : (
           <div
@@ -414,7 +414,7 @@ export function SliderControl({
             onClick={handleValueClick}
           >
             <span className="font-mono tabular-nums tracking-tight" suppressHydrationWarning>
-              {Number(displayValue.toFixed(precision)).toFixed(precision)}
+              {Number(displayValue.toFixed(precision)).toFixed(precision).replace('.', ',')}
             </span>
             {displayUnit && <span className="ml-[1px] text-muted-foreground">{displayUnit}</span>}
           </div>

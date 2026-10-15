@@ -60,13 +60,13 @@ export async function preparePrintExport(
     !artifact ||
     (!isPrintExportReport(artifact.metadata) && !isPrintLevelBundleReport(artifact.metadata))
   ) {
-    throw new Error('The 3D print exporter did not return a valid file.')
+    throw new Error("L'esportazione per la stampa 3D non ha restituito un file valido.")
   }
 
   if (artifact.metadata.status === 'blocked') {
     throw new Error(
       firstBlockingMessage(artifact.metadata) ??
-        'This project cannot be exported as printable parts.',
+        'Questo progetto non si può esportare come parti stampabili.',
     )
   }
 
@@ -87,7 +87,7 @@ export function PrintExportButton({ onlyVisible }: { onlyVisible: boolean }) {
       const prepared = await preparePrintExport(modelExport, onlyVisible, format)
       downloadArtifact(prepared.artifact)
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : '3D print export failed.')
+      setError(reason instanceof Error ? reason.message : 'Esportazione per la stampa 3D non riuscita.')
     } finally {
       setExportingFormat(null)
     }
@@ -105,7 +105,7 @@ export function PrintExportButton({ onlyVisible }: { onlyVisible: boolean }) {
         variant="outline"
       >
         <Printer className="size-4" />
-        Export 3D print 3MF
+        Esporta per stampa 3D (3MF)
       </Button>
       <Button
         aria-busy={exportingFormat === 'print-stl'}
@@ -115,7 +115,7 @@ export function PrintExportButton({ onlyVisible }: { onlyVisible: boolean }) {
         variant="outline"
       >
         <Printer className="size-4" />
-        Export 3D print STL
+        Esporta per stampa 3D (STL)
       </Button>
       {error && (
         <div className="col-span-full flex gap-2 text-destructive text-xs">

@@ -614,7 +614,7 @@ export function RoomHandleDragPreview3D() {
         />
         <Html center position={[ax, drag.value + 0.35, az]} zIndexRange={[25, 0]}>
           <div className={PILL}>
-            <span className="font-medium text-foreground">Floor</span>
+            <span className="font-medium text-foreground">Pavimento</span>
             <span className="text-muted-foreground">
               {formatMeasurement(
                 drag.value - roomFloorBase(useScene.getState().nodes, drag.zoneId),

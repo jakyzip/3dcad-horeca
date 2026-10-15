@@ -116,10 +116,10 @@ const MODEL_EXPORT_FORMATS = [
 type ModelExportFormat = (typeof MODEL_EXPORT_FORMATS)[number]['format']
 
 const SEND_TO_BLENDER_STEP_LABEL: Record<SendToAppStep, string> = {
-  probing: 'Looking for Blender…',
-  exporting: 'Preparing the scene…',
-  sending: 'Sending to Blender…',
-  importing: 'Blender is importing…',
+  probing: 'Ricerca di Blender…',
+  exporting: 'Preparazione della scena…',
+  sending: 'Invio a Blender…',
+  importing: 'Blender sta importando…',
 }
 
 const BLENDER_ADDON_URL = 'https://github.com/pascalorg/blender-addon#install'
@@ -314,7 +314,7 @@ const INTERFACE_THEME_OPTIONS: { label: ReactNode; value: InterfaceTheme }[] = [
     label: (
       <>
         <Monitor className="size-3.5" />
-        System
+        Sistema
       </>
     ),
     value: 'system',
@@ -323,7 +323,7 @@ const INTERFACE_THEME_OPTIONS: { label: ReactNode; value: InterfaceTheme }[] = [
     label: (
       <>
         <Sun className="size-3.5" />
-        Light
+        Chiaro
       </>
     ),
     value: 'light',
@@ -332,7 +332,7 @@ const INTERFACE_THEME_OPTIONS: { label: ReactNode; value: InterfaceTheme }[] = [
     label: (
       <>
         <Moon className="size-3.5" />
-        Dark
+        Scuro
       </>
     ),
     value: 'dark',
@@ -355,9 +355,9 @@ export function InterfaceThemeRow({
     <div className="flex flex-col gap-2 py-1 @sm:flex-row @sm:items-center @sm:justify-between @sm:gap-4">
       <div className="min-w-0 space-y-0.5">
         <p className="font-medium text-sm" id={labelId}>
-          Interface theme
+          Tema dell’interfaccia
         </p>
-        <p className="text-muted-foreground text-xs">System follows your device’s appearance.</p>
+        <p className="text-muted-foreground text-xs">Sistema segue l’aspetto del tuo dispositivo.</p>
       </div>
       <div aria-labelledby={labelId} className="w-full shrink-0 @sm:w-60" role="group">
         <SegmentedControl onChange={onChange} options={INTERFACE_THEME_OPTIONS} value={value} />
@@ -434,11 +434,11 @@ function FloorSettingsSection() {
 
   return (
     <div className="space-y-3">
-      <label className="font-medium text-muted-foreground text-xs uppercase">Floors</label>
+      <label className="font-medium text-muted-foreground text-xs uppercase">Piani</label>
       <div className="grid grid-cols-2 gap-2">
         <Button className="justify-start" onClick={addFloor} size="sm" type="button" variant="outline">
           <ArrowUp className="size-3.5" />
-          Add floor
+          Aggiungi piano
         </Button>
         <Button
           className="justify-start"
@@ -448,13 +448,13 @@ function FloorSettingsSection() {
           variant="outline"
         >
           <ArrowDown className="size-3.5" />
-          Add basement
+          Aggiungi interrato
         </Button>
       </div>
 
       <div className="space-y-1 rounded-md border p-1">
         {levels.length === 0 ? (
-          <div className="px-2 py-2 text-muted-foreground text-xs">No floors yet</div>
+          <div className="px-2 py-2 text-muted-foreground text-xs">Ancora nessun piano</div>
         ) : (
           levels.map((level) => {
             const isSelected = level.id === selectedLevelId
@@ -479,11 +479,11 @@ function FloorSettingsSection() {
                   </span>
                 </button>
                 <button
-                  aria-label={`Remove ${getLevelDisplayName(level)}`}
+                  aria-label={`Elimina ${getLevelDisplayName(level)}`}
                   className="flex size-7 shrink-0 items-center justify-center rounded text-muted-foreground hover:bg-destructive/10 hover:text-destructive disabled:cursor-not-allowed disabled:opacity-30"
                   disabled={!canDelete}
                   onClick={() => deleteLevelWithFallbackSelection(level.id)}
-                  title={canDelete ? 'Remove floor' : 'The ground floor cannot be removed'}
+                  title={canDelete ? 'Elimina piano' : 'Il piano terra non si può eliminare'}
                   type="button"
                 >
                   <Trash2 className="size-3.5" />
@@ -494,7 +494,7 @@ function FloorSettingsSection() {
         )}
       </div>
       <p className="text-muted-foreground text-xs">
-        Select a floor to make it active. The ground floor is always kept as the building datum.
+        Seleziona un piano per renderlo attivo. Il piano terra resta sempre come riferimento dell'edificio.
       </p>
     </div>
   )
@@ -659,7 +659,7 @@ export function SettingsPanel({
               {
                 severity: 'error',
                 code: 'invalid_json',
-                message: 'File could not be parsed as JSON.',
+                message: 'Il file non è un JSON valido.',
               },
             ],
             warnings: [],
@@ -797,12 +797,12 @@ export function SettingsPanel({
             : [],
       })
       if (!artifact) {
-        throw new Error('Model export did not produce a file')
+        throw new Error('L’esportazione del modello non ha prodotto un file')
       }
       if (artifact.warnings?.length) setModelExportWarning(artifact.warnings.join(' '))
     } catch (error) {
       setModelExportError(
-        error instanceof Error ? error.message : `Couldn’t export ${label}. Try again.`,
+        error instanceof Error ? error.message : `Impossibile esportare ${label}. Riprova.`,
       )
     } finally {
       setActiveModelExport(null)
@@ -819,14 +819,14 @@ export function SettingsPanel({
       if (probe.status === 'unreachable') {
         setSendToBlenderMessage({
           tone: 'error',
-          text: 'Blender isn’t listening. Open Blender with the Pascal add-on installed and enabled, then try again.',
+          text: 'Blender non risponde. Apri Blender con il componente aggiuntivo installato e attivo, poi riprova.',
         })
         return
       }
       if (probe.status === 'refused') {
         setSendToBlenderMessage({
           tone: 'error',
-          text: `Blender is open but hasn’t allowed ${window.location.origin} yet. In Blender, open the Pascal tab in the 3D viewport sidebar (N) and click Allow.`,
+          text: `Blender è aperto ma non ha ancora autorizzato ${window.location.origin}. In Blender apri la scheda del componente aggiuntivo nella barra laterale della vista 3D (N) e fai clic su Allow.`,
         })
         return
       }
@@ -840,7 +840,7 @@ export function SettingsPanel({
         ),
         download: false,
       })
-      if (!artifact) throw new Error('Model export did not produce a file')
+      if (!artifact) throw new Error('L’esportazione del modello non ha prodotto un file')
 
       setSendToBlenderStep('sending')
       const queued = await sendGlbToLocalApp(probe.base, artifact.blob, {
@@ -852,13 +852,13 @@ export function SettingsPanel({
       const done = await waitForLocalImport(probe.base, queued.id)
       setSendToBlenderMessage({
         tone: 'info',
-        text: done.summary ? `Sent to Blender. ${done.summary}.` : 'Sent to Blender.',
+        text: done.summary ? `Inviato a Blender. ${done.summary}.` : 'Inviato a Blender.',
       })
     } catch (error) {
       const text =
         error instanceof LocalAppError || error instanceof Error
           ? error.message
-          : 'Couldn’t send the scene to Blender. Try again.'
+          : 'Impossibile inviare la scena a Blender. Riprova.'
       setSendToBlenderMessage({ tone: 'error', text })
     } finally {
       setSendToBlenderStep(null)
@@ -874,7 +874,7 @@ export function SettingsPanel({
       await exportFloorplanPdf(scope)
     } catch (error) {
       setFloorplanExportError(
-        `Couldn’t export the floor plan. ${error instanceof Error ? error.message : 'Try again.'}`,
+        `Impossibile esportare la pianta. ${error instanceof Error ? error.message : 'Riprova.'}`,
       )
     } finally {
       setActiveFloorplanExport(null)
@@ -894,19 +894,19 @@ export function SettingsPanel({
         </section>
         {projectId && (
           <SettingsSection
-            description="Reference this project from the API, MCP tools, or support."
-            title="Project"
+            description="Usa questo codice per indicare il progetto nelle API, negli strumenti MCP o all'assistenza."
+            title="Progetto"
           >
             <div className="flex items-center gap-2">
               <Input
-                aria-label="Project ID"
+                aria-label="ID del progetto"
                 className="font-mono text-xs"
                 readOnly
                 value={projectId}
               />
               <Button
                 aria-label={
-                  projectIdCopyState === 'copied' ? 'Project ID copied' : 'Copy project ID'
+                  projectIdCopyState === 'copied' ? 'ID del progetto copiato' : "Copia l'ID del progetto"
                 }
                 className="rounded-full"
                 onClick={() => void handleCopyProjectId()}
@@ -920,10 +920,10 @@ export function SettingsPanel({
                   <Copy className="size-3.5" />
                 )}
                 {projectIdCopyState === 'copied'
-                  ? 'Copied'
+                  ? 'Copiato'
                   : projectIdCopyState === 'error'
-                    ? 'Try again'
-                    : 'Copy'}
+                    ? 'Riprova'
+                    : 'Copia'}
               </Button>
             </div>
           </SettingsSection>
@@ -931,44 +931,44 @@ export function SettingsPanel({
 
         {/* Sharing (only for cloud projects) */}
         {projectId && !isLocalProject && (
-          <SettingsSection description="Control who can open this project." title="Sharing">
+          <SettingsSection description="Decidi chi può aprire questo progetto." title="Condivisione">
             <SettingsSwitchRow
               checked={!(projectVisibility?.isPrivate ?? false)}
               description={
                 projectVisibility?.isPrivate
-                  ? 'Only you can view it.'
-                  : 'Anyone with the link can view it.'
+                  ? 'Solo tu puoi vederlo.'
+                  : 'Chiunque abbia il link può vederlo.'
               }
-              label="Public project"
+              label="Progetto pubblico"
               onCheckedChange={(checked) => handleVisibilityChange('isPrivate', !checked)}
             />
             <SettingsSwitchRow
               checked={projectVisibility?.showScansPublic ?? true}
-              description="Visible in the public viewer."
-              label="Show 3D scans"
+              description="Visibili nel visualizzatore pubblico."
+              label="Mostra le scansioni 3D"
               onCheckedChange={(checked) => handleVisibilityChange('showScansPublic', checked)}
             />
             <SettingsSwitchRow
               checked={projectVisibility?.showGuidesPublic ?? true}
-              description="Visible in the public viewer."
-              label="Show floor plans"
+              description="Visibili nel visualizzatore pubblico."
+              label="Mostra le immagini di riferimento"
               onCheckedChange={(checked) => handleVisibilityChange('showGuidesPublic', checked)}
             />
           </SettingsSection>
         )}
 
-        <SettingsSection description="Rendering options for this editor session." title="Viewer">
+        <SettingsSection description="Opzioni di visualizzazione per questa sessione dell'editor." title="Visualizzazione">
           <SettingsSwitchRow
             checked={shadows}
-            description="Cast shadows from lights."
-            label="Shadows"
+            description="Le luci proiettano ombre."
+            label="Ombre"
             onCheckedChange={(checked) => useViewer.getState().setShadows(checked)}
           />
         </SettingsSection>
 
-        <SettingsSection description="Download the scene or hand it to another app." title="Export">
+        <SettingsSection description="Scarica la scena o passala a un'altra applicazione." title="Esporta">
           <div className="space-y-3">
-            <SettingsSubheading>3D model</SettingsSubheading>
+            <SettingsSubheading>Modello 3D</SettingsSubheading>
             <details
               className="group"
               onKeyDownCapture={(event) => {
@@ -977,21 +977,21 @@ export function SettingsPanel({
               }}
             >
               <summary className="flex min-h-10 cursor-pointer list-none items-center justify-between rounded-md border px-3 font-medium text-sm focus-visible:outline-2 focus-visible:outline-ring">
-                Export options
+                Opzioni di esportazione
                 <ChevronDown aria-hidden="true" className="size-4 group-open:rotate-180" />
               </summary>
               <div className="space-y-3 pt-3">
                 <div className="flex items-center justify-between gap-4 rounded-md border p-3">
                   <div className="min-w-0">
                     <label className="font-medium text-sm" htmlFor={visibleOnlySwitchId}>
-                      Visible nodes only
+                      Solo elementi visibili
                     </label>
                     <div className="text-muted-foreground text-xs">
-                      Exclude hidden furniture and other hidden scene nodes
+                      Escludi gli arredi nascosti e gli altri elementi nascosti della scena
                     </div>
                   </div>
                   <Switch
-                    aria-label="Export visible nodes only"
+                    aria-label="Esporta solo gli elementi visibili"
                     checked={exportOnlyVisible}
                     id={visibleOnlySwitchId}
                     onCheckedChange={setExportOnlyVisible}
@@ -999,10 +999,10 @@ export function SettingsPanel({
                 </div>
 
                 <fieldset className="space-y-2 rounded-md border p-3">
-                  <legend className="px-1 font-medium text-sm">Include in file</legend>
+                  <legend className="px-1 font-medium text-sm">Includi nel file</legend>
                   <p className="text-muted-foreground text-xs">
-                    Choose which procedural content is baked into model files. GLB and USDZ use the
-                    textured portable path; STL, OBJ and IFC remain geometry-only.
+                    Scegli quali contenuti generati inserire nei file del modello. GLB e USDZ
+                    includono le texture; STL, OBJ e IFC contengono solo la geometria.
                   </p>
                   {exportableNodeTypes.length > 0 ? (
                     <div className="space-y-2 pt-1">
@@ -1015,12 +1015,12 @@ export function SettingsPanel({
                               {!supportsGeometryOnly && (
                                 <span className="text-muted-foreground text-xs">
                                   {' '}
-                                  (GLB/USDZ only)
+                                  (solo GLB/USDZ)
                                 </span>
                               )}
                             </label>
                             <Switch
-                              aria-label={`Include ${label} in model files`}
+                              aria-label={`Includi ${label} nei file del modello`}
                               checked={!excludedNodeTypes.includes(type)}
                               id={switchId}
                               onCheckedChange={(included) =>
@@ -1033,18 +1033,18 @@ export function SettingsPanel({
                     </div>
                   ) : (
                     <p className="text-muted-foreground text-xs">
-                      No optional procedural content is present.
+                      Non ci sono contenuti generati facoltativi.
                     </p>
                   )}
                   <p className="text-muted-foreground text-xs">
-                    Viewer surroundings are excluded unless selected separately below.
+                    Il contesto del visualizzatore è escluso, a meno che non lo selezioni qui sotto.
                   </p>
                 </fieldset>
                 {exportablePresentations.length > 0 ? (
                   <fieldset className="space-y-2 rounded-md border p-3">
-                    <legend className="px-1 font-medium text-sm">Viewer surroundings</legend>
+                    <legend className="px-1 font-medium text-sm">Contesto del visualizzatore</legend>
                     <p className="text-muted-foreground text-xs">
-                      Optional static surroundings are included only in GLB and USDZ.
+                      Il contesto statico facoltativo è incluso solo in GLB e USDZ.
                     </p>
                     <div className="space-y-2 pt-1">
                       {exportablePresentations.map((contribution, index) => {
@@ -1059,7 +1059,7 @@ export function SettingsPanel({
                               {label}
                             </label>
                             <Switch
-                              aria-label={`Include ${label} in GLB and USDZ`}
+                              aria-label={`Includi ${label} in GLB e USDZ`}
                               checked={includedPresentationIds.includes(contribution.id)}
                               id={switchId}
                               onCheckedChange={(included) =>
@@ -1090,7 +1090,7 @@ export function SettingsPanel({
                     variant="outline"
                   >
                     <Download aria-hidden="true" className="size-4" />
-                    {isActive ? `Exporting ${label}…` : `Export ${label}`}
+                    {isActive ? `Esportazione ${label}…` : `Esporta ${label}`}
                   </Button>
                 )
               })}
@@ -1107,19 +1107,19 @@ export function SettingsPanel({
                 <Send aria-hidden="true" className="size-4" />
                 {sendToBlenderStep
                   ? SEND_TO_BLENDER_STEP_LABEL[sendToBlenderStep]
-                  : 'Send to Blender'}
+                  : 'Invia a Blender'}
               </Button>
               <p className="text-muted-foreground text-xs">
-                Needs the{' '}
+                Richiede il{' '}
                 <a
                   className="underline underline-offset-2"
                   href={BLENDER_ADDON_URL}
                   rel="noreferrer"
                   target="_blank"
                 >
-                  Pascal add-on for Blender
+                  componente aggiuntivo per Blender
                 </a>{' '}
-                running in an open Blender.
+                in un Blender aperto.
               </p>
             </div>
             {sendToBlenderMessage ? (
@@ -1137,7 +1137,7 @@ export function SettingsPanel({
 
             {activeModelExport ? (
               <p className="text-muted-foreground text-xs" role="status">
-                Preparing {activeModelExport.toUpperCase()} file…
+                Preparazione del file {activeModelExport.toUpperCase()}…
               </p>
             ) : null}
             {modelExportError ? (
@@ -1147,7 +1147,7 @@ export function SettingsPanel({
             ) : null}
             {modelExportWarning ? (
               <p className="text-foreground text-xs" role="status">
-                Warning: {modelExportWarning}
+                Avviso: {modelExportWarning}
               </p>
             ) : null}
 
@@ -1158,9 +1158,9 @@ export function SettingsPanel({
 
           <div className="space-y-3 pt-2">
             <div className="flex items-center justify-between">
-              <SettingsSubheading>Floor plan</SettingsSubheading>
+              <SettingsSubheading>Pianta</SettingsSubheading>
               <span className="text-muted-foreground text-xs">
-                {floorplanMode === 'default' ? 'Default mode' : 'Expert mode'}
+                {floorplanMode === 'default' ? 'Modalità base' : 'Modalità Esperto'}
               </span>
             </div>
             <div className="grid gap-2 @sm:grid-cols-2">
@@ -1172,7 +1172,7 @@ export function SettingsPanel({
                 variant="outline"
               >
                 <MapIcon className="size-4" />
-                Full floor plan
+                Pianta completa
               </Button>
               <Button
                 aria-busy={activeFloorplanExport === 'structure'}
@@ -1182,12 +1182,12 @@ export function SettingsPanel({
                 variant="outline"
               >
                 <MapIcon className="size-4" />
-                Structure only
+                Solo struttura
               </Button>
             </div>
             {activeFloorplanExport ? (
               <p className="text-muted-foreground text-xs" role="status">
-                Preparing floor-plan PDF…
+                Preparazione del PDF della pianta…
               </p>
             ) : null}
             {floorplanExportError ? (
@@ -1201,8 +1201,8 @@ export function SettingsPanel({
         {/* Thumbnail (only for cloud projects) */}
         {projectId && !isLocalProject && (
           <SettingsSection
-            description="Refresh the preview shown in your project list."
-            title="Thumbnail"
+            description="Aggiorna l'anteprima mostrata nell'elenco dei progetti."
+            title="Miniatura"
           >
             <div className="grid gap-2 @sm:grid-cols-2">
               <Button
@@ -1212,15 +1212,15 @@ export function SettingsPanel({
                 variant="outline"
               >
                 <Camera className="size-4" />
-                {isGeneratingThumbnail ? 'Generating…' : 'Generate thumbnail'}
+                {isGeneratingThumbnail ? 'Generazione…' : 'Genera miniatura'}
               </Button>
             </div>
           </SettingsSection>
         )}
 
         <SettingsSection
-          description="Keep a JSON copy of the scene, or restore one."
-          title="Save and load"
+          description="Salva una copia JSON della scena o ripristinane una."
+          title="Salva e carica"
         >
           <div className="grid gap-2 @sm:grid-cols-2">
             <Button
@@ -1229,7 +1229,7 @@ export function SettingsPanel({
               variant="outline"
             >
               <Save className="size-4" />
-              Save build
+              Salva su file
             </Button>
             <Button
               className="w-full justify-start gap-2"
@@ -1237,7 +1237,7 @@ export function SettingsPanel({
               variant="outline"
             >
               <Upload className="size-4" />
-              Load build
+              Carica da file
             </Button>
           </div>
 
@@ -1257,8 +1257,8 @@ export function SettingsPanel({
         </SettingsSection>
 
         <SettingsSection
-          description="Sound levels, the construction animation and keyboard shortcuts."
-          title="Preferences"
+          description="Volumi, animazione di costruzione e scorciatoie da tastiera."
+          title="Preferenze"
         >
           <ConstructionAnimationSetting />
           {preferences}
@@ -1269,20 +1269,20 @@ export function SettingsPanel({
         </SettingsSection>
 
         <SettingsSection
-          description="Inspect how nodes are nested in this scene."
-          title="Scene graph"
+          description="Esamina come sono annidati gli elementi di questa scena."
+          title="Albero della scena"
         >
           <Dialog>
             <DialogTrigger asChild>
               <div className="grid gap-2 @sm:grid-cols-2">
                 <Button className="w-full justify-start gap-2" variant="outline">
                   <ListTree className="size-4" />
-                  Explore scene graph
+                  Esplora l'albero della scena
                 </Button>
               </div>
             </DialogTrigger>
             <DialogContent className="dark h-[80vh] max-w-[95vw] gap-0 overflow-hidden border-0 bg-[#1e1e1e] p-0 shadow-none sm:max-w-5xl">
-              <DialogTitle className="sr-only">Scene Graph</DialogTitle>
+              <DialogTitle className="sr-only">Albero della scena</DialogTitle>
               <div
                 className="flex h-full min-h-0 w-full min-w-0 *:h-full *:w-full *:overflow-y-auto"
                 onContextMenuCapture={blockSceneGraphMutations}
@@ -1299,8 +1299,8 @@ export function SettingsPanel({
         </SettingsSection>
 
         <SettingsSection
-          description="Removes every node from this scene. This cannot be undone."
-          title="Danger zone"
+          description="Elimina tutti gli elementi di questa scena. L'operazione non si può annullare."
+          title="Zona pericolosa"
           tone="destructive"
         >
           <div className="grid gap-2 @sm:grid-cols-2">
@@ -1310,7 +1310,7 @@ export function SettingsPanel({
               variant="destructive"
             >
               <Trash2 className="size-4" />
-              Clear and start new
+              Svuota e ricomincia
             </Button>
           </div>
         </SettingsSection>

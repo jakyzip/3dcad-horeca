@@ -390,7 +390,7 @@ export function PanelWrapper({
               const isActive = !collapsed && activeExtensionId === extension.id
               return (
                 <button
-                  aria-label={isActive ? `Close ${extension.title}` : `Open ${extension.title}`}
+                  aria-label={isActive ? `Chiudi ${extension.title}` : `Apri ${extension.title}`}
                   aria-pressed={isActive}
                   className={cn(
                     'flex h-7 w-7 items-center justify-center rounded-md transition-colors',
@@ -411,7 +411,7 @@ export function PanelWrapper({
             })}
             <button
               aria-expanded={!collapsed}
-              aria-label={collapsed ? 'Expand panel' : 'Collapse panel'}
+              aria-label={collapsed ? 'Espandi il pannello' : 'Comprimi il pannello'}
               className="flex h-7 w-7 items-center justify-center rounded-md bg-black/4 dark:bg-[#2C2C2E] text-muted-foreground transition-colors hover:bg-black/8 dark:hover:bg-[#3e3e3e] hover:text-foreground"
               onClick={handleCardToggle}
               type="button"
@@ -457,10 +457,10 @@ export function PanelWrapper({
               )}
               {children}
               {inspectedIds.length > 0 && (
-                <PanelSection title="Collections">
+                <PanelSection title="Raccolte">
                   <ActionGroup>
                     <CollectionsPopover nodeIds={inspectedIds}>
-                      <ActionButton label="Manage collections…" />
+                      <ActionButton label="Gestisci le raccolte…" />
                     </CollectionsPopover>
                   </ActionGroup>
                 </PanelSection>
@@ -560,7 +560,7 @@ function InspectorExtensionSection({
       <ErrorBoundary
         fallback={
           <p className="p-1 text-muted-foreground text-xs">
-            “{extension.title}” hit an error and was unloaded for this session.
+            “{extension.title}” ha avuto un errore ed è stato disattivato per questa sessione.
           </p>
         }
       >

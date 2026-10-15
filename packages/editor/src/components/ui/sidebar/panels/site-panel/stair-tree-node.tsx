@@ -79,7 +79,7 @@ export const StairTreeNode = memo(function StairTreeNode({
   }, [isDropTarget, expanded])
 
   const segmentCount = segments.length
-  const defaultName = `Staircase (${segmentCount} segment${segmentCount !== 1 ? 's' : ''})`
+  const defaultName = `Scala (${segmentCount} ${segmentCount !== 1 ? 'tratti' : 'tratto'})`
 
   // Hide the dragged segment from every stair while dragging
   const visibleSegments = drag ? segments.filter((seg) => seg.id !== drag.nodeId) : segments
@@ -177,8 +177,8 @@ function StairSegmentTreeNode({
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
       if (e.button !== 0) return
-      const typeLabel = node.segmentType === 'stair' ? 'Flight' : 'Landing'
-      const label = `${typeLabel} (${node.width.toFixed(1)}×${node.length.toFixed(1)}m)`
+      const typeLabel = node.segmentType === 'stair' ? 'Rampa' : 'Pianerottolo'
+      const label = `${typeLabel} (${node.width.toFixed(1).replace('.', ',')}×${node.length.toFixed(1).replace('.', ',')} m)`
       startDrag(node.id, node.type, node.parentId as string, label, e.clientX, e.clientY)
     },
     [node.id, node.type, node.parentId, node.segmentType, node.width, node.length, startDrag],
@@ -187,8 +187,8 @@ function StairSegmentTreeNode({
   const handleStartEditing = useCallback(() => setIsEditing(true), [])
   const handleStopEditing = useCallback(() => setIsEditing(false), [])
 
-  const typeLabel = node.segmentType === 'stair' ? 'Flight' : 'Landing'
-  const defaultName = `${typeLabel} (${node.width.toFixed(1)}×${node.length.toFixed(1)}m)`
+  const typeLabel = node.segmentType === 'stair' ? 'Rampa' : 'Pianerottolo'
+  const defaultName = `${typeLabel} (${node.width.toFixed(1).replace('.', ',')}×${node.length.toFixed(1).replace('.', ',')} m)`
 
   return (
     <div data-drop-child={node.id}>

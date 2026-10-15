@@ -15,7 +15,7 @@ import { formatAreaLabel } from '../../../lib/measurements'
 import { pill } from './room-construction-rows'
 import { ShapeChoice } from './shape-choice'
 
-const count = (n: number) => `${n} ${n === 1 ? 'opening' : 'openings'}`
+const count = (n: number) => `${n} ${n === 1 ? 'apertura' : 'aperture'}`
 
 /**
  * A room's openings through its floor (or its ceiling), inside the row's
@@ -43,7 +43,7 @@ export function RoomOpeningsField({
     <ShapeChoice
       data={`cut-opening-${surface}`}
       disabled={readOnly}
-      label="Cut opening"
+      label="Ritaglia apertura"
       onPick={(shape) => startOpeningDraft(zoneId, surface, shape)}
     />
   )
@@ -57,21 +57,21 @@ export function RoomOpeningsField({
   if (!editing)
     return (
       <div className="flex min-h-7 items-center justify-between gap-3" data-room-openings={surface}>
-        <span>{openings.length ? count(openings.length) : 'No openings'}</span>
+        <span>{openings.length ? count(openings.length) : 'Nessuna apertura'}</span>
         <button
           className={pill}
           data-edit-floor
           onClick={() => startFloorEdit(zoneId)}
           type="button"
         >
-          Edit floor
+          Modifica pavimento
         </button>
       </div>
     )
   return (
     <div className="flex flex-col gap-1.5" data-room-openings={surface} data-editing-floor>
       {openings.length === 0 ? (
-        <p>No openings yet. Cut one for a stair void or a hatch.</p>
+        <p>Ancora nessuna apertura. Ritagliane una per il vano di una scala o per una botola.</p>
       ) : (
         openings.map((opening, index) => (
           <button
@@ -83,10 +83,10 @@ export function RoomOpeningsField({
           >
             <span className="text-foreground">
               {opening.source === 'stair'
-                ? 'Stair opening'
+                ? 'Apertura per scala'
                 : opening.source === 'elevator'
-                  ? 'Elevator opening'
-                  : `Opening ${index + 1}`}
+                  ? 'Apertura per ascensore'
+                  : `Apertura ${index + 1}`}
             </span>
             <span className="font-mono tabular-nums">
               {formatAreaLabel(area([{ outer: opening.polygon, holes: [] }]), unit, 2)}
@@ -102,7 +102,7 @@ export function RoomOpeningsField({
           onClick={() => (finishFloorEdit() ? undefined : endFloorEdit())}
           type="button"
         >
-          Done
+          Fatto
         </button>
       </div>
     </div>

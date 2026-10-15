@@ -53,8 +53,9 @@ export function mechanismHudInteract(node: AnyNode): WalkthroughInteract {
   const mechanism = nodeMechanism(node)
   if (!mechanism) return null
   const on = mechanism.isOn(node, useInteractive.getState())
-  const verb = mechanism.verb === 'open' ? (on ? 'close' : 'open') : on ? 'turn off' : 'turn on'
-  return { label: node.name ?? 'item', verb }
+  const verb =
+    mechanism.verb === 'open' ? (on ? 'chiudere' : 'aprire') : on ? 'spegnere' : 'accendere'
+  return { label: node.name ?? 'l’oggetto', verb }
 }
 
 /** Ids of the mounted doors built from a script that are open, by their mechanism. */

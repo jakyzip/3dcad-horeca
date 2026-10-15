@@ -53,7 +53,7 @@ export const SCENE_THEMES: SceneTheme[] = [
   },
   {
     id: 'paper',
-    name: 'Paper',
+    name: 'Carta',
     appearance: 'light',
     background: '#ede9df',
     backgroundSky: '#c0d2e4',
@@ -75,7 +75,7 @@ export const SCENE_THEMES: SceneTheme[] = [
   },
   {
     id: 'sunset',
-    name: 'Sunset',
+    name: 'Tramonto',
     appearance: 'light',
     background: '#f6e8d4',
     backgroundSky: '#b5bede',
@@ -97,7 +97,7 @@ export const SCENE_THEMES: SceneTheme[] = [
   },
   {
     id: 'overcast',
-    name: 'Overcast',
+    name: 'Nuvoloso',
     appearance: 'light',
     background: '#e6e7e6',
     backgroundSky: '#c3ccd6',
@@ -116,7 +116,7 @@ export const SCENE_THEMES: SceneTheme[] = [
   },
   {
     id: 'blueprint',
-    name: 'Blueprint',
+    name: 'Cianografia',
     appearance: 'light',
     background: '#dde6ef',
     backgroundSky: '#a5c4e2',
@@ -138,7 +138,7 @@ export const SCENE_THEMES: SceneTheme[] = [
   },
   {
     id: 'mediterranean',
-    name: 'Mediterranean',
+    name: 'Mediterraneo',
     appearance: 'light',
     background: '#bdd6e8',
     backgroundSky: '#8ab4d6',
@@ -160,7 +160,7 @@ export const SCENE_THEMES: SceneTheme[] = [
   },
   {
     id: 'twilight',
-    name: 'Twilight',
+    name: 'Crepuscolo',
     appearance: 'dark',
     background: '#3a3550',
     backgroundSky: '#272338',
@@ -182,7 +182,7 @@ export const SCENE_THEMES: SceneTheme[] = [
   },
   {
     id: 'night',
-    name: 'Night',
+    name: 'Notte',
     appearance: 'dark',
     background: '#1f2433',
     backgroundSky: '#12161f',
@@ -204,7 +204,7 @@ export const SCENE_THEMES: SceneTheme[] = [
   },
   {
     id: 'verdant',
-    name: 'Verdant',
+    name: 'Verde',
     appearance: 'light',
     background: '#d6e4d2',
     backgroundSky: '#aecde0',

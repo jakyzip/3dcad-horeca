@@ -35,7 +35,7 @@ export function FloorOpeningPanel({ openingId }: { openingId: string }) {
   const onCeiling = opening.drawnOn === 'ceiling'
   const zoneId = openingRoom(nodes, opening)
   const zone = zoneId ? nodes[zoneId as AnyNodeId] : undefined
-  const roomName = zone?.type === 'zone' ? zone.name?.trim() || 'Room' : null
+  const roomName = zone?.type === 'zone' ? zone.name?.trim() || 'Stanza' : null
   const level = opening.parentId ? nodes[opening.parentId as AnyNodeId] : undefined
   const adjacentId = opening.parentId
     ? adjacentLevelId(nodes, opening.parentId, onCeiling ? 1 : -1)
@@ -48,18 +48,18 @@ export function FloorOpeningPanel({ openingId }: { openingId: string }) {
     nodes[opening.ownerId as AnyNodeId]?.type === opening.source
   const hints = floorOpeningHints(nodes, opening)
   const title = opening.source === 'stair'
-    ? 'Stair opening'
+    ? 'Apertura per scala'
     : opening.source === 'elevator'
-      ? 'Elevator opening'
-      : onCeiling ? 'Ceiling opening' : 'Floor opening'
+      ? 'Apertura per ascensore'
+      : onCeiling ? 'Apertura nel soffitto' : 'Apertura nel pavimento'
   const kicker = [
-    'Opening',
+    'Apertura',
     roomName ? `in ${roomName}` : null,
     level?.type === 'level' ? getLevelDisplayName(level) : null,
   ]
     .filter(Boolean)
     .join(' · ')
-  const switchLabel = onCeiling ? 'Also cut the floor above' : 'Also cut the ceiling below'
+  const switchLabel = onCeiling ? 'Taglia anche il pavimento sopra' : 'Taglia anche il soffitto sotto'
   const setAdjacent = (next: boolean) =>
     useScene.getState().updateNode(opening.id, { cutsAdjacent: next })
 
@@ -73,7 +73,7 @@ export function FloorOpeningPanel({ openingId }: { openingId: string }) {
       <div className="flex flex-col gap-3 px-4 pt-3 pb-4 text-sm" data-floor-opening-panel={opening.id}>
         <p className="text-muted-foreground text-xs">
           {formatAreaLabel(area([{ outer: opening.polygon, holes: [] }]), unit, 2)}
-          {owned ? ' · Shape follows its owner.' : ' · Drag its corners to change the shape.'}
+          {owned ? ' · La forma segue l\'elemento a cui appartiene.' : ' · Trascina gli angoli per cambiare la forma.'}
         </p>
         {owned && (
           <button
@@ -82,12 +82,12 @@ export function FloorOpeningPanel({ openingId }: { openingId: string }) {
             onClick={() => useViewer.getState().setSelection({ selectedIds: [opening.ownerId!] })}
             type="button"
           >
-            Owned by {opening.source === 'stair' ? 'Staircase' : 'Elevator'}
+            Appartiene a: {opening.source === 'stair' ? 'Scala' : 'Ascensore'}
           </button>
         )}
         {hosted ? (
           <p className="text-muted-foreground text-xs" data-opening-hosted>
-            A hatch in the mezzanine: it cuts only the mezzanine’s floor.
+            Una botola nel soppalco: taglia solo il pavimento del soppalco.
           </p>
         ) : owned ? null : (
           <label className="flex items-start gap-3" data-opening-adjacent>
@@ -95,10 +95,10 @@ export function FloorOpeningPanel({ openingId }: { openingId: string }) {
               <span className="font-medium text-[13px] text-foreground">{switchLabel}</span>
               <span className="text-muted-foreground text-xs">
                 {adjacent?.type === 'level'
-                  ? `On ${getLevelDisplayName(adjacent)}, as one void with this opening.`
+                  ? `Su ${getLevelDisplayName(adjacent)}, come un unico vano con questa apertura.`
                   : onCeiling
-                    ? 'There is no floor above this storey.'
-                    : 'There is no storey below.'}
+                    ? 'Non c\'è un piano sopra questo.'
+                    : 'Non c\'è un piano sotto.'}
               </span>
             </span>
             <Switch
@@ -123,7 +123,7 @@ export function FloorOpeningPanel({ openingId }: { openingId: string }) {
             type="button"
             variant="outline"
           >
-            Done
+            Fatto
           </Button>
           {!owned && <Button
             className="flex-1 rounded-full"
@@ -134,7 +134,7 @@ export function FloorOpeningPanel({ openingId }: { openingId: string }) {
             type="button"
             variant="outline"
           >
-            Delete
+            Elimina
           </Button>}
         </div>
       </div>

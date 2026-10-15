@@ -27,7 +27,7 @@ export function SelectControl<T extends string>({
   className,
   mixed = false,
 }: SelectControlProps<T>) {
-  const current = mixed ? 'Mixed' : options.find((option) => option.value === value)?.label
+  const current = mixed ? 'Vari' : options.find((option) => option.value === value)?.label
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

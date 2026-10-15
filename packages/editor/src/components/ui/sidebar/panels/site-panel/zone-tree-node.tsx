@@ -70,7 +70,7 @@ export const ZoneTreeNode = memo(function ZoneTreeNode({
             <ZoneMembershipCheckbox
               checked={focusedUnit.members.includes(nodeId)}
               onToggle={() => toggleZoneMembership(focusedUnit.id, nodeId)}
-              unitName={focusedUnit.name || 'Unit'}
+              unitName={focusedUnit.name || 'Unità'}
             />
           )}
           <InlineRenameInput

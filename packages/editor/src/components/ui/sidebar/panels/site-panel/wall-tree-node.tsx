@@ -83,7 +83,7 @@ export const WallTreeNode = memo(function WallTreeNode({
       isVisible={isVisible}
       label={
         <InlineRenameInput
-          defaultName="Wall"
+          defaultName="Muro"
           isEditing={isEditing}
           nodeId={nodeId as AnyNodeId}
           onStartEditing={handleStartEditing}

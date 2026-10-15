@@ -26,183 +26,183 @@ type ShortcutCategory = {
 
 const SHORTCUT_CATEGORIES: ShortcutCategory[] = [
   {
-    title: 'Editor Navigation',
+    title: "Navigazione nell'editor",
     shortcuts: [
-      { keys: ['1'], action: 'Switch to Site' },
-      { keys: ['2'], action: 'Switch to Building' },
-      { keys: ['\\'], action: 'Open or close the split view' },
-      { keys: ['F'], action: 'Open the items catalog with the item tool' },
-      { keys: ['Z'], action: 'Draw a zone' },
+      { keys: ['1'], action: 'Passa al lotto' },
+      { keys: ['2'], action: "Passa all'edificio" },
+      { keys: ['\\'], action: 'Apri o chiudi la vista divisa' },
+      { keys: ['F'], action: 'Apri il catalogo degli oggetti con lo strumento Oggetto' },
+      { keys: ['Z'], action: 'Disegna una zona' },
       {
         keys: ['Cmd/Ctrl', 'Arrow Up'],
-        action: 'Select next level in the active building',
+        action: "Seleziona il piano successivo dell'edificio attivo",
       },
       {
         keys: ['Cmd/Ctrl', 'Arrow Down'],
-        action: 'Select previous level in the active building',
+        action: "Seleziona il piano precedente dell'edificio attivo",
       },
-      { keys: ['Cmd/Ctrl', 'B'], action: 'Toggle sidebar' },
+      { keys: ['Cmd/Ctrl', 'B'], action: 'Mostra/nascondi barra laterale' },
     ],
   },
   {
-    title: 'Modes & History',
+    title: 'Modalità e cronologia',
     shortcuts: [
-      { keys: ['V'], action: 'Switch to Select mode' },
-      { keys: ['B'], action: 'Switch to Build mode' },
-      { keys: ['M'], action: 'Activate the last measurement tool' },
-      { keys: ['X'], action: 'Switch to Delete mode' },
+      { keys: ['V'], action: 'Passa alla modalità Seleziona' },
+      { keys: ['B'], action: 'Passa alla modalità Costruisci' },
+      { keys: ['M'], action: "Attiva l'ultimo strumento di misura usato" },
+      { keys: ['X'], action: 'Passa alla modalità Elimina' },
       {
         keys: ['Esc'],
-        action: 'Cancel the active tool and return to Select mode',
-        note: 'Mid-draw it cancels only the chain in progress and keeps the tool armed; press it again to leave the tool.',
+        action: 'Annulla lo strumento attivo e torna alla modalità Seleziona',
+        note: 'Mentre disegni annulla solo la sequenza in corso e lascia attivo lo strumento; premilo di nuovo per uscire dallo strumento.',
       },
-      { keys: ['Delete / Backspace'], action: 'Delete selected objects' },
-      { keys: ['Cmd/Ctrl', 'Z'], action: 'Undo' },
-      { keys: ['Cmd/Ctrl', 'Shift', 'Z'], action: 'Redo' },
-      { keys: ['Cmd/Ctrl', 'S'], action: 'Save' },
+      { keys: ['Delete / Backspace'], action: 'Elimina gli oggetti selezionati' },
+      { keys: ['Cmd/Ctrl', 'Z'], action: 'Annulla' },
+      { keys: ['Cmd/Ctrl', 'Shift', 'Z'], action: 'Ripeti' },
+      { keys: ['Cmd/Ctrl', 'S'], action: 'Salva' },
     ],
   },
   {
-    title: 'Selection',
+    title: 'Selezione',
     shortcuts: [
       {
         keys: ['Cmd/Ctrl', 'C'],
-        action: 'Copy the selected objects',
-        note: 'The copied selection can be pasted into another level, project, or browser tab.',
+        action: 'Copia gli oggetti selezionati',
+        note: 'La selezione copiata si può incollare in un altro piano, progetto o scheda del browser.',
       },
       {
         keys: ['Cmd/Ctrl', 'X'],
-        action: 'Cut the selected objects',
-        note: 'Copies the selection to the clipboard, then removes it from this scene.',
+        action: 'Taglia gli oggetti selezionati',
+        note: 'Copia la selezione negli appunti, poi la toglie da questa scena.',
       },
       {
         keys: ['Cmd/Ctrl', 'V'],
-        action: 'Paste and place copied objects',
+        action: 'Incolla e posiziona gli oggetti copiati',
         note:
-          'Carries a preview under the cursor. Click to place it, or press Escape to cancel.',
+          "Mostra un'anteprima sotto il cursore. Fai clic per posizionarla o premi Esc per annullare.",
       },
       {
         keys: ['Cmd/Ctrl', 'Left click'],
-        action: 'Add or remove an object from multi-selection',
-        note: 'Works in Select mode on the 3D canvas, the 2D floor plan, and the scene graph.',
+        action: 'Aggiungi o togli un oggetto dalla selezione multipla',
+        note: "Funziona in modalità Seleziona nella vista 3D, nella pianta 2D e nell'albero della scena.",
       },
       {
         keys: ['Shift', 'Left click'],
-        action: 'Add or remove an object from canvas multi-selection',
-        note: 'In the scene graph, Shift-click selects the visible range like a file browser.',
+        action: 'Aggiungi o togli un oggetto dalla selezione multipla nella vista',
+        note: "Nell'albero della scena, Maiusc+clic seleziona l'intervallo visibile come in un gestore di file.",
       },
       {
         keys: ['Left click'],
-        action: 'Move the whole multi-selection',
+        action: 'Sposta tutta la selezione multipla',
         note:
-          'With 2+ objects selected, in 2D and 3D alike: drag the selection (or its dashed box) to slide it; click it to pick it up and place with the next click.',
+          'Con almeno 2 oggetti selezionati, sia in 2D sia in 3D: trascina la selezione (o il suo riquadro tratteggiato) per spostarla; fai clic per prenderla e posizionala con il clic successivo.',
       },
       {
         keys: ['R', 'T'],
-        action: 'Rotate a multi-selection ±45° around its center',
-        note: 'Also works mid-move while carrying the selection.',
+        action: 'Ruota la selezione multipla di ±45° attorno al suo centro',
+        note: 'Funziona anche durante lo spostamento della selezione.',
       },
       {
         keys: ['Cmd/Ctrl', 'G'],
-        action: 'Group the multi-selection (session only)',
+        action: 'Raggruppa la selezione multipla (solo per questa sessione)',
         note:
-          'Editor-only. Plain click a member later to reselect the whole group. Not saved with the project.',
+          "Solo nell'editor. In seguito, un clic semplice su un elemento riseleziona tutto il gruppo. Non viene salvato nel progetto.",
       },
       {
         keys: ['Cmd/Ctrl', 'Shift', 'G'],
-        action: 'Ungroup the session selection',
-        note: 'Keeps the current selection; only dissolves the session group.',
+        action: 'Separa il gruppo della sessione',
+        note: 'Mantiene la selezione attuale; scioglie solo il gruppo della sessione.',
       },
       {
         keys: ['Esc'],
-        action: 'Clear the selection',
-        note: 'Clicking empty space does the same.',
+        action: 'Annulla la selezione',
+        note: 'Lo stesso succede facendo clic su uno spazio vuoto.',
       },
     ],
   },
   {
-    title: 'Direct Manipulation',
+    title: 'Modifica diretta',
     shortcuts: [
       {
         keys: ['Cmd/Ctrl', 'Left click'],
-        action: 'Move the selected movable object under the cursor',
-        note: 'Drag in Select mode with a single object selected. Guided snapping and guides are enabled by default.',
+        action: "Sposta l'oggetto selezionato sotto il cursore",
+        note: "Trascina in modalità Seleziona con un solo oggetto selezionato. L'aggancio guidato e le guide sono attivi in modo predefinito.",
       },
       {
         keys: ['Cmd/Ctrl', 'Right click'],
-        action: 'Rotate the selected object under the cursor',
-        note: 'Drag left or right in Select mode with a single object selected. Rotation snaps to 15° increments by default.',
+        action: "Ruota l'oggetto selezionato sotto il cursore",
+        note: 'Trascina a sinistra o a destra in modalità Seleziona con un solo oggetto selezionato. In modo predefinito la rotazione procede a scatti di 15°.',
       },
       {
         keys: ['Cmd/Ctrl', 'Shift', 'Right click'],
-        action: 'Rotate freely',
-        note: 'Hold Shift during the drag to bypass the 15° rotation increment.',
+        action: 'Ruota liberamente',
+        note: 'Tieni premuto Maiusc durante il trascinamento per ignorare gli scatti di 15°.',
       },
     ],
   },
   {
-    title: 'Drawing Tools',
+    title: 'Strumenti di disegno',
     shortcuts: [
       // Shift and Ctrl each mean one thing held and another tapped, and only
       // the hold was documented — which read as the taps not existing. Both
       // taps are listed first because they are the ones nobody discovers.
       {
         keys: ['Shift'],
-        action: 'Cycle the snapping mode',
-        note: 'Tap and release without pressing anything else, while a drawing or move gesture is available.',
+        action: 'Cambia la modalità di aggancio',
+        note: 'Premi e rilascia senza premere altro, mentre puoi disegnare o spostare.',
       },
       {
         keys: ['Cmd/Ctrl'],
-        action: 'Cycle the grid step: 0.5 m → 0.25 m → 0.1 m → 0.05 m',
-        note: 'Tap and release on its own. Use it when the default half-metre grid is too coarse — placing a window, for instance.',
+        action: 'Cambia il passo della griglia: 0,5 m → 0,25 m → 0,1 m → 0,05 m',
+        note: 'Premi e rilascia da solo. Usalo quando la griglia predefinita da mezzo metro è troppo larga, per esempio per posizionare una finestra.',
       },
       {
         keys: ['Shift'],
-        action: 'Bypass guided snapping and angle constraints',
-        note: 'Hold during the active gesture. Passive guide or measurement feedback may stay visible.',
+        action: "Ignora l'aggancio guidato e i vincoli di angolo",
+        note: "Tieni premuto durante l'azione in corso. Guide e misure di riferimento possono restare visibili.",
       },
       {
         keys: ['Shift'],
-        action: 'Rotate freely, bypassing the default 15° rotation snap',
-        note: 'Hold while dragging a rotate handle or direct-rotation gesture.',
+        action: 'Ruota liberamente, senza gli scatti predefiniti di 15°',
+        note: 'Tieni premuto mentre trascini una maniglia di rotazione o ruoti direttamente.',
       },
     ],
   },
   {
-    title: 'Item Placement',
+    title: 'Posizionamento degli oggetti',
     shortcuts: [
       {
         keys: ['R', 'T'],
-        action: 'Rotate item; with a door selected, R toggles open/closed and T closes',
+        action: "Ruota l'oggetto; con una porta selezionata, R la apre o la chiude e T la chiude",
       },
       {
         keys: ['E'],
-        action: 'Operate the selected node — doors, windows, and cabinet doors/drawers animate open/closed',
+        action: "Aziona l'elemento selezionato: porte, finestre e ante o cassetti dei mobili si aprono o si chiudono",
       },
       {
         keys: ['Shift'],
-        action: 'Temporarily bypass placement validation constraints',
-        note: 'Hold while placing.',
+        action: 'Ignora per il momento i vincoli di posizionamento',
+        note: 'Tieni premuto mentre posizioni.',
       },
     ],
   },
   {
-    title: 'Camera',
+    title: 'Vista',
     shortcuts: [
       {
         keys: ['W', 'A', 'S', 'D'],
-        action: 'Pan camera',
-        note: 'Moves in screen space, similar to dragging the camera view.',
+        action: 'Sposta la vista',
+        note: 'Sposta sul piano dello schermo, come trascinare la vista.',
       },
       {
         keys: ['Middle click'],
-        action: 'Pan camera',
-        note: 'Drag with the middle mouse button, or hold Space while dragging with the left mouse button.',
+        action: 'Sposta la vista',
+        note: 'Trascina con il tasto centrale del mouse, oppure tieni premuto Spazio mentre trascini con il tasto sinistro.',
       },
       {
         keys: ['Right click'],
-        action: 'Orbit camera',
-        note: 'Drag with the right mouse button.',
+        action: 'Ruota la vista',
+        note: 'Trascina con il tasto destro del mouse.',
       },
     ],
   },
@@ -227,15 +227,15 @@ export function KeyboardShortcutsDialog() {
       <DialogTrigger asChild>
         <Button className="w-full justify-start gap-2" variant="outline">
           <Keyboard className="size-4" />
-          Keyboard shortcuts
+          Scorciatoie da tastiera
         </Button>
       </DialogTrigger>
       <DialogContent className="flex max-h-[85vh] flex-col overflow-hidden p-0 sm:max-w-3xl">
         <DialogHeader className="shrink-0 border-b px-6 py-4">
-          <DialogTitle>Keyboard shortcuts</DialogTitle>
+          <DialogTitle>Scorciatoie da tastiera</DialogTitle>
           <DialogDescription>
-            Shortcuts are context-aware. Guided constraints are enabled by default; hold Shift
-            during an active gesture to build freely.
+            Le scorciatoie dipendono dal contesto. I vincoli guidati sono attivi in modo
+            predefinito; tieni premuto Maiusc durante un'azione per costruire liberamente.
           </DialogDescription>
         </DialogHeader>
 

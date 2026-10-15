@@ -378,8 +378,11 @@ function resolveHudInteract(target: FirstPersonInteractableTarget | null): Walkt
   if (!target) return null
   if (target.type === 'elevator') {
     return {
-      label: target.action === 'open-door' ? 'door button' : 'elevator button',
-      verb: 'press',
+      label:
+        target.action === 'open-door'
+          ? 'il pulsante di apertura porte'
+          : 'il pulsante dell’ascensore',
+      verb: 'premere',
     }
   }
 
@@ -401,28 +404,28 @@ function resolveHudInteract(target: FirstPersonInteractableTarget | null): Walkt
     if (parts.length === 0 && procedural.recipe.parts.some((part) => part.light)) {
       const state = useInteractive.getState()
       const isOn = state.procedural[target.id]?.lightsOn ?? state.lampDefault
-      return { label: procedural.name ?? 'Lights', verb: isOn ? 'turn off' : 'turn on' }
+      return { label: procedural.name ?? 'le luci', verb: isOn ? 'spegnere' : 'accendere' }
     }
     const part = target.partId ? parts.find((entry) => entry.id === target.partId) : undefined
     const active = useInteractive.getState().procedural[target.id]?.parts
     const isOn = part ? Boolean(active?.[part.id]) : parts.some((entry) => active?.[entry.id])
     const kind = part?.kind ?? (parts.every((entry) => entry.kind === 'spin') ? 'spin' : 'hinge')
     return {
-      label: part?.label ?? procedural.name ?? 'item',
-      verb: kind === 'spin' ? (isOn ? 'turn off' : 'turn on') : isOn ? 'close' : 'open',
+      label: part?.label ?? procedural.name ?? 'l’oggetto',
+      verb: kind === 'spin' ? (isOn ? 'spegnere' : 'accendere') : isOn ? 'chiudere' : 'aprire',
     }
   }
   if (target.type === 'window') {
     if (node?.type !== 'window') return null
     const isOpen = getDisplayedWindowValue(target.id, node.operationState) > 0
-    return { label: node.name || 'window', verb: isOpen ? 'close' : 'open' }
+    return { label: node.name || 'la finestra', verb: isOpen ? 'chiudere' : 'aprire' }
   }
 
   if (node?.type !== 'door') return null
   const isOpen = isOperationDoorType(node.doorType)
     ? getDisplayedDoorValue(target.id, 'operationState', node.operationState) > 0
     : getDisplayedDoorValue(target.id, 'swingAngle', node.swingAngle) > 0
-  return { label: node.name || 'door', verb: isOpen ? 'close' : 'open' }
+  return { label: node.name || 'la porta', verb: isOpen ? 'chiudere' : 'aprire' }
 }
 
 function resolveElevatorButtonTarget(object: Object3D): ElevatorButtonTarget | null {
@@ -2009,7 +2012,8 @@ export const FirstPersonOverlay = ({ onExit }: { onExit: () => void }) => {
     >
       {!hasPlacedSpawn && (
         <div className="corner-smooth rounded-full border border-border/40 bg-background/80 px-3 py-1 text-center text-muted-foreground text-xs shadow-elevation-3 backdrop-blur-xl">
-          Place a spawn point from the Build tab to control where walkthrough starts.
+          Inserisci un punto di partenza dalla scheda Costruisci per scegliere dove inizia la
+          visita.
         </div>
       )}
     </WalkthroughHud>

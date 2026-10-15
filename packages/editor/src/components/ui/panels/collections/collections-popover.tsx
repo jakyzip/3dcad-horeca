@@ -102,7 +102,7 @@ export function CollectionsPopover({ nodeIds, children }: CollectionsPopoverProp
           <div className="flex items-center gap-1.5">
             <Layers className="h-3.5 w-3.5 text-muted-foreground" />
             <span className="font-semibold text-foreground text-xs tracking-tight">
-              Collections
+              Raccolte
             </span>
           </div>
           <button
@@ -114,7 +114,7 @@ export function CollectionsPopover({ nodeIds, children }: CollectionsPopoverProp
             type="button"
           >
             <Plus className="h-3 w-3" />
-            New
+            Nuova
           </button>
         </div>
 
@@ -132,7 +132,7 @@ export function CollectionsPopover({ nodeIds, children }: CollectionsPopoverProp
                   setCreateName('')
                 }
               }}
-              placeholder="Collection name…"
+              placeholder="Nome della raccolta…"
               value={createName}
             />
             <button
@@ -162,7 +162,7 @@ export function CollectionsPopover({ nodeIds, children }: CollectionsPopoverProp
             <div className="flex flex-col items-center justify-center gap-2 px-4 py-8 text-center">
               <Layers className="h-6 w-6 text-muted-foreground/40" />
               <p className="text-muted-foreground text-xs">
-                No collections yet. Create one to group elements together.
+                Ancora nessuna raccolta. Creane una per raggruppare gli elementi.
               </p>
             </div>
           ) : (
@@ -182,7 +182,7 @@ export function CollectionsPopover({ nodeIds, children }: CollectionsPopoverProp
                       key={collection.id}
                     >
                       <span className="truncate text-foreground/80 text-xs">
-                        Delete "{collection.name}"?
+                        Eliminare "{collection.name}"?
                       </span>
                       <div className="flex shrink-0 items-center gap-1">
                         <button
@@ -193,14 +193,14 @@ export function CollectionsPopover({ nodeIds, children }: CollectionsPopoverProp
                           }}
                           type="button"
                         >
-                          Delete
+                          Elimina
                         </button>
                         <button
                           className="rounded-md px-2 py-0.5 font-medium text-[11px] text-muted-foreground transition-colors hover:bg-black/6 dark:hover:bg-white/10"
                           onClick={() => setDeletingId(null)}
                           type="button"
                         >
-                          Cancel
+                          Annulla
                         </button>
                       </div>
                     </li>
@@ -314,14 +314,14 @@ export function CollectionsPopover({ nodeIds, children }: CollectionsPopoverProp
                             }}
                           >
                             <Pencil className="h-3.5 w-3.5" />
-                            Rename
+                            Rinomina
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => setDeletingId(collection.id)}
                             variant="destructive"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
-                            Delete
+                            Elimina
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

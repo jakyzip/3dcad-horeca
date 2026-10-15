@@ -69,14 +69,14 @@ describe('walkthrough mechanism targets', () => {
   test('the HUD names the node and says what E will do', () => {
     const kind = registerKind({ mechanism: switchMechanism })
     const node = mount(kind, 'articulated_hud', { joints: 1, name: 'Desk lamp' })
-    expect(mechanismHudInteract(node)).toEqual({ label: 'Desk lamp', verb: 'turn on' })
+    expect(mechanismHudInteract(node)).toEqual({ label: 'Desk lamp', verb: 'accendere' })
     useInteractive.getState().setMechanism(node.id, true)
-    expect(mechanismHudInteract(node)).toEqual({ label: 'Desk lamp', verb: 'turn off' })
+    expect(mechanismHudInteract(node)).toEqual({ label: 'Desk lamp', verb: 'spegnere' })
 
     const lid = mount(registerKind({ mechanism: { ...switchMechanism, verb: 'open' } }), 'lid_1', {
       joints: 1,
     })
-    expect(mechanismHudInteract(lid)).toEqual({ label: 'item', verb: 'open' })
+    expect(mechanismHudInteract(lid)).toEqual({ label: 'l’oggetto', verb: 'aprire' })
     expect(mechanismHudInteract(mount(registerKind({}), 'plain_hud'))).toBeNull()
   })
 })

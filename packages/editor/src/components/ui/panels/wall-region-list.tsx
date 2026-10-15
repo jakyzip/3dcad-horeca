@@ -48,7 +48,7 @@ export function WallPaintRegionList({ wallId }: { wallId: string }) {
   return (
     // Focus inside this list still lets Delete target the active region.
     <div className="contents" data-wall-region-list={wallId}>
-      <PanelSection title="Paint regions">
+      <PanelSection title="Zone dipinte">
         <div className="flex flex-col gap-1">
           {rows.map((row) => {
             const isActive = active?.wallId === wallId && active.regionId === row.id
@@ -85,13 +85,13 @@ export function WallPaintRegionList({ wallId }: { wallId: string }) {
                   </span>
                 </button>
                 <button
-                  aria-label="Delete region"
+                  aria-label="Elimina la zona"
                   className={ROW_ACTION_CLASS}
                   onClick={() => {
                     if (isActive) setActive(null)
                     if (removeWallRegion(wallId, row.id)) sfxEmitter.emit('sfx:structure-delete')
                   }}
-                  title="Delete region"
+                  title="Elimina la zona"
                   type="button"
                 >
                   <Trash2 className="h-3 w-3" />

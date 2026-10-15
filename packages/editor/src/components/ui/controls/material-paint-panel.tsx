@@ -25,25 +25,25 @@ export type MaterialPaintPanelProps = {
 }
 
 const PAINT_MODE_OPTIONS: { value: PaintMode; label: string; icon: typeof PaintBucket }[] = [
-  { value: 'surface', label: 'Whole surface: a click paints the surface under it', icon: PaintBucket },
+  { value: 'surface', label: 'Superficie intera: un clic dipinge la superficie sotto il cursore', icon: PaintBucket },
   {
     value: 'rectangle',
-    label: 'Rectangle: press anywhere on a wall, floor or ceiling, drag to the opposite corner',
+    label: 'Rettangolo: premi su un muro, un pavimento o un soffitto e trascina fino all’angolo opposto',
     icon: Square,
   },
   {
     value: 'polygon',
-    label: 'Polygon: click the points of a shape on a floor or ceiling',
+    label: 'Poligono: fai clic sui punti di una forma su un pavimento o un soffitto',
     icon: Pentagon,
   },
   {
     value: 'erase',
-    label: 'Erase: click a painted part to remove it, or a painted surface to reset it',
+    label: 'Cancella: fai clic su una parte dipinta per toglierla, o su una superficie dipinta per ripristinarla',
     icon: Eraser,
   },
   {
     value: 'pick',
-    label: 'Pick: click a surface to paint with its material (or hold Alt / Option)',
+    label: 'Preleva: fai clic su una superficie per dipingere con il suo materiale (o tieni premuto Alt/Opzione)',
     icon: Pipette,
   },
 ]
@@ -72,7 +72,7 @@ function PaintModeControl() {
       onPointerUp={(event) => (event.target as HTMLElement).closest('button')?.blur()}
     >
       <div className="px-0.5 font-medium text-muted-foreground text-xs">
-        {painting && mode === 'erase' ? 'Erase' : painting && mode === 'pick' ? 'Pick material' : 'Paint'}
+        {painting && mode === 'erase' ? 'Cancella' : painting && mode === 'pick' ? 'Preleva materiale' : 'Dipingi'}
       </div>
       <SegmentedControl
         mixed={!painting}
@@ -116,8 +116,8 @@ export function MaterialPaintPanel({ onCreateMaterialRequest }: MaterialPaintPan
       {/* Erasing paints nothing: no swatches to pick from, just what a click does. */}
       {erasing ? (
         <p className="px-0.5 py-1 text-muted-foreground text-xs" data-paint-erase-note>
-          Click a painted part of a wall, floor or ceiling to remove it, or a painted surface to reset it to
-          its default.
+          Fai clic su una parte dipinta di un muro, un pavimento o un soffitto per toglierla, o su una
+          superficie dipinta per riportarla al materiale predefinito.
         </p>
       ) : (
         <>
@@ -136,12 +136,12 @@ export function MaterialPaintPanel({ onCreateMaterialRequest }: MaterialPaintPan
       <div className="mt-2 shrink-0 space-y-1.5 border-border/60 border-t pt-2">
         <div className="flex items-center justify-between">
           <span className="font-medium text-muted-foreground text-xs uppercase tracking-[0.12em]">
-            Scene materials
+            Materiali della scena
           </span>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                aria-label="Add material"
+                aria-label="Aggiungi materiale"
                 onClick={createCustomMaterial}
                 size="icon-sm"
                 type="button"
@@ -150,7 +150,7 @@ export function MaterialPaintPanel({ onCreateMaterialRequest }: MaterialPaintPan
                 <Plus />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Add material</TooltipContent>
+            <TooltipContent>Aggiungi materiale</TooltipContent>
           </Tooltip>
         </div>
         <div className="subtle-scrollbar max-h-56 overflow-y-auto">
@@ -158,7 +158,7 @@ export function MaterialPaintPanel({ onCreateMaterialRequest }: MaterialPaintPan
             <SceneMaterialList autoEditId={autoEditMaterialId} />
           ) : (
             <p className="px-0.5 py-1 text-muted-foreground text-xs">
-              No custom materials yet — add one with +.
+              Nessun materiale personalizzato: aggiungine uno con +.
             </p>
           )}
         </div>

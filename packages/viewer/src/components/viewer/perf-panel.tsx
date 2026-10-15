@@ -75,7 +75,7 @@ const LastAction = () => {
   if (!latest) return null
   return (
     <div style={section}>
-      <div style={{ ...label, opacity: 0.7 }}>last action</div>
+      <div style={{ ...label, opacity: 0.7 }}>ultima azione</div>
       <div style={grid}>
         <span style={{ ...value, textAlign: 'left', ...clip }}>
           {latest.detail ? `${latest.name} ${latest.detail}` : latest.name}
@@ -221,12 +221,12 @@ export const PerfPanel = () => {
           touchAction: 'none',
         }}
       >
-        <span style={{ fontWeight: 600, letterSpacing: 0.2 }}>Performance</span>
+        <span style={{ fontWeight: 600, letterSpacing: 0.2 }}>Prestazioni</span>
         <span style={{ marginLeft: 'auto', color: stats ? fpsColor(stats.fps) : '#8b90a0' }}>
           {stats ? `${stats.fps} fps` : '—'}
         </span>
         <button
-          aria-label="Dock panel to the side"
+          aria-label="Aggancia il pannello al lato"
           onClick={dock}
           onPointerDown={(e) => e.stopPropagation()}
           style={{
@@ -303,7 +303,7 @@ export const PerfPanel = () => {
           )}
         </div>
       ) : (
-        <div style={{ padding: '8px 10px', color: '#8b90a0' }}>waiting for samples…</div>
+        <div style={{ padding: '8px 10px', color: '#8b90a0' }}>in attesa di campioni…</div>
       )}
     </div>,
     document.body,

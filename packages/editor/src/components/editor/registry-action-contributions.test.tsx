@@ -51,13 +51,13 @@ describe('mechanism action in the action menu', () => {
     const idle = renderToStaticMarkup(
       <MechanismButton mechanism={switchMechanism} node={node} running={false} />,
     )
-    expect(idle).toContain('aria-label="Play"')
+    expect(idle).toContain('aria-label="Avvia"')
     expect(idle).toContain('aria-pressed="false"')
 
     const running = renderToStaticMarkup(
       <MechanismButton mechanism={switchMechanism} node={node} running />,
     )
-    expect(running).toContain('aria-label="Stop"')
+    expect(running).toContain('aria-label="Ferma"')
     expect(running).toContain('aria-pressed="true"')
   })
 })

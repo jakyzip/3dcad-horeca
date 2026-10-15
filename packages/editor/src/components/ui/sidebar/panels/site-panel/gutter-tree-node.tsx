@@ -39,7 +39,7 @@ export const GutterTreeNode = memo(function GutterTreeNode({
     [nodeId, setSelection],
   )
 
-  const defaultName = node?.name || 'Gutter'
+  const defaultName = node?.name || 'Grondaia'
 
   return (
     <TreeNodeWrapper

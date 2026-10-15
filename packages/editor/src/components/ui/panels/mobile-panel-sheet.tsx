@@ -88,7 +88,7 @@ export function MobilePanelSheet({ open, onClose, icon, title, children }: Mobil
               </h2>
             </div>
             <button
-              aria-label="Close"
+              aria-label="Chiudi"
               className="flex h-8 w-8 items-center justify-center rounded-md bg-black/4 dark:bg-[#2C2C2E] text-muted-foreground transition-colors hover:bg-black/8 dark:hover:bg-[#3e3e3e] hover:text-foreground"
               onClick={onClose}
               type="button"
