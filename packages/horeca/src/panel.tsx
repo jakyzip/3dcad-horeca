@@ -25,6 +25,7 @@ import {
 } from './distinta'
 import { planToDxf } from './dxf-export'
 import { parseDxfRilievo } from './dxf-import'
+import { ImpiantiSection } from './impianti-section'
 import { useHorecaLabels } from './labels'
 import { levelPlanEntries } from './plan-entries'
 import { RenderSection } from './render-section'
@@ -481,7 +482,9 @@ function DistintaSection() {
       )}
       {distinta.invalid > 0 && (
         <p className="text-amber-500 text-xs">
-          {distinta.invalid} elementi hanno un ID CRM non valido e non sono contati.
+          {distinta.invalid === 1
+            ? '1 elemento ha un ID CRM non valido e non è contato.'
+            : `${distinta.invalid} elementi hanno un ID CRM non valido e non sono contati.`}
         </p>
       )}
       <div className="flex gap-2">
@@ -522,7 +525,7 @@ function LabelsToggle() {
 /** Sidebar panel: catalog, shapes per category, free placement, the distinta. */
 export default function HorecaPanel() {
   return (
-    <div className="flex flex-col gap-5 p-3 text-sidebar-foreground text-sm">
+    <div className="subtle-scrollbar flex h-full min-h-0 flex-col gap-5 overflow-y-auto overscroll-contain p-3 text-sidebar-foreground text-sm">
       <RilievoSection />
       <CrmSection />
       <CatalogSection />
@@ -550,6 +553,7 @@ export default function HorecaPanel() {
         <LabelsToggle />
       </section>
       <DistintaSection />
+      <ImpiantiSection />
       <CrmSendSection />
       <RenderSection />
     </div>

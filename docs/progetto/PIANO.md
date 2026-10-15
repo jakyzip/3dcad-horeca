@@ -122,7 +122,7 @@ Librerie scelte con l'utente (2026-10-15), entrambe MIT come le loro dipendenze:
 
 **DWG**: non si legge direttamente. L'unico lettore libero (LibreDWG, anche nella versione per browser) è GPL-3 e renderebbe GPL tutto il progetto; le alternative (ODA) non sono ridistribuibili. L'utente salva il DWG come DXF da AutoCAD, oppure lo converte con ODA File Converter (gratuito, installato da lui, non incluso nell'app). Se si sceglie un `.dwg`, il pannello lo spiega.
 
-### 3a. Import del rilievo (fatto, da provare nell'editor)
+### 3a. Import del rilievo (fatto e provato dall'utente, 2026-10-15)
 Pannello Ho.Re.Ca → "Importa rilievo DXF". Il disegno diventa un oggetto "Rilievo DXF" sul piano attivo (`packages/horeca/src/dxf-import.ts`, `rilievo.tsx`):
 - linee, polilinee, archi, cerchi, ellissi, spline e blocchi (anche annidati) come linee vettoriali nella pianta, nitide a ogni zoom; nel 3D come linee a terra;
 - testi (TEXT e MTEXT, ripuliti dalla formattazione) con altezza e rotazione;
@@ -132,13 +132,13 @@ Pannello Ho.Re.Ca → "Importa rilievo DXF". Il disegno diventa un oggetto "Rili
 - resta fuori dalla distinta e dagli export (GLB, PDF).
 Esempio per provare: `docs/progetto/esempio-rilievo.dxf` (laboratorio inventato 7 × 5 m, rigenerabile con `bun packages/horeca/scripts/genera-esempio-dxf.ts`).
 
-### 3c. Muri e quote dal rilievo (fatto, da provare nell'editor)
+### 3c. Muri e quote dal rilievo (fatto e provato dall'utente, 2026-10-15)
 Nelle proprietà del rilievo, gruppo "Usa il rilievo" (`rilievo-walls.ts`, `rilievo-actions.ts`, `rilievo-tools-field.tsx`); ogni pulsante è un solo passo di annulla:
 - **Crea muri dalle linee**: sui layer accesi cerca coppie di linee parallele a 5–60 cm (le due facce di un muro), crea il muro sull'asse con quello spessore, unisce angoli e incroci a T, lascia i vani delle aperture. I lati interno/esterno li classifica poi l'editor, come per i muri disegnati a mano. Limite: le linee dentro un muro sullo stesso layer (vetri delle finestre, davanzali) vengono prese per facce, quindi vanno accesi solo i layer dei muri. Scelto così perché un corridoio stretto tra due muri sottili resti due muri.
 - **Trasforma le quote in quote dell'editor**: le quote dei layer accesi diventano quote tecniche dell'editor (`construction-dimension`: stessi punti misurati, stessa linea di quota), modificabili ed esportate in DXF/PDF; il rilievo smette di disegnarle.
 Provato senza interfaccia sull'esempio: 5 muri da 30 cm che coincidono col disegno (porta compresa) e 4 quote nelle stesse posizioni.
 
-### 3b. Export della pianta in DXF (fatto, da provare nell'editor e in un CAD)
+### 3b. Export della pianta in DXF (fatto e provato dall'utente, 2026-10-15)
 Pannello Ho.Re.Ca → "Esporta pianta in DXF": il piano attivo come lo disegna l'editor per i documenti (`collectSheetGeometry`, la stessa raccolta dell'export a fogli), convertito in `packages/horeca/src/dxf-export.ts`:
 - millimetri (`$INSUNITS` = mm), un layer per tipo: MURI, APERTURE, SOLAI, AMBIENTI, SCALE, PILASTRI, ARREDI, ATTREZZATURE, QUOTE, TESTI, RILIEVO, ALTRO;
 - muri con lo spessore vero, tagliati nei vani di porte e finestre con le spallette; archi e curve spezzati in tratti brevi (`svg-path.ts`);
@@ -166,9 +166,11 @@ Due copie dello stesso progetto collegate allo stesso cliente hanno lo stesso `d
 
 Scelta dell'utente (2026-10-15): prima un render con il motore dell'editor, poi eventualmente il path tracing come modalità "alta qualità".
 
-### 5a. Render con il motore dell'editor (fatto, da provare nell'editor)
+### 5a. Render con il motore dell'editor (fatto e provato)
 Pannello Ho.Re.Ca → "Render": la vista 3D com'è inquadrata, ridisegnata a 1920, 2560 o 3840 px di larghezza (l'altezza segue le proporzioni della vista), senza griglia, guide, zone, scansioni, selezione ed evidenziazione; i nomi delle attrezzature solo se richiesti. Usa la grafica del viewer (WebGPU con luce indiretta SSGI, denoise, ombre, texture): alza per qualche istante il rapporto di pixel, aspetta 40 fotogrammi perché la luce si stabilizzi, legge l'immagine subito dopo un fotogramma (con WebGPU va letta nello stesso istante) e rimette tutto com'era. Codice: `render-store.ts`, `render-system.tsx` (montato come `system` del tipo rilievo, sempre installato con il pacchetto), `render-section.tsx`. Nessuna libreria nuova.
-Non provato nel browser: il controllo a mano è la prima cosa da fare.
+Provato dall'utente il 2026-10-15: l'immagine esce bene ("non male").
+
+Idea rimandata (utente, 2026-10-15: "per ora non serve"): materiali delle attrezzature modificabili con lo strumento Dipingi (parti: struttura, piano, ante/pannelli, guarnizioni) tramite `createSlotPaintCapability`; oggi i materiali sono fissi (inox, inox scuro, bianco, gomma).
 
 ### 5b. Path tracing (da decidere dopo la prova di 5a)
 `three-gpu-pathtracer` 0.0.27 (MIT, ottobre 2026) funziona solo con `WebGLRenderer` e materiali standard, mentre il viewer usa `WebGPURenderer` con materiali TSL: servirebbe una seconda scena con i materiali convertiti. Immagini più realistiche, ma minuti per immagine.
@@ -199,6 +201,15 @@ Blocco 2 (fatto): barra laterale, impostazioni, scorciatoie, pannelli delle prop
 Blocco 3 (fatto): definizioni dei tipi di oggetto (`packages/nodes`) e testi del nucleo (`packages/core`): nomi dei tipi, campi, preset, nomi predefiniti ("Piano terra", "Muro N", "Stanza N", "Porta N"…), messaggi dei comandi, abachi nel PDF, verbi della visita. Dizionario `packages/editor/src/lib/field-labels-it.ts` per le etichette dei campi generate dai nomi interni. I nomi predefiniti inglesi dei progetti vecchi continuano a essere riconosciuti (numerazione, "Ground floor" mostrato come "Piano terra").
 Restano in inglese: testi per l'assistente AI (MCP), nomi dei moduli dei mobili che il codice confronta ("Base Cabinet"…), materiali degli strati dei muri (americani), diagnostica della stampa 3D, la tavola `site-plan` americana, alcune quote scritte col punto da `formatConstructionLength` ("Ora 2.45m").
 Circa 2.700 testi in inglese nell'editor ereditato. A blocchi con un commit ciascuno: menu e barre, pannelli, proprietà degli oggetti. Le descrizioni per l'assistente AI (MCP) restano in inglese. Più lingue: forse in futuro.
+
+## Fase 8: funzioni per il lavoro tecnico (ordine scelto dall'utente, 2026-10-15: prima il lavoro tecnico, poi disegnare più in fretta, poi chiudere la vendita)
+
+### 8a. Allacciamenti degli impianti (fatto e provato dall'utente, 2026-10-15)
+Ogni attrezzatura ha i suoi attacchi in `metadata.allacciamenti` (inseriti nel CAD, salvati sull'attrezzatura): acqua fredda (AF), acqua calda (AC), scarico (S), corrente 230 V e 400 V (con kW), gas (G, con kW); lato (retro, fronte, sinistra, destra), distanza lungo il lato, altezza da terra, "quota in pianta" sì/no. Pulsante "Attacchi tipici" con valori indicativi per tipo di attrezzatura. In pianta: simbolo con la sigla, altezza e quote (una dal muro dietro, una catena lungo il muro dal muro laterale), mostrate con le quote manuali; nel DXF tutto sul livello `IMPIANTI`. Pannello Ho.Re.Ca → "Impianti": attacchi per tipo, potenza elettrica totale (somma, senza contemporaneità), potenza gas, avviso per gli attacchi senza potenza, "Quota tutti" / "Togli le quote". Le quote si ridisegnano quando cambiano i muri del piano (`floorplanDependencies`). Simboli disegnati per il progetto nello stile UNI 9511 / CEI EN 60617, non copiati dalle norme (a pagamento). Codice: `allacciamenti.ts`, `allacciamenti-field.tsx`, `impianti-section.tsx`.
+Nota: `floorplanDependsOnSiblings: true` sulle attrezzature bloccava il caricamento di tutti i progetti (ciclo di ricalcolo): non usarlo.
+
+### 8b. Controlli automatici (da fare)
+Attrezzature sovrapposte tra loro o ai muri, passaggi troppo stretti (misura minima da decidere con l'utente).
 
 ## Fase 7: rilascio
 

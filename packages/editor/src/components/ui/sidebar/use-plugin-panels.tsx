@@ -85,7 +85,7 @@ function resolvePanelComponent(panel: EditorHostPanel): ComponentType {
   const Lazy = lazy(panel.component)
   const Wrapped: ComponentType = () => (
     <ErrorBoundary fallback={<PluginPanelCrashed label={panel.label} />}>
-      <Suspense fallback={<div className="p-4 text-sidebar-foreground/50 text-sm">Loading…</div>}>
+      <Suspense fallback={<div className="p-4 text-sidebar-foreground/50 text-sm">Caricamento…</div>}>
         <Lazy />
       </Suspense>
     </ErrorBoundary>

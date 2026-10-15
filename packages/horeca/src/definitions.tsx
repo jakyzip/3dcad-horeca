@@ -1,14 +1,17 @@
 import type {
   AnyNode,
   AnyNodeDefinition,
+  AnyNodeId,
   Capabilities,
   NodeDefinition,
   ParametricDescriptor,
   ParamField,
 } from '@pascal-app/core'
-import type { FloorplanNodeExtension } from '@pascal-app/editor'
+import { type FloorplanNodeExtension, withFloorplanGeometryMetadata } from '@pascal-app/editor'
 import type { Object3D } from 'three'
 import type { ZodObject, ZodType } from 'zod'
+import { allacciamentiFloorplan, levelWallFaces, readAllacciamenti } from './allacciamenti'
+import { AllacciamentiField } from './allacciamenti-field'
 import type { DistintaNode } from './distinta'
 import {
   bancoMarks,
@@ -144,6 +147,16 @@ function parametricsFor(spec: EquipmentSpec<ZodObject>): ParametricDescriptor<Eq
       ],
     },
   ]
+  groups.push({
+    label: 'Allacciamenti',
+    fields: [
+      {
+        key: 'allacciamenti' as keyof EquipmentNode,
+        kind: 'custom',
+        component: AllacciamentiField,
+      },
+    ],
+  })
   if (spec.options?.length) {
     groups.push({
       label: 'Opzioni',
@@ -197,10 +210,27 @@ function defineEquipment<S extends ZodObject>(spec: EquipmentSpec<S>): AnyNodeDe
     },
     floorplan: (node, ctx) => {
       const n = node as unknown as EquipmentNode
-      return equipmentFloorplan(n, ctx, spec.marks, {
+      const body = equipmentFloorplan(n, ctx, spec.marks, {
         label: articleLabel(n),
         dashed: Boolean(spec.wallMounted),
       })
+      const list = readAllacciamenti(n.metadata)
+      if (!list.length) return body
+      const faces = list.some((a) => a.quota)
+        ? levelWallFaces(ctx.parent, (id) => ctx.resolve(id))
+        : []
+      // Asked for by the user, so they show and hide with the manual dimensions, not the automatic ones.
+      const impianti = allacciamentiFloorplan(n, list, faces, (g) =>
+        withFloorplanGeometryMetadata(g, { annotationRole: 'manual-dimension' }),
+      )
+      return impianti ? { kind: 'group', children: [body, impianti] } : body
+    },
+    // Connection dimensions measure from the level's walls: their changes redraw the unit.
+    floorplanDependencies: (node, nodes) => {
+      const n = node as unknown as EquipmentNode
+      if (!readAllacciamenti(n.metadata).some((a) => a.quota) || !n.parentId) return []
+      const level = nodes[n.parentId as AnyNodeId] as { children?: AnyNodeId[] } | undefined
+      return (level?.children ?? []).filter((id) => nodes[id]?.type === 'wall')
     },
     system: {
       module: () =>
@@ -235,7 +265,7 @@ function defineEquipment<S extends ZodObject>(spec: EquipmentSpec<S>): AnyNodeDe
       } satisfies FloorplanNodeExtension<AnyNode>,
     },
     mcp: {
-      description: `${spec.description} Position is level-local meters (y at the base), rotation is yaw radians, width/depth/height in meters, elevation is the underside height above the floor. The catalog article is metadata.product = { item_id (CRM catalog uuid), code, name }.`,
+      description: `${spec.description} Position is level-local meters (y at the base), rotation is yaw radians, width/depth/height in meters, elevation is the underside height above the floor. The catalog article is metadata.product = { item_id (CRM catalog uuid), code, name }. Service connections are metadata.allacciamenti = [{ tipo: acqua-fredda|acqua-calda|scarico|elettrico-230|elettrico-400|gas, lato: retro|fronte|sinistra|destra, distanza (m along the side: from the left edge seen from the front on retro/fronte, from the back edge on sinistra/destra), altezza (m above the floor), potenza (kW, power and gas only), quota (dimension it in plan) }].`,
     },
   }
   // Plugin kinds sit outside the closed AnyNode union (see plugin-authoring.md).

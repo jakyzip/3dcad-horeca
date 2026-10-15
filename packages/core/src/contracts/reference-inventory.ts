@@ -1025,9 +1025,12 @@ export const METADATA_NON_REFERENCES: readonly { path: string; reason: string }[
     'balcony.options.railing',
   ]),
   ...described(
-    'Ho.Re.Ca pack: catalog article data and the link to the external CRM (its own ids); names no node.',
-    ['product', 'crm'],
+    'Ho.Re.Ca pack: catalog article data, the link to the external CRM (its own ids) and service connections; names no node.',
+    ['product', 'crm', 'allacciamenti'],
   ),
+  ...described('Ho.Re.Ca pack: DXF layer name on a plan-geometry group, not on a node.', [
+    'dxfLayer',
+  ]),
 ]
 
 const bare = (path: string) => path.replace(/^metadata\./, '').replace(/\[\]/g, '')

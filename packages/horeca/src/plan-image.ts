@@ -14,6 +14,7 @@ const COLORS: Record<string, string> = {
   APERTURE: '#0e7490',
   AMBIENTI: '#9ca3af',
   ATTREZZATURE: '#1d4ed8',
+  IMPIANTI: '#ea580c',
   ARREDI: '#7c3aed',
   QUOTE: '#b91c1c',
   TESTI: '#374151',
@@ -78,7 +79,7 @@ export function planToSvg(
       parts.push(`<circle cx="${n(c[0])}" cy="${n(c[1])}" r="${n(r)}" ${stroke(layer)}/>`)
     },
     text,
-    dimension: (a, b, lineA, lineB, value, overshoot) => {
+    dimension: (a, b, lineA, lineB, value, overshoot, layer = 'QUOTE') => {
       const dx = lineB[0] - lineA[0]
       const dy = lineB[1] - lineA[1]
       const length = Math.hypot(dx, dy)
@@ -93,13 +94,12 @@ export function planToSvg(
         const ey = to[1] - from[1]
         const el = Math.hypot(ex, ey)
         if (el > 1e-6)
-          line('QUOTE', from, [to[0] + (ex / el) * overshoot, to[1] + (ey / el) * overshoot], 1)
+          line(layer, from, [to[0] + (ex / el) * overshoot, to[1] + (ey / el) * overshoot], 1)
       }
-      line('QUOTE', lineA, lineB, 1)
+      line(layer, lineA, lineB, 1)
       const tx = ((ux - uy) * TICK) / 2 / Math.SQRT2
       const ty = ((uy + ux) * TICK) / 2 / Math.SQRT2
-      for (const p of [lineA, lineB])
-        line('QUOTE', [p[0] - tx, p[1] - ty], [p[0] + tx, p[1] + ty], 2)
+      for (const p of [lineA, lineB]) line(layer, [p[0] - tx, p[1] - ty], [p[0] + tx, p[1] + ty], 2)
       let nx = uy
       let ny = -ux
       if (ny > 0 || (ny === 0 && nx < 0)) {
@@ -113,7 +113,7 @@ export function planToSvg(
         (lineA[0] + lineB[0]) / 2 + nx * DIM_TEXT * 0.6,
         (lineA[1] + lineB[1]) / 2 + ny * DIM_TEXT * 0.6,
       ]
-      text('QUOTE', mid, DIM_TEXT, value, angle, 'middle', 'central')
+      text(layer, mid, DIM_TEXT, value, angle, 'middle', 'central')
     },
   }
 

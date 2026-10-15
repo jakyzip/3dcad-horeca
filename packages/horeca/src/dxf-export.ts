@@ -32,6 +32,7 @@ const LAYERS: Record<string, number> = {
   PILASTRI: 7,
   ARREDI: 6,
   ATTREZZATURE: 5,
+  IMPIANTI: 30,
   RILIEVO: 9,
   QUOTE: 1,
   TESTI: 2,
@@ -99,6 +100,8 @@ export type PlanWriter = {
     lineB: FloorplanPoint,
     text: string,
     overshoot: number,
+    /** QUOTE unless the dimension belongs to a layer of its own (IMPIANTI). */
+    layer?: string,
   ) => void
 }
 
@@ -276,7 +279,7 @@ function createWriter(dxf: DxfWriter): PlanWriter & { finish: () => void } {
     circle: (layer, center, radius) =>
       dxf.addCircle(p3(center), round(radius * MM), { layerName: layer }),
     text,
-    dimension: (a, b, lineA, lineB, value, overshoot) => {
+    dimension: (a, b, lineA, lineB, value, overshoot, layer = 'QUOTE') => {
       const dx = lineB[0] - lineA[0]
       const dy = lineB[1] - lineA[1]
       const length = Math.hypot(dx, dy)
@@ -288,7 +291,7 @@ function createWriter(dxf: DxfWriter): PlanWriter & { finish: () => void } {
       const block = dxf.document.blocks.addBlock(name, dxf.document.objects, false)
       block.flags = BlockFlags.AnonymousBlock
       const add = (p: FloorplanPoint, q: FloorplanPoint) =>
-        block.addLine(p3(p), p3(q), { layerName: 'QUOTE' })
+        block.addLine(p3(p), p3(q), { layerName: layer })
       for (const [from, to] of [
         [a, lineA],
         [b, lineB],
@@ -319,7 +322,7 @@ function createWriter(dxf: DxfWriter): PlanWriter & { finish: () => void } {
       if (angle > Math.PI / 2) angle -= Math.PI
       if (angle <= -Math.PI / 2) angle += Math.PI
       block.addText(p3(mid), round(DIM_TEXT * MM), value, {
-        layerName: 'QUOTE',
+        layerName: layer,
         rotation: round((-angle * 180) / Math.PI),
         horizontalAlignment: TextHorizontalAlignment.Center,
         verticalAlignment: TextVerticalAlignment.Middle,
@@ -327,7 +330,7 @@ function createWriter(dxf: DxfWriter): PlanWriter & { finish: () => void } {
       })
       // `definitionPoint` given directly: the writer's own offset maths misplaces the line.
       dxf.addAlignedDim(p3(a), p3(b), {
-        layerName: 'QUOTE',
+        layerName: layer,
         blockName: name,
         definitionPoint: p3(lineB),
         middlePoint: p3(mid),
@@ -346,10 +349,19 @@ function emit(geometry: FloorplanGeometry, m: Matrix, layer: string, w: PlanWrit
   const scale = Math.hypot(m[0], m[1])
   const angle = Math.atan2(m[1], m[0])
   switch (geometry.kind) {
-    case 'group':
+    case 'group': {
+      // A group may name its own layer (the equipment connections go on IMPIANTI).
+      const own = geometry.metadata?.dxfLayer
+      const groupLayer = typeof own === 'string' && own in LAYERS ? own : layer
       for (const child of geometry.children)
-        emit(child, compose(m, geometry.transform?.translate, geometry.transform?.rotate), layer, w)
+        emit(
+          child,
+          compose(m, geometry.transform?.translate, geometry.transform?.rotate),
+          groupLayer,
+          w,
+        )
       return
+    }
     case 'line':
       w.line(layer, at([geometry.x1, geometry.y1]), at([geometry.x2, geometry.y2]))
       return
@@ -410,6 +422,7 @@ function emit(geometry: FloorplanGeometry, m: Matrix, layer: string, w: PlanWrit
         at(geometry.dimensionEnd ?? offset(geometry.end)),
         geometry.text,
         geometry.extensionOvershoot * scale,
+        layer === 'IMPIANTI' ? 'IMPIANTI' : 'QUOTE',
       )
       return
     }
@@ -426,6 +439,7 @@ function emit(geometry: FloorplanGeometry, m: Matrix, layer: string, w: PlanWrit
           at(segment.dimensionEnd ?? offset(segment.end)),
           segment.text,
           geometry.extensionOvershoot * scale,
+          layer === 'IMPIANTI' ? 'IMPIANTI' : 'QUOTE',
         )
       }
       return
