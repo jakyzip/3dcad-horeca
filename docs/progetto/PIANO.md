@@ -221,6 +221,13 @@ Un modello è un progetto il cui nome comincia per "Modello" (es. "Modello – L
 ### 8e. Banconi e vetrine componibili (da decidere con l'utente)
 Servono i moduli usati davvero (tipi, larghezze standard, angoli).
 
+## Fase 9: chiudere la vendita
+
+### 9a. Tavola PDF per il cliente (fatta, da provare)
+Pannello Ho.Re.Ca → "Tavola per il cliente": cliente (dal CRM se collegato, modificabile, salvato nel progetto), formato A3 (un foglio: pianta a sinistra, render, attrezzature e impianti a destra) o A4 (pagine: pianta, vista 3D, attrezzature che continuano su più pagine, impianti), revisione (salvata nel progetto), render sì/no (la vista 3D com'è inquadrata; se non risponde in 30 s il PDF esce senza). Pianta vettoriale con le quote automatiche, alla scala usuale più grande che ci sta (1:20 … 1:1000), dichiarata nel cartiglio. Cartiglio su ogni pagina: logo, dati dell'azienda (salvati su questo computer, "Dati dell'azienda e logo"), cliente, progetto, data, scala, revisione, piano, foglio. Elenco senza prezzi (codice, articolo, quantità). Nei documenti (tavola, DXF, anteprima CRM) non compaiono gli avvisi dei controlli né il punto di partenza della visita. Usa `exportSheetsToPdf` dell'editor; codice: `tavola.ts`, `tavola-section.tsx`, `intestazione-store.ts`.
+
+### 9b. Varianti dello stesso progetto (da decidere)
+
 ## Fase 7: rilascio
 
 `README` nuovo, `THIRD_PARTY_NOTICES.md` completo, `LICENSE`, nome e logo, CI. Controllare un'ultima volta `ASSETS.md` e le licenze di tutte le dipendenze.

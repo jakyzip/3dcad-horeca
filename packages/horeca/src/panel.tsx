@@ -32,6 +32,7 @@ import { useHorecaLabels } from './labels'
 import { levelPlanEntries } from './plan-entries'
 import { RenderSection } from './render-section'
 import { RilievoNode } from './rilievo'
+import { TavolaSection } from './tavola-section'
 
 function armTool(kind: string, defaults: Record<string, unknown> | null = null) {
   const editor = useEditor.getState()
@@ -560,6 +561,7 @@ export default function HorecaPanel() {
       <ControlliSection />
       <CrmSendSection />
       <RenderSection />
+      <TavolaSection />
     </div>
   )
 }

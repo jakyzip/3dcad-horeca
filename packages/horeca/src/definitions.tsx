@@ -8,7 +8,11 @@ import type {
   ParametricDescriptor,
   ParamField,
 } from '@pascal-app/core'
-import { type FloorplanNodeExtension, withFloorplanGeometryMetadata } from '@pascal-app/editor'
+import {
+  type FloorplanNodeExtension,
+  readFloorplanContext,
+  withFloorplanGeometryMetadata,
+} from '@pascal-app/editor'
 import type { Object3D } from 'three'
 import type { ZodObject, ZodType } from 'zod'
 import { allacciamentiFloorplan, levelWallFaces, readAllacciamenti } from './allacciamenti'
@@ -243,9 +247,14 @@ function defineEquipment<S extends ZodObject>(spec: EquipmentSpec<S>): AnyNodeDe
         dashed: Boolean(spec.wallMounted),
       })
       const parts: FloorplanGeometry[] = [body]
-      const problemi = levelProblems(n, ctx.parent, (id) => ctx.resolve(id))
-      const avvisi = controlliFloorplan(n, problemi)
-      if (avvisi) parts.push(avvisi)
+      // Layout warnings are a working aid: on screen, never on a sheet, DXF or preview.
+      if (readFloorplanContext(ctx).purpose !== 'document') {
+        const avvisi = controlliFloorplan(
+          n,
+          levelProblems(n, ctx.parent, (id) => ctx.resolve(id)),
+        )
+        if (avvisi) parts.push(avvisi)
+      }
       const list = readAllacciamenti(n.metadata)
       if (!list.length) return parts.length > 1 ? { kind: 'group', children: parts } : body
       const faces = list.some((a) => a.quota)

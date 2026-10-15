@@ -1026,7 +1026,7 @@ export const METADATA_NON_REFERENCES: readonly { path: string; reason: string }[
   ]),
   ...described(
     'Ho.Re.Ca pack: catalog article data, the link to the external CRM (its own ids) and service connections; names no node.',
-    ['product', 'crm', 'allacciamenti', 'controlli'],
+    ['product', 'crm', 'allacciamenti', 'controlli', 'tavola'],
   ),
   ...described('Ho.Re.Ca pack: DXF layer name on a plan-geometry group, not on a node.', [
     'dxfLayer',
