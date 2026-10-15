@@ -15,6 +15,7 @@ import {
 } from '@pascal-app/editor'
 import type { Object3D } from 'three'
 import type { ZodObject, ZodType } from 'zod'
+import { aggancia, dentroUnMuro, intorno, sagomaDi } from './aggancio'
 import { allacciamentiFloorplan, levelWallFaces, readAllacciamenti } from './allacciamenti'
 import { AllacciamentiField } from './allacciamenti-field'
 import {
@@ -106,7 +107,43 @@ type EquipmentSpec<S extends ZodObject> = {
 
 const capabilities: Capabilities = {
   selectable: { hitVolume: 'bbox' },
-  movable: { axes: ['x', 'z'], gridSnap: true },
+  movable: {
+    axes: ['x', 'z'],
+    gridSnap: true,
+    // Against the walls and beside the other units (see `aggancio.ts`).
+    groupMoveSnapPose: ({
+      node,
+      candidatePosition,
+      candidateRotation,
+      movingIds,
+      nodes,
+      levelId,
+    }) => {
+      const unit = node as unknown as EquipmentNode
+      const { walls, others } = intorno(nodes, levelId, movingIds)
+      const posa = aggancia(
+        {
+          centre: [candidatePosition[0], candidatePosition[2]],
+          rotation: candidateRotation ?? unit.rotation,
+        },
+        sagomaDi(unit),
+        walls,
+        others,
+      )
+      return (
+        posa && {
+          position: [posa.centre[0], candidatePosition[1], posa.centre[1]],
+          rotation: posa.rotation,
+        }
+      )
+    },
+    isValidPosition: ({ node, position, rotation, levelId, nodes }) =>
+      !dentroUnMuro(
+        { centre: [position[0], position[2]], rotation },
+        sagomaDi(node as unknown as EquipmentNode),
+        intorno(nodes, levelId, [node.id]).walls,
+      ),
+  },
   rotatable: { axes: ['y'], snapAngles: [Math.PI / 4] },
   duplicable: true,
   deletable: true,

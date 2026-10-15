@@ -77,6 +77,7 @@ import useEditor, { selectDefaultBuildingAndLevel } from './../../../../../store
 import useFloorplanMode from './../../../../../store/use-floorplan-mode'
 import { type SendToAppStep, useSendToApp } from './../../../../../store/use-send-to-app'
 import { AudioSettingsDialog } from './audio-settings-dialog'
+import { NavigationDeviceSetting } from './navigation-device-setting'
 import { ConstructionAnimationSetting } from './construction-animation-setting'
 import { KeyboardShortcutsDialog } from './keyboard-shortcuts-dialog'
 import { LoadBuildDialog, type PendingImport } from './load-build-dialog'
@@ -1257,9 +1258,10 @@ export function SettingsPanel({
         </SettingsSection>
 
         <SettingsSection
-          description="Volumi, animazione di costruzione e scorciatoie da tastiera."
+          description="Mouse o trackpad, volumi, animazione di costruzione e scorciatoie da tastiera."
           title="Preferenze"
         >
+          <NavigationDeviceSetting />
           <ConstructionAnimationSetting />
           {preferences}
           <div className="grid gap-2 @sm:grid-cols-2">

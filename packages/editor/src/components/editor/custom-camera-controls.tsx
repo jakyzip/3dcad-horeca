@@ -58,6 +58,7 @@ import {
   ORBIT_TARGET_HEIGHT,
 } from '../../lib/orbit-floor-clearance'
 import { editorOwnsOneFingerDrag } from '../../lib/touch-gesture-priority'
+import { loadNavigationDevice, resolveWheelGesture } from '../../lib/trackpad'
 import { frameViewerCamera } from '../../lib/viewer-selection'
 import { publishCameraPose } from '../../store/camera-pose-store'
 import useEditor, { takePreviewCameraRestore } from '../../store/use-editor'
@@ -81,6 +82,8 @@ const tempTarget = new Vector3()
 const transitionFreezePosition = new Vector3()
 const transitionFreezeTarget = new Vector3()
 const keyboardPanSpherical = new Spherical()
+/** Orbit speed for a trackpad slide: half a turn per canvas height of finger travel. */
+const TRACKPAD_ORBIT = 1
 /** Mouse/touch orbit speed (camera-controls default 1): slower for precise looks. */
 const ORBIT_ROTATE_SPEED = 0.6
 // In 2D-only view the canvas is paused, so the floor plan drives WASD, orbit and
@@ -1036,6 +1039,50 @@ export const CustomCameraControls = ({ paused = false }: { paused?: boolean }) =
       cameraDraggingLifecycle.end()
     }
   }, [beginLocalCameraInteraction, cameraDraggingLifecycle, cameraMode, gl, isFirstPersonMode])
+
+  // A trackpad's two-finger slide orbits (Shift: pans) instead of zooming; the pinch and a
+  // mouse wheel keep the controls' own zoom (`lib/trackpad.ts`). Capture on the canvas runs
+  // before the controls' wheel listener, so a handled slide never reaches it.
+  useEffect(() => {
+    if (isFirstPersonMode) return
+    loadNavigationDevice()
+    const onWheel = (event: WheelEvent) => {
+      const control = controls.current
+      if (!control) return
+      const gesture = resolveWheelGesture(event, '3d')
+      if (gesture === 'default') return
+      event.preventDefault()
+      event.stopImmediatePropagation()
+      beginLocalCameraInteraction()
+      cameraDraggingLifecycle.scheduleEnd()
+      const height = gl.domElement.clientHeight || 1
+      // The fingers move the scene the way a drag would (content follows them).
+      if (gesture === 'orbit') {
+        control.rotate(
+          (TRACKPAD_ORBIT * Math.PI * event.deltaX) / height,
+          (TRACKPAD_ORBIT * Math.PI * event.deltaY) / height,
+          false,
+        )
+        return
+      }
+      control.getSpherical(keyboardPanSpherical, false)
+      const perPixel =
+        getCameraViewWidth(camera, keyboardPanSpherical.radius, viewportSize) /
+        (gl.domElement.clientWidth || 1)
+      // Along the floor, as the middle-button pan (SCREEN_PAN) moves.
+      control.truck(event.deltaX * perPixel, 0, false)
+      control.forward(-event.deltaY * perPixel, false)
+    }
+    gl.domElement.addEventListener('wheel', onWheel, { capture: true, passive: false })
+    return () => gl.domElement.removeEventListener('wheel', onWheel, true)
+  }, [
+    beginLocalCameraInteraction,
+    camera,
+    cameraDraggingLifecycle,
+    gl,
+    isFirstPersonMode,
+    viewportSize,
+  ])
 
   // `controlstart` fires only for user pointer interactions. Pointerdowns
   // mapped to ACTION.NONE must not flag the camera as dragging because no

@@ -10,6 +10,7 @@ import { EQUIPMENT_KINDS } from './definitions'
 import { buildDistinta, type DistintaNode } from './distinta'
 import { logoDataUrl, useHorecaIntestazione } from './intestazione-store'
 import { levelPlanEntries } from './plan-entries'
+import { idProgettoDaUrl, useHorecaRenders } from './render-archivio'
 import { requestRender, useHorecaRender } from './render-store'
 import { type FormatoTavola, type Intestazione, tavolaPages } from './tavola'
 
@@ -35,7 +36,15 @@ const readTavola = (metadata: unknown): DatiTavola => {
 
 const RENDER_TIMEOUT_MS = 30_000
 
-/** The 3D render as a data URL with its proportions; null when the 3D view can't make one. */
+const dataUrlOf = (blob: Blob) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(String(reader.result))
+    reader.onerror = () => reject(reader.error)
+    reader.readAsDataURL(blob)
+  })
+
+/** A render of the current 3D view as a data URL with its proportions; null when the view can't make one. */
 async function renderPerTavola(): Promise<{ dataUrl: string; aspect: number } | null> {
   const blob = await Promise.race([
     requestRender(1920, false),
@@ -46,12 +55,7 @@ async function renderPerTavola(): Promise<{ dataUrl: string; aspect: number } | 
     useHorecaRender.setState({ request: null })
     return null
   }
-  const dataUrl = await new Promise<string>((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => resolve(String(reader.result))
-    reader.onerror = () => reject(reader.error)
-    reader.readAsDataURL(blob)
-  })
+  const dataUrl = await dataUrlOf(blob)
   const bitmap = await createImageBitmap(blob)
   const aspect = bitmap.width / bitmap.height
   bitmap.close()
@@ -138,10 +142,13 @@ export function TavolaSection() {
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState<{ text: string; error: boolean } | null>(null)
   const [progetto, setProgetto] = useState('')
+  const renders = useHorecaRenders((s) => s.renders)
+  const scelti = useMemo(() => renders.filter((r) => r.nellaTavola), [renders])
 
   // The project's name lives with the saved scene, not in the drawing: ask the editor's API.
   useEffect(() => {
-    const id = /\/project\/([^/?#]+)/.exec(window.location.pathname)?.[1]
+    const id = idProgettoDaUrl()
+    useHorecaRenders.getState().carica(id)
     if (!id) return
     fetch(`/api/scenes/${id}`)
       .then((r) => (r.ok ? r.json() : null))
@@ -168,7 +175,18 @@ export function TavolaSection() {
     try {
       const state = useScene.getState().nodes as Record<string, AnyNode>
       const entries = levelPlanEntries(levelId as AnyNodeId, false, { automaticDimensions: true })
-      const render = conRender ? await renderPerTavola() : null
+      // The renders chosen in the gallery; without any, one of the current view if asked.
+      const fresh = !scelti.length && conRender ? await renderPerTavola() : null
+      const renders = scelti.length
+        ? await Promise.all(
+            scelti.map(async (r) => ({
+              dataUrl: await dataUrlOf(r.png),
+              aspect: r.width / r.height,
+            })),
+          )
+        : fresh
+          ? [fresh]
+          : []
       const equipment = Object.values(state).filter((n) => EQUIPMENT_KINDS.includes(n.type))
       const distinta = buildDistinta(state as unknown as Record<string, DistintaNode>)
       const riepilogo = riepilogoImpianti(equipment as Array<{ metadata?: unknown }>)
@@ -184,7 +202,7 @@ export function TavolaSection() {
             annotations: entries.flatMap((e) => (e.annotations ? [e.annotations] : [])),
             rotationDeg: resolveSheetRotationDeg(state as never, levelId as AnyNodeId),
           },
-          render,
+          renders,
           elenco: [...distinta.rows, ...distinta.local],
           impianti: Object.values(riepilogo.conteggi).some((n) => n > 0) ? riepilogo : null,
         },
@@ -204,10 +222,10 @@ export function TavolaSection() {
       await exportSheetsToPdf(pages, `${nomeFile}.pdf`, nomeProgetto)
       setMessage({
         text:
-          conRender && !render
+          !scelti.length && conRender && !fresh
             ? 'PDF creato, ma senza render: la vista 3D non ha risposto (prova a passare alla vista 3D).'
             : `PDF creato: ${pages.length === 1 ? '1 foglio' : `${pages.length} pagine`}.`,
-        error: conRender && !render,
+        error: !scelti.length && conRender && !fresh,
       })
     } catch (error) {
       setMessage({ text: error instanceof Error ? error.message : String(error), error: true })
@@ -239,8 +257,8 @@ export function TavolaSection() {
             onChange={(e) => setFormato(e.target.value as FormatoTavola)}
             value={formato}
           >
-            <option value="A3">A3, un foglio</option>
-            <option value="A4">A4, più pagine</option>
+            <option value="A3">A3, pianta ed elenco in un foglio</option>
+            <option value="A4">A4, una pagina per parte</option>
           </select>
         </label>
         <label className="flex flex-col gap-0.5">
@@ -259,14 +277,22 @@ export function TavolaSection() {
           />
         </label>
       </div>
-      <label className="flex items-center gap-2 text-xs">
-        <input
-          checked={conRender}
-          onChange={(e) => setConRender(e.target.checked)}
-          type="checkbox"
-        />
-        Con il render della vista 3D (inquadrala prima come vuoi)
-      </label>
+      {scelti.length ? (
+        <p className="text-xs opacity-80">
+          {scelti.length === 1
+            ? 'Con 1 render della sezione Render.'
+            : `Con ${scelti.length} render della sezione Render (il primo accanto alla pianta).`}
+        </p>
+      ) : (
+        <label className="flex items-center gap-2 text-xs">
+          <input
+            checked={conRender}
+            onChange={(e) => setConRender(e.target.checked)}
+            type="checkbox"
+          />
+          Con un render della vista 3D attuale (inquadrala prima come vuoi)
+        </label>
+      )}
       <button className={BUTTON} disabled={busy || !levelId} onClick={crea} type="button">
         {busy ? 'Preparazione del PDF…' : 'Crea PDF'}
       </button>

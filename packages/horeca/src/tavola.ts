@@ -43,7 +43,8 @@ export type InfoTavola = {
 export type ContenutoTavola = {
   /** The level's plan in unrotated level metres, as `collectSheetGeometry` returns it. */
   pianta: { model: FloorplanGeometry[]; annotations: FloorplanGeometry[]; rotationDeg: number }
-  render: { dataUrl: string; aspect: number } | null
+  /** 3D views, in order: the first beside the plan on the A3 sheet, the others on pages of their own. */
+  renders: ReadonlyArray<{ dataUrl: string; aspect: number }>
   elenco: DistintaRow[]
   impianti: RiepilogoImpianti | null
 }
@@ -451,25 +452,67 @@ export function tavolaPages(
   info: InfoTavola,
 ): SheetPdfPage[] {
   return formato === 'A3'
-    ? [paginaA3(contenuto, intestazione, info)]
+    ? pagineA3(contenuto, intestazione, info)
     : pagineA4(contenuto, intestazione, info)
 }
 
-function paginaA3(c: ContenutoTavola, intestazione: Intestazione, info: InfoTavola): SheetPdfPage {
+function pagineA3(
+  c: ContenutoTavola,
+  intestazione: Intestazione,
+  info: InfoTavola,
+): SheetPdfPage[] {
+  const [first, ...more] = c.renders
+  const total = 1 + more.length
+  const { w, h } = A3
+  const titleH = 1.35
+  const inner = { x: MARGIN, y: MARGIN, w: w - 2 * MARGIN, h: h - 2 * MARGIN }
+  const body = { x: inner.x + 0.1, y: inner.y + 0.1, w: inner.w - 0.2, h: inner.h - titleH - 0.3 }
+  return [
+    paginaA3({ ...c, renders: first ? [first] : [] }, intestazione, info, `1/${total}`),
+    ...more.map(
+      (r, i): SheetPdfPage => ({
+        number: String(i + 2),
+        title: 'Vista 3D',
+        widthIn: w,
+        heightIn: h,
+        plate: [
+          box(inner, INK, 0.02),
+          ...cartiglio(
+            { x: inner.x, y: inner.y + inner.h - titleH, w: inner.w, h: titleH },
+            intestazione,
+            info,
+            null,
+            `${i + 2}/${total}`,
+          ),
+        ],
+        windows: [],
+        overlay: [imageIn(r.dataUrl, r.aspect, body)],
+      }),
+    ),
+  ]
+}
+
+function paginaA3(
+  c: ContenutoTavola,
+  intestazione: Intestazione,
+  info: InfoTavola,
+  foglio: string,
+): SheetPdfPage {
+  const render = c.renders[0]
   const { w, h } = A3
   const titleH = 1.35
   const inner = { x: MARGIN, y: MARGIN, w: w - 2 * MARGIN, h: h - 2 * MARGIN }
   const body = { x: inner.x, y: inner.y, w: inner.w, h: inner.h - titleH - 0.15 }
-  const side = c.render || c.elenco.length || c.impianti ? 5.4 : 0
+  const side = render || c.elenco.length || c.impianti ? 5.4 : 0
   const planArea = { x: body.x + 0.1, y: body.y + 0.1, w: body.w - side - 0.3, h: body.h - 0.2 }
   const { windows, scala } = finestraPianta(c.pianta, planArea)
 
   const overlay: FloorplanGeometry[] = []
   let y = body.y + 0.1
   const sx = body.x + body.w - side
-  if (c.render) {
-    const area = { x: sx, y, w: side, h: Math.min(3.4, side / c.render.aspect) }
-    overlay.push(imageIn(c.render.dataUrl, c.render.aspect, area), box(area, RULE, 0.008))
+  if (render) {
+    const area = { x: sx, y, w: side, h: Math.min(3.4, side / render.aspect) }
+    overlay.push(imageIn(render.dataUrl, render.aspect, area), box(area, RULE, 0.008))
     y += area.h + 0.25
   }
   const bottom = body.y + body.h - 0.1
@@ -503,7 +546,7 @@ function paginaA3(c: ContenutoTavola, intestazione: Intestazione, info: InfoTavo
         intestazione,
         info,
         scala,
-        '1/1',
+        foglio,
       ),
     ],
     windows,
@@ -524,11 +567,11 @@ function pagineA4(
 
   type Draft = { title: string; windows: SheetPdfPage['windows']; overlay: FloorplanGeometry[] }
   const drafts: Draft[] = [{ title: 'Pianta', windows, overlay: [] }]
-  if (c.render)
+  for (const render of c.renders)
     drafts.push({
       title: 'Vista 3D',
       windows: [],
-      overlay: [imageIn(c.render.dataUrl, c.render.aspect, body)],
+      overlay: [imageIn(render.dataUrl, render.aspect, body)],
     })
 
   // The equipment list runs over as many pages as it needs, the services under its end.

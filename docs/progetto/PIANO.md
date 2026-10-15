@@ -239,6 +239,30 @@ Scelte dell'utente, 2026-10-15. Il pannello Ho.Re.Ca è diviso in quattro icone 
 
 Tolta la scheda "Oggetti", che era il catalogo vuoto dell'editor originale. L'inspector è una colonna fissa a destra invece della scheda galleggiante: si allarga o si stringe trascinando il bordo sinistro (da 280 a 640 px, ricordato). Le scorciatoie compaiono in fondo alla colonna quando non c'è niente selezionato. Sul telefono resta il foglio dal basso.
 
+### 10b. Attrezzature che si appoggiano ai muri (fatto, da provare)
+Vale con l'aggancio attivo, sia quando inserisci un'attrezzatura sia quando la sposti, in 2D o in 3D:
+- vicino a un muro (entro 20 cm) l'attrezzatura si gira con la schiena al muro e ci si appoggia;
+- vicino a un secondo muro va nell'angolo;
+- accanto a un'altra attrezzatura (entro 15 cm, stessa altezza) si accosta e si allinea;
+- un pensile non si aggancia al banco che ha sotto.
+
+Un'attrezzatura dentro un muro non si può lasciare lì, a meno di tenere premuto Alt. Il codice è in `packages/horeca/src/aggancio.ts`.
+
+### 10c. Galleria dei render (fatto, da provare)
+Ogni render resta nella sezione Render del progetto (salvato nel browser, non nel file del progetto) invece di scaricarsi subito. Si possono scaricare uno alla volta o tutti insieme in uno zip. Quelli segnati "Nella tavola" vanno nel PDF per il cliente:
+- in A3, il primo va accanto alla pianta e gli altri su fogli loro;
+- in A4, ognuno ha una pagina.
+
+Senza render segnati resta l'opzione di farne uno della vista attuale al momento del PDF.
+
+### 10d. Trackpad (fatto, da provare con un trackpad vero)
+Si sceglie in Impostazioni → Preferenze → Navigazione: Automatico, Mouse o Trackpad. Con il trackpad:
+- in 3D due dita ruotano la vista e Maiusc + due dita la spostano;
+- in 2D due dita spostano la pianta;
+- il pizzico fa zoom.
+
+Con il mouse non cambia niente. "Automatico" passa al trackpad al primo pizzico o scorrimento laterale. Provato solo con gesti simulati nel browser di prova.
+
 ## Fase 7: rilascio
 
 `README` nuovo, `THIRD_PARTY_NOTICES.md` completo, `LICENSE`, nome e logo, CI. Controllare un'ultima volta `ASSETS.md` e le licenze di tutte le dipendenze.

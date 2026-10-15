@@ -98,7 +98,7 @@ describe('title block and tables', () => {
 describe('sheets', () => {
   const contenuto = {
     pianta: { model: [room], annotations: [], rotationDeg: 0 },
-    render: { dataUrl: 'data:image/png;base64,AA==', aspect: 16 / 9 },
+    renders: [{ dataUrl: 'data:image/png;base64,AA==', aspect: 16 / 9 }],
     elenco: Array.from({ length: 60 }, (_, i) => ({
       item_id: '',
       code: `A${i}`,
@@ -122,5 +122,33 @@ describe('sheets', () => {
     expect(pages.map((p) => p.title).slice(0, 3)).toEqual(['Pianta', 'Vista 3D', 'Attrezzature'])
     expect(pages.length).toBeGreaterThan(3)
     expect(texts(pages.at(-1)!.plate)).toContain(`${pages.length}/${pages.length}`)
+  })
+
+  test('more renders: A3 adds a sheet for each after the first, A4 a page each', () => {
+    const r = { dataUrl: 'data:image/png;base64,AA==', aspect: 4 / 3 }
+    const tre = { ...contenuto, renders: [r, r, r] }
+    const a3 = tavolaPages('A3', tre, INTESTAZIONE_VUOTA, info)
+    expect(a3.map((p) => p.title)).toEqual([info.progetto, 'Vista 3D', 'Vista 3D'])
+    expect(texts(a3[0]!.plate)).toContain('1/3')
+    expect(texts(a3[2]!.plate)).toContain('3/3')
+    const a4 = tavolaPages('A4', tre, INTESTAZIONE_VUOTA, info)
+    expect(a4.map((p) => p.title).slice(0, 4)).toEqual([
+      'Pianta',
+      'Vista 3D',
+      'Vista 3D',
+      'Vista 3D',
+    ])
+  })
+
+  test('no render: the A3 sheet keeps the plan and the list only', () => {
+    const [page, ...rest] = tavolaPages(
+      'A3',
+      { ...contenuto, renders: [] },
+      INTESTAZIONE_VUOTA,
+      info,
+    )
+    expect(rest).toHaveLength(0)
+    expect(page!.overlay.some((g) => g.kind === 'image')).toBe(false)
+    expect(texts(page!.plate)).toContain('1/1')
   })
 })

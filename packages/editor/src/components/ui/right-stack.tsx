@@ -177,6 +177,7 @@ export function RightStack({
  */
 export function RightDock({ inspector, helper }: { inspector: ReactNode; helper: ReactNode }) {
   const width = useRightDockWidth((s) => s.width)
+  useEffect(() => useRightDockWidth.getState().load(), [])
   const drag = useRef<{ startX: number; startWidth: number } | null>(null)
 
   // The handle on the left edge: dragging left widens the column.

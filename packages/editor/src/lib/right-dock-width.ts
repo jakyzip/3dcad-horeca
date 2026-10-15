@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 
 // The docked inspector's width, dragged from its left edge and kept per viewer.
-// Read when the module loads, like `inspector-expanded.ts`: the column opens
-// with the editor. Storage can be missing or refuse; the default width then.
+// The server renders the default; the stored width is applied after mounting
+// (`load`), so hydration matches. Storage can be missing or refuse; the default then.
 const STORAGE_KEY = '3dcad-horeca:right-dock-width'
 
 export const RIGHT_DOCK_DEFAULT_WIDTH = 340
@@ -25,11 +25,14 @@ function readWidth(): number {
 
 export const useRightDockWidth = create<{
   width: number
+  /** Applies the stored width; called once the column has mounted. */
+  load: () => void
   setWidth: (width: number) => void
   /** Remembers the current width; called when a drag ends, not on every move. */
   save: () => void
 }>((set, get) => ({
-  width: readWidth(),
+  width: RIGHT_DOCK_DEFAULT_WIDTH,
+  load: () => set({ width: readWidth() }),
   setWidth: (width) => set({ width: clampRightDockWidth(width) }),
   save: () => {
     try {

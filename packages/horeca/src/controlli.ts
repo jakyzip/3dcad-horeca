@@ -101,7 +101,7 @@ export function overlapDepth(a: readonly FloorplanPoint[], b: readonly Floorplan
 }
 
 /** A straight wall's plan rectangle. Curved walls are skipped, as for the dimensions. */
-function wallRects(walls: readonly AnyNode[]): FloorplanPoint[][] {
+export function wallRects(walls: readonly AnyNode[]): FloorplanPoint[][] {
   const rects: FloorplanPoint[][] = []
   const faces = wallFacesOf(walls)
   for (let i = 0; i + 1 < faces.length; i += 2) {

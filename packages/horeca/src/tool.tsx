@@ -9,12 +9,19 @@ import {
   sceneRegistry,
   useScene,
 } from '@pascal-app/core'
-import { isGridSnapActive, isTypingTarget, triggerSFX, useEditor } from '@pascal-app/editor'
+import {
+  isGridSnapActive,
+  isMagneticSnapActive,
+  isTypingTarget,
+  triggerSFX,
+  useEditor,
+} from '@pascal-app/editor'
 import { useViewer } from '@pascal-app/viewer'
 import { useFrame } from '@react-three/fiber'
 import { type ComponentType, type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import type { Group, Object3D } from 'three'
 import type { ZodType } from 'zod'
+import { aggancia, intorno, sagomaDi } from './aggancio'
 import type { EquipmentNode } from './schema'
 
 const PREVIEW_OPACITY = 0.55
@@ -41,15 +48,15 @@ type ToolSpec = {
 }
 
 /**
- * Click-to-place tool shared by the equipment kinds: a translucent ghost follows the grid, R / T
- * rotate it by 45°, a click places the node on the active level and selects it.
+ * Click-to-place tool shared by the equipment kinds: a translucent ghost follows the grid and
+ * settles against the walls and the units nearby (with snapping on), R / T rotate it by 45°, a
+ * click places the node on the active level and selects it.
  */
 function createPlacementTool({ kind, schema, build }: ToolSpec): ComponentType {
   const PlacementTool = () => {
     const activeLevelId = useViewer((s) => s.selection.levelId)
     const toolDefaults = useEditor((s) => s.toolDefaults[kind])
-    const [cursor, setCursor] = useState<[number, number, number] | null>(null)
-    const [yaw, setYaw] = useState(0)
+    const [pose, setPose] = useState<{ at: [number, number, number]; yaw: number } | null>(null)
     const yawRef = useRef(0)
 
     const fresh = useMemo(
@@ -70,16 +77,37 @@ function createPlacementTool({ kind, schema, build }: ToolSpec): ComponentType {
 
     useEffect(() => {
       if (!activeLevelId) return
-      const resolve = (event: GridEvent): [number, number, number] => {
-        const step = isGridSnapActive() ? useEditor.getState().gridSnapStep : 0
-        return [snap(event.localPosition[0], step), 0, snap(event.localPosition[2], step)]
+      const resolve = (event: GridEvent) => {
+        const gridOn = isGridSnapActive()
+        const step = gridOn ? useEditor.getState().gridSnapStep : 0
+        const at: [number, number, number] = [
+          snap(event.localPosition[0], step),
+          0,
+          snap(event.localPosition[2], step),
+        ]
+        if (!(gridOn || isMagneticSnapActive())) return { at, yaw: yawRef.current }
+        const { walls, others } = intorno(useScene.getState().nodes as never, activeLevelId, [])
+        const settled = aggancia(
+          { centre: [at[0], at[2]], rotation: yawRef.current },
+          sagomaDi(schema.parse(fresh())),
+          walls,
+          others,
+        )
+        return settled
+          ? { at: [settled.centre[0], 0, settled.centre[1]] as typeof at, yaw: settled.rotation }
+          : { at, yaw: yawRef.current }
       }
-      const onMove = (event: GridEvent) => setCursor(resolve(event))
+      let last: GridEvent | null = null
+      const onMove = (event: GridEvent) => {
+        last = event
+        setPose(resolve(event))
+      }
       const onClick = (event: GridEvent) => {
+        const { at, yaw } = resolve(event)
         const placed = schema.parse({
           ...fresh(),
-          position: resolve(event),
-          rotation: yawRef.current,
+          position: at,
+          rotation: yaw,
           parentId: activeLevelId,
         })
         const committed = schema.parse({
@@ -98,7 +126,7 @@ function createPlacementTool({ kind, schema, build }: ToolSpec): ComponentType {
         e.preventDefault()
         e.stopPropagation()
         yawRef.current += (e.key === 't' || e.key === 'T' || e.shiftKey ? -1 : 1) * ROTATE_STEP_RAD
-        setYaw(yawRef.current)
+        if (last) setPose(resolve(last))
       }
       emitter.on('grid:move', onMove)
       emitter.on('grid:click', onClick)
@@ -110,10 +138,10 @@ function createPlacementTool({ kind, schema, build }: ToolSpec): ComponentType {
       }
     }, [activeLevelId, fresh])
 
-    if (!activeLevelId || !cursor) return null
+    if (!activeLevelId || !pose) return null
     return (
       <LevelOffset>
-        <group position={cursor} rotation={[0, yaw, 0]}>
+        <group position={pose.at} rotation={[0, pose.yaw, 0]}>
           <primitive object={ghost} />
         </group>
       </LevelOffset>

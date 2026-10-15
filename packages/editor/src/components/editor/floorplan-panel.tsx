@@ -128,6 +128,7 @@ import { enterBuildingFromPlanHit } from '../../lib/selection-routing'
 import { sfxEmitter } from '../../lib/sfx-bus'
 import { SITE_BOUNDARY_DRAG_LABEL, siteBoundaryHandlesEnabled } from '../../lib/site-boundary'
 import { resolveSlabPlanPointSnap } from '../../lib/slab-plan-snap'
+import { loadNavigationDevice, resolveWheelGesture } from '../../lib/trackpad'
 import {
   cancelPendingZonePaint,
   focusedUnitNode,
@@ -7668,6 +7669,62 @@ export function FloorplanPanel({
     }
   }, [publishFloorplanNavigationPose])
 
+  // A trackpad's two-finger slide pans the plan (`lib/trackpad.ts`); the move is committed once
+  // the fingers rest, as a pointer pan is on release.
+  const wheelPanCommitTimerRef = useRef<number | null>(null)
+  const panViewportByPixels = useCallback(
+    (deltaX: number, deltaY: number) => {
+      const currentViewport = latestViewportRef.current ?? latestFittedViewportRef.current
+      if (!currentViewport) return
+      const worldPerPixelX = currentViewport.width / surfaceSize.width
+      const worldPerPixelY = currentViewport.width / svgAspectRatio / surfaceSize.height
+      const nextCenterSvg = {
+        x: currentViewport.centerX + deltaX * worldPerPixelX,
+        y: currentViewport.centerY + deltaY * worldPerPixelY,
+      }
+      const userRotationDeg = latestFloorplanUserRotationDegRef.current
+      const sceneRotationDeg = FLOORPLAN_VIEW_ROTATION_DEG + userRotationDeg - buildingRotationDeg
+      const localCenter = rotateSvgPoint(nextCenterSvg, -sceneRotationDeg)
+      stopFloorplanViewAnimation()
+      floorplanViewportInteractionInProgressRef.current = true
+      applyFloorplanViewportImperatively({
+        centerX: nextCenterSvg.x,
+        centerY: nextCenterSvg.y,
+        width: currentViewport.width,
+      })
+      floorplanPanPoseRef.current = {
+        localCenter,
+        userRotationDeg,
+        viewWidth: currentViewport.width,
+      }
+      if (visibleScene(useEditor.getState()) === 'split') {
+        publishFloorplanNavigationPose(localCenter, userRotationDeg, currentViewport.width)
+      }
+      if (wheelPanCommitTimerRef.current !== null)
+        window.clearTimeout(wheelPanCommitTimerRef.current)
+      wheelPanCommitTimerRef.current = window.setTimeout(() => {
+        wheelPanCommitTimerRef.current = null
+        commitFloorplanPan()
+      }, 150)
+    },
+    [
+      applyFloorplanViewportImperatively,
+      buildingRotationDeg,
+      commitFloorplanPan,
+      publishFloorplanNavigationPose,
+      stopFloorplanViewAnimation,
+      surfaceSize,
+      svgAspectRatio,
+    ],
+  )
+  useEffect(
+    () => () => {
+      if (wheelPanCommitTimerRef.current !== null)
+        window.clearTimeout(wheelPanCommitTimerRef.current)
+    },
+    [],
+  )
+
   const commitFloorplanRotation = useCallback(
     (rotationState: FloorplanRotationState) => {
       floorplanViewportInteractionInProgressRef.current = false
@@ -11086,11 +11143,16 @@ export function FloorplanPanel({
       }
     }
 
+    loadNavigationDevice()
     const handleNativeWheel = (event: WheelEvent) => {
       event.preventDefault()
       event.stopPropagation()
 
       floorplanNavigationSyncScheduler.flush()
+      if (resolveWheelGesture(event, '2d') === 'pan') {
+        panViewportByPixels(event.deltaX, event.deltaY)
+        return
+      }
       const widthFactor = Math.exp(event.deltaY * (event.ctrlKey ? 0.003 : 0.0015))
       zoomViewportAtClientPoint(event.clientX, event.clientY, widthFactor)
     }
@@ -11143,7 +11205,12 @@ export function FloorplanPanel({
       svg.removeEventListener('gesturechange', handleGestureChange)
       svg.removeEventListener('gestureend', handleGestureEnd)
     }
-  }, [commitFloorplanZoom, floorplanNavigationSyncScheduler, zoomViewportAtClientPoint])
+  }, [
+    commitFloorplanZoom,
+    floorplanNavigationSyncScheduler,
+    panViewportByPixels,
+    zoomViewportAtClientPoint,
+  ])
 
   const restoreGroundLevelStructureSelection = useCallback(() => {
     const sceneNodes = useScene.getState().nodes
