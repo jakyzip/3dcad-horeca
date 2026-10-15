@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
+import { existsSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -402,7 +403,9 @@ describe('IFC export — columns', () => {
   })
 })
 
-describe('IFC export — sample house round trip', () => {
+// The upstream IFC samples were removed (no documented license, see
+// docs/progetto/AUDIT_LICENZE.md). These cases run again once licensed files are added there.
+describe.skipIf(!existsSync(sampleHouse))('IFC export — sample house round trip', () => {
   let first: PascalSceneGraph
   let second: PascalSceneGraph
   let ifc: string

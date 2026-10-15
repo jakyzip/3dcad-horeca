@@ -24,7 +24,7 @@ export function FollowPascalToggle({
           : 'hover:bg-black/4 hover:text-violet-600 dark:hover:text-violet-300',
         className,
       )}
-      label={`Follow Pascal: ${on ? 'On' : 'Off'}`}
+      label={`Follow the assistant: ${on ? 'On' : 'Off'}`}
       onClick={() => setOn(!on)}
       size="icon"
       tooltipClassName={tooltipClassName}

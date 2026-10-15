@@ -182,7 +182,7 @@ export function cardTitle(pin: PinModel, fallback = 'Done'): string {
   if (pin.state === 'done' && pin.committed) {
     const count = new Set([...pin.changedTargetIds, ...pin.alsoChangedIds]).size
     return count
-      ? `Pascal changed ${count} element${count === 1 ? '' : 's'}`
+      ? `The assistant changed ${count} element${count === 1 ? '' : 's'}`
       : 'Pascal updated the scene'
   }
   return fallback

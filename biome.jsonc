@@ -90,10 +90,6 @@
     "ignoreUnknown": true,
     "includes": [
       "scripts/**/*.ts",
-      "skills/**/*.json",
-      ".agents/plugins/**/*.json",
-      ".claude-plugin/**/*.json",
-      ".codex-plugin/**/*.json",
       "packages/**/*.ts",
       "packages/**/*.tsx",
       "packages/**/*.js",

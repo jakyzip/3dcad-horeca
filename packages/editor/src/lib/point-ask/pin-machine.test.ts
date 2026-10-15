@@ -259,7 +259,7 @@ describe('the turn ends', () => {
     expect(pin.state).toBe('done')
     expect(pin.landed).toBe(0)
     expect(pin.alsoChangedIds).toEqual(['wall_9'])
-    expect(cardTitle(pin)).toBe('Pascal changed 1 element')
+    expect(cardTitle(pin)).toBe('The assistant changed 1 element')
     expect(play(pin, { type: 'undo' }).state).toBe('undone')
     expect(play(pin, { type: 'undo' }, { type: 'redo' }).state).toBe('done')
   })

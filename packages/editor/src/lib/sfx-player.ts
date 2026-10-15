@@ -24,6 +24,14 @@ type LoopSFXConfig = {
 }
 
 const DEFAULT_MIN_INTERVAL_MS = 30
+
+// Off until the project ships sound files with a documented license (see ASSETS.md):
+// the upstream files under /audios/sfx were removed, so loading them would only 404.
+let sfxEnabled = false
+
+export function setSFXEnabled(enabled: boolean) {
+  sfxEnabled = enabled
+}
 const SFX_FAILURE_BACKOFF_MS = 5_000
 const DEFAULT_LOOP_FADE_MS = 90
 
@@ -229,6 +237,7 @@ function cacheNeedsRebuild(): boolean {
 }
 
 export function preloadSFX() {
+  if (!sfxEnabled) return
   if (!cacheNeedsRebuild()) return
   unloadCachedSounds(false)
 
@@ -256,6 +265,7 @@ export function disposeSFX() {
 }
 
 export function startLoopSFX(name: LoopSFXName) {
+  if (!sfxEnabled) return
   const { muted } = useAudio.getState()
   if (muted) {
     stopLoopSFX()
@@ -311,6 +321,7 @@ export function stopLoopSFX() {
  * Play a sound effect with volume based on audio settings
  */
 export function playSFX(name: SFXName, options: SFXPlaybackOptions = {}) {
+  if (!sfxEnabled) return
   const config = SFX[name]!
   const { masterVolume, sfxVolume, muted } = useAudio.getState()
 

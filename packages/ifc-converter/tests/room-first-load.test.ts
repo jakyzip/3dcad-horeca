@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
+import { existsSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -147,7 +148,12 @@ const FILES = [
   '10-sample-house.ifc',
 ]
 
+// The upstream IFC samples were removed (no documented license, see
+// docs/progetto/AUDIT_LICENZE.md). These cases run again once licensed files are added there.
+const samplesPresent = FILES.every((file) => existsSync(`${fixtures}${file}`))
+
 beforeAll(async () => {
+  if (!samplesPresent) return
   console.log = () => {}
   for (const file of FILES) {
     const raw = await convert(file)
@@ -160,7 +166,7 @@ afterAll(() => {
 
 const scene = (file: string) => scenes.get(file)!
 
-describe('IFC import loads as room-first structure', () => {
+describe.skipIf(!samplesPresent)('IFC import loads as room-first structure', () => {
   test('IFC spaces are adopted as the rooms of their wall loops', () => {
     expect(adoption(scene('01-duplex.ifc').loaded)).toEqual({ adopted: 21, total: 21 })
     // ENTREE LOGEMENTS stays joined to FILIERE VENDANGES: the wall between them
@@ -344,7 +350,7 @@ describe('IFC import loads as room-first structure', () => {
   })
 })
 
-describe('IFC wall reference lines', () => {
+describe.skipIf(!samplesPresent)('IFC wall reference lines', () => {
   test('a layer set on a wall face becomes Pascal justification', async () => {
     // The sample house partitions are centred (NEGATIVE, offset 47.5 of 95 mm);
     // an offset of 0 puts the IFC reference line on one face instead.

@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
-import { AppCard } from '@/components/app-shell'
+import { AppCard, PRODUCT_NAME } from '@/components/app-shell'
 
 export const dynamic = 'force-dynamic'
-export const metadata: Metadata = { title: 'Set up · Pascal' }
+export const metadata: Metadata = { title: `Set up · ${PRODUCT_NAME}` }
 
 const VARIABLES = [
   ['PASCAL_ADMIN_PASSWORD', 'The password that unlocks this editor. Required on a network host.'],

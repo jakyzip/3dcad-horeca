@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
@@ -20,28 +19,32 @@ export function AppShell({ children, className }: { children: ReactNode; classNa
   )
 }
 
-export function PascalLogo({ className }: { className?: string }) {
+export const PRODUCT_NAME = '3DCadHo.Re.Ca'
+
+/** The product mark: an isometric block, plan on top (blue) and 3D sides. Same art as app/icon.svg. */
+export function ProductMark({ className }: { className?: string }) {
   return (
-    <Image
-      alt="Pascal"
-      className={cn('h-5 w-auto invert', className)}
-      height={20}
-      priority
-      src="/pascal-logo-full.svg"
-      width={100}
-    />
+    <svg aria-hidden className={cn('h-5 w-5', className)} viewBox="0 0 64 64">
+      <rect fill="#1c1917" height="64" rx="14" width="64" />
+      <path d="M32 14 48 23 32 32 16 23Z" fill="#2563eb" />
+      <path d="M16 23 32 32V50L16 41Z" fill="#fafaf9" />
+      <path d="M48 23 32 32V50L48 41Z" fill="#a8a29e" />
+      <path
+        d="M24 18.5 40 27.5M40 18.5 24 27.5"
+        stroke="#1c1917"
+        strokeOpacity=".35"
+        strokeWidth="1.2"
+      />
+    </svg>
   )
 }
 
-export function PascalMark({ className }: { className?: string }) {
+export function ProductLogo({ className }: { className?: string }) {
   return (
-    <Image
-      alt=""
-      className={cn('h-5 w-5 invert', className)}
-      height={20}
-      src="/pascal-logo-shape.svg"
-      width={20}
-    />
+    <span className={cn('flex h-5 items-center gap-2 font-semibold text-sm', className)}>
+      <ProductMark className="h-full w-auto" />
+      {PRODUCT_NAME}
+    </span>
   )
 }
 
@@ -50,11 +53,11 @@ export function AppHeader({ children }: { children?: ReactNode }) {
     <header className="sticky top-0 z-20 border-border/50 border-b bg-sidebar">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-6">
         <Link
-          aria-label="Pascal home"
+          aria-label={`${PRODUCT_NAME} home`}
           className="-mx-2 flex items-center rounded-lg px-2 py-1.5 transition-colors hover:bg-accent"
           href="/"
         >
-          <PascalLogo />
+          <ProductLogo />
         </Link>
         <div className="flex items-center gap-2">{children}</div>
       </div>
@@ -72,7 +75,7 @@ export function AppCard({ children, className }: { children: ReactNode; classNam
           className,
         )}
       >
-        <PascalLogo className="h-4" />
+        <ProductLogo className="h-4" />
         {children}
       </div>
     </AppShell>

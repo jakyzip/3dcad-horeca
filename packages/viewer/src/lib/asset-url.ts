@@ -1,6 +1,7 @@
 import { loadAssetUrl, resolveArtifactUrl } from '@pascal-app/core'
 
-export const ASSETS_CDN_URL = process.env.NEXT_PUBLIC_ASSETS_CDN_URL || 'https://editor.pascal.app'
+// Empty by default: assets are served by the app itself (same origin), never by a third-party host.
+export const ASSETS_CDN_URL = process.env.NEXT_PUBLIC_ASSETS_CDN_URL || ''
 
 /**
  * Resolves an asset URL to the appropriate format:

@@ -10,7 +10,6 @@ import {
   type SceneGraph,
   type SidebarTab,
 } from '@pascal-app/editor'
-import { PascalWebXRButton } from '@webxr/plugin/pascal-editor'
 import { Hammer, Layers, Package, Palette, Settings } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -23,7 +22,6 @@ import { BuildTab } from './build-tab'
 import { EditorNavbar } from './editor-navbar'
 import { PaintPanel } from './paint-panel'
 import { EditorViewerToolbarLeft, EditorViewerToolbarRight } from './viewer-toolbar'
-import { useWebXRFeature, useWebXRInstalled, WebXRFeatureRuntime } from './webxr-feature-gate'
 
 export interface SceneMeta {
   id: string
@@ -153,7 +151,6 @@ function isLightPreviewQuery(searchParams: URLSearchParams): boolean {
 }
 
 export function SceneLoader(props: SceneLoaderProps) {
-  const webXRInstalled = useWebXRInstalled()
   // The editor follows its host's `.dark` class, and this app keeps the editor
   // dark: the page root carries it from the first paint, and <body> for the
   // menus and dialogs the editor portals there.
@@ -161,11 +158,7 @@ export function SceneLoader(props: SceneLoaderProps) {
     document.body.classList.add('dark')
     return () => document.body.classList.remove('dark')
   }, [])
-  return (
-    <WebXRFeatureRuntime enabled={webXRInstalled}>
-      <SceneEditor {...props} />
-    </WebXRFeatureRuntime>
-  )
+  return <SceneEditor {...props} />
 }
 
 function SceneEditor({ initialScene, meta: initialMeta }: SceneLoaderProps) {
@@ -175,7 +168,6 @@ function SceneEditor({ initialScene, meta: initialMeta }: SceneLoaderProps) {
     () => (renamedTo === null ? initialMeta : { ...initialMeta, name: renamedTo }),
     [initialMeta, renamedTo],
   )
-  const vr = useWebXRFeature()
   useLocalArtifactStore()
   useThumbnailAutosave({ sceneId: meta.id, enabled: true })
   const router = useRouter()
@@ -370,7 +362,6 @@ function SceneEditor({ initialScene, meta: initialMeta }: SceneLoaderProps) {
       )}
       <Editor
         disablePostFx={lightPreview}
-        immersive={vr?.session ? vr.immersive : undefined}
         layoutVersion="v2"
         navbarSlot={<EditorNavbar name={meta.name} onRename={handleRename} sceneId={meta.id} />}
         onLoad={handleLoad}
@@ -380,19 +371,7 @@ function SceneEditor({ initialScene, meta: initialMeta }: SceneLoaderProps) {
         projectName={meta.name}
         sidebarTabs={SIDEBAR_TABS}
         viewerToolbarLeft={<EditorViewerToolbarLeft />}
-        viewerToolbarRight={
-          <EditorViewerToolbarRight
-            vrButton={
-              vr ? (
-                <PascalWebXRButton
-                  className="flex h-8 w-8 items-center justify-center text-muted-foreground hover:bg-accent disabled:opacity-50"
-                  feature={vr}
-                />
-              ) : null
-            }
-            vrLabel="Enter VR"
-          />
-        }
+        viewerToolbarRight={<EditorViewerToolbarRight />}
       />
     </div>
   )

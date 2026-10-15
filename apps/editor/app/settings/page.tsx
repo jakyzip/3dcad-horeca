@@ -3,12 +3,12 @@ import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
-import { AppHeader, AppShell, SECONDARY_PILL } from '@/components/app-shell'
+import { AppHeader, AppShell, PRODUCT_NAME, SECONDARY_PILL } from '@/components/app-shell'
 import { resolvePublicUrl } from '@/lib/public-url'
 import { resolveAuthMode } from '@/lib/self-host-auth'
 
 export const dynamic = 'force-dynamic'
-export const metadata: Metadata = { title: 'Settings · Pascal' }
+export const metadata: Metadata = { title: `Settings · ${PRODUCT_NAME}` }
 
 /** Server components see headers, not a Request; the auth helpers want the latter. */
 async function currentRequest(): Promise<Request> {
@@ -74,8 +74,10 @@ export default async function SettingsPage() {
           )}
 
           <Section title="About">
-            <ExternalRow href="https://github.com/pascalorg/editor" label="Source code" />
-            <ExternalRow href="https://editor.pascal.app/docs" label="Documentation" />
+            <ExternalRow
+              href="https://github.com/pascalorg/editor"
+              label="Based on pascalorg/editor (MIT)"
+            />
           </Section>
         </div>
       </main>

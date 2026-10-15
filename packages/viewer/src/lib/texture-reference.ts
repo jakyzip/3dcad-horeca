@@ -50,8 +50,11 @@ function pascalStorageOrigin(): string | null {
  *  a server-known KTX2 source like the storage buckets, just app-hosted. */
 function isAppMaterialUrl(src: string): boolean {
   try {
+    // No CDN configured means the app serves its own public dir, i.e. the page's origin.
+    const cdnOrigin = ASSETS_CDN_URL ? new URL(ASSETS_CDN_URL).origin : globalThis.location?.origin
+    if (!cdnOrigin) return false
     const url = new URL(src)
-    return url.origin === new URL(ASSETS_CDN_URL).origin && url.pathname.startsWith('/material/')
+    return url.origin === cdnOrigin && url.pathname.startsWith('/material/')
   } catch {
     return false
   }

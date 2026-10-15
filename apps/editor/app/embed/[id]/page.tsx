@@ -2,6 +2,7 @@ import type { SceneGraph } from '@pascal-app/editor'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { cache } from 'react'
+import { PRODUCT_NAME } from '@/components/app-shell'
 import { EmbedViewer } from '@/components/embed-viewer'
 import { isSceneShared } from '@/lib/scene-sharing'
 import { getSceneOperations } from '@/lib/scene-store-server'
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: PageProps<'/embed/[id]'>): Pr
   const { id } = await params
   const scene = await loadSharedScene(id)
   return {
-    title: scene ? `${scene.name} · Pascal` : 'Pascal',
+    title: scene ? `${scene.name} · ${PRODUCT_NAME}` : PRODUCT_NAME,
     robots: { index: false },
   }
 }

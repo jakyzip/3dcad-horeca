@@ -1,4 +1,3 @@
-import { Agentation } from 'agentation'
 import { GeistPixelSquare } from 'geist/font/pixel'
 import { Barlow } from 'next/font/google'
 import localFont from 'next/font/local'
@@ -36,7 +35,6 @@ export default function RootLayout({
     >
       <body className="font-sans">
         <ClientBootstrap enableDevDiagnostics={enableDevDiagnostics}>{children}</ClientBootstrap>
-        {enableDevDiagnostics && <Agentation />}
       </body>
     </html>
   )

@@ -18,11 +18,9 @@ import {
   WalkthroughHud,
 } from '@pascal-app/editor'
 import { InteractiveSystem, SceneEnvironment, useViewer, Viewer } from '@pascal-app/viewer'
-import Image from 'next/image'
 import { Component, type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import { EmbedCameraControls } from '@/components/embed-camera-controls'
-import { cn } from '@/lib/utils'
 
 interface EmbedViewerProps {
   id: string
@@ -124,28 +122,6 @@ export function EmbedViewer({ id, name, graph, chrome = true }: EmbedViewerProps
           </ViewerStage>
         )}
       </ViewerErrorBoundary>
-
-      {!isFirstPersonMode && (
-        <a
-          // The floorplan keeps its zoom buttons in the bottom-right corner; sit above them.
-          className={cn(
-            'corner-smooth absolute z-20 inline-flex items-center gap-1.5 rounded-2xl border border-border/40 bg-background/95 px-3 py-2 font-medium text-foreground text-xs shadow-elevation-4 backdrop-blur-xl transition-colors hover:bg-background',
-            stageMode === '3d' ? 'right-3 bottom-3' : 'right-4 bottom-16',
-          )}
-          href="https://editor.pascal.app"
-          rel="noopener"
-          target="_blank"
-        >
-          <Image
-            alt=""
-            className="h-3.5 w-3.5 invert"
-            height={14}
-            src="/pascal-logo-shape.svg"
-            width={14}
-          />
-          Made with Pascal
-        </a>
-      )}
     </div>
   )
 }

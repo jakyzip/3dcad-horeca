@@ -300,42 +300,44 @@ export default function IfcConverter() {
         </label>
       </div>
 
-      {/* Example IFC files — 2 rows x 5 cards */}
-      <div>
-        <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-3">
-          Or pick an example
-        </p>
-        <div className="grid grid-cols-5 gap-3">
-          {availableTestFiles().map((file) => (
-            <button
-              key={file.name}
-              onClick={() => loadExampleFile(file.name)}
-              disabled={isWorking}
-              className={`rounded-lg border p-3 text-left transition-all ${
-                selectedFile === file.name
-                  ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500'
-                  : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
-              } ${isWorking ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-            >
-              <p
-                className={`text-sm font-medium truncate ${
-                  selectedFile === file.name ? 'text-blue-700' : 'text-gray-900'
-                }`}
+      {/* Example IFC files, shown only when some are configured */}
+      {availableTestFiles().length > 0 && (
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-3">
+            Or pick an example
+          </p>
+          <div className="grid grid-cols-5 gap-3">
+            {availableTestFiles().map((file) => (
+              <button
+                key={file.name}
+                onClick={() => loadExampleFile(file.name)}
+                disabled={isWorking}
+                className={`rounded-lg border p-3 text-left transition-all ${
+                  selectedFile === file.name
+                    ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500'
+                    : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
+                } ${isWorking ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
               >
-                {file.label}
-              </p>
-              <p className="text-xs text-gray-400 mt-0.5">{file.detail}</p>
-              <p className="text-xs text-gray-500 mt-1">{file.description}</p>
-              {file.warning && (
-                <p className="mt-1.5 flex items-start gap-1 text-[11px] leading-snug text-amber-700">
-                  <span aria-hidden>⚠️</span>
-                  <span>{file.warning}</span>
+                <p
+                  className={`text-sm font-medium truncate ${
+                    selectedFile === file.name ? 'text-blue-700' : 'text-gray-900'
+                  }`}
+                >
+                  {file.label}
                 </p>
-              )}
-            </button>
-          ))}
+                <p className="text-xs text-gray-400 mt-0.5">{file.detail}</p>
+                <p className="text-xs text-gray-500 mt-1">{file.description}</p>
+                {file.warning && (
+                  <p className="mt-1.5 flex items-start gap-1 text-[11px] leading-snug text-amber-700">
+                    <span aria-hidden>⚠️</span>
+                    <span>{file.warning}</span>
+                  </p>
+                )}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Error */}
       {status === 'error' && error && (

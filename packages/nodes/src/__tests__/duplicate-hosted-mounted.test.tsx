@@ -1,4 +1,5 @@
 import { expect, spyOn, test } from 'bun:test'
+import type { AssetInput } from '@pascal-app/core'
 import * as Core from '@pascal-app/core'
 import {
   type AnyNode,
@@ -32,7 +33,6 @@ import { Component, type ReactNode, StrictMode } from 'react'
 import { Euler, Mesh, Vector3 } from 'three'
 import gridTableRecipe from '../../../core/src/procedural-items/__fixtures__/grid-table.json'
 import { counterRecipe } from '../../../core/src/procedural-items/fixtures'
-import { CATALOG_ITEMS } from '../../../editor/src/components/ui/item-catalog/catalog-items'
 import {
   createFreshPlacementSubtree,
   duplicatesAsFreshSubtree,
@@ -280,6 +280,33 @@ for (const mover of ['catalog', 'registry'] as const)
           await renderer.unmount()
         }
       })
+// Catalog-shaped assets (the editor catalog ships empty). The model files are
+// never fetched: these tests only exercise placement and duplication.
+const TABLE_LAMP_ASSET: AssetInput = {
+  id: 'table-lamp',
+  category: 'furniture',
+  name: 'Table Lamp',
+  tags: ['countertop', 'lighting'],
+  thumbnail: '/items/table-lamp/thumbnail.png',
+  src: '/items/table-lamp/model.glb',
+  dimensions: [0.29, 0.74, 0.67],
+  offset: [0, 0, 0],
+  rotation: [0, 0, 0],
+  scale: [1, 1, 1],
+}
+const BOOKS_ASSET: AssetInput = {
+  id: 'books',
+  category: 'furniture',
+  name: 'Books',
+  tags: ['books', 'decor', 'shelf'],
+  thumbnail: '/items/books/thumbnail.png',
+  src: '/items/books/model.glb',
+  dimensions: [0.22, 0.22, 0.18],
+  offset: [-0.0851, 0.003, 0.0209],
+  rotation: [0, 0, 0],
+  scale: [1, 1, 1],
+}
+
 test('registry owns conditional subtree policy, including plugin kinds', () => {
   for (const kind of ['item', 'shelf', 'procedural-item'])
     expect(nodeRegistry.get(kind)!.capabilities.duplicable).toEqual({ subtree: 'with-children' })
@@ -1526,7 +1553,7 @@ for (const view of ['3d', '2d'])
           },
           parameters: { width: 4.5, depth: 3.5 },
         })
-        const realAsset = CATALOG_ITEMS.find((a) => a.id === 'table-lamp')!
+        const realAsset = TABLE_LAMP_ASSET
         const root =
           childKind === 'catalog'
             ? ItemNode.parse({ parentId: host.id, asset: realAsset, position: [-1, 0, 0] })
@@ -1549,7 +1576,7 @@ for (const view of ['3d', '2d'])
               })
         const leaf = ItemNode.parse({
           parentId: root.id,
-          asset: CATALOG_ITEMS.find((a) => a.id === 'books')!,
+          asset: BOOKS_ASSET,
           position: [0, 0.8, 0],
         })
         host.attachments[root.id] = 'worktop'

@@ -465,20 +465,18 @@ export async function createFloorplanPdfDocument(
   defaultPageSize: readonly [number, number],
   options: { title?: string } = {},
 ) {
-  const [pdfkit, helvetica, helveticaBold, courier, courierBold, { default: blobStream }, fonts] =
-    await Promise.all([
-      import('pdfkit'),
-      import('pdfkit/standard-fonts/Helvetica'),
-      import('pdfkit/standard-fonts/HelveticaBold'),
-      import('pdfkit/standard-fonts/Courier'),
-      import('pdfkit/standard-fonts/CourierBold'),
-      import('blob-stream'),
-      // an export in the standard fonts beats no export when the font files are unreachable
-      loadFloorplanPdfFonts().catch((error: unknown) => {
-        console.warn('[floorplan-export] Falling back to the standard PDF fonts', error)
-        return null
-      }),
-    ])
+  const [pdfkit, helvetica, helveticaBold, courier, courierBold, fonts] = await Promise.all([
+    import('pdfkit'),
+    import('pdfkit/standard-fonts/Helvetica'),
+    import('pdfkit/standard-fonts/HelveticaBold'),
+    import('pdfkit/standard-fonts/Courier'),
+    import('pdfkit/standard-fonts/CourierBold'),
+    // an export in the standard fonts beats no export when the font files are unreachable
+    loadFloorplanPdfFonts().catch((error: unknown) => {
+      console.warn('[floorplan-export] Falling back to the standard PDF fonts', error)
+      return null
+    }),
+  ])
   // The browser build has no standard-font metrics until they are registered, and
   // the constructor already sets Helvetica; the Node build loads its own and has no registry.
   ;(pdfkit as PdfKitStandardFontRegistry).registerStdFonts?.(
@@ -494,13 +492,14 @@ export async function createFloorplanPdfDocument(
     // the viewer's title bar shows the document title, not the file name
     ...(options.title ? { info: { Title: options.title }, displayTitle: true } : {}),
   })
-  const stream = raw.pipe(blobStream())
+  // PDFKit is a readable stream: collect its chunks from the start and build the Blob on 'end'.
+  const chunks: Uint8Array[] = []
+  raw.on('data', (chunk: Uint8Array) => chunks.push(chunk))
   return {
     doc: new FloorplanPdfDocument(raw, defaultPageSize, fonts),
     save: async (filename: string) => {
       const blob = await new Promise<Blob>((resolve, reject) => {
-        stream.on('finish', () => resolve(stream.toBlob('application/pdf')))
-        stream.on('error', reject)
+        raw.on('end', () => resolve(new Blob(chunks as BlobPart[], { type: 'application/pdf' })))
         raw.on('error', reject)
         raw.end()
       })

@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, spyOn } from 'bun:test'
+import { existsSync } from 'node:fs'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import * as WebIFC from 'web-ifc'
@@ -29,7 +30,9 @@ function assertUniqueFills(graph: PascalSceneGraph) {
   }
 }
 
-describe('IFC opening emission', () => {
+// The upstream IFC samples were removed (no documented license, see
+// docs/progetto/AUDIT_LICENZE.md). These cases run again once licensed files are added there.
+describe.skipIf(!existsSync(fixture))('IFC opening emission', () => {
   const spies: { mockRestore: () => void }[] = []
 
   beforeEach(() => {

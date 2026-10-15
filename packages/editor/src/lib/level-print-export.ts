@@ -500,9 +500,7 @@ export async function exportSceneLevelsForPrint(
 
   return {
     data:
-      format === '3mf'
-        ? createPrint3mf(packageParts, 'Pascal level parts')
-        : zipSync(files, { level: 0 }),
+      format === '3mf' ? createPrint3mf(packageParts, 'Level parts') : zipSync(files, { level: 0 }),
     report: {
       kind: 'print-level-export-report',
       version: 2,

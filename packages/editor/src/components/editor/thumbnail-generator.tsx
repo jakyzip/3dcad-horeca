@@ -351,7 +351,7 @@ const INTERIOR_FILL_INTENSITY = 2
 
 /** Why a sheet's capture refuses to run in a background tab — the words reach the Architect. */
 const HIDDEN_TAB =
-  'The Pascal tab is in the background, where the 3D viewer draws no frames — bring it to the front.'
+  'The editor tab is in the background, where the 3D viewer draws no frames — bring it to the front.'
 
 function isTabHidden(): boolean {
   return typeof document !== 'undefined' && document.visibilityState === 'hidden'

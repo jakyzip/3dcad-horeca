@@ -93,8 +93,18 @@ const fakeHowler = {
 
 mock.module('howler', () => ({ Howl: FakeHowl, Howler: fakeHowler }))
 
-const { disposeSFX, playSFX, preloadSFX, startLoopSFX, stopLoopSFX, updateSFXVolumes } =
-  await import('./sfx-player')
+const {
+  disposeSFX,
+  playSFX,
+  preloadSFX,
+  setSFXEnabled,
+  startLoopSFX,
+  stopLoopSFX,
+  updateSFXVolumes,
+} = await import('./sfx-player')
+
+// The app ships with sounds off (no licensed files yet); these tests cover the engine itself.
+setSFXEnabled(true)
 const { disposeSFXBus, initSFXBus, sfxEmitter, triggerSFX } = await import('./sfx-bus')
 
 beforeEach(() => {

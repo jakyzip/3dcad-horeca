@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'bun:test'
+import { existsSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -148,115 +149,120 @@ function duplexWithLongRoomNumberScene() {
   return duplexWithLongRoomNumber
 }
 
-describe('IFC imported mesh conversion', () => {
-  test('keeps millimetre mesh geometry aligned with native walls', async () => {
-    const scene = await openHouseScene()
-    const meshBounds = importedMeshPlanBounds(importedMeshes(scene))
-    const nativeBounds = wallPlanBounds(scene)
+// The upstream IFC samples were removed (no documented license, see
+// docs/progetto/AUDIT_LICENZE.md). These cases run again once licensed files are added there.
+describe.skipIf(!existsSync(`${fixturesDirectory}04-ifc-open-house.ifc`))(
+  'IFC imported mesh conversion',
+  () => {
+    test('keeps millimetre mesh geometry aligned with native walls', async () => {
+      const scene = await openHouseScene()
+      const meshBounds = importedMeshPlanBounds(importedMeshes(scene))
+      const nativeBounds = wallPlanBounds(scene)
 
-    expect(meshBounds.maxX - meshBounds.minX).toBeGreaterThan(9)
-    expect(meshBounds.maxZ - meshBounds.minZ).toBeGreaterThan(5)
-    expect(Math.abs(meshBounds.minX - nativeBounds.minX)).toBeLessThan(1)
-    expect(Math.abs(meshBounds.maxX - nativeBounds.maxX)).toBeLessThan(1)
-    expect(Math.abs(meshBounds.minZ - nativeBounds.minZ)).toBeLessThan(1)
-    expect(Math.abs(meshBounds.maxZ - nativeBounds.maxZ)).toBeLessThan(1)
-  }, 30_000)
+      expect(meshBounds.maxX - meshBounds.minX).toBeGreaterThan(9)
+      expect(meshBounds.maxZ - meshBounds.minZ).toBeGreaterThan(5)
+      expect(Math.abs(meshBounds.minX - nativeBounds.minX)).toBeLessThan(1)
+      expect(Math.abs(meshBounds.maxX - nativeBounds.maxX)).toBeLessThan(1)
+      expect(Math.abs(meshBounds.minZ - nativeBounds.minZ)).toBeLessThan(1)
+      expect(Math.abs(meshBounds.maxZ - nativeBounds.maxZ)).toBeLessThan(1)
+    }, 30_000)
 
-  test('keeps flat meshes aligned when STEP axis swapping is disabled', async () => {
-    const scene = await openHouseWithoutAxisSwapScene()
-    const meshBounds = importedMeshPlanBounds(importedMeshes(scene), 1)
-    const nativeBounds = wallPlanBounds(scene)
+    test('keeps flat meshes aligned when STEP axis swapping is disabled', async () => {
+      const scene = await openHouseWithoutAxisSwapScene()
+      const meshBounds = importedMeshPlanBounds(importedMeshes(scene), 1)
+      const nativeBounds = wallPlanBounds(scene)
 
-    expect(Math.abs(meshBounds.minX - nativeBounds.minX)).toBeLessThan(1)
-    expect(Math.abs(meshBounds.maxX - nativeBounds.maxX)).toBeLessThan(1)
-    expect(Math.abs(meshBounds.minZ - nativeBounds.minZ)).toBeLessThan(1)
-    expect(Math.abs(meshBounds.maxZ - nativeBounds.maxZ)).toBeLessThan(1)
-  }, 30_000)
+      expect(Math.abs(meshBounds.minX - nativeBounds.minX)).toBeLessThan(1)
+      expect(Math.abs(meshBounds.maxX - nativeBounds.maxX)).toBeLessThan(1)
+      expect(Math.abs(meshBounds.minZ - nativeBounds.minZ)).toBeLessThan(1)
+      expect(Math.abs(meshBounds.maxZ - nativeBounds.maxZ)).toBeLessThan(1)
+    }, 30_000)
 
-  test('keeps mesh-derived room heights stable when STEP axis swapping is disabled', async () => {
-    const [defaultScene, unswappedScene] = await Promise.all([
-      duplexScene(),
-      duplexWithoutAxisSwapScene(),
-    ])
-    const defaultZones = Object.values(defaultScene.nodes).filter(
-      (node): node is ZoneNode => node.type === 'zone',
-    )
-    const unswappedZonesByExpressId = new Map(
-      Object.values(unswappedScene.nodes)
-        .filter((node): node is ZoneNode => node.type === 'zone')
-        .map((zone) => [metadata(zone).expressID, zone]),
-    )
+    test('keeps mesh-derived room heights stable when STEP axis swapping is disabled', async () => {
+      const [defaultScene, unswappedScene] = await Promise.all([
+        duplexScene(),
+        duplexWithoutAxisSwapScene(),
+      ])
+      const defaultZones = Object.values(defaultScene.nodes).filter(
+        (node): node is ZoneNode => node.type === 'zone',
+      )
+      const unswappedZonesByExpressId = new Map(
+        Object.values(unswappedScene.nodes)
+          .filter((node): node is ZoneNode => node.type === 'zone')
+          .map((zone) => [metadata(zone).expressID, zone]),
+      )
 
-    expect(defaultZones.length).toBeGreaterThan(0)
-    for (const zone of defaultZones) {
-      const unswappedZone = unswappedZonesByExpressId.get(metadata(zone).expressID)
-      expect(unswappedZone).toBeDefined()
-      expect(Math.abs(zone.ceilingHeight - unswappedZone!.ceilingHeight)).toBeLessThan(0.001)
-    }
-  }, 30_000)
+      expect(defaultZones.length).toBeGreaterThan(0)
+      for (const zone of defaultZones) {
+        const unswappedZone = unswappedZonesByExpressId.get(metadata(zone).expressID)
+        expect(unswappedZone).toBeDefined()
+        expect(Math.abs(zone.ceilingHeight - unswappedZone!.ceilingHeight)).toBeLessThan(0.001)
+      }
+    }, 30_000)
 
-  test('keeps converted nodes reachable when the IFC has no building storey', async () => {
-    const scene = await openHouseWithoutStoreyScene()
+    test('keeps converted nodes reachable when the IFC has no building storey', async () => {
+      const scene = await openHouseWithoutStoreyScene()
 
-    expect(Object.values(scene.nodes).filter((node) => node.type === 'level')).toHaveLength(0)
-    expect(importedMeshes(scene).length).toBeGreaterThan(0)
-    expect(reachableNodeIds(scene).size).toBe(Object.keys(scene.nodes).length)
-  }, 30_000)
+      expect(Object.values(scene.nodes).filter((node) => node.type === 'level')).toHaveLength(0)
+      expect(importedMeshes(scene).length).toBeGreaterThan(0)
+      expect(reachableNodeIds(scene).size).toBe(Object.keys(scene.nodes).length)
+    }, 30_000)
 
-  test('preserves roof slabs as imported geometry when a mesh is available', async () => {
-    const scene = await openHouseScene()
-    const roofSlabs = importedMeshes(scene).filter(
-      (node) =>
-        metadata(node).ifcType === 'IFCSLAB' &&
-        String(metadata(node).predefinedType).toUpperCase() === 'ROOF',
-    )
+    test('preserves roof slabs as imported geometry when a mesh is available', async () => {
+      const scene = await openHouseScene()
+      const roofSlabs = importedMeshes(scene).filter(
+        (node) =>
+          metadata(node).ifcType === 'IFCSLAB' &&
+          String(metadata(node).predefinedType).toUpperCase() === 'ROOF',
+      )
 
-    expect(roofSlabs).toHaveLength(2)
-  }, 30_000)
+      expect(roofSlabs).toHaveLength(2)
+    }, 30_000)
 
-  test('rounds serialized positions and normals to the storage precision', async () => {
-    const scene = await openHouseScene()
-    for (const mesh of importedMeshes(scene)) {
-      for (const primitive of mesh.primitives) {
-        for (const value of primitive.positions) {
-          expect(Math.abs(value * 10_000 - Math.round(value * 10_000))).toBeLessThan(1e-8)
-        }
-        for (const value of primitive.normals ?? []) {
-          expect(Math.abs(value * 1000 - Math.round(value * 1000))).toBeLessThan(1e-8)
+    test('rounds serialized positions and normals to the storage precision', async () => {
+      const scene = await openHouseScene()
+      for (const mesh of importedMeshes(scene)) {
+        for (const primitive of mesh.primitives) {
+          for (const value of primitive.positions) {
+            expect(Math.abs(value * 10_000 - Math.round(value * 10_000))).toBeLessThan(1e-8)
+          }
+          for (const value of primitive.normals ?? []) {
+            expect(Math.abs(value * 1000 - Math.round(value * 1000))).toBeLessThan(1e-8)
+          }
         }
       }
-    }
-  }, 30_000)
+    }, 30_000)
 
-  test('preserves stair flight meshes and continues after a space with no Name', async () => {
-    const scene = await duplexWithMissingSpaceNameScene()
-    const nodes = Object.values(scene.nodes)
+    test('preserves stair flight meshes and continues after a space with no Name', async () => {
+      const scene = await duplexWithMissingSpaceNameScene()
+      const nodes = Object.values(scene.nodes)
 
-    // Wall loops no IfcSpace claims become rooms too; only the spaces are counted.
-    expect(
-      nodes.filter((node) => node.type === 'zone' && metadata(node).ifcType === 'IFCSPACE'),
-    ).toHaveLength(21)
-    expect(
-      nodes.some((node) => node.type === 'zone' && metadata(node).footprintApproximated === true),
-    ).toBe(true)
-    expect(nodes.filter((node) => node.type === 'stair')).toHaveLength(0)
-    expect(
-      nodes.filter(
-        (node) => node.type === 'imported-mesh' && metadata(node).ifcType === 'IFCSTAIRFLIGHT',
-      ),
-    ).toHaveLength(2)
-  }, 30_000)
+      // Wall loops no IfcSpace claims become rooms too; only the spaces are counted.
+      expect(
+        nodes.filter((node) => node.type === 'zone' && metadata(node).ifcType === 'IFCSPACE'),
+      ).toHaveLength(21)
+      expect(
+        nodes.some((node) => node.type === 'zone' && metadata(node).footprintApproximated === true),
+      ).toBe(true)
+      expect(nodes.filter((node) => node.type === 'stair')).toHaveLength(0)
+      expect(
+        nodes.filter(
+          (node) => node.type === 'imported-mesh' && metadata(node).ifcType === 'IFCSTAIRFLIGHT',
+        ),
+      ).toHaveLength(2)
+    }, 30_000)
 
-  test('keeps a zone when its IFC room number exceeds the Pascal limit', async () => {
-    const scene = await duplexWithLongRoomNumberScene()
-    const zones = Object.values(scene.nodes).filter(
-      (node): node is ZoneNode => node.type === 'zone' && metadata(node).ifcType === 'IFCSPACE',
-    )
-    const changedZone = zones.find((zone) => metadata(zone).expressID === 157)
+    test('keeps a zone when its IFC room number exceeds the Pascal limit', async () => {
+      const scene = await duplexWithLongRoomNumberScene()
+      const zones = Object.values(scene.nodes).filter(
+        (node): node is ZoneNode => node.type === 'zone' && metadata(node).ifcType === 'IFCSPACE',
+      )
+      const changedZone = zones.find((zone) => metadata(zone).expressID === 157)
 
-    expect(zones).toHaveLength(21)
-    expect(changedZone).toBeDefined()
-    expect(changedZone!.roomNumber).toBe('')
-    expect(metadata(changedZone!).ifcName).toBe(longRoomNumber)
-  }, 30_000)
-})
+      expect(zones).toHaveLength(21)
+      expect(changedZone).toBeDefined()
+      expect(changedZone!.roomNumber).toBe('')
+      expect(metadata(changedZone!).ifcName).toBe(longRoomNumber)
+    }, 30_000)
+  },
+)

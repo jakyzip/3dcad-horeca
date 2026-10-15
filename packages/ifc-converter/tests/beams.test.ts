@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, spyOn } from 'bun:test'
+import { existsSync } from 'node:fs'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { AnyNode, type BlockNode, BlockTopology } from '@pascal-app/core'
@@ -10,6 +11,8 @@ const duplex = new URL(
   '../../../apps/ifc-converter/public/test-ifc-files/01-duplex.ifc',
   import.meta.url,
 )
+// The upstream IFC samples were removed (no documented license, see
+// docs/progetto/AUDIT_LICENZE.md). These cases run again once licensed files are added there.
 const originalSetWasmPath = WebIFC.IfcAPI.prototype.SetWasmPath
 const originalGetLineIDsWithType = WebIFC.IfcAPI.prototype.GetLineIDsWithType
 
@@ -84,29 +87,32 @@ describe('IFC beam import', () => {
   })
 
   for (const simplify of [false, true]) {
-    it(`preserves all eight duplex I-beams with simplify=${simplify}`, async () => {
-      const graph = await convertIfcToPascal(await Bun.file(duplex).bytes(), undefined, {
-        simplify,
-      })
-      const imported = beams(graph)
-      expect(imported.map((node) => node.metadata.expressID).sort()).toEqual([
-        28785, 28839, 28883, 28927, 28971, 29015, 29059, 29103,
-      ])
-      for (const node of imported) {
-        assertAttached(graph, node)
-        expect(node.topology.faces.length).toBeGreaterThan(12)
-        expect(signedVolume(node)).toBeGreaterThan(0)
-      }
-      const first = imported.find((node) => node.metadata.expressID === 28785)!
-      const level = graph.nodes[first.parentId!]
-      const elevation = Number(level?.metadata.elevation)
-      expectBounds(first, [
-        [4.2985, 2.797 - elevation, 10],
-        [4.5015, 3.1 - elevation, 17.4213],
-      ])
-      expect(first.metadata.globalId).toBe('2OrWItJ6zAwBNp0OUxK_l8')
-      expect(first.metadata.material).toBe('Metal - Steel - 345 MPa')
-    })
+    it.skipIf(!existsSync(duplex))(
+      `preserves all eight duplex I-beams with simplify=${simplify}`,
+      async () => {
+        const graph = await convertIfcToPascal(await Bun.file(duplex).bytes(), undefined, {
+          simplify,
+        })
+        const imported = beams(graph)
+        expect(imported.map((node) => node.metadata.expressID).sort()).toEqual([
+          28785, 28839, 28883, 28927, 28971, 29015, 29059, 29103,
+        ])
+        for (const node of imported) {
+          assertAttached(graph, node)
+          expect(node.topology.faces.length).toBeGreaterThan(12)
+          expect(signedVolume(node)).toBeGreaterThan(0)
+        }
+        const first = imported.find((node) => node.metadata.expressID === 28785)!
+        const level = graph.nodes[first.parentId!]
+        const elevation = Number(level?.metadata.elevation)
+        expectBounds(first, [
+          [4.2985, 2.797 - elevation, 10],
+          [4.5015, 3.1 - elevation, 17.4213],
+        ])
+        expect(first.metadata.globalId).toBe('2OrWItJ6zAwBNp0OUxK_l8')
+        expect(first.metadata.material).toBe('Metal - Steel - 345 MPa')
+      },
+    )
   }
 
   for (const swapYZ of [true, false]) {

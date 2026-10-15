@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import { AppCard } from '@/components/app-shell'
+import { AppCard, PRODUCT_NAME } from '@/components/app-shell'
 import { LoginForm } from './login-form'
 
 export const dynamic = 'force-dynamic'
-export const metadata: Metadata = { title: 'Sign in · Pascal' }
+export const metadata: Metadata = { title: `Sign in · ${PRODUCT_NAME}` }
 
 export default async function LoginPage({
   searchParams,

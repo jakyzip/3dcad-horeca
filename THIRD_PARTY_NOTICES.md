@@ -27,6 +27,6 @@ Stato rilevato sul `bun.lock` di upstream; da riverificare dopo aver rigenerato 
 | `@img/sharp-*` e librerie `libvips` | LGPL-3.0, Apache-2.0 | Solo se si distribuiscono binari: testo della licenza e codice | Da verificare se serve |
 | `lightningcss` | MPL-2.0 | Strumento di build, non incluso nell'app | Nessuna azione prevista |
 
-## Da eliminare
+## Eliminate nella fase 0
 
-Dipendenze che il piano toglie e che non devono comparire nei rilasci: `agentation` (PolyForm Shield 1.0.0, non open source), `blob` (senza licenza), i 7 plugin di terzi (`PIANO.md`, fase 0).
+Non fanno più parte del progetto (né di `package.json` né di `bun.lock`): `agentation` (PolyForm Shield 1.0.0, non open source), `blob-stream` e `blob` (senza licenza; l'export PDF ora usa il `Blob` nativo), i 7 plugin di terzi e `@react-three/xr`.

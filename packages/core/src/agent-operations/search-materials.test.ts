@@ -63,7 +63,11 @@ describe('search_materials', () => {
   test('matches whole words: a short or common word answers nothing by being inside another', () => {
     const [walls, brick] = search({ query: 'white render for the walls' }, { query: 'a red brick' })
     // "for" is in forest, "red" in prepared, "a" in nearly every material.
-    expect(refs(walls!)[0]).toBe('library:concrete-stucco')
+    // Both renders are white now that the textured finishes carry a flat colour.
+    expect(refs(walls!).slice(0, 2).sort()).toEqual([
+      'library:concrete-plaster',
+      'library:concrete-stucco',
+    ])
     expect(refs(walls!)).not.toContain('library:siding-lap-forest')
     expect(refs(brick!)).not.toContain('library:concrete-drywall')
     expect(refs(brick!).every((ref) => /brick|red|tomato/.test(ref))).toBe(true)

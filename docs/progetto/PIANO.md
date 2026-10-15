@@ -40,6 +40,22 @@ Lo script `setup.sh` ha già tolto dal primo commit: modelli 3D, texture, suoni,
 
 **Verifica fase 0:** `bun install` e `bun run ci` passano; `bun dev` apre l'editor; negli strumenti di rete del browser non compaiono richieste a `editor.pascal.app` né a `supabase.co`; nel repository non resta nessun `.glb`, texture o `.mp3` senza riga in `ASSETS.md`.
 
+### Stato fase 0 (2026-10-15, branch `fase-0-licenze`)
+
+Fatto:
+- 0.1–0.3: tolti i 7 plugin, `@react-three/xr`, `agentation`, `blob-stream`/`blob` (export PDF con `Blob` nativo). `bun.lock` non li contiene più.
+- 0.4: catalogo vuoto; 80 materiali convertiti in tinta unita (stessi id, colori scelti a mano); suoni disattivati (`setSFXEnabled`, spento di default); `ASSETS_CDN_URL` vuoto = asset serviti dall'app stessa; esempi IFC senza indirizzo Supabase; i test IFC che leggono i file rimossi sono saltati con `skipIf` (tornano attivi se si aggiungono file con licenza); loghi e favicon sostituiti dal logo del progetto (`ProductMark`, `app/icon.svg`); README riscritto.
+- 0.5: tolti manifest e skill del plugin per agenti di Pascal, i workflow `release.yml` e `mcp-registry.yml`, la validazione `skills:validate`; testi "Pascal" dell'interfaccia resi neutri.
+- `ASSETS.md`: registrati font, fixture, icone e favicon (icone e favicon: **da sostituire**).
+
+Verifica: `bun run ci` passa. Nel codice inviato al browser non restano indirizzi `editor.pascal.app` né `supabase.co`. Controllo nel browser fatto dall'utente il 2026-10-15 (strumenti di rete di Chrome, filtri `pascal` e `supabase`): nessuna richiesta.
+
+Resta aperto:
+- Icone dell'interfaccia (91) di origine non documentata.
+- Catalogo di prova del server MCP (`packages/mcp/src/tools/asset-catalog.ts`): nomi e misure senza file, punta a `/items/...` ora vuota.
+- CLI `packages/cli` (`agent-account.ts`): il comando di collegamento account contatta `editor.pascal.app` se usato.
+- Testi OFL dei font da copiare in `THIRD_PARTY_NOTICES.md`.
+
 ## Fase 1: prototipo della distinta
 
 - Definire uno schema Zod `ProductRef` (codice articolo, descrizione, unità, prezzo di listino, fornitore, categoria) e salvarlo in `node.metadata`. Validarlo quando si legge.

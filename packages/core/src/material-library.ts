@@ -78,16 +78,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor', 'wall', 'furniture'],
     description: 'Fine wood finish',
-    previewThumbnailUrl: '/material/wood/finewood_27/finewood_27_thumb.webp',
+    previewColor: '#b08a5e',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/finewood_27/finewood_27_basecolor_512.ktx2',
-        aoMap: '/material/wood/finewood_27/finewood_27_ao_512.ktx2',
-        normalMap: '/material/wood/finewood_27/finewood_27_normal_512.ktx2',
-        roughnessMap: '/material/wood/finewood_27/finewood_27_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#b08a5e',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -116,15 +111,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor'],
     description: 'Wood plank finish',
-    previewThumbnailUrl: '/material/wood/floor_plank_1/floor_plank_1_thumb.webp',
+    previewColor: '#a67c52',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/floor_plank_1/floor_plank_1_basecolor_512.ktx2',
-        aoMap: '/material/wood/floor_plank_1/floor_plank_1_ao_512.ktx2',
-        normalMap: '/material/wood/floor_plank_1/floor_plank_1_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#a67c52',
         roughness: 0.45,
         metalness: 0,
         repeatX: 0.4,
@@ -153,15 +144,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
-    previewThumbnailUrl: '/material/wood/hungarian_parquet_10/hungarian_parquet_10_thumb.webp',
+    previewColor: '#9c6b3f',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/hungarian_parquet_10/hungarian_parquet_10_basecolor_512.ktx2',
-        normalMap: '/material/wood/hungarian_parquet_10/hungarian_parquet_10_normal_512.ktx2',
-        roughnessMap: '/material/wood/hungarian_parquet_10/hungarian_parquet_10_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#9c6b3f',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -190,15 +177,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
-    previewThumbnailUrl: '/material/wood/hungarian_parquet_2/hungarian_parquet_2_thumb.webp',
+    previewColor: '#b5885a',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/hungarian_parquet_2/hungarian_parquet_2_basecolor_512.ktx2',
-        normalMap: '/material/wood/hungarian_parquet_2/hungarian_parquet_2_normal_512.ktx2',
-        roughnessMap: '/material/wood/hungarian_parquet_2/hungarian_parquet_2_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#b5885a',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -227,15 +210,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
-    previewThumbnailUrl: '/material/wood/square_parquet_21/square_parquet_21_thumb.webp',
+    previewColor: '#a0703f',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/square_parquet_21/square_parquet_21_basecolor_512.ktx2',
-        normalMap: '/material/wood/square_parquet_21/square_parquet_21_normal_512.ktx2',
-        roughnessMap: '/material/wood/square_parquet_21/square_parquet_21_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#a0703f',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -264,17 +243,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
-    previewThumbnailUrl: '/material/wood/square_wood_parquet_23/square_wood_parquet_23_thumb.webp',
+    previewColor: '#8c5f38',
     preset: {
-      maps: {
-        albedoMap:
-          '/material/wood/square_wood_parquet_23/square_wood_parquet_23_basecolor_512.ktx2',
-        normalMap: '/material/wood/square_wood_parquet_23/square_wood_parquet_23_normal_512.ktx2',
-        roughnessMap:
-          '/material/wood/square_wood_parquet_23/square_wood_parquet_23_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#8c5f38',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -303,15 +276,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor', 'wall', 'furniture'],
     description: 'Fine wood finish',
-    previewThumbnailUrl: '/material/wood/wood_fine/wood_fine_thumb.webp',
+    previewColor: '#c49a6c',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/wood_fine/wood_fine_basecolor_512.ktx2',
-        aoMap: '/material/wood/wood_fine/wood_fine_ao_512.ktx2',
-        normalMap: '/material/wood/wood_fine/wood_fine_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#c49a6c',
         roughness: 0.45,
         metalness: 0,
         repeatX: 1,
@@ -340,15 +309,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor', 'wall', 'furniture'],
     description: 'Fine wood finish',
-    previewThumbnailUrl: '/material/wood/wood_fine_11/wood_fine_11_thumb.webp',
+    previewColor: '#a9805a',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/wood_fine_11/wood_fine_11_basecolor_512.ktx2',
-        aoMap: '/material/wood/wood_fine_11/wood_fine_11_ao_512.ktx2',
-        normalMap: '/material/wood/wood_fine_11/wood_fine_11_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#a9805a',
         roughness: 0.45,
         metalness: 0,
         repeatX: 1,
@@ -377,15 +342,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor', 'wall', 'furniture'],
     description: 'Fine wood finish',
-    previewThumbnailUrl: '/material/wood/wood_fine_13/wood_fine_13_thumb.webp',
+    previewColor: '#8a6240',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/wood_fine_13/wood_fine_13_basecolor_512.ktx2',
-        aoMap: '/material/wood/wood_fine_13/wood_fine_13_ao_512.ktx2',
-        normalMap: '/material/wood/wood_fine_13/wood_fine_13_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#8a6240',
         roughness: 0.45,
         metalness: 0,
         repeatX: 1,
@@ -414,15 +375,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor', 'wall', 'furniture'],
     description: 'Fine wood finish',
-    previewThumbnailUrl: '/material/wood/wood_fine_2/wood_fine_2_thumb.webp',
+    previewColor: '#d1ad80',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/wood_fine_2/wood_fine_2_basecolor_512.ktx2',
-        aoMap: '/material/wood/wood_fine_2/wood_fine_2_ao_512.ktx2',
-        normalMap: '/material/wood/wood_fine_2/wood_fine_2_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#d1ad80',
         roughness: 0.45,
         metalness: 0,
         repeatX: 1,
@@ -451,15 +408,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor', 'wall', 'furniture'],
     description: 'Fine wood finish',
-    previewThumbnailUrl: '/material/wood/wood_fine_22/wood_fine_22_thumb.webp',
+    previewColor: '#7a5235',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/wood_fine_22/wood_fine_22_basecolor_512.ktx2',
-        aoMap: '/material/wood/wood_fine_22/wood_fine_22_ao_512.ktx2',
-        normalMap: '/material/wood/wood_fine_22/wood_fine_22_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#7a5235',
         roughness: 0.45,
         metalness: 0,
         repeatX: 1,
@@ -488,15 +441,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor', 'wall', 'furniture'],
     description: 'Fine wood finish',
-    previewThumbnailUrl: '/material/wood/wood_fine_24/wood_fine_24_thumb.webp',
+    previewColor: '#b98d5f',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/wood_fine_24/wood_fine_24_basecolor_512.ktx2',
-        aoMap: '/material/wood/wood_fine_24/wood_fine_24_ao_512.ktx2',
-        normalMap: '/material/wood/wood_fine_24/wood_fine_24_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#b98d5f',
         roughness: 0.45,
         metalness: 0,
         repeatX: 1,
@@ -525,17 +474,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
-    previewThumbnailUrl: '/material/wood/wood_parquet_14/wood_parquet_14_thumb.webp',
+    previewColor: '#a27245',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/wood_parquet_14/wood_parquet_14_basecolor_512.ktx2',
-        aoMap: '/material/wood/wood_parquet_14/wood_parquet_14_ao_512.ktx2',
-        metalnessMap: '/material/wood/wood_parquet_14/wood_parquet_14_metallic_512.ktx2',
-        normalMap: '/material/wood/wood_parquet_14/wood_parquet_14_normal_512.ktx2',
-        roughnessMap: '/material/wood/wood_parquet_14/wood_parquet_14_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#a27245',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -564,15 +507,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
-    previewThumbnailUrl: '/material/wood/wooden_parquet_11/wooden_parquet_11_thumb.webp',
+    previewColor: '#93683f',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/wooden_parquet_11/wooden_parquet_11_basecolor_512.ktx2',
-        normalMap: '/material/wood/wooden_parquet_11/wooden_parquet_11_normal_512.ktx2',
-        roughnessMap: '/material/wood/wooden_parquet_11/wooden_parquet_11_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#93683f',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -601,16 +540,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
-    previewThumbnailUrl: '/material/wood/woodparquet_121/woodparquet_121_thumb.webp',
+    previewColor: '#b78e63',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/woodparquet_121/woodparquet_121_basecolor_512.ktx2',
-        aoMap: '/material/wood/woodparquet_121/woodparquet_121_ao_512.ktx2',
-        normalMap: '/material/wood/woodparquet_121/woodparquet_121_normal_512.ktx2',
-        roughnessMap: '/material/wood/woodparquet_121/woodparquet_121_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#b78e63',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -639,17 +573,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
-    previewThumbnailUrl: '/material/wood/woodparquet_56/woodparquet_56_thumb.webp',
+    previewColor: '#8f6a48',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/woodparquet_56/woodparquet_56_basecolor_512.ktx2',
-        aoMap: '/material/wood/woodparquet_56/woodparquet_56_ao_512.ktx2',
-        metalnessMap: '/material/wood/woodparquet_56/woodparquet_56_metallic_512.ktx2',
-        normalMap: '/material/wood/woodparquet_56/woodparquet_56_normal_512.ktx2',
-        roughnessMap: '/material/wood/woodparquet_56/woodparquet_56_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#8f6a48',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -678,17 +606,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
-    previewThumbnailUrl: '/material/wood/woodparquet_65/woodparquet_65_thumb.webp',
+    previewColor: '#c19a70',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/woodparquet_65/woodparquet_65_basecolor_512.ktx2',
-        aoMap: '/material/wood/woodparquet_65/woodparquet_65_ao_512.ktx2',
-        metalnessMap: '/material/wood/woodparquet_65/woodparquet_65_metallic_512.ktx2',
-        normalMap: '/material/wood/woodparquet_65/woodparquet_65_normal_512.ktx2',
-        roughnessMap: '/material/wood/woodparquet_65/woodparquet_65_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#c19a70',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -717,17 +639,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor'],
     description: 'Parquet wood finish',
-    previewThumbnailUrl: '/material/wood/woodparquet_99/woodparquet_99_thumb.webp',
+    previewColor: '#6e4a2f',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/woodparquet_99/woodparquet_99_basecolor_512.ktx2',
-        aoMap: '/material/wood/woodparquet_99/woodparquet_99_ao_512.ktx2',
-        metalnessMap: '/material/wood/woodparquet_99/woodparquet_99_metallic_512.ktx2',
-        normalMap: '/material/wood/woodparquet_99/woodparquet_99_normal_512.ktx2',
-        roughnessMap: '/material/wood/woodparquet_99/woodparquet_99_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#6e4a2f',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -756,16 +672,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor', 'wall'],
     description: 'Wood plank finish',
-    previewThumbnailUrl: '/material/wood/woodplank_19/woodplank_19_thumb.webp',
+    previewColor: '#a9845d',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/woodplank_19/woodplank_19_basecolor_512.ktx2',
-        aoMap: '/material/wood/woodplank_19/woodplank_19_ao_512.ktx2',
-        normalMap: '/material/wood/woodplank_19/woodplank_19_normal_512.ktx2',
-        roughnessMap: '/material/wood/woodplank_19/woodplank_19_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#a9845d',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -794,16 +705,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor', 'wall'],
     description: 'Wood plank finish',
-    previewThumbnailUrl: '/material/wood/woodplank_48/woodplank_48_thumb.webp',
+    previewColor: '#8b6b4a',
     preset: {
-      maps: {
-        albedoMap: '/material/wood/woodplank_48/woodplank_48_basecolor_512.ktx2',
-        aoMap: '/material/wood/woodplank_48/woodplank_48_ao_512.ktx2',
-        normalMap: '/material/wood/woodplank_48/woodplank_48_normal_512.ktx2',
-        roughnessMap: '/material/wood/woodplank_48/woodplank_48_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#8b6b4a',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -832,16 +738,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'tile',
     surfaces: ['floor'],
     description: 'Floor tile finish',
-    previewThumbnailUrl: '/material/flooring/tile_quarry/tile_quarry_thumb.webp',
+    previewColor: '#a4553a',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/tile_quarry/tile_quarry_basecolor_512.ktx2',
-        aoMap: '/material/flooring/tile_quarry/tile_quarry_ao_512.ktx2',
-        normalMap: '/material/flooring/tile_quarry/tile_quarry_normal_512.ktx2',
-        roughnessMap: '/material/flooring/tile_quarry/tile_quarry_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#a4553a',
         roughness: 0.5,
         metalness: 0,
         repeatX: 0.3,
@@ -870,17 +771,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'brick',
     surfaces: ['wall', 'floor', 'outdoor'],
     description: 'Brick finish',
-    previewThumbnailUrl: '/material/flooring/brick_wall_rustic/brick_wall_rustic_thumb.webp',
+    previewColor: '#9a5a42',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/brick_wall_rustic/brick_wall_rustic_basecolor_512.ktx2',
-        aoMap: '/material/flooring/brick_wall_rustic/brick_wall_rustic_ao_512.ktx2',
-        metalnessMap: '/material/flooring/brick_wall_rustic/brick_wall_rustic_metallic_512.ktx2',
-        normalMap: '/material/flooring/brick_wall_rustic/brick_wall_rustic_normal_512.ktx2',
-        roughnessMap: '/material/flooring/brick_wall_rustic/brick_wall_rustic_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#9a5a42',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1.5,
@@ -909,17 +804,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'brick',
     surfaces: ['wall', 'floor', 'outdoor'],
     description: 'Brick finish',
-    previewThumbnailUrl: '/material/flooring/brick_wall_aged/brick_wall_aged_thumb.webp',
+    previewColor: '#8e5b48',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/brick_wall_aged/brick_wall_aged_basecolor_512.ktx2',
-        aoMap: '/material/flooring/brick_wall_aged/brick_wall_aged_ao_512.ktx2',
-        metalnessMap: '/material/flooring/brick_wall_aged/brick_wall_aged_metallic_512.ktx2',
-        normalMap: '/material/flooring/brick_wall_aged/brick_wall_aged_normal_512.ktx2',
-        roughnessMap: '/material/flooring/brick_wall_aged/brick_wall_aged_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#8e5b48',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1.5,
@@ -948,18 +837,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'brick',
     surfaces: ['wall', 'floor', 'outdoor'],
     description: 'Brick finish',
-    previewThumbnailUrl: '/material/flooring/brick_wall_weathered/brick_wall_weathered_thumb.webp',
+    previewColor: '#a3705d',
     preset: {
-      maps: {
-        albedoMap:
-          '/material/flooring/brick_wall_weathered/brick_wall_weathered_basecolor_512.ktx2',
-        aoMap: '/material/flooring/brick_wall_weathered/brick_wall_weathered_ao_512.ktx2',
-        normalMap: '/material/flooring/brick_wall_weathered/brick_wall_weathered_normal_512.ktx2',
-        roughnessMap:
-          '/material/flooring/brick_wall_weathered/brick_wall_weathered_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#a3705d',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -988,15 +870,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'metal',
     surfaces: ['wall', 'furniture'],
     description: 'Panel finish',
-    previewThumbnailUrl: '/material/flooring/garage_panel/garage_panel_thumb.webp',
+    previewColor: '#c9ccce',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/garage_panel/garage_panel_basecolor_512.ktx2',
-        aoMap: '/material/flooring/garage_panel/garage_panel_ao_512.ktx2',
-        normalMap: '/material/flooring/garage_panel/garage_panel_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#c9ccce',
         roughness: 0.45,
         metalness: 0,
         repeatX: 1,
@@ -1025,15 +903,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'stone',
     surfaces: ['floor', 'wall'],
     description: 'Stone flooring finish',
-    previewThumbnailUrl: '/material/flooring/green_labradorite/green_labradorite_thumb.webp',
+    previewColor: '#4f6b5e',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/green_labradorite/green_labradorite_basecolor_512.ktx2',
-        aoMap: '/material/flooring/green_labradorite/green_labradorite_ao_512.ktx2',
-        normalMap: '/material/flooring/green_labradorite/green_labradorite_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#4f6b5e',
         roughness: 0.35,
         metalness: 0,
         repeatX: 0.6,
@@ -1062,17 +936,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'ground',
     surfaces: ['outdoor', 'floor'],
     description: 'Ground surface finish',
-    previewThumbnailUrl: '/material/flooring/ground_earth/ground_earth_thumb.webp',
+    previewColor: '#7a6448',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/ground_earth/ground_earth_basecolor_512.ktx2',
-        aoMap: '/material/flooring/ground_earth/ground_earth_ao_512.ktx2',
-        metalnessMap: '/material/flooring/ground_earth/ground_earth_metallic_512.ktx2',
-        normalMap: '/material/flooring/ground_earth/ground_earth_normal_512.ktx2',
-        roughnessMap: '/material/flooring/ground_earth/ground_earth_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#7a6448',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -1101,15 +969,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'tile',
     surfaces: ['floor', 'outdoor'],
     description: 'Pool tile finish',
-    previewThumbnailUrl: '/material/flooring/pool_tiles/pool_tiles_thumb.webp',
+    previewColor: '#6fb3c8',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/pool_tiles/pool_tiles_basecolor_512.ktx2',
-        aoMap: '/material/flooring/pool_tiles/pool_tiles_ao_512.ktx2',
-        normalMap: '/material/flooring/pool_tiles/pool_tiles_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#6fb3c8',
         roughness: 0.45,
         metalness: 0,
         repeatX: 1,
@@ -1138,15 +1002,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'tile',
     surfaces: ['floor'],
     description: 'Tile flooring finish',
-    previewThumbnailUrl: '/material/flooring/tiles_checker/tiles_checker_thumb.webp',
+    previewColor: '#d9d6cf',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/tiles_checker/tiles_checker_basecolor_512.ktx2',
-        aoMap: '/material/flooring/tiles_checker/tiles_checker_ao_512.ktx2',
-        normalMap: '/material/flooring/tiles_checker/tiles_checker_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#d9d6cf',
         roughness: 0.45,
         metalness: 0,
         repeatX: 1,
@@ -1175,15 +1035,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'tile',
     surfaces: ['floor'],
     description: 'Tile flooring finish',
-    previewThumbnailUrl: '/material/flooring/tiles_grid/tiles_grid_thumb.webp',
+    previewColor: '#e3e1dc',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/tiles_grid/tiles_grid_basecolor_512.ktx2',
-        aoMap: '/material/flooring/tiles_grid/tiles_grid_ao_512.ktx2',
-        normalMap: '/material/flooring/tiles_grid/tiles_grid_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#e3e1dc',
         roughness: 0.45,
         metalness: 0,
         repeatX: 1,
@@ -1212,15 +1068,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'stone',
     surfaces: ['wall', 'floor', 'outdoor'],
     description: 'Stone finish',
-    previewThumbnailUrl: '/material/flooring/stone_wall/stone_wall_thumb.webp',
+    previewColor: '#8e8a82',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/stone_wall/stone_wall_basecolor_512.ktx2',
-        aoMap: '/material/flooring/stone_wall/stone_wall_ao_512.ktx2',
-        normalMap: '/material/flooring/stone_wall/stone_wall_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#8e8a82',
         roughness: 0.45,
         metalness: 0,
         repeatX: 1,
@@ -1249,15 +1101,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'tile',
     surfaces: ['floor'],
     description: 'Wood-look ceramic flooring finish',
-    previewThumbnailUrl: '/material/flooring/wooden_ceramic_3/wooden_ceramic_3_thumb.webp',
+    previewColor: '#b08b66',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/wooden_ceramic_3/wooden_ceramic_3_basecolor_512.ktx2',
-        aoMap: '/material/flooring/wooden_ceramic_3/wooden_ceramic_3_ao_512.ktx2',
-        normalMap: '/material/flooring/wooden_ceramic_3/wooden_ceramic_3_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#b08b66',
         roughness: 0.45,
         metalness: 0,
         repeatX: 1,
@@ -1286,17 +1134,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'tile',
     surfaces: ['floor', 'wall'],
     description: 'Ceramic flooring finish',
-    previewThumbnailUrl: '/material/flooring/ceramic_mosaic/ceramic_mosaic_thumb.webp',
+    previewColor: '#c9c4ba',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/ceramic_mosaic/ceramic_mosaic_basecolor_512.ktx2',
-        aoMap: '/material/flooring/ceramic_mosaic/ceramic_mosaic_ao_512.ktx2',
-        metalnessMap: '/material/flooring/ceramic_mosaic/ceramic_mosaic_metallic_512.ktx2',
-        normalMap: '/material/flooring/ceramic_mosaic/ceramic_mosaic_normal_512.ktx2',
-        roughnessMap: '/material/flooring/ceramic_mosaic/ceramic_mosaic_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#c9c4ba',
         roughness: 0.5,
         metalness: 0,
         repeatX: 0.5,
@@ -1325,16 +1167,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'stone',
     surfaces: ['floor', 'wall'],
     description: 'Terrazzo flooring finish',
-    previewThumbnailUrl: '/material/flooring/terrazzo/terrazzo_thumb.webp',
+    previewColor: '#d8d2c6',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/terrazzo/terrazzo_basecolor_512.ktx2',
-        metalnessMap: '/material/flooring/terrazzo/terrazzo_metallic_512.ktx2',
-        normalMap: '/material/flooring/terrazzo/terrazzo_normal_512.ktx2',
-        roughnessMap: '/material/flooring/terrazzo/terrazzo_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#d8d2c6',
         roughness: 0.5,
         metalness: 0,
         repeatX: 0.5,
@@ -1363,16 +1200,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'stone',
     surfaces: ['floor', 'wall'],
     description: 'Floor tile finish',
-    previewThumbnailUrl: '/material/flooring/tile_stone/tile_stone_thumb.webp',
+    previewColor: '#a8a39a',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/tile_stone/tile_stone_basecolor_512.ktx2',
-        aoMap: '/material/flooring/tile_stone/tile_stone_ao_512.ktx2',
-        normalMap: '/material/flooring/tile_stone/tile_stone_normal_512.ktx2',
-        roughnessMap: '/material/flooring/tile_stone/tile_stone_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#a8a39a',
         roughness: 0.5,
         metalness: 0,
         repeatX: 0.5,
@@ -1401,16 +1233,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'tile',
     surfaces: ['floor'],
     description: 'Floor tile finish',
-    previewThumbnailUrl: '/material/flooring/tile_terracotta/tile_terracotta_thumb.webp',
+    previewColor: '#c0714f',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/tile_terracotta/tile_terracotta_basecolor_512.ktx2',
-        aoMap: '/material/flooring/tile_terracotta/tile_terracotta_ao_512.ktx2',
-        normalMap: '/material/flooring/tile_terracotta/tile_terracotta_normal_512.ktx2',
-        roughnessMap: '/material/flooring/tile_terracotta/tile_terracotta_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#c0714f',
         roughness: 0.5,
         metalness: 0,
         repeatX: 0.5,
@@ -1439,17 +1266,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'stone',
     surfaces: ['floor', 'wall'],
     description: 'Green quartzite flooring finish',
-    previewThumbnailUrl:
-      '/material/flooring/green_glass_quartzite/green_glass_quartzite_thumb.webp',
+    previewColor: '#8fa395',
     preset: {
-      maps: {
-        albedoMap:
-          '/material/flooring/green_glass_quartzite/green_glass_quartzite_basecolor_512.ktx2',
-        aoMap: '/material/flooring/green_glass_quartzite/green_glass_quartzite_ao_512.ktx2',
-        normalMap: '/material/flooring/green_glass_quartzite/green_glass_quartzite_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#8fa395',
         roughness: 0.35,
         metalness: 0,
         repeatX: 1,
@@ -1478,19 +1299,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'tile',
     surfaces: ['floor'],
     description: 'Dark ceramic flooring finish',
-    previewThumbnailUrl: '/material/flooring/dark_ceramic_grunge/dark_ceramic_grunge_thumb.webp',
+    previewColor: '#4f4d4a',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/dark_ceramic_grunge/dark_ceramic_grunge_basecolor_512.ktx2',
-        aoMap: '/material/flooring/dark_ceramic_grunge/dark_ceramic_grunge_ao_512.ktx2',
-        metalnessMap:
-          '/material/flooring/dark_ceramic_grunge/dark_ceramic_grunge_metallic_512.ktx2',
-        normalMap: '/material/flooring/dark_ceramic_grunge/dark_ceramic_grunge_normal_512.ktx2',
-        roughnessMap:
-          '/material/flooring/dark_ceramic_grunge/dark_ceramic_grunge_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#4f4d4a',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -1519,20 +1332,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'tile',
     surfaces: ['floor'],
     description: 'Light ceramic flooring finish',
-    previewThumbnailUrl: '/material/flooring/light_ceramic_grunge/light_ceramic_grunge_thumb.webp',
+    previewColor: '#d6d2ca',
     preset: {
-      maps: {
-        albedoMap:
-          '/material/flooring/light_ceramic_grunge/light_ceramic_grunge_basecolor_512.ktx2',
-        aoMap: '/material/flooring/light_ceramic_grunge/light_ceramic_grunge_ao_512.ktx2',
-        metalnessMap:
-          '/material/flooring/light_ceramic_grunge/light_ceramic_grunge_metallic_512.ktx2',
-        normalMap: '/material/flooring/light_ceramic_grunge/light_ceramic_grunge_normal_512.ktx2',
-        roughnessMap:
-          '/material/flooring/light_ceramic_grunge/light_ceramic_grunge_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#d6d2ca',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -1561,15 +1365,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'stone',
     surfaces: ['floor', 'wall'],
     description: 'White marble flooring finish',
-    previewThumbnailUrl: '/material/flooring/statuaretto/statuaretto_thumb.webp',
+    previewColor: '#ecebe7',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/statuaretto/statuaretto_basecolor_512.ktx2',
-        aoMap: '/material/flooring/statuaretto/statuaretto_ao_512.ktx2',
-        normalMap: '/material/flooring/statuaretto/statuaretto_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#ecebe7',
         roughness: 0.35,
         metalness: 0,
         repeatX: 1,
@@ -1598,17 +1398,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'tile',
     surfaces: ['floor', 'wall'],
     description: 'Floor tile finish',
-    previewThumbnailUrl: '/material/flooring/tile_mosaic/tile_mosaic_thumb.webp',
+    previewColor: '#bcc3c4',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/tile_mosaic/tile_mosaic_basecolor_512.ktx2',
-        aoMap: '/material/flooring/tile_mosaic/tile_mosaic_ao_512.ktx2',
-        metalnessMap: '/material/flooring/tile_mosaic/tile_mosaic_metallic_512.ktx2',
-        normalMap: '/material/flooring/tile_mosaic/tile_mosaic_normal_512.ktx2',
-        roughnessMap: '/material/flooring/tile_mosaic/tile_mosaic_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#bcc3c4',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -1637,17 +1431,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'tile',
     surfaces: ['floor', 'wall'],
     description: 'Floor tile finish',
-    previewThumbnailUrl: '/material/flooring/tile_pattern/tile_pattern_thumb.webp',
+    previewColor: '#c8bfae',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/tile_pattern/tile_pattern_basecolor_512.ktx2',
-        aoMap: '/material/flooring/tile_pattern/tile_pattern_ao_512.ktx2',
-        metalnessMap: '/material/flooring/tile_pattern/tile_pattern_metallic_512.ktx2',
-        normalMap: '/material/flooring/tile_pattern/tile_pattern_normal_512.ktx2',
-        roughnessMap: '/material/flooring/tile_pattern/tile_pattern_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#c8bfae',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -1676,15 +1464,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'tile',
     surfaces: ['floor'],
     description: 'Wood-look ceramic flooring finish',
-    previewThumbnailUrl: '/material/flooring/wooden_ceramic_2/wooden_ceramic_2_thumb.webp',
+    previewColor: '#9e7856',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/wooden_ceramic_2/wooden_ceramic_2_basecolor_512.ktx2',
-        aoMap: '/material/flooring/wooden_ceramic_2/wooden_ceramic_2_ao_512.ktx2',
-        normalMap: '/material/flooring/wooden_ceramic_2/wooden_ceramic_2_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#9e7856',
         roughness: 0.45,
         metalness: 0,
         repeatX: 1.5,
@@ -1713,17 +1497,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'wood',
     surfaces: ['floor'],
     description: 'Wood parquet flooring finish',
-    previewThumbnailUrl: '/material/flooring/woodparquet/woodparquet_thumb.webp',
+    previewColor: '#a67a4f',
     preset: {
-      maps: {
-        albedoMap: '/material/flooring/woodparquet/woodparquet_basecolor_512.ktx2',
-        aoMap: '/material/flooring/woodparquet/woodparquet_ao_512.ktx2',
-        metalnessMap: '/material/flooring/woodparquet/woodparquet_metallic_512.ktx2',
-        normalMap: '/material/flooring/woodparquet/woodparquet_normal_512.ktx2',
-        roughnessMap: '/material/flooring/woodparquet/woodparquet_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#a67a4f',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1,
@@ -1752,20 +1530,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'roofing',
     surfaces: ['roof'],
     description: 'Classic roof shingle finish',
-    previewThumbnailUrl: '/material/roofing/roof_shingles_classic/roof_shingles_classic_thumb.webp',
+    previewColor: '#5e5d5a',
     preset: {
-      maps: {
-        albedoMap:
-          '/material/roofing/roof_shingles_classic/roof_shingles_classic_basecolor_512.ktx2',
-        aoMap: '/material/roofing/roof_shingles_classic/roof_shingles_classic_ao_512.ktx2',
-        metalnessMap:
-          '/material/roofing/roof_shingles_classic/roof_shingles_classic_metallic_512.ktx2',
-        normalMap: '/material/roofing/roof_shingles_classic/roof_shingles_classic_normal_512.ktx2',
-        roughnessMap:
-          '/material/roofing/roof_shingles_classic/roof_shingles_classic_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#5e5d5a',
         roughness: 1,
         metalness: 0.15,
         repeatX: 1,
@@ -1794,17 +1563,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'roofing',
     surfaces: ['roof'],
     description: 'Clay roof tile finish',
-    previewThumbnailUrl: '/material/roofing/roof_tiles_clay/roof_tiles_clay_thumb.webp',
+    previewColor: '#b0563a',
     preset: {
-      maps: {
-        albedoMap: '/material/roofing/roof_tiles_clay/roof_tiles_clay_basecolor_512.ktx2',
-        aoMap: '/material/roofing/roof_tiles_clay/roof_tiles_clay_ao_512.ktx2',
-        metalnessMap: '/material/roofing/roof_tiles_clay/roof_tiles_clay_metallic_512.ktx2',
-        normalMap: '/material/roofing/roof_tiles_clay/roof_tiles_clay_normal_512.ktx2',
-        roughnessMap: '/material/roofing/roof_tiles_clay/roof_tiles_clay_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#b0563a',
         roughness: 1,
         metalness: 0.1,
         repeatX: 1,
@@ -1833,20 +1596,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'roofing',
     surfaces: ['roof'],
     description: 'Terracotta roof tile finish',
-    previewThumbnailUrl: '/material/roofing/roof_tiles_terracotta/roof_tiles_terracotta_thumb.webp',
+    previewColor: '#c06a45',
     preset: {
-      maps: {
-        albedoMap:
-          '/material/roofing/roof_tiles_terracotta/roof_tiles_terracotta_basecolor_512.ktx2',
-        aoMap: '/material/roofing/roof_tiles_terracotta/roof_tiles_terracotta_ao_512.ktx2',
-        metalnessMap:
-          '/material/roofing/roof_tiles_terracotta/roof_tiles_terracotta_metallic_512.ktx2',
-        normalMap: '/material/roofing/roof_tiles_terracotta/roof_tiles_terracotta_normal_512.ktx2',
-        roughnessMap:
-          '/material/roofing/roof_tiles_terracotta/roof_tiles_terracotta_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#c06a45',
         roughness: 1,
         metalness: 0.1,
         repeatX: 1,
@@ -1875,19 +1629,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'roofing',
     surfaces: ['roof'],
     description: 'Grey composition shingle finish',
-    previewThumbnailUrl: '/material/roofing/roof_shingles_grey/roof_shingles_grey_thumb.webp',
+    previewColor: '#7a7b7d',
     preset: {
-      maps: {
-        albedoMap: '/material/roofing/roof_shingles_grey/roof_shingles_grey_basecolor_512.webp',
-        aoMap: '/material/roofing/roof_shingles_classic/roof_shingles_classic_ao_512.ktx2',
-        metalnessMap:
-          '/material/roofing/roof_shingles_classic/roof_shingles_classic_metallic_512.ktx2',
-        normalMap: '/material/roofing/roof_shingles_classic/roof_shingles_classic_normal_512.ktx2',
-        roughnessMap:
-          '/material/roofing/roof_shingles_classic/roof_shingles_classic_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#7a7b7d',
         roughness: 1,
         metalness: 0.1,
         repeatX: 1,
@@ -1916,22 +1662,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'roofing',
     surfaces: ['roof'],
     description: 'Weathered roof shingle finish',
-    previewThumbnailUrl:
-      '/material/roofing/roof_shingles_weathered/roof_shingles_weathered_thumb.webp',
+    previewColor: '#6d665c',
     preset: {
-      maps: {
-        albedoMap:
-          '/material/roofing/roof_shingles_weathered/roof_shingles_weathered_basecolor_512.ktx2',
-        aoMap: '/material/roofing/roof_shingles_weathered/roof_shingles_weathered_ao_512.ktx2',
-        metalnessMap:
-          '/material/roofing/roof_shingles_weathered/roof_shingles_weathered_metallic_512.ktx2',
-        normalMap:
-          '/material/roofing/roof_shingles_weathered/roof_shingles_weathered_normal_512.ktx2',
-        roughnessMap:
-          '/material/roofing/roof_shingles_weathered/roof_shingles_weathered_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#6d665c',
         roughness: 1,
         metalness: 0.1,
         repeatX: 1,
@@ -3469,14 +3204,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'fabric',
     surfaces: ['furniture', 'wall'],
     description: 'Natural linen weave',
-    previewThumbnailUrl: '/material/fabric/linen_hikari_fabric/linen_hikari_fabric_thumb.webp',
+    previewColor: '#d9d0bf',
     preset: {
-      maps: {
-        albedoMap: '/material/fabric/linen_hikari_fabric/linen_hikari_fabric_basecolor_512.ktx2',
-        normalMap: '/material/fabric/linen_hikari_fabric/linen_hikari_fabric_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#d9d0bf',
         roughness: 0.85,
         metalness: 0,
         repeatX: 2,
@@ -3505,16 +3237,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'fabric',
     surfaces: ['furniture', 'wall'],
     description: 'Plain cotton weave',
-    previewThumbnailUrl: '/material/fabric/blue_cotton/blue_cotton_thumb.webp',
+    previewColor: '#ecebe6',
     preset: {
-      maps: {
-        albedoMap: '/material/fabric/blue_cotton/blue_cotton_basecolor_512.ktx2',
-        normalMap: '/material/fabric/blue_cotton/blue_cotton_normal_512.ktx2',
-        roughnessMap: '/material/fabric/blue_cotton/blue_cotton_roughness_512.ktx2',
-        aoMap: '/material/fabric/blue_cotton/blue_cotton_ao_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#ecebe6',
         roughness: 0.85,
         metalness: 0,
         repeatX: 2,
@@ -3543,16 +3270,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'fabric',
     surfaces: ['furniture'],
     description: 'Velvet with a soft sheen',
-    previewThumbnailUrl: '/material/fabric/red_velvet/red_velvet_thumb.webp',
+    previewColor: '#5a3b4c',
     preset: {
-      maps: {
-        albedoMap: '/material/fabric/red_velvet/red_velvet_basecolor_512.ktx2',
-        normalMap: '/material/fabric/red_velvet/red_velvet_normal_512.ktx2',
-        roughnessMap: '/material/fabric/red_velvet/red_velvet_roughness_512.ktx2',
-        aoMap: '/material/fabric/red_velvet/red_velvet_ao_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#5a3b4c',
         roughness: 0.6,
         metalness: 0,
         repeatX: 2.5,
@@ -3581,16 +3303,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'fabric',
     surfaces: ['furniture'],
     description: 'Matte wool felt',
-    previewThumbnailUrl: '/material/fabric/white_wool/white_wool_thumb.webp',
+    previewColor: '#b8ae9f',
     preset: {
-      maps: {
-        albedoMap: '/material/fabric/white_wool/white_wool_basecolor_512.ktx2',
-        normalMap: '/material/fabric/white_wool/white_wool_normal_512.ktx2',
-        roughnessMap: '/material/fabric/white_wool/white_wool_roughness_512.ktx2',
-        aoMap: '/material/fabric/white_wool/white_wool_ao_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#b8ae9f',
         roughness: 0.9,
         metalness: 0,
         repeatX: 2.5,
@@ -3619,16 +3336,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'fabric',
     surfaces: ['furniture'],
     description: 'Matte suede nap',
-    previewThumbnailUrl: '/material/fabric/suede/suede_thumb.webp',
+    previewColor: '#9a7a5c',
     preset: {
-      maps: {
-        albedoMap: '/material/fabric/suede/suede_basecolor_512.ktx2',
-        normalMap: '/material/fabric/suede/suede_normal_512.ktx2',
-        roughnessMap: '/material/fabric/suede/suede_roughness_512.ktx2',
-        aoMap: '/material/fabric/suede/suede_ao_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#9a7a5c',
         roughness: 0.9,
         metalness: 0,
         repeatX: 2,
@@ -3657,14 +3369,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'fabric',
     surfaces: ['furniture'],
     description: 'Looped bouclé upholstery',
-    previewThumbnailUrl: '/material/fabric/wool_boucle/wool_boucle_thumb.webp',
+    previewColor: '#e6e0d4',
     preset: {
-      maps: {
-        albedoMap: '/material/fabric/wool_boucle/wool_boucle_basecolor_512.ktx2',
-        normalMap: '/material/fabric/wool_boucle/wool_boucle_normal_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#e6e0d4',
         roughness: 0.9,
         metalness: 0,
         repeatX: 3.3,
@@ -3693,15 +3402,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'leather',
     surfaces: ['furniture'],
     description: 'Smooth black leather',
-    previewThumbnailUrl: '/material/leather/black_leather/black_leather_thumb.webp',
+    previewColor: '#2a2826',
     preset: {
-      maps: {
-        albedoMap: '/material/leather/black_leather/black_leather_basecolor_512.ktx2',
-        normalMap: '/material/leather/black_leather/black_leather_normal_512.ktx2',
-        roughnessMap: '/material/leather/black_leather/black_leather_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#2a2826',
         roughness: 0.5,
         metalness: 0,
         repeatX: 1.67,
@@ -3730,16 +3435,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'leather',
     surfaces: ['furniture'],
     description: 'Pebbled calf leather',
-    previewThumbnailUrl: '/material/leather/calf_leather/calf_leather_thumb.webp',
+    previewColor: '#8a5a3a',
     preset: {
-      maps: {
-        albedoMap: '/material/leather/calf_leather/calf_leather_basecolor_512.ktx2',
-        normalMap: '/material/leather/calf_leather/calf_leather_normal_512.ktx2',
-        roughnessMap: '/material/leather/calf_leather/calf_leather_roughness_512.ktx2',
-        aoMap: '/material/leather/calf_leather/calf_leather_ao_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#8a5a3a',
         roughness: 0.5,
         metalness: 0,
         repeatX: 2,
@@ -3768,16 +3468,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'concrete',
     surfaces: ['wall', 'ceiling'],
     description: 'Smooth painted plaster wall',
-    previewThumbnailUrl: '/material/concrete/plaster_painted/plaster_painted_thumb.webp',
+    previewColor: '#e6e2da',
     preset: {
-      maps: {
-        albedoMap: '/material/concrete/plaster_painted/plaster_painted_basecolor_512.ktx2',
-        normalMap: '/material/concrete/plaster_painted/plaster_painted_normal_512.ktx2',
-        roughnessMap: '/material/concrete/plaster_painted/plaster_painted_roughness_512.ktx2',
-        aoMap: '/material/concrete/plaster_painted/plaster_painted_ao_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#e6e2da',
         roughness: 0.85,
         metalness: 0,
         repeatX: 0.67,
@@ -3806,15 +3501,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'concrete',
     surfaces: ['floor', 'wall'],
     description: 'Polished concrete floor',
-    previewThumbnailUrl: '/material/concrete/concrete_polished/concrete_polished_thumb.webp',
+    previewColor: '#a9a8a3',
     preset: {
-      maps: {
-        albedoMap: '/material/concrete/concrete_polished/concrete_polished_basecolor_512.ktx2',
-        normalMap: '/material/concrete/concrete_polished/concrete_polished_normal_512.ktx2',
-        roughnessMap: '/material/concrete/concrete_polished/concrete_polished_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#a9a8a3',
         roughness: 0.5,
         metalness: 0,
         repeatX: 0.5,
@@ -3843,16 +3534,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'concrete',
     surfaces: ['wall', 'floor', 'outdoor'],
     description: 'Board-formed raw concrete',
-    previewThumbnailUrl: '/material/concrete/concrete_raw/concrete_raw_thumb.webp',
+    previewColor: '#9b9a95',
     preset: {
-      maps: {
-        albedoMap: '/material/concrete/concrete_raw/concrete_raw_basecolor_512.ktx2',
-        normalMap: '/material/concrete/concrete_raw/concrete_raw_normal_512.ktx2',
-        roughnessMap: '/material/concrete/concrete_raw/concrete_raw_roughness_512.ktx2',
-        aoMap: '/material/concrete/concrete_raw/concrete_raw_ao_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#9b9a95',
         roughness: 0.8,
         metalness: 0,
         repeatX: 0.5,
@@ -3881,16 +3567,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'concrete',
     surfaces: ['wall', 'floor'],
     description: 'Smooth cast concrete plate',
-    previewThumbnailUrl: '/material/concrete/concrete_plate/concrete_plate_thumb.webp',
+    previewColor: '#8f8e8a',
     preset: {
-      maps: {
-        albedoMap: '/material/concrete/concrete_plate/concrete_plate_basecolor_512.ktx2',
-        normalMap: '/material/concrete/concrete_plate/concrete_plate_normal_512.ktx2',
-        roughnessMap: '/material/concrete/concrete_plate/concrete_plate_roughness_512.ktx2',
-        aoMap: '/material/concrete/concrete_plate/concrete_plate_ao_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#8f8e8a',
         roughness: 0.8,
         metalness: 0,
         repeatX: 0.5,
@@ -3919,16 +3600,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'concrete',
     surfaces: ['wall', 'outdoor'],
     description: 'Exterior stucco render',
-    previewThumbnailUrl: '/material/concrete/white_stucco/white_stucco_thumb.webp',
+    previewColor: '#eeebe4',
     preset: {
-      maps: {
-        albedoMap: '/material/concrete/white_stucco/white_stucco_basecolor_512.ktx2',
-        normalMap: '/material/concrete/white_stucco/white_stucco_normal_512.ktx2',
-        roughnessMap: '/material/concrete/white_stucco/white_stucco_roughness_512.ktx2',
-        aoMap: '/material/concrete/white_stucco/white_stucco_ao_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#eeebe4',
         roughness: 0.9,
         metalness: 0,
         repeatX: 1,
@@ -3957,16 +3633,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'concrete',
     surfaces: ['wall', 'ceiling'],
     description: 'Smooth prepared drywall ready for paint',
-    previewThumbnailUrl: '/material/concrete/prepared_drywall/prepared_drywall_thumb.webp',
+    previewColor: '#e2e0db',
     preset: {
-      maps: {
-        albedoMap: '/material/concrete/prepared_drywall/prepared_drywall_basecolor_512.ktx2',
-        normalMap: '/material/concrete/prepared_drywall/prepared_drywall_normal_512.ktx2',
-        roughnessMap: '/material/concrete/prepared_drywall/prepared_drywall_roughness_512.ktx2',
-        aoMap: '/material/concrete/prepared_drywall/prepared_drywall_ao_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#e2e0db',
         roughness: 0.9,
         metalness: 0,
         repeatX: 0.5,
@@ -3995,16 +3666,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'metal',
     surfaces: ['furniture', 'wall'],
     description: 'Warm copper',
-    previewThumbnailUrl: '/material/metal/copper_metal/copper_metal_thumb.webp',
+    previewColor: '#b87333',
     preset: {
-      maps: {
-        albedoMap: '/material/metal/copper_metal/copper_metal_basecolor_512.ktx2',
-        normalMap: '/material/metal/copper_metal/copper_metal_normal_512.ktx2',
-        roughnessMap: '/material/metal/copper_metal/copper_metal_roughness_512.ktx2',
-        metalnessMap: '/material/metal/copper_metal/copper_metal_metallic_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#b87333',
         roughness: 0.4,
         metalness: 0.6,
         repeatX: 1,
@@ -4033,17 +3699,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'metal',
     surfaces: ['furniture', 'wall'],
     description: 'Polished stainless steel',
-    previewThumbnailUrl: '/material/metal/polished_metal/polished_metal_thumb.webp',
+    previewColor: '#d6d8db',
     preset: {
-      maps: {
-        albedoMap: '/material/metal/polished_metal/polished_metal_basecolor_512.ktx2',
-        normalMap: '/material/metal/polished_metal/polished_metal_normal_512.ktx2',
-        roughnessMap: '/material/metal/polished_metal/polished_metal_roughness_512.ktx2',
-        aoMap: '/material/metal/polished_metal/polished_metal_ao_512.ktx2',
-        metalnessMap: '/material/metal/polished_metal/polished_metal_metallic_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#d6d8db',
         roughness: 0.3,
         metalness: 0.6,
         repeatX: 1,
@@ -4072,19 +3732,11 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     category: 'metal',
     surfaces: ['furniture', 'wall'],
     description: 'Brushed stainless steel',
-    previewThumbnailUrl:
-      '/material/metal/stainless_steel_brushed/stainless_steel_brushed_thumb.webp',
+    previewColor: '#b4b8bc',
     preset: {
-      maps: {
-        albedoMap:
-          '/material/metal/stainless_steel_brushed/stainless_steel_brushed_basecolor_512.ktx2',
-        normalMap:
-          '/material/metal/stainless_steel_brushed/stainless_steel_brushed_normal_512.ktx2',
-        roughnessMap:
-          '/material/metal/stainless_steel_brushed/stainless_steel_brushed_roughness_512.ktx2',
-      },
+      maps: {},
       mapProperties: {
-        color: '#ffffff',
+        color: '#b4b8bc',
         roughness: 0.45,
         metalness: 0.6,
         repeatX: 1,
@@ -4192,9 +3844,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     description: 'Exterior clapboard lap siding, painted white',
     previewColor: '#e9e9e9',
     preset: {
-      maps: {
-        albedoMap: '/material/siding/lap_albedo_512.webp',
-      },
+      maps: {},
       mapProperties: {
         color: '#e9e9e9',
         roughness: 0.85,
@@ -4227,9 +3877,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     description: 'Exterior clapboard lap siding, painted greige',
     previewColor: '#c8c1b8',
     preset: {
-      maps: {
-        albedoMap: '/material/siding/lap_albedo_512.webp',
-      },
+      maps: {},
       mapProperties: {
         color: '#c8c1b8',
         roughness: 0.85,
@@ -4262,9 +3910,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     description: 'Exterior clapboard lap siding, painted gray',
     previewColor: '#8b8a86',
     preset: {
-      maps: {
-        albedoMap: '/material/siding/lap_albedo_512.webp',
-      },
+      maps: {},
       mapProperties: {
         color: '#8b8a86',
         roughness: 0.85,
@@ -4297,9 +3943,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     description: 'Exterior clapboard lap siding, painted sage',
     previewColor: '#bcc5b2',
     preset: {
-      maps: {
-        albedoMap: '/material/siding/lap_albedo_512.webp',
-      },
+      maps: {},
       mapProperties: {
         color: '#bcc5b2',
         roughness: 0.85,
@@ -4332,9 +3976,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     description: 'Exterior clapboard lap siding, stained cedar',
     previewColor: '#b5825a',
     preset: {
-      maps: {
-        albedoMap: '/material/siding/lap_albedo_512.webp',
-      },
+      maps: {},
       mapProperties: {
         color: '#b5825a',
         roughness: 0.85,
@@ -4367,9 +4009,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     description: 'Exterior clapboard lap siding, painted forest',
     previewColor: '#4f6b57',
     preset: {
-      maps: {
-        albedoMap: '/material/siding/lap_albedo_512.webp',
-      },
+      maps: {},
       mapProperties: {
         color: '#4f6b57',
         roughness: 0.85,
@@ -4402,9 +4042,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     description: 'Exterior clapboard lap siding, painted navy',
     previewColor: '#2f4865',
     preset: {
-      maps: {
-        albedoMap: '/material/siding/lap_albedo_512.webp',
-      },
+      maps: {},
       mapProperties: {
         color: '#2f4865',
         roughness: 0.85,
@@ -4437,9 +4075,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     description: 'Exterior clapboard lap siding, painted yellow',
     previewColor: '#f2e3b3',
     preset: {
-      maps: {
-        albedoMap: '/material/siding/lap_albedo_512.webp',
-      },
+      maps: {},
       mapProperties: {
         color: '#f2e3b3',
         roughness: 0.85,
@@ -4472,9 +4108,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     description: 'Exterior clapboard lap siding, painted nearblack',
     previewColor: '#232322',
     preset: {
-      maps: {
-        albedoMap: '/material/siding/lap_albedo_512.webp',
-      },
+      maps: {},
       mapProperties: {
         color: '#5c5c59',
         roughness: 0.85,
@@ -4507,9 +4141,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     description: 'Exterior clapboard lap siding, painted clay',
     previewColor: '#8f4a2e',
     preset: {
-      maps: {
-        albedoMap: '/material/siding/lap_albedo_512.webp',
-      },
+      maps: {},
       mapProperties: {
         color: '#8f4a2e',
         roughness: 0.85,
@@ -4542,9 +4174,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     description: 'Exterior board-and-batten siding, painted cream',
     previewColor: '#efe3cc',
     preset: {
-      maps: {
-        albedoMap: '/material/siding/batten_albedo_512.webp',
-      },
+      maps: {},
       mapProperties: {
         color: '#efe3cc',
         roughness: 0.85,
@@ -4577,9 +4207,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     description: 'Exterior board-and-batten siding, painted sand',
     previewColor: '#ddccae',
     preset: {
-      maps: {
-        albedoMap: '/material/siding/batten_albedo_512.webp',
-      },
+      maps: {},
       mapProperties: {
         color: '#ddccae',
         roughness: 0.85,
@@ -4612,9 +4240,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     description: 'Exterior board-and-batten siding, painted charcoal',
     previewColor: '#4e5257',
     preset: {
-      maps: {
-        albedoMap: '/material/siding/batten_albedo_512.webp',
-      },
+      maps: {},
       mapProperties: {
         color: '#4e5257',
         roughness: 0.85,
@@ -4647,9 +4273,7 @@ export const MATERIAL_CATALOG: MaterialCatalogItem[] = [
     description: 'Exterior board-and-batten siding, painted olive',
     previewColor: '#8d9368',
     preset: {
-      maps: {
-        albedoMap: '/material/siding/batten_albedo_512.webp',
-      },
+      maps: {},
       mapProperties: {
         color: '#8d9368',
         roughness: 0.85,
