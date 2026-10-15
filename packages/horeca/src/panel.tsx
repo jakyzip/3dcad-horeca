@@ -1,7 +1,11 @@
 'use client'
 
 import { nodeRegistry, useScene } from '@pascal-app/core'
-import { useEditor } from '@pascal-app/editor'
+import {
+  collectSheetGeometry,
+  useEditor,
+  useFloorplanAnnotationVisibility,
+} from '@pascal-app/editor'
 import { useViewer } from '@pascal-app/viewer'
 import { type ChangeEvent, useMemo, useRef, useState } from 'react'
 import { type CatalogArticle, parseCatalogFile } from './catalog'
@@ -22,9 +26,10 @@ import {
   distintaCsv,
   distintaHash,
 } from './distinta'
+import { planToDxf, zoneLabelEntries } from './dxf-export'
 import { parseDxfRilievo } from './dxf-import'
 import { useHorecaLabels } from './labels'
-import { RilievoNode } from './rilievo'
+import { RILIEVO, RilievoNode } from './rilievo'
 
 function armTool(kind: string, defaults: Record<string, unknown> | null = null) {
   const editor = useEditor.getState()
@@ -122,9 +127,40 @@ function RilievoSection() {
     }
   }
 
+  const [withRilievo, setWithRilievo] = useState(false)
+
+  /** The active level as the 2D plan draws it for documents, in millimetres. */
+  const exportDxf = () => {
+    if (!levelId) return
+    const { nodes } = useScene.getState()
+    const entries = collectSheetGeometry({
+      nodes: nodes as never,
+      levelId,
+      drawingType: 'floor-plan',
+      annotationVisibility: useFloorplanAnnotationVisibility.getState().visibility,
+      unit: 'metric',
+      metricNotation: useViewer.getState().metricNotation,
+      accept: (node) => withRilievo || (node.type as string) !== RILIEVO,
+    })
+    if (entries.length === 0) {
+      setMessage({ text: 'Il piano è vuoto: niente da esportare.', error: true })
+      return
+    }
+    const levelName = (nodes[levelId] as { name?: string } | undefined)?.name?.trim() || 'piano'
+    download(
+      `pianta-${levelName.replace(/[^\w-]+/g, '_')}.dxf`,
+      'application/dxf',
+      planToDxf([...entries, ...zoneLabelEntries(nodes, levelId)]),
+    )
+    setMessage({
+      text: 'Pianta esportata in millimetri, un layer per tipo di elemento.',
+      error: false,
+    })
+  }
+
   return (
     <section className="flex flex-col gap-2">
-      <h3 className={HEADING}>Rilievo</h3>
+      <h3 className={HEADING}>Rilievo e DXF</h3>
       <input accept=".dxf,.dwg" className="hidden" onChange={onFile} ref={fileInput} type="file" />
       <button
         className={BUTTON}
@@ -134,6 +170,17 @@ function RilievoSection() {
       >
         {busy ? 'Lettura in corso…' : 'Importa rilievo DXF'}
       </button>
+      <button className={BUTTON} disabled={!levelId} onClick={exportDxf} type="button">
+        Esporta pianta in DXF
+      </button>
+      <label className="flex cursor-pointer items-center gap-2 text-xs">
+        <input
+          checked={withRilievo}
+          onChange={(e) => setWithRilievo(e.target.checked)}
+          type="checkbox"
+        />
+        Includi il rilievo nell’export
+      </label>
       {message && (
         <p className={`text-xs ${message.error ? 'text-amber-500' : 'opacity-80'}`}>
           {message.text}

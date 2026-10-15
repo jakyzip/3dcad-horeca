@@ -114,7 +114,7 @@ Dal render di riferimento (laboratorio di gelateria): tavolo su gambe (ripiano s
 ### 2e. Etichette 3D (fatto, da provare nell'editor)
 Sopra ogni attrezzatura, nella vista 3D, compare il nome: quello dell'articolo, altrimenti il nome dato all'oggetto, altrimenti il tipo ("Mantecatore"). Si accendono e spengono dal pannello Ho.Re.Ca ("Mostra i nomi delle attrezzature nel 3D"); la scelta resta salvata nel browser. Le etichette seguono l'oggetto quando lo sposti e spariscono se lo nascondi. Non finiscono negli export GLB/PDF (sono testo della pagina, non geometria). Codice: `packages/horeca/src/labels.ts` e `labels-3d.tsx`.
 
-Stato al 2026-10-15: forme 2c e piastrelle 2d committate (`1a999d5`); etichette 2e committate sul branch `fase-2c-forme`. Fase 3a (import DXF) committata sul branch `fase-3-dxf`; 3b (export DXF) in corso. Catalogo dal CRM (2b) provato dall'utente con un account vero: funziona. `bun run ci` passa. Prova a mano nell'editor ancora da fare per 2c, 2d e 2e.
+Stato al 2026-10-15: forme 2c e piastrelle 2d committate (`1a999d5`); etichette 2e committate sul branch `fase-2c-forme`. Fase 3a (import DXF) committata sul branch `fase-3-dxf`; 3b (export DXF) e 3c (muri e quote dal rilievo) committate; fase 4 in corso. Catalogo dal CRM (2b) provato dall'utente con un account vero: funziona. `bun run ci` passa. Prova a mano nell'editor ancora da fare per 2c, 2d e 2e.
 
 ## Fase 3: rilievo e DXF
 
@@ -132,10 +132,23 @@ Pannello Ho.Re.Ca → "Importa rilievo DXF". Il disegno diventa un oggetto "Rili
 - resta fuori dalla distinta e dagli export (GLB, PDF).
 Esempio per provare: `docs/progetto/esempio-rilievo.dxf` (laboratorio inventato 7 × 5 m, rigenerabile con `bun packages/horeca/scripts/genera-esempio-dxf.ts`).
 
-Da fare dopo la prova: trasformare le quote del DXF in quote dell'editor (nodo `measurement`, che però non ha scostamento né testo forzato); muri dal rilievo (scegliere due linee → muro).
+### 3c. Muri e quote dal rilievo (fatto, da provare nell'editor)
+Nelle proprietà del rilievo, gruppo "Usa il rilievo" (`rilievo-walls.ts`, `rilievo-actions.ts`, `rilievo-tools-field.tsx`); ogni pulsante è un solo passo di annulla:
+- **Crea muri dalle linee**: sui layer accesi cerca coppie di linee parallele a 5–60 cm (le due facce di un muro), crea il muro sull'asse con quello spessore, unisce angoli e incroci a T, lascia i vani delle aperture. I lati interno/esterno li classifica poi l'editor, come per i muri disegnati a mano. Limite: le linee dentro un muro sullo stesso layer (vetri delle finestre, davanzali) vengono prese per facce, quindi vanno accesi solo i layer dei muri. Scelto così perché un corridoio stretto tra due muri sottili resti due muri.
+- **Trasforma le quote in quote dell'editor**: le quote dei layer accesi diventano quote tecniche dell'editor (`construction-dimension`: stessi punti misurati, stessa linea di quota), modificabili ed esportate in DXF/PDF; il rilievo smette di disegnarle.
+Provato senza interfaccia sull'esempio: 5 muri da 30 cm che coincidono col disegno (porta compresa) e 4 quote nelle stesse posizioni.
 
-### 3b. Export della pianta in DXF (da fare)
-Muri, attrezzature (con codice articolo), testi e quote. Attenzione: `@tarikjabiri/dxf` 2.9.0 sbaglia la posizione della linea di quota nelle quote allineate (`addAlignedDim`); le lineari (`addLinearDim`, anche con angolo) sono giuste. Per le quote oblique serve scrivere l'entità a mano o aggirare il problema.
+### 3b. Export della pianta in DXF (fatto, da provare nell'editor e in un CAD)
+Pannello Ho.Re.Ca → "Esporta pianta in DXF": il piano attivo come lo disegna l'editor per i documenti (`collectSheetGeometry`, la stessa raccolta dell'export a fogli), convertito in `packages/horeca/src/dxf-export.ts`:
+- millimetri (`$INSUNITS` = mm), un layer per tipo: MURI, APERTURE, SOLAI, AMBIENTI, SCALE, PILASTRI, ARREDI, ATTREZZATURE, QUOTE, TESTI, RILIEVO, ALTRO;
+- muri con lo spessore vero, tagliati nei vani di porte e finestre con le spallette; archi e curve spezzati in tratti brevi (`svg-path.ts`);
+- quote automatiche dei muri e quote manuali come vere entità DIMENSION, ciascuna con il suo blocco disegnato (`*D1`, `*D2`…), così si vedono anche nei programmi che non ricalcolano le quote; testo della quota uguale a quello dell'editor;
+- nome e superficie di ogni ambiente al centro (sui documenti l'editor li lascia all'impaginazione, quindi li scrive l'export);
+- attrezzature con il loro codice articolo; il rilievo resta fuori, salvo spuntare "Includi il rilievo nell'export".
+Le quote allineate non usano il calcolo dello scostamento di `@tarikjabiri/dxf` 2.9.0 (sbagliato): il punto della linea di quota è passato direttamente.
+Provato senza interfaccia su una scena di prova (stanza 6 × 4 m, porta, ambiente, banco frigo): riletto con l'import 3a, misure e posizioni tornano. Non ancora aperto in AutoCAD o LibreCAD.
+
+Limiti noti: niente campiture (i muri sono contorni, non pieni); niente quote del rilievo convertite in quote dell'editor; le scale e gli oggetti di libreria escono come li disegna il foglio, senza blocchi DXF riutilizzabili.
 
 ## Fase 4: collegamento al CRM
 
