@@ -114,7 +114,7 @@ Dal render di riferimento (laboratorio di gelateria): tavolo su gambe (ripiano s
 ### 2e. Etichette 3D (fatto, da provare nell'editor)
 Sopra ogni attrezzatura, nella vista 3D, compare il nome: quello dell'articolo, altrimenti il nome dato all'oggetto, altrimenti il tipo ("Mantecatore"). Si accendono e spengono dal pannello Ho.Re.Ca ("Mostra i nomi delle attrezzature nel 3D"); la scelta resta salvata nel browser. Le etichette seguono l'oggetto quando lo sposti e spariscono se lo nascondi. Non finiscono negli export GLB/PDF (sono testo della pagina, non geometria). Codice: `packages/horeca/src/labels.ts` e `labels-3d.tsx`.
 
-Stato al 2026-10-15: forme 2c e piastrelle 2d committate (`1a999d5`); etichette 2e committate sul branch `fase-2c-forme`. Fase 3a (import DXF) committata sul branch `fase-3-dxf`; 3b (export DXF) e 3c (muri e quote dal rilievo) committate; fase 4 in corso. Catalogo dal CRM (2b) provato dall'utente con un account vero: funziona. `bun run ci` passa. Prova a mano nell'editor ancora da fare per 2c, 2d e 2e.
+Stato al 2026-10-15: forme 2c e piastrelle 2d committate (`1a999d5`); etichette 2e committate sul branch `fase-2c-forme`. Fase 3a (import DXF) committata sul branch `fase-3-dxf`; 3b (export DXF) e 3c (muri e quote dal rilievo) committate; fase 4a (invio distinta al CRM) committata; fase 5 in corso. Catalogo dal CRM (2b) provato dall'utente con un account vero: funziona. `bun run ci` passa. Prova a mano nell'editor ancora da fare per 2c, 2d e 2e.
 
 ## Fase 3: rilievo e DXF
 
@@ -152,7 +152,15 @@ Limiti noti: niente campiture (i muri sono contorni, non pieni); niente quote de
 
 ## Fase 4: collegamento al CRM
 
-Due strade già presenti: le API `apps/editor/app/api/scenes` e il server MCP (`packages/mcp`, salvataggio SQLite). Definire con l'utente il formato (JSON con righe distinta, cliente, totale) e un endpoint che il CRM può chiamare.
+### 4a. Invio della distinta (fatto, da provare con il CRM vero)
+Contratto: `crm_donà/docs/disegni-cad.md` (schema 1), lo stesso del CAD in Rust. Pannello Ho.Re.Ca → "Invia al CRM" (`crm-send.tsx`, `crm.ts`, `crm-link.ts`, `plan-image.ts`):
+- serve l'accesso al CRM (sezione CRM in alto);
+- **collega il disegno**: cerca il cliente (almeno 2 lettere, `accounts`), scegli una trattativa aperta (`v_deals`, `outcome = open`); cliente, trattativa e `drawing_id` restano nel progetto (metadati del nodo `site`, altrimenti `building`). Stesso cliente → stesso `drawing_id`, quindi reinviare aggiorna lo stesso disegno nel CRM; un cliente diverso → nuovo `drawing_id` (come il CAD in Rust);
+- **Invia distinta al CRM**: `rpc('invia_distinta', { p })`, senza prezzi, solo articoli con ID CRM. Se la distinta è cambiata, carica l'immagine della pianta del piano attivo (PNG 2400 × 1600, stessa raccolta dell'export DXF) in `crm-files` al `preview_path` restituito, con `x-upsert`. Un errore sull'immagine non annulla l'invio;
+- mostra "Nessuna novità" se il CRM aveva già questa distinta per quella trattativa, e l'elenco degli articoli che il CRM non trova nel catalogo (`non_trovati`).
+Provato solo con un server finto nei test (richieste, intestazioni e risposte); l'invio vero scrive nel CRM, quindi va provato dall'utente.
+
+Due copie dello stesso progetto collegate allo stesso cliente hanno lo stesso `drawing_id` e si sovrascrivono nel CRM (come nel CAD in Rust). Per una copia da tenere separata: "Nuovo disegno nel CRM" (con conferma) dà al progetto un nuovo `drawing_id`, stesso cliente e trattativa.
 
 ## Fase 5: render
 

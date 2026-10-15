@@ -1,6 +1,16 @@
 import { describe, expect, test } from 'bun:test'
 import type { CatalogArticle } from './catalog'
-import { type CrmSession, crmLogin, fetchCrmCatalog, mergeCrmCatalog } from './crm'
+import {
+  type CrmSession,
+  crmLogin,
+  fetchCrmCatalog,
+  mergeCrmCatalog,
+  openCrmDeals,
+  searchCrmAccounts,
+  sendDistinta,
+  uploadCrmPreview,
+} from './crm'
+import type { InviaDistintaPayload } from './distinta'
 
 const config = { url: 'https://crm.example.supabase.co/', key: 'sb_publishable_test' }
 const A = 'a0000000-0000-4000-8000-000000000001'
@@ -165,5 +175,88 @@ describe('mergeCrmCatalog', () => {
       removed: [B],
     })
     expect(merged.map((a) => a.code)).toEqual(['FILE', 'NEW'])
+  })
+})
+
+describe('sending the distinta', () => {
+  const session: CrmSession = {
+    access_token: 't1',
+    refresh_token: 'r1',
+    expires_at: 99_999,
+    email: 'x',
+  }
+  const payload: InviaDistintaPayload = {
+    schema: 1,
+    drawing_id: 'd0000000-0000-4000-8000-000000000004',
+    name: 'Laboratorio',
+    account_id: A,
+    deal_id: B,
+    items_hash: 'a'.repeat(64),
+    items: [{ item_id: CAT, code: 'BF-150', name: 'Banco frigo', quantity: 2 }],
+  }
+
+  test('customers by name, with PostgREST syntax stripped', async () => {
+    const { calls, fetchImpl } = fakeFetch(() => ({
+      status: 200,
+      body: [{ id: A, name: 'Bar', city: 'Treviso' }],
+    }))
+    const { accounts } = await searchCrmAccounts(config, session, 'Bar (Rossi), *', {
+      fetchImpl,
+      now: 0,
+    })
+    expect(accounts[0]!.name).toBe('Bar')
+    expect(decodeURIComponent(calls[0]!.url)).toContain(
+      '/rest/v1/accounts?select=id,name,city&name=ilike.*Bar  Rossi*&order=name',
+    )
+    expect(calls[0]!.init.headers).toMatchObject({ Authorization: 'Bearer t1' })
+  })
+
+  test('open deals of a customer', async () => {
+    const { calls, fetchImpl } = fakeFetch(() => ({ status: 200, body: [] }))
+    await openCrmDeals(config, session, A, { fetchImpl, now: 0 })
+    expect(calls[0]!.url).toContain(
+      `/rest/v1/v_deals?select=id,title,stage_name&account_id=eq.${A}&outcome=eq.open`,
+    )
+  })
+
+  test('posts { p } to the rpc and reads the answer', async () => {
+    const { calls, fetchImpl } = fakeFetch(() => ({
+      status: 200,
+      body: { changed: true, preview_path: 'org/disegni/d/pianta.png', non_trovati: [CAT] },
+    }))
+    const { result } = await sendDistinta(config, session, payload, { fetchImpl, now: 0 })
+    expect(result).toEqual({
+      changed: true,
+      preview_path: 'org/disegni/d/pianta.png',
+      non_trovati: [CAT],
+    })
+    expect(calls[0]!.url).toBe('https://crm.example.supabase.co/rest/v1/rpc/invia_distinta')
+    expect(calls[0]!.init.method).toBe('POST')
+    expect(JSON.parse(String(calls[0]!.init.body))).toEqual({ p: payload })
+  })
+
+  test('a refusal comes back with the CRM’s words', async () => {
+    const { fetchImpl } = fakeFetch(() => ({
+      status: 404,
+      body: { code: 'P0002', message: 'Trattativa non trovata' },
+    }))
+    await expect(sendDistinta(config, session, payload, { fetchImpl, now: 0 })).rejects.toThrow(
+      'Trattativa non trovata',
+    )
+  })
+
+  test('the plan picture is upserted at the given path', async () => {
+    const { calls, fetchImpl } = fakeFetch(() => ({ status: 200, body: { Key: 'x' } }))
+    await uploadCrmPreview(config, session, '/org 1/disegni/d/pianta.png', new Blob(['png']), {
+      fetchImpl,
+      now: 0,
+    })
+    expect(calls[0]!.url).toBe(
+      'https://crm.example.supabase.co/storage/v1/object/crm-files/org%201/disegni/d/pianta.png',
+    )
+    expect(calls[0]!.init.headers).toMatchObject({
+      'Content-Type': 'image/png',
+      'x-upsert': 'true',
+    })
   })
 })

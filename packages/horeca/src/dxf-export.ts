@@ -73,10 +73,11 @@ function compose(m: Matrix, translate: FloorplanPoint = [0, 0], rotate = 0): Mat
 }
 
 const MM = 1000
-const TICK = 0.06
-const DIM_TEXT = 0.12
+export const TICK = 0.06
+export const DIM_TEXT = 0.12
 
-type Writer = {
+/** What a plan is drawn onto: the DXF file here, a picture in `plan-image.ts`. */
+export type PlanWriter = {
   /** A white fill an opening lays over its wall in the plan: the wall lines are cut there. */
   mask: (points: readonly FloorplanPoint[]) => void
   line: (layer: string, a: FloorplanPoint, b: FloorplanPoint) => void
@@ -199,13 +200,13 @@ export function cutWalls(
   return out
 }
 
-function createWriter(dxf: DxfWriter): Writer & { finish: () => void } {
+function createWriter(dxf: DxfWriter): PlanWriter & { finish: () => void } {
   // Plan (metres, y down) → DXF (millimetres, y up).
   const p3 = (p: FloorplanPoint) => point3d(round(p[0] * MM), round(-p[1] * MM), 0)
   const round = (v: number) => Math.round(v * 100) / 100
   let dimensionCount = 0
 
-  const text: Writer['text'] = (layer, at, height, value, angle, anchor, baseline) => {
+  const text: PlanWriter['text'] = (layer, at, height, value, angle, anchor, baseline) => {
     const clean = value.replace(/\s+/g, ' ').trim()
     if (!clean) return
     const horizontal =
@@ -337,7 +338,7 @@ function createWriter(dxf: DxfWriter): Writer & { finish: () => void } {
   }
 }
 
-function emit(geometry: FloorplanGeometry, m: Matrix, layer: string, w: Writer) {
+function emit(geometry: FloorplanGeometry, m: Matrix, layer: string, w: PlanWriter) {
   const at = (p: FloorplanPoint): FloorplanPoint => [
     m[0] * p[0] + m[2] * p[1] + m[4],
     m[1] * p[0] + m[3] * p[1] + m[5],
@@ -434,11 +435,8 @@ function emit(geometry: FloorplanGeometry, m: Matrix, layer: string, w: Writer) 
   }
 }
 
-export function planToDxf(entries: readonly DxfExportEntry[]): string {
-  const dxf = new DxfWriter()
-  dxf.setUnits(Units.Millimeters)
-  for (const [name, color] of Object.entries(LAYERS)) dxf.addLayer(name, color)
-  const w = createWriter(dxf)
+/** Every entry onto `w`, each kind on its layer. */
+export function drawPlan(entries: readonly DxfExportEntry[], w: PlanWriter): void {
   for (const entry of entries) {
     const layer = layerForKind(entry.type)
     if (entry.model) emit(entry.model, IDENTITY, layer, w)
@@ -446,6 +444,14 @@ export function planToDxf(entries: readonly DxfExportEntry[]): string {
     if (entry.annotations)
       emit(entry.annotations, IDENTITY, layer === 'QUOTE' ? 'QUOTE' : 'TESTI', w)
   }
+}
+
+export function planToDxf(entries: readonly DxfExportEntry[]): string {
+  const dxf = new DxfWriter()
+  dxf.setUnits(Units.Millimeters)
+  for (const [name, color] of Object.entries(LAYERS)) dxf.addLayer(name, color)
+  const w = createWriter(dxf)
+  drawPlan(entries, w)
   w.finish()
   return dxf.stringify()
 }

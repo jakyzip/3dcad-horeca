@@ -1,11 +1,7 @@
 'use client'
 
 import { nodeRegistry, useScene } from '@pascal-app/core'
-import {
-  collectSheetGeometry,
-  useEditor,
-  useFloorplanAnnotationVisibility,
-} from '@pascal-app/editor'
+import { useEditor } from '@pascal-app/editor'
 import { useViewer } from '@pascal-app/viewer'
 import { type ChangeEvent, useMemo, useRef, useState } from 'react'
 import { type CatalogArticle, parseCatalogFile } from './catalog'
@@ -17,6 +13,7 @@ import {
   useHorecaCatalog,
 } from './catalog-store'
 import { crmConfigFromEnv } from './crm'
+import { CrmSendSection } from './crm-send'
 import { EQUIPMENT_KINDS } from './definitions'
 import {
   buildDistinta,
@@ -26,10 +23,11 @@ import {
   distintaCsv,
   distintaHash,
 } from './distinta'
-import { planToDxf, zoneLabelEntries } from './dxf-export'
+import { planToDxf } from './dxf-export'
 import { parseDxfRilievo } from './dxf-import'
 import { useHorecaLabels } from './labels'
-import { RILIEVO, RilievoNode } from './rilievo'
+import { levelPlanEntries } from './plan-entries'
+import { RilievoNode } from './rilievo'
 
 function armTool(kind: string, defaults: Record<string, unknown> | null = null) {
   const editor = useEditor.getState()
@@ -132,25 +130,17 @@ function RilievoSection() {
   /** The active level as the 2D plan draws it for documents, in millimetres. */
   const exportDxf = () => {
     if (!levelId) return
-    const { nodes } = useScene.getState()
-    const entries = collectSheetGeometry({
-      nodes: nodes as never,
-      levelId,
-      drawingType: 'floor-plan',
-      annotationVisibility: useFloorplanAnnotationVisibility.getState().visibility,
-      unit: 'metric',
-      metricNotation: useViewer.getState().metricNotation,
-      accept: (node) => withRilievo || (node.type as string) !== RILIEVO,
-    })
+    const entries = levelPlanEntries(levelId, withRilievo)
     if (entries.length === 0) {
       setMessage({ text: 'Il piano è vuoto: niente da esportare.', error: true })
       return
     }
-    const levelName = (nodes[levelId] as { name?: string } | undefined)?.name?.trim() || 'piano'
+    const levelName =
+      (useScene.getState().nodes[levelId] as { name?: string } | undefined)?.name?.trim() || 'piano'
     download(
       `pianta-${levelName.replace(/[^\w-]+/g, '_')}.dxf`,
       'application/dxf',
-      planToDxf([...entries, ...zoneLabelEntries(nodes, levelId)]),
+      planToDxf(entries),
     )
     setMessage({
       text: 'Pianta esportata in millimetri, un layer per tipo di elemento.',
@@ -485,7 +475,7 @@ function DistintaSection() {
       )}
       {distinta.local.length > 0 && (
         <p className="text-amber-500 text-xs">
-          Gli articoli non nel CRM sono nel CSV e nel PDF, ma non nel JSON per il CRM.
+          Gli articoli non nel CRM sono nel CSV e nel PDF, ma non vengono inviati al CRM.
         </p>
       )}
       {distinta.invalid > 0 && (
@@ -559,6 +549,7 @@ export default function HorecaPanel() {
         <LabelsToggle />
       </section>
       <DistintaSection />
+      <CrmSendSection />
     </div>
   )
 }

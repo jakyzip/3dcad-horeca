@@ -1,4 +1,5 @@
 import type { CatalogArticle } from './catalog'
+import type { InviaDistintaPayload } from './distinta'
 
 /**
  * Read access to the user's CRM (`crm_donà`, Supabase): sign-in and the article catalog. Same
@@ -44,17 +45,29 @@ const nowSeconds = (options: Options) => options.now ?? Math.floor(Date.now() / 
 async function send(
   config: CrmConfig,
   path: string,
-  init: { method?: string; token?: string; body?: unknown },
+  init: {
+    method?: string
+    token?: string
+    body?: unknown
+    raw?: { data: Blob; type: string }
+    headers?: Record<string, string>
+  },
   options: Options,
 ): Promise<Response> {
-  const headers: Record<string, string> = { apikey: config.key }
+  const headers: Record<string, string> = { apikey: config.key, ...init.headers }
   if (init.token) headers.Authorization = `Bearer ${init.token}`
   if (init.body !== undefined) headers['Content-Type'] = 'application/json'
+  if (init.raw) headers['Content-Type'] = init.raw.type
+  const body = init.raw
+    ? init.raw.data
+    : init.body !== undefined
+      ? JSON.stringify(init.body)
+      : undefined
   try {
     return await (options.fetchImpl ?? fetch)(`${base(config)}${path}`, {
       method: init.method ?? 'GET',
       headers,
-      ...(init.body !== undefined ? { body: JSON.stringify(init.body) } : {}),
+      ...(body !== undefined ? { body } : {}),
     })
   } catch {
     throw new CrmError('Il CRM non risponde: controlla la connessione.', 'network')
@@ -116,36 +129,40 @@ export function crmLogin(
   return token(config, 'password', { email: email.trim(), password }, options)
 }
 
+type AuthedInit = Omit<Parameters<typeof send>[2], 'token'>
+
 /**
- * An authenticated GET: refreshes a session that expires within a minute, and after a 401 refreshes
- * and retries once. Returns the session in use, which may be new.
+ * An authenticated request: refreshes a session that expires within a minute, and after a 401
+ * refreshes and retries once. Returns the session in use, which may be new, and the response.
  */
+async function authed(
+  config: CrmConfig,
+  session: CrmSession,
+  path: string,
+  init: AuthedInit,
+  options: Options,
+): Promise<{ session: CrmSession; response: Response }> {
+  let current = session
+  const refresh = () =>
+    token(config, 'refresh_token', { refresh_token: current.refresh_token }, options)
+  if (current.expires_at <= nowSeconds(options) + 60) current = await refresh()
+  let response = await send(config, path, { ...init, token: current.access_token }, options)
+  if (response.status === 401) {
+    current = await refresh()
+    response = await send(config, path, { ...init, token: current.access_token }, options)
+    if (response.status === 401) throw new CrmError('Sessione scaduta: accedi di nuovo.', 'auth')
+  }
+  return { session: current, response }
+}
+
+/** An authenticated GET of JSON. */
 async function authedGet(
   config: CrmConfig,
   session: CrmSession,
   path: string,
   options: Options,
 ): Promise<{ session: CrmSession; data: unknown }> {
-  let current = session
-  if (current.expires_at <= nowSeconds(options) + 60) {
-    current = await token(
-      config,
-      'refresh_token',
-      { refresh_token: current.refresh_token },
-      options,
-    )
-  }
-  let response = await send(config, path, { token: current.access_token }, options)
-  if (response.status === 401) {
-    current = await token(
-      config,
-      'refresh_token',
-      { refresh_token: current.refresh_token },
-      options,
-    )
-    response = await send(config, path, { token: current.access_token }, options)
-    if (response.status === 401) throw new CrmError('Sessione scaduta: accedi di nuovo.', 'auth')
-  }
+  const { session: current, response } = await authed(config, session, path, {}, options)
   if (response.status === 403) throw new CrmError(await messageOf(response), 'auth')
   if (!response.ok)
     throw new CrmError(`Il CRM ha risposto: ${await messageOf(response)}.`, 'server')
@@ -251,4 +268,111 @@ export function mergeCrmCatalog(
     return !gone.has(a.item_id) && !updated.has(a.item_id)
   })
   return [...kept, ...delta.upserts]
+}
+
+export type CrmAccount = { id: string; name: string; city: string | null }
+export type CrmDeal = { id: string; title: string; stage_name: string | null }
+
+/** Customers whose name contains `query` (the CRM's own row rules limit them to the user's company). */
+export async function searchCrmAccounts(
+  config: CrmConfig,
+  session: CrmSession,
+  query: string,
+  options: Options = {},
+): Promise<{ session: CrmSession; accounts: CrmAccount[] }> {
+  // PostgREST reads * , ( ) inside a filter value as syntax.
+  const q = query
+    .replace(/[*,()]/g, ' ')
+    .trim()
+    .slice(0, 60)
+  const { session: current, data } = await authedGet(
+    config,
+    session,
+    `/rest/v1/accounts?select=id,name,city&name=ilike.${encodeURIComponent(`*${q}*`)}&order=name&limit=20`,
+    options,
+  )
+  return { session: current, accounts: data as CrmAccount[] }
+}
+
+/** The customer's open deals, newest first. */
+export async function openCrmDeals(
+  config: CrmConfig,
+  session: CrmSession,
+  accountId: string,
+  options: Options = {},
+): Promise<{ session: CrmSession; deals: CrmDeal[] }> {
+  const { session: current, data } = await authedGet(
+    config,
+    session,
+    `/rest/v1/v_deals?select=id,title,stage_name&account_id=eq.${encodeURIComponent(accountId)}&outcome=eq.open&order=created_at.desc&limit=50`,
+    options,
+  )
+  return { session: current, deals: data as CrmDeal[] }
+}
+
+export type InviaDistintaResult = {
+  /** False when the CRM already had this very distinta for this deal. */
+  changed: boolean
+  /** Where the plan picture goes in the `crm-files` bucket. */
+  preview_path: string
+  /** Article ids the CRM catalog does not have (or has switched off). */
+  non_trovati: string[]
+}
+
+/** `rpc('invia_distinta', { p })`. Refusals come back with the CRM's own words. */
+export async function sendDistinta(
+  config: CrmConfig,
+  session: CrmSession,
+  payload: InviaDistintaPayload,
+  options: Options = {},
+): Promise<{ session: CrmSession; result: InviaDistintaResult }> {
+  const { session: current, response } = await authed(
+    config,
+    session,
+    '/rest/v1/rpc/invia_distinta',
+    { method: 'POST', body: { p: payload } },
+    options,
+  )
+  if (response.status === 400 || response.status === 404)
+    throw new CrmError(`Il CRM ha rifiutato la distinta: ${await messageOf(response)}.`, 'rejected')
+  if (response.status === 403) throw new CrmError(await messageOf(response), 'auth')
+  if (!response.ok)
+    throw new CrmError(`Il CRM ha risposto: ${await messageOf(response)}.`, 'server')
+  const data = (await response.json()) as Partial<InviaDistintaResult>
+  return {
+    session: current,
+    result: {
+      changed: data.changed === true,
+      preview_path: typeof data.preview_path === 'string' ? data.preview_path : '',
+      non_trovati: Array.isArray(data.non_trovati) ? data.non_trovati.map(String) : [],
+    },
+  }
+}
+
+/** Upload (or replace) the plan picture at the path `invia_distinta` returned. */
+export async function uploadCrmPreview(
+  config: CrmConfig,
+  session: CrmSession,
+  path: string,
+  png: Blob,
+  options: Options = {},
+): Promise<CrmSession> {
+  const clean = path
+    .replace(/^\/+|\/+$/g, '')
+    .split('/')
+    .map(encodeURIComponent)
+    .join('/')
+  const { session: current, response } = await authed(
+    config,
+    session,
+    `/storage/v1/object/crm-files/${clean}`,
+    { method: 'POST', raw: { data: png, type: 'image/png' }, headers: { 'x-upsert': 'true' } },
+    options,
+  )
+  if (!response.ok)
+    throw new CrmError(
+      `Immagine della pianta non caricata: ${await messageOf(response)}.`,
+      'server',
+    )
+  return current
 }

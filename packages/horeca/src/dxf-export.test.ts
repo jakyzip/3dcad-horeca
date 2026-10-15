@@ -176,3 +176,26 @@ test('rooms get their name and area', () => {
   expect(texts.map((t) => (t.kind === 'text' ? t.text : ''))).toEqual(['Laboratorio', '24,00 m²'])
   expect(texts[0]!.kind === 'text' && [texts[0]!.x, texts[0]!.y]).toEqual([3, 2])
 })
+
+test('the CRM preview is an SVG of the same plan', async () => {
+  const { planToSvg } = await import('./plan-image')
+  const svg = planToSvg([
+    {
+      type: 'wall',
+      model: {
+        kind: 'polygon',
+        points: [
+          [0, 0],
+          [4, 0],
+          [4, 0.2],
+          [0, 0.2],
+        ],
+      },
+      annotations: { kind: 'text', x: 2, y: 1, text: 'A & B', fontSize: 0.2 },
+    },
+  ])!
+  expect(svg.startsWith('<svg')).toBe(true)
+  expect(svg).toContain('width="2400" height="1600"')
+  expect(svg).toContain('A &amp; B')
+  expect(planToSvg([])).toBeNull()
+})
