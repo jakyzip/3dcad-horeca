@@ -3,7 +3,21 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 import type { CatalogArticle } from './catalog'
 import { type CrmConfig, type CrmSession, crmLogin, fetchCrmCatalog, mergeCrmCatalog } from './crm'
 import { PRODUCT_METADATA_KEY } from './product'
-import { GENERICO } from './schema'
+import {
+  ABBATTITORE,
+  BANCO_FRIGO,
+  CELLA_FRIGO,
+  FRIGORIFERO,
+  GENERICO,
+  LAVAMANI,
+  LAVASTOVIGLIE,
+  LAVELLO,
+  MANTECATORE,
+  PASTORIZZATORE,
+  PENSILE,
+  TAVOLO,
+  TRAMOGGIA,
+} from './schema'
 
 /** Category (normalised) → equipment kind. Categories without an entry use the generic block. */
 export type ShapeMap = Record<string, string>
@@ -90,8 +104,52 @@ export const useHorecaCatalog = create<CatalogState>()(
   ),
 )
 
+/**
+ * Word stems that name a shape, checked in order (the more specific first: "lavastoviglie" and
+ * "lava-mani" before "lavell", "cella" before "frigo"). Accents and hyphens are ignored.
+ */
+const GUESSES: ReadonlyArray<[RegExp, string]> = [
+  [/lavastovigl/, LAVASTOVIGLIE],
+  [/lava ?mani/, LAVAMANI],
+  [/lavell/, LAVELLO],
+  [/abbattitor/, ABBATTITORE],
+  [/mantecator/, MANTECATORE],
+  [/pastorizzator/, PASTORIZZATORE],
+  [/\bcell[ae]\b/, CELLA_FRIGO],
+  [/banc[oh]i? (frigo|refrigerat)/, BANCO_FRIGO],
+  [/pensil/, PENSILE],
+  [/tramogg/, TRAMOGGIA],
+  [/frigorifer|\bfrigo\b/, FRIGORIFERO],
+  [/tavol/, TAVOLO],
+]
+
+function guessShape(text: string): string | null {
+  const plain = categoryKey(text)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[-_]/g, ' ')
+  return GUESSES.find(([pattern]) => pattern.test(plain))?.[1] ?? null
+}
+
+/** The shape set for the category, else one guessed from its name, else the generic block. */
 export function shapeForCategory(shapes: ShapeMap, category: string): string {
-  return shapes[categoryKey(category)] ?? GENERICO
+  return shapes[categoryKey(category)] ?? guessShape(category) ?? GENERICO
+}
+
+/**
+ * The shape for one article: the category's (set or guessed), else one guessed from the article
+ * name ("Abbattitore 5 teglie" filed under "Refrigerazione"), else the generic block.
+ */
+export function shapeForArticle(
+  shapes: ShapeMap,
+  article: Pick<CatalogArticle, 'category' | 'name'>,
+): string {
+  return (
+    shapes[categoryKey(article.category)] ??
+    guessShape(article.category) ??
+    guessShape(article.name) ??
+    GENERICO
+  )
 }
 
 /** What the placement tool needs to place an article: its kind and the node defaults. */
@@ -106,7 +164,7 @@ export function placementFor(
     height: metres(article.height_mm),
   }
   return {
-    kind: shapeForCategory(shapes, article.category),
+    kind: shapeForArticle(shapes, article),
     defaults: {
       ...Object.fromEntries(Object.entries(sizes).filter(([, v]) => v !== undefined)),
       name: article.name || article.code,

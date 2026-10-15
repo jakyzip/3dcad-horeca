@@ -52,14 +52,24 @@ export {
 export { PRODUCT_METADATA_KEY, type ProductRead, ProductRef, readProductRef } from './product'
 export { equipmentSchedule } from './schedule'
 export {
+  ABBATTITORE,
   BANCO_FRIGO,
   BancoFrigoNode,
   CELLA_FRIGO,
   CellaFrigoNode,
   type EquipmentNode,
+  FRIGORIFERO,
   GENERICO,
   GenericoNode,
   HORECA_PLUGIN_ID,
+  LAVAMANI,
+  LAVASTOVIGLIE,
   LAVELLO,
   LavelloNode,
+  MANTECATORE,
+  PASTORIZZATORE,
+  PENSILE,
+  TAVOLO,
+  TRAMOGGIA,
 } from './schema'
+export { TILE_SPECS, type TileSpec, tileMaterials } from './tiles'

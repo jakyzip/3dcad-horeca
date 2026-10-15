@@ -101,9 +101,20 @@ Rivista il 2026-10-15 con l'utente. Il catalogo vero sta nel CRM (`catalog_items
 - Configurazione in `.env.local` (esclusa da git): `NEXT_PUBLIC_CRM_SUPABASE_URL`, `NEXT_PUBLIC_CRM_SUPABASE_KEY` (chiave publishable). Verificato senza credenziali: il CRM risponde, accetta richieste dal browser e senza login non mostra il catalogo (RLS).
 - Pannello: sezione CRM con accesso, "Aggiorna catalogo dal CRM" ed esci.
 
-### 2c. Forme nuove (da fare, ordine proposto dal render di riferimento)
-1. Tavolo su gambe (con o senza ripiano). 2. Pensile ante scorrevoli, anche con gocciolatoio (appeso: serve "altezza da terra"). 3. Lava-mani a parete. 4. Lavastoviglie e abbattitore. 5. Mantecatore e pastorizzatore. 6. Frigorifero verticale. 7. Tramoggia su ruote.
-Inoltre, emersi dal render: rivestimento pareti in piastrelle (servono texture CC0), etichette con il nome delle attrezzature nel 3D.
+### 2c. Forme nuove (fatto, da provare nell'editor)
+Dal render di riferimento (laboratorio di gelateria): tavolo su gambe (ripiano sotto facoltativo), pensile ante scorrevoli (anche gocciolatoio, appeso a 1,5 m), lava-mani a parete, lavastoviglie, abbattitore, mantecatore, pastorizzatore, frigorifero verticale, tramoggia su ruote. Totale 13 forme con il blocco generico.
+- Campo comune "Altezza da terra" (`elevation`, 0 per gli elementi a terra; le scene salvate prima si caricano uguali). In pianta gli elementi appesi sono tratteggiati; ogni elemento riporta il codice dell'articolo.
+- Forma suggerita dal nome: se la categoria non ha una forma scelta a mano, il CAD la deduce dal nome della categoria e poi da quello dell'articolo ("Abbattitore 5 teglie" → abbattitore); altrimenti blocco generico.
+
+### 2d. Piastrelle (fatto, da provare nell'editor)
+- Texture generate da script, non scaricate: `packages/horeca/scripts/genera-piastrelle.ts` disegna colore, rilievo (fughe incassate) e anteprima in `apps/editor/public/material/horeca/` per ogni voce di `TILE_SPECS` (`src/tiles.ts`): 10×10 bianca/rosso bordeaux/blu, 20×20 bianca/grigia, 10×20 bianca, pavimento 30×30 chiaro/grigio, 30×60 antracite. Misure reali con gli UV dell'editor (1 unità = 1 m).
+- Registrate all'avvio nella libreria materiali (categoria "tile") con `registerLibraryMaterials` in `apps/editor/lib/bootstrap.ts`.
+- Rivestimento parziale (es. fino a 150 cm): l'editor lo supporta già con le "regioni" di faccia del muro (`WallFaceRegion`, `v1` = altezza). Da verificare nell'editor come si crea una regione dal pannello Paint.
+
+### 2e. Etichette 3D (da fare)
+Nome dell'attrezzatura sopra ogni elemento nella vista 3D, attivabili/disattivabili, come nel render di riferimento.
+
+Stato al 2026-10-15: branch `fase-2c-forme`, non ancora committato (forme 2c + piastrelle 2d). `bun run ci` passa. Prova a mano nell'editor ancora da fare per 2c e 2d.
 
 ## Fase 3: rilievo e DXF
 

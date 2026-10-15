@@ -9,8 +9,9 @@ export function equipmentFloorplan(
   node: EquipmentNode,
   ctx: GeometryContext,
   marks: (hw: number, hd: number) => Array<[number, number, number, number]>,
-  label?: string,
+  options: { label?: string; dashed?: boolean } = {},
 ): FloorplanGeometry {
+  const { label, dashed } = options
   const [cx, , cz] = node.position
   const cos = Math.cos(node.rotation)
   const sin = Math.sin(node.rotation)
@@ -30,9 +31,11 @@ export function equipmentFloorplan(
     {
       kind: 'polygon',
       points: [at(-hw, -hd), at(hw, -hd), at(hw, hd), at(-hw, hd)],
-      fill: FILL,
+      // Overhead units (wall cabinets) read dashed and unfilled, as on a drawn plan.
+      fill: dashed ? 'none' : FILL,
       stroke,
       strokeWidth: selected ? 0.03 : 0.02,
+      ...(dashed ? { strokeDasharray: '0.08 0.05' } : {}),
       opacity: 0.92,
     },
   ]
@@ -48,6 +51,7 @@ export function equipmentFloorplan(
       stroke,
       strokeWidth: 1,
       vectorEffect: 'non-scaling-stroke',
+      ...(dashed ? { strokeDasharray: '4 3' } : {}),
       opacity: 0.7,
     })
   }
@@ -94,3 +98,8 @@ export const lavelloMarks = (hw: number, hd: number): Array<[number, number, num
 
 /** Generic block: no mark, the article code is written inside instead. */
 export const genericoMarks = (): Array<[number, number, number, number]> => []
+
+/** A single diagonal: the usual mark for a machine. */
+export const diagonaleMarks = (hw: number, hd: number): Array<[number, number, number, number]> => [
+  [-hw, -hd, hw, hd],
+]

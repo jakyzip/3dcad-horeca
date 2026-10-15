@@ -9,11 +9,13 @@ import {
   CELLA_FRIGO,
   CellaFrigoNode,
   type DistintaNode,
+  EQUIPMENT_KINDS,
   GENERICO,
-  GenericoNode,
   horecaPlugin,
   LAVELLO,
   LavelloNode,
+  PENSILE,
+  TAVOLO,
 } from '../index'
 import { reshapeNode } from '../shape-field'
 
@@ -64,26 +66,54 @@ describe('horeca plugin', () => {
     }
   })
 
-  test('defaults parse, and the body geometry has the node size', () => {
-    for (const [kind, schema] of [
-      [BANCO_FRIGO, BancoFrigoNode],
-      [CELLA_FRIGO, CellaFrigoNode],
-      [LAVELLO, LavelloNode],
-      [GENERICO, GenericoNode],
-    ] as const) {
+  test('every kind: defaults parse, the body has the node size, the plan draws', () => {
+    expect(EQUIPMENT_KINDS).toHaveLength(13)
+    for (const kind of EQUIPMENT_KINDS) {
       const def = nodeRegistry.get(kind)!
-      const node = schema.parse(def.defaults())
+      const node = def.schema.parse(def.defaults()) as { width: number }
       const object = def.geometry!(node as never, {} as never)
       const bodies: Mesh[] = []
       object.traverse((child) => {
         if (child instanceof Mesh && child.name.endsWith('-body')) bodies.push(child)
       })
-      expect(bodies).toHaveLength(1)
+      expect(bodies.map((b) => b.name)).toHaveLength(1)
       const size = new Box3().setFromObject(bodies[0]!).getSize(new Vector3())
       expect(size.x).toBeCloseTo(node.width, 3)
       const plan = def.floorplan!(node as never, {} as never)
       expect(plan?.kind).toBe('group')
     }
+  })
+
+  test('wall-hung units sit at their elevation; floor units at zero', () => {
+    const pensile = nodeRegistry.get(PENSILE)!
+    const node = pensile.schema.parse(pensile.defaults()) as { elevation: number }
+    expect(node.elevation).toBe(1.5)
+    expect(pensile.geometry!(node as never, {} as never).position.y).toBe(1.5)
+    const tavolo = nodeRegistry.get(TAVOLO)!
+    expect(
+      tavolo.geometry!(tavolo.schema.parse(tavolo.defaults()) as never, {} as never).position.y,
+    ).toBe(0)
+  })
+
+  test('a scene saved before elevation existed still loads', () => {
+    const saved = { id: 'horeca_old', type: BANCO_FRIGO, width: 1.5, depth: 0.7, height: 0.85 }
+    expect(BancoFrigoNode.parse(saved).elevation).toBe(0)
+  })
+
+  test('options change the geometry: table shelf, drip-rack cabinet', () => {
+    const names = (kind: string, patch: Record<string, unknown>) => {
+      const def = nodeRegistry.get(kind)!
+      const out: string[] = []
+      def.geometry!(
+        def.schema.parse({ ...def.defaults(), ...patch }) as never,
+        {} as never,
+      ).traverse((c) => out.push(c.name))
+      return out
+    }
+    expect(names(TAVOLO, { ripiano: true })).toContain('tavolo-shelf')
+    expect(names(TAVOLO, { ripiano: false })).not.toContain('tavolo-shelf')
+    expect(names(PENSILE, { gocciolatoio: true })).toContain('pensile-rack')
+    expect(names(PENSILE, { gocciolatoio: true })).not.toContain('pensile-bottom')
   })
 
   test('the plan sheet lists each kind with exact quantities', () => {

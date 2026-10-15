@@ -1,7 +1,16 @@
 import { beforeEach, describe, expect, test } from 'bun:test'
 import type { CatalogArticle } from './catalog'
-import { placementFor, shapeForCategory, useHorecaCatalog } from './catalog-store'
-import { BANCO_FRIGO, CELLA_FRIGO, GENERICO } from './schema'
+import { placementFor, shapeForArticle, shapeForCategory, useHorecaCatalog } from './catalog-store'
+import {
+  ABBATTITORE,
+  BANCO_FRIGO,
+  CELLA_FRIGO,
+  GENERICO,
+  LAVAMANI,
+  LAVASTOVIGLIE,
+  LAVELLO,
+  TAVOLO,
+} from './schema'
 
 const article = (over: Partial<CatalogArticle> = {}): CatalogArticle => ({
   item_id: '',
@@ -34,11 +43,38 @@ describe('catalog store', () => {
     expect(shapeForCategory(shapes, 'Banchi refrigerati')).toBe(BANCO_FRIGO)
     expect(shapeForCategory(shapes, ' banchi REFRIGERATI ')).toBe(BANCO_FRIGO)
     expect(shapeForCategory(shapes, 'Cottura')).toBe(GENERICO)
-    useHorecaCatalog.getState().setShape('Banchi refrigerati', null)
+    useHorecaCatalog.getState().setShape('Banchi refrigerati', GENERICO)
     expect(shapeForCategory(useHorecaCatalog.getState().shapes, 'Banchi refrigerati')).toBe(
       GENERICO,
     )
   })
+})
+
+describe('shape guessed from the category name', () => {
+  test('known words pick a shape; a manual choice wins; unknown words stay generic', () => {
+    expect(shapeForCategory({}, 'Lavelli')).toBe(LAVELLO)
+    expect(shapeForCategory({}, 'Lava-mani a parete')).toBe(LAVAMANI)
+    expect(shapeForCategory({}, 'Lavastoviglie')).toBe(LAVASTOVIGLIE)
+    expect(shapeForCategory({}, 'Tavoli inox')).toBe(TAVOLO)
+    expect(shapeForCategory({}, 'Abbattitori')).toBe(ABBATTITORE)
+    expect(shapeForCategory({}, 'Celle frigorifere')).toBe(CELLA_FRIGO)
+    expect(shapeForCategory({}, 'Banchi refrigerati')).toBe(BANCO_FRIGO)
+    expect(shapeForCategory({ lavelli: GENERICO }, 'Lavelli')).toBe(GENERICO)
+    expect(shapeForCategory({}, 'Cottura')).toBe(GENERICO)
+  })
+})
+
+test('a vague category falls back to the article name', () => {
+  expect(shapeForArticle({}, { category: 'Refrigerazione', name: 'Abbattitore 5 teglie' })).toBe(
+    ABBATTITORE,
+  )
+  expect(
+    shapeForArticle(
+      { refrigerazione: GENERICO },
+      { category: 'Refrigerazione', name: 'Abbattitore' },
+    ),
+  ).toBe(GENERICO)
+  expect(shapeForArticle({}, { category: '', name: 'Friggitrice' })).toBe(GENERICO)
 })
 
 describe('placementFor', () => {

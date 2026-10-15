@@ -5,7 +5,13 @@ import { useEditor } from '@pascal-app/editor'
 import { useViewer } from '@pascal-app/viewer'
 import { type ChangeEvent, useMemo, useRef, useState } from 'react'
 import { type CatalogArticle, parseCatalogFile } from './catalog'
-import { categoryKey, placementFor, shapeForCategory, useHorecaCatalog } from './catalog-store'
+import {
+  categoryKey,
+  placementFor,
+  shapeForArticle,
+  shapeForCategory,
+  useHorecaCatalog,
+} from './catalog-store'
 import { crmConfigFromEnv } from './crm'
 import { EQUIPMENT_KINDS } from './definitions'
 import {
@@ -120,7 +126,7 @@ function CatalogSection() {
           />
           <ul className="flex max-h-64 flex-col gap-1 overflow-y-auto">
             {visible.map((article) => {
-              const kind = shapeForCategory(shapes, article.category)
+              const kind = shapeForArticle(shapes, article)
               const size = [article.width_mm, article.depth_mm, article.height_mm]
                 .map((mm) => (mm === null ? '?' : Math.round(mm / 10)))
                 .join('×')
