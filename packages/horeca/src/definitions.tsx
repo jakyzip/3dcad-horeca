@@ -3,6 +3,7 @@ import type {
   AnyNodeDefinition,
   AnyNodeId,
   Capabilities,
+  FloorplanGeometry,
   NodeDefinition,
   ParametricDescriptor,
   ParamField,
@@ -12,6 +13,13 @@ import type { Object3D } from 'three'
 import type { ZodObject, ZodType } from 'zod'
 import { allacciamentiFloorplan, levelWallFaces, readAllacciamenti } from './allacciamenti'
 import { AllacciamentiField } from './allacciamenti-field'
+import {
+  controllaLivello,
+  controlliFloorplan,
+  descriviProblema,
+  hostOf,
+  readSoglie,
+} from './controlli'
 import type { DistintaNode } from './distinta'
 import {
   bancoMarks,
@@ -177,6 +185,26 @@ function articleLabel(node: EquipmentNode): string | undefined {
   return node.name
 }
 
+/** The layout problems of the unit's level, with `node` standing where it is now (maybe mid-drag). */
+function levelProblems(
+  node: EquipmentNode,
+  level: AnyNode | null,
+  resolve: (id: AnyNodeId) => AnyNode | undefined,
+) {
+  const ids = (level as unknown as { children?: AnyNodeId[] } | null)?.children ?? []
+  const equipment: EquipmentNode[] = []
+  const walls: AnyNode[] = []
+  for (const id of ids) {
+    const child = (id as string) === node.id ? (node as unknown as AnyNode) : resolve(id)
+    if (!child || child.visible === false) continue
+    if (child.type === 'wall') walls.push(child)
+    else if (EQUIPMENT_KINDS.includes(child.type)) equipment.push(child as unknown as EquipmentNode)
+  }
+  if (!equipment.some((e) => e.id === node.id)) equipment.push(node)
+  const host = hostOf(node, resolve)
+  return controllaLivello(equipment, walls, readSoglie(host?.metadata))
+}
+
 function defineEquipment<S extends ZodObject>(spec: EquipmentSpec<S>): AnyNodeDefinition {
   // The builder draws from the unit's underside; a wall-hung unit is lifted by its elevation.
   const build = (node: EquipmentNode) => {
@@ -214,8 +242,12 @@ function defineEquipment<S extends ZodObject>(spec: EquipmentSpec<S>): AnyNodeDe
         label: articleLabel(n),
         dashed: Boolean(spec.wallMounted),
       })
+      const parts: FloorplanGeometry[] = [body]
+      const problemi = levelProblems(n, ctx.parent, (id) => ctx.resolve(id))
+      const avvisi = controlliFloorplan(n, problemi)
+      if (avvisi) parts.push(avvisi)
       const list = readAllacciamenti(n.metadata)
-      if (!list.length) return body
+      if (!list.length) return parts.length > 1 ? { kind: 'group', children: parts } : body
       const faces = list.some((a) => a.quota)
         ? levelWallFaces(ctx.parent, (id) => ctx.resolve(id))
         : []
@@ -223,14 +255,44 @@ function defineEquipment<S extends ZodObject>(spec: EquipmentSpec<S>): AnyNodeDe
       const impianti = allacciamentiFloorplan(n, list, faces, (g) =>
         withFloorplanGeometryMetadata(g, { annotationRole: 'manual-dimension' }),
       )
-      return impianti ? { kind: 'group', children: [body, impianti] } : body
+      if (impianti) parts.push(impianti)
+      return parts.length > 1 ? { kind: 'group', children: parts } : body
     },
     // Connection dimensions measure from the level's walls: their changes redraw the unit.
+    // and the layout checks look at the other units and the project's thresholds too.
     floorplanDependencies: (node, nodes) => {
       const n = node as unknown as EquipmentNode
-      if (!readAllacciamenti(n.metadata).some((a) => a.quota) || !n.parentId) return []
+      if (!n.parentId) return []
       const level = nodes[n.parentId as AnyNodeId] as { children?: AnyNodeId[] } | undefined
-      return (level?.children ?? []).filter((id) => nodes[id]?.type === 'wall')
+      const ids = (level?.children ?? []).filter((id) => {
+        const type = nodes[id]?.type
+        return (id as string) !== n.id && (type === 'wall' || EQUIPMENT_KINDS.includes(type ?? ''))
+      })
+      const host = hostOf(n, (id) => nodes[id])
+      return host ? [...ids, host.id as AnyNodeId] : ids
+    },
+    placementNotice: (node, { nodes, live }) => {
+      const n = (live ? { ...node, ...live } : node) as unknown as EquipmentNode
+      const resolve = (id: AnyNodeId) => nodes[id]
+      const problemi = levelProblems(
+        n,
+        n.parentId ? (resolve(n.parentId as AnyNodeId) ?? null) : null,
+        resolve,
+      )
+      const mine = problemi.filter(
+        (p) => p.id === n.id || (p.tipo === 'sovrapposizione' && p.altro === n.id),
+      )
+      if (!mine.length) return null
+      const nameOf = (id: string) => {
+        const other = nodes[id] as unknown as EquipmentNode | undefined
+        return other ? articleLabel(other) || 'un’altra attrezzatura' : 'un’altra attrezzatura'
+      }
+      const lines = mine.map((p) =>
+        p.tipo === 'sovrapposizione' && p.altro === n.id
+          ? descriviProblema({ ...p, altro: p.id }, nameOf)
+          : descriviProblema(p, nameOf),
+      )
+      return { line: lines[0]!, detail: lines.length > 1 ? lines.slice(1).join(' ') : undefined }
     },
     system: {
       module: () =>

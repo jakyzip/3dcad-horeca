@@ -12,6 +12,7 @@ import {
   shapeForCategory,
   useHorecaCatalog,
 } from './catalog-store'
+import { ControlliSection } from './controlli-section'
 import { crmConfigFromEnv } from './crm'
 import { CrmSendSection } from './crm-send'
 import { EQUIPMENT_KINDS } from './definitions'
@@ -554,6 +555,7 @@ export default function HorecaPanel() {
       </section>
       <DistintaSection />
       <ImpiantiSection />
+      <ControlliSection />
       <CrmSendSection />
       <RenderSection />
     </div>
