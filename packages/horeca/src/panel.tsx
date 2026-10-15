@@ -3,7 +3,7 @@
 import { nodeRegistry, useScene } from '@pascal-app/core'
 import { useEditor } from '@pascal-app/editor'
 import { useViewer } from '@pascal-app/viewer'
-import { type ChangeEvent, useMemo, useRef, useState } from 'react'
+import { type ChangeEvent, type ReactNode, useMemo, useRef, useState } from 'react'
 import { type CatalogArticle, parseCatalogFile } from './catalog'
 import {
   categoryKey,
@@ -238,8 +238,9 @@ function CatalogSection() {
       )}
       {articles.length === 0 ? (
         <p className="text-xs opacity-60">
-          Nessun articolo. Il file deve avere almeno la colonna "codice"; le altre colonne
-          riconosciute sono nome, categoria, larghezza_mm, profondita_mm, altezza_mm e id_crm.
+          Nessun articolo. Scaricalo dal CRM (icona “CRM e distinta”) oppure importa un file: deve
+          avere almeno la colonna "codice"; le altre colonne riconosciute sono nome, categoria,
+          larghezza_mm, profondita_mm, altezza_mm e id_crm.
         </p>
       ) : (
         <>
@@ -525,43 +526,78 @@ function LabelsToggle() {
   )
 }
 
-/** Sidebar panel: catalog, shapes per category, free placement, the distinta. */
-export default function HorecaPanel() {
+function EquipmentButtons() {
+  return (
+    <section className="flex flex-col gap-2">
+      <h3 className={HEADING}>Attrezzature senza articolo</h3>
+      <div className="grid grid-cols-2 gap-1.5">
+        {EQUIPMENT_KINDS.map((kind) => {
+          const presentation = nodeRegistry.get(kind)?.presentation
+          return (
+            <button
+              className={`${BUTTON} flex items-center gap-2 text-left`}
+              key={kind}
+              onClick={() => armTool(kind)}
+              type="button"
+            >
+              {presentation?.icon.kind === 'url' && (
+                <img alt="" className="h-5 w-5" src={presentation.icon.src} />
+              )}
+              <span className="truncate">{presentation?.label ?? kind}</span>
+            </button>
+          )
+        })}
+      </div>
+      <LabelsToggle />
+    </section>
+  )
+}
+
+function PanelColumn({ children }: { children: ReactNode }) {
   return (
     <div className="subtle-scrollbar flex h-full min-h-0 flex-col gap-5 overflow-y-auto overscroll-contain p-3 text-sidebar-foreground text-sm">
-      <RilievoSection />
-      <CrmSection />
+      {children}
+    </div>
+  )
+}
+
+/** Sidebar panels, one per kind of work: placing, services and checks, CRM, documents. */
+export function AttrezzaturePanel() {
+  return (
+    <PanelColumn>
       <CatalogSection />
       <ShapesSection />
-      <section className="flex flex-col gap-2">
-        <h3 className={HEADING}>Attrezzature senza articolo</h3>
-        <div className="grid grid-cols-2 gap-1.5">
-          {EQUIPMENT_KINDS.map((kind) => {
-            const presentation = nodeRegistry.get(kind)?.presentation
-            return (
-              <button
-                className={`${BUTTON} flex items-center gap-2 text-left`}
-                key={kind}
-                onClick={() => armTool(kind)}
-                type="button"
-              >
-                {presentation?.icon.kind === 'url' && (
-                  <img alt="" className="h-5 w-5" src={presentation.icon.src} />
-                )}
-                <span className="truncate">{presentation?.label ?? kind}</span>
-              </button>
-            )
-          })}
-        </div>
-        <LabelsToggle />
-      </section>
+      <EquipmentButtons />
       <ComposizioniSection />
-      <DistintaSection />
+    </PanelColumn>
+  )
+}
+
+export function ImpiantiPanel() {
+  return (
+    <PanelColumn>
       <ImpiantiSection />
       <ControlliSection />
+    </PanelColumn>
+  )
+}
+
+export function CrmPanel() {
+  return (
+    <PanelColumn>
+      <CrmSection />
+      <DistintaSection />
       <CrmSendSection />
+    </PanelColumn>
+  )
+}
+
+export function DocumentiPanel() {
+  return (
+    <PanelColumn>
+      <RilievoSection />
       <RenderSection />
       <TavolaSection />
-    </div>
+    </PanelColumn>
   )
 }

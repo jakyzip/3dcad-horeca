@@ -38,7 +38,7 @@ import { useInspectorExpanded } from '../../../lib/inspector-expanded'
 import { ActionButton, ActionGroup } from '../controls/action-button'
 import { PanelSection } from '../controls/panel-section'
 import { ErrorBoundary } from '../primitives/error-boundary'
-import { useInRightStack } from '../right-stack'
+import { useInRightDock, useInRightStack } from '../right-stack'
 import { CollectionsPopover } from './collections/collections-popover'
 
 const DRAG_MARGIN = 8
@@ -121,6 +121,8 @@ export function PanelWrapper({
 }: PanelWrapperProps) {
   const isMobile = useIsMobile()
   const inStack = useInRightStack()
+  // Docked beside the stage: fixed in place and always open.
+  const inDock = useInRightDock()
   const contextFooter = useContext(InspectorFooterContext)
   const inspectedIds = useContext(InspectedNodesContext)
   const resolvedFooter = footer ?? contextFooter
@@ -160,7 +162,8 @@ export function PanelWrapper({
   // The panel is collapsed to just its header until the user expands it. The
   // choice is one editor preference for every inspector (room, wall, item…),
   // persisted, so every panel opens the way the user last left one.
-  const collapsed = !useInspectorExpanded((state) => state.expanded)
+  const expanded = useInspectorExpanded((state) => state.expanded)
+  const collapsed = !(inDock || expanded)
   const setCollapsed = useCallback((next: boolean) => {
     useInspectorExpanded.getState().setExpanded(!next)
   }, [])
@@ -209,7 +212,7 @@ export function PanelWrapper({
   const handleHeaderPointerDown = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
       // Buttons (close / reset / collapse) and a title edited in place handle their own clicks.
-      if ((e.target as HTMLElement).closest('button, input, label')) return
+      if (inDock || (e.target as HTMLElement).closest('button, input, label')) return
       const rect = panelRef.current?.getBoundingClientRect()
       if (!rect) return
       const bounds = getDragBounds(panelRef.current)
@@ -285,6 +288,8 @@ export function PanelWrapper({
       className={cn(
         isMobile
           ? 'flex h-full w-full flex-col overflow-hidden bg-transparent dark:text-foreground'
+          : inDock
+            ? 'flex h-full min-h-0 w-full flex-col overflow-hidden dark:text-foreground'
           : inStack
             ? // In the shared right column: it grows down and scrolls on itself,
               // leaving the shortcuts card below it its room (`right-stack.tsx`).
@@ -302,7 +307,7 @@ export function PanelWrapper({
       data-panel-wrapper
       ref={panelRef}
       style={
-        isMobile
+        isMobile || inDock
           ? undefined
           : {
               width,
@@ -317,7 +322,7 @@ export function PanelWrapper({
           className={cn(
             'relative flex select-none items-center justify-between px-3 py-3',
             !collapsed && 'border-border/50 border-b',
-            isDragging ? 'cursor-grabbing' : 'cursor-grab',
+            !inDock && (isDragging ? 'cursor-grabbing' : 'cursor-grab'),
           )}
           data-panel-header
           onPointerDown={handleHeaderPointerDown}
@@ -367,7 +372,7 @@ export function PanelWrapper({
           </div>
 
           {/* Centered grip — purely a visual drag affordance (a title edited in place takes its room). */}
-          {!titleContent && (
+          {!(titleContent || inDock) && (
             <GripHorizontal className="-translate-x-1/2 pointer-events-none absolute left-1/2 h-4 w-4 text-muted-foreground/40" />
           )}
 
@@ -409,17 +414,19 @@ export function PanelWrapper({
                 </button>
               )
             })}
-            <button
-              aria-expanded={!collapsed}
-              aria-label={collapsed ? 'Espandi il pannello' : 'Comprimi il pannello'}
-              className="flex h-7 w-7 items-center justify-center rounded-md bg-black/4 dark:bg-[#2C2C2E] text-muted-foreground transition-colors hover:bg-black/8 dark:hover:bg-[#3e3e3e] hover:text-foreground"
-              onClick={handleCardToggle}
-              type="button"
-            >
-              <ChevronDown
-                className={cn('h-4 w-4 transition-transform', collapsed ? '' : 'rotate-180')}
-              />
-            </button>
+            {!inDock && (
+                <button
+                aria-expanded={!collapsed}
+                aria-label={collapsed ? 'Espandi il pannello' : 'Comprimi il pannello'}
+                className="flex h-7 w-7 items-center justify-center rounded-md bg-black/4 dark:bg-[#2C2C2E] text-muted-foreground transition-colors hover:bg-black/8 dark:hover:bg-[#3e3e3e] hover:text-foreground"
+                onClick={handleCardToggle}
+                type="button"
+              >
+                <ChevronDown
+                  className={cn('h-4 w-4 transition-transform', collapsed ? '' : 'rotate-180')}
+                />
+              </button>
+            )}
             {onClose && (
               <button
                 className="flex h-7 w-7 items-center justify-center rounded-md bg-black/4 dark:bg-[#2C2C2E] text-muted-foreground transition-colors hover:bg-black/8 dark:hover:bg-[#3e3e3e] hover:text-foreground"

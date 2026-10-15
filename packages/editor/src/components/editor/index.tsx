@@ -87,7 +87,7 @@ import { PanelManager } from '../ui/panels/panel-manager'
 import { ErrorBoundary } from '../ui/primitives/error-boundary'
 import { useSidebarStore } from '../ui/primitives/sidebar'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/primitives/tooltip'
-import { RightStack } from '../ui/right-stack'
+import { RightDock, RightStack } from '../ui/right-stack'
 import { SceneLoader, SceneLoadFailed } from '../ui/scene-loader'
 import { AppSidebar } from '../ui/sidebar/app-sidebar'
 import type { ExtraPanel } from '../ui/sidebar/icon-rail'
@@ -1816,6 +1816,14 @@ function EditorContent({
       })),
     ]
 
+    const rightInspector =
+      isVersionPreviewMode || isCaptureMode || isStudioMode ? null : (
+        <PanelManager
+          inspectorFooter={inspectorFooter}
+          multiSelectionFooter={multiSelectionFooter}
+        />
+      )
+
     return (
       <>
         <FloorplanModeCoordinator />
@@ -1853,20 +1861,16 @@ function EditorContent({
                       ))}
                     {sceneOverlay}
                   </SceneRegion>
-                  {/* The inspector and the shortcuts card share one right column. */}
-                  <RightStack
-                    belowTopMenu={topMenuShown}
-                    reserveBottomMenu={!dockMenuOnTop}
-                    helper={isCaptureMode ? null : <HelperManager />}
-                    inspector={
-                      isVersionPreviewMode || isCaptureMode || isStudioMode ? null : (
-                        <PanelManager
-                          inspectorFooter={inspectorFooter}
-                          multiSelectionFooter={multiSelectionFooter}
-                        />
-                      )
-                    }
-                  />
+                  {/* On a phone the inspector and the shortcuts card float over the stage;
+                      on a desktop they sit in the docked column (`rightDock`). */}
+                  {isMobile && (
+                    <RightStack
+                      belowTopMenu={topMenuShown}
+                      reserveBottomMenu={!dockMenuOnTop}
+                      helper={isCaptureMode ? null : <HelperManager />}
+                      inspector={rightInspector}
+                    />
+                  )}
                   {/* Capture mode drives walk / drone from its own overlay, which
                       owns the framing chrome — the walkthrough HUD would both
                       clutter the frame and offer a second, conflicting exit. */}
@@ -1880,6 +1884,11 @@ function EditorContent({
                 </>
               }
               renderTabContent={renderTabContent}
+              rightDock={
+                isVersionPreviewMode || isStudioMode ? null : (
+                  <RightDock helper={<HelperManager />} inspector={rightInspector} />
+                )
+              }
               sidebarOverlay={sidebarOverlay}
               sidebarTabs={tabBarTabs}
               stageOverlay={stageOverlay}

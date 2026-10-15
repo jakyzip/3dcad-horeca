@@ -6,11 +6,10 @@
 import {
   applySceneGraphToEditor,
   Editor,
-  ItemsPanel,
   type SceneGraph,
   type SidebarTab,
 } from '@pascal-app/editor'
-import { Hammer, Layers, Package, Palette, Settings } from 'lucide-react'
+import { Hammer, Layers, Palette, Settings } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -34,13 +33,6 @@ export interface SceneMeta {
   ownerId: string | null
   sizeBytes: number
   nodeCount: number
-}
-
-// The open-source editor only ships the built-in catalog (no uploaded items),
-// so the item source chips and tag filters add nothing — drop them and keep
-// the panel to plain categories.
-function EditorItemsPanel() {
-  return <ItemsPanel showSourceFilter={false} showTagFilters={false} />
 }
 
 const SIDEBAR_TABS: (SidebarTab & { component: React.ComponentType })[] = [
@@ -88,22 +80,6 @@ const SIDEBAR_TABS: (SidebarTab & { component: React.ComponentType })[] = [
         className="h-8 w-8 object-contain"
         height={32}
         src="/icons/paint.webp"
-        width={32}
-      />
-    ),
-  },
-  {
-    id: 'items',
-    label: 'Oggetti',
-    component: EditorItemsPanel,
-    mobileDefaultSnap: 0.5,
-    mobileIcon: <Package className="h-5 w-5" />,
-    icon: (
-      <Image
-        alt=""
-        className="h-8 w-8 object-contain"
-        height={32}
-        src="/icons/couch.webp"
         width={32}
       />
     ),

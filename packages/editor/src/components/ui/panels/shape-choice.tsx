@@ -34,7 +34,7 @@ export function ShapeChoice({
 }) {
   return (
     <div
-      className={cn('flex min-h-7 items-center justify-between gap-2', className)}
+      className={cn('flex min-h-7 flex-wrap items-center justify-between gap-2', className)}
       data-shape-choice={data}
     >
       <span className="whitespace-nowrap">{label}</span>

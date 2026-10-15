@@ -22,7 +22,7 @@ import useFenceCurveDraft from '../../../store/use-fence-curve-draft'
 import { IconRefGlyph } from '../icon-ref'
 import { ShortcutToken } from '../primitives/shortcut-token'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../primitives/tooltip'
-import { useInRightStack } from '../right-stack'
+import { useInRightDock, useInRightStack } from '../right-stack'
 
 // One muted container holds every row — passive key hints and interactive chips
 // alike — so the HUD reads as a single panel, not a stack of floating pills. It
@@ -493,13 +493,14 @@ export function ContextualHelperPanel({
   notice?: string | null
 }) {
   const inStack = useInRightStack()
+  const inDock = useInRightDock()
   const modeChips = chipHints.filter((hint) => hint.chip)
   const hasChips = !!snapContext || !!continuationContext || modeChips.length > 0 || showPaintScope
   const fenceFeature = useEditor((state) =>
     state.mode === 'build' && state.tool === 'fence' ? state.toolDefaults.fence?.featurePlacement : null,
   )
   if (fenceFeature === 'gate' || fenceFeature === 'opening') return (
-    <div className={cn(CARD_CLASS, !inStack && FLOATING_CLASS)} data-hud-card>
+    <div className={cn(CARD_CLASS, !inStack && FLOATING_CLASS, inDock && 'w-full shadow-none')} data-hud-card>
       {title ? <HudHeader title={title} /> : null}
       <ChipRow shortcut="Left click" label={fenceFeature === 'gate' ? 'Posiziona il cancello su una recinzione' : 'Posiziona il passaggio su una recinzione'} />
       <ChipRow shortcut="Esc" label="Annulla posizionamento" />
@@ -512,7 +513,7 @@ export function ContextualHelperPanel({
 
   return (
     <div
-      className={cn(CARD_CLASS, !inStack && FLOATING_CLASS)}
+      className={cn(CARD_CLASS, !inStack && FLOATING_CLASS, inDock && 'w-full shadow-none')}
       data-hud-card
     >
       {title ? <HudHeader title={title} /> : null}

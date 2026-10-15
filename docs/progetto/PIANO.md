@@ -228,6 +228,17 @@ Pannello Ho.Re.Ca → "Tavola per il cliente": cliente (dal CRM se collegato, mo
 
 ### 9b. Varianti dello stesso progetto (da decidere)
 
+## Fase 10: interfaccia
+
+### 10a. Pannelli e inspector (fatto, da provare)
+Scelte dell'utente, 2026-10-15. Il pannello Ho.Re.Ca è diviso in quattro icone nella barra a sinistra:
+- Attrezzature: catalogo, forme, pulsanti e composizioni.
+- Impianti e controlli.
+- CRM e distinta: accesso, distinta e invio.
+- Rilievo e documenti: DXF, render e tavola.
+
+Tolta la scheda "Oggetti", che era il catalogo vuoto dell'editor originale. L'inspector è una colonna fissa a destra invece della scheda galleggiante: si allarga o si stringe trascinando il bordo sinistro (da 280 a 640 px, ricordato). Le scorciatoie compaiono in fondo alla colonna quando non c'è niente selezionato. Sul telefono resta il foglio dal basso.
+
 ## Fase 7: rilascio
 
 `README` nuovo, `THIRD_PARTY_NOTICES.md` completo, `LICENSE`, nome e logo, CI. Controllare un'ultima volta `ASSETS.md` e le licenze di tutte le dipendenze.

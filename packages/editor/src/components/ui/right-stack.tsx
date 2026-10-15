@@ -2,14 +2,21 @@
 
 import { createContext, type ReactNode, useContext, useEffect, useRef } from 'react'
 import { useIsMobile } from '../../hooks/use-mobile'
+import { useRightDockWidth } from '../../lib/right-dock-width'
 import { cn } from '../../lib/utils'
 import { TOP_MENU_CLEARANCE } from './action-menu/placement'
 
 const RightStackContext = createContext(false)
+const RightDockContext = createContext(false)
 
 /** Whether a panel renders inside the shared right column (in flow) rather than on its own. */
 export function useInRightStack() {
   return useContext(RightStackContext)
+}
+
+/** Whether a panel renders in the docked right column beside the stage (`RightDock`). */
+export function useInRightDock() {
+  return useContext(RightDockContext)
 }
 
 /** The inspector never shrinks below this (or its own height, if shorter) for the card, px. */
@@ -159,6 +166,76 @@ export function RightStack({
           {helper}
         </div>
       </div>
+    </RightStackContext.Provider>
+  )
+}
+
+/**
+ * The inspector docked as a fixed column beside the stage, as in a desktop CAD: always there, so
+ * selecting never covers the drawing. The shortcuts card sits at its foot while nothing is
+ * selected (drawing, placing).
+ */
+export function RightDock({ inspector, helper }: { inspector: ReactNode; helper: ReactNode }) {
+  const width = useRightDockWidth((s) => s.width)
+  const drag = useRef<{ startX: number; startWidth: number } | null>(null)
+
+  // The handle on the left edge: dragging left widens the column.
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    drag.current = { startX: e.clientX, startWidth: width }
+    e.currentTarget.setPointerCapture(e.pointerId)
+    document.body.style.cursor = 'col-resize'
+    document.body.style.userSelect = 'none'
+  }
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!drag.current) return
+    useRightDockWidth
+      .getState()
+      .setWidth(drag.current.startWidth + drag.current.startX - e.clientX)
+  }
+  const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!drag.current) return
+    drag.current = null
+    e.currentTarget.releasePointerCapture(e.pointerId)
+    document.body.style.cursor = ''
+    document.body.style.userSelect = ''
+    useRightDockWidth.getState().save()
+  }
+
+  return (
+    <RightStackContext.Provider value={true}>
+      <RightDockContext.Provider value={true}>
+        <aside
+          className="group/dock relative flex h-full shrink-0 flex-col border-border/50 border-l bg-sidebar text-sidebar-foreground"
+          data-right-dock
+          style={{ width }}
+        >
+          <div
+            aria-label="Trascina per cambiare la larghezza"
+            className="-left-3 absolute inset-y-0 z-[100] flex w-6 cursor-col-resize items-center justify-center"
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            role="separator"
+          >
+            <div className="h-8 w-1 rounded-full bg-neutral-500" />
+          </div>
+          <div className="peer flex min-h-0 flex-1 flex-col empty:hidden">{inspector}</div>
+          <div className="hidden flex-1 flex-col items-center justify-center gap-1 px-6 text-center text-muted-foreground text-sm peer-empty:flex">
+            <p className="font-medium text-foreground">Nessun elemento selezionato</p>
+            <p className="text-xs">
+              Clicca un muro, una stanza o un’attrezzatura per vederne e modificarne le
+              proprietà qui.
+            </p>
+          </div>
+          {/* The selection's properties need the room more than the select-mode shortcuts. */}
+          {helper && (
+            <div className="flex shrink-0 flex-col p-3 empty:hidden group-has-[[data-panel-wrapper]]/dock:hidden">
+              {helper}
+            </div>
+          )}
+        </aside>
+      </RightDockContext.Provider>
     </RightStackContext.Provider>
   )
 }

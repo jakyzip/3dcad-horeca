@@ -11,21 +11,52 @@ export const horecaPlugin: Plugin = {
   nodes: [...EQUIPMENT_DEFINITIONS, rilievoDefinition],
 }
 
-/**
- * Sidebar panel of the pack. Registering it with `defaultInstalled` also installs the plugin in
- * new scenes, which is what enables its kinds (see `isNodeKindEnabled`).
- */
-export const horecaHostPanel: EditorHostPanel = {
-  id: 'horeca',
-  label: 'Ho.Re.Ca',
-  icon: { kind: 'url', src: '/icons/horeca/banco-frigo.svg' },
-  component: () => import('./panel'),
-  kinds: [...EQUIPMENT_KINDS, RILIEVO],
+const panel = (name: 'AttrezzaturePanel' | 'ImpiantiPanel' | 'CrmPanel' | 'DocumentiPanel') => () =>
+  import('./panel').then((m) => ({ default: m[name] }))
+
+const shared = {
   pluginId: HORECA_PLUGIN_ID,
   defaultInstalled: true,
   description: 'Attrezzature Ho.Re.Ca e distinta materiali per il CRM.',
   summary: 'Attrezzature e distinta',
-}
+} as const
+
+/**
+ * Sidebar panels of the pack, one rail icon each. Registering them with `defaultInstalled` also
+ * installs the plugin in new scenes, which is what enables its kinds (see `isNodeKindEnabled`).
+ */
+export const horecaHostPanels: EditorHostPanel[] = [
+  {
+    ...shared,
+    id: 'horeca',
+    label: 'Attrezzature',
+    icon: { kind: 'url', src: '/icons/horeca/banco-frigo.svg' },
+    component: panel('AttrezzaturePanel'),
+    kinds: EQUIPMENT_KINDS,
+  },
+  {
+    ...shared,
+    id: 'horeca-impianti',
+    label: 'Impianti e controlli',
+    icon: { kind: 'iconify', name: 'lucide:plug-zap' },
+    component: panel('ImpiantiPanel'),
+  },
+  {
+    ...shared,
+    id: 'horeca-crm',
+    label: 'CRM e distinta',
+    icon: { kind: 'iconify', name: 'lucide:clipboard-list' },
+    component: panel('CrmPanel'),
+  },
+  {
+    ...shared,
+    id: 'horeca-documenti',
+    label: 'Rilievo e documenti',
+    icon: { kind: 'iconify', name: 'lucide:file-text' },
+    component: panel('DocumentiPanel'),
+    kinds: [RILIEVO],
+  },
+]
 
 export { type CatalogArticle, type CatalogParseResult, parseCatalogFile } from './catalog'
 export { placementFor, type ShapeMap, shapeForCategory, useHorecaCatalog } from './catalog-store'

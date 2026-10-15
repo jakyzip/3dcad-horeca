@@ -296,6 +296,8 @@ export interface EditorLayoutV2Props {
   viewerContent: ReactNode
   overlays?: ReactNode
   stageOverlay?: ReactNode
+  /** A fixed column right of the stage (the docked inspector); desktop only. */
+  rightDock?: ReactNode
   /** Show each pane's view bar. Off for hosts that present one fixed view. */
   viewBar?: boolean
 }
@@ -310,6 +312,7 @@ export function EditorLayoutV2({
   viewerContent,
   overlays,
   stageOverlay,
+  rightDock,
   viewBar = true,
 }: EditorLayoutV2Props) {
   const isCaptureMode = useEditor((s) => s.isCaptureMode)
@@ -354,6 +357,7 @@ export function EditorLayoutV2({
         >
           {viewerContent}
         </RightColumn>
+        {!isCaptureMode && rightDock}
       </div>
     </div>
   )
