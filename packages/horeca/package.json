@@ -1,0 +1,46 @@
+{
+  "name": "@3dcad-horeca/horeca",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Plugin Ho.Re.Ca per 3DCadHo.Re.Ca: attrezzature parametriche, dati articolo e distinta per il CRM",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsgo --build --watch",
+    "test": "bun test"
+  },
+  "peerDependencies": {
+    "@pascal-app/core": "^1.0.4",
+    "@pascal-app/editor": "^1.0.4",
+    "@pascal-app/viewer": "^1.0.4",
+    "react": "^18 || ^19",
+    "three": "^0.186",
+    "zod": ">=4.6.7 <4.7",
+    "@react-three/fiber": "^9"
+  },
+  "devDependencies": {
+    "@pascal-app/core": "^1.0.4",
+    "@pascal-app/editor": "^1.0.4",
+    "@pascal-app/viewer": "^1.0.4",
+    "@pascal/typescript-config": "*",
+    "@types/bun": "^1.4.3",
+    "@types/node": "^26.6.5",
+    "@types/react": "19.3.0",
+    "@types/three": "^0.184.0",
+    "typescript": "7.0.2",
+    "@react-three/fiber": "9.8.1"
+  },
+  "license": "MIT"
+}

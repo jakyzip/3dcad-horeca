@@ -12,6 +12,7 @@
     "test": "bun test lib"
   },
   "dependencies": {
+    "@3dcad-horeca/horeca": "*",
     "@iconify/react": "^6.0.2",
     "@number-flow/react": "^0.6.2",
     "@pascal-app/core": "*",

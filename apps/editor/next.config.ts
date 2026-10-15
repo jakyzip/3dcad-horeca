@@ -43,6 +43,7 @@ const nextConfig: NextConfig = {
     '@pascal-app/core',
     '@pascal-app/editor',
     '@pascal-app/mcp',
+    '@3dcad-horeca/horeca',
   ],
   turbopack: {
     resolveAlias: {

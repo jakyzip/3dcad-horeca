@@ -29,6 +29,7 @@
       "name": "editor",
       "version": "0.1.0",
       "dependencies": {
+        "@3dcad-horeca/horeca": "*",
         "@iconify/react": "^6.0.2",
         "@number-flow/react": "^0.6.2",
         "@pascal-app/core": "*",
@@ -242,6 +243,31 @@
         "three": "^0.186",
       },
     },
+    "packages/horeca": {
+      "name": "@3dcad-horeca/horeca",
+      "version": "0.1.0",
+      "devDependencies": {
+        "@pascal-app/core": "^1.0.4",
+        "@pascal-app/editor": "^1.0.4",
+        "@pascal-app/viewer": "^1.0.4",
+        "@pascal/typescript-config": "*",
+        "@react-three/fiber": "9.8.1",
+        "@types/bun": "^1.4.3",
+        "@types/node": "^26.6.5",
+        "@types/react": "19.3.0",
+        "@types/three": "^0.184.0",
+        "typescript": "7.0.2",
+      },
+      "peerDependencies": {
+        "@pascal-app/core": "^1.0.4",
+        "@pascal-app/editor": "^1.0.4",
+        "@pascal-app/viewer": "^1.0.4",
+        "@react-three/fiber": "^9",
+        "react": "^18 || ^19",
+        "three": "^0.186",
+        "zod": ">=4.6.7 <4.7",
+      },
+    },
     "packages/ifc-converter": {
       "name": "@pascal-app/ifc-converter",
       "version": "1.0.4",
@@ -374,6 +400,8 @@
     "three": "0.186.0",
   },
   "packages": {
+    "@3dcad-horeca/horeca": ["@3dcad-horeca/horeca@workspace:packages/horeca"],
+
     "@alloc/quick-lru": ["@alloc/quick-lru@5.2.0", "", {}, "sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw=="],
 
     "@babel/code-frame": ["@babel/code-frame@7.29.7", "", { "dependencies": { "@babel/helper-validator-identifier": "^7.29.7", "js-tokens": "^4.0.0", "picocolors": "^1.1.1" } }, "sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw=="],
@@ -2079,6 +2107,8 @@
     "zundo": ["zundo@2.3.0", "", { "peerDependencies": { "zustand": "^4.3.0 || ^5.0.0" } }, "sha512-4GXYxXA17SIKYhVbWHdSEU04P697IMyVGXrC2TnzoyohEAWytFNOKqOp5gTGvaW93F/PM5Y0evbGtOPF0PWQwQ=="],
 
     "zustand": ["zustand@5.0.15", "", { "peerDependencies": { "@types/react": ">=18.0.0", "immer": ">=9.0.6", "react": ">=18.0.0", "use-sync-external-store": ">=1.2.0" }, "optionalPeers": ["@types/react", "immer", "react", "use-sync-external-store"] }, "sha512-MpSEjRiBkA9crSYeOUH32rJC7SVqAbm0Fqcqge/bUi2PPoLcBWKOsG+C8mevmpr8TwXHBVkChbbJiyvkE+i/3A=="],
+
+    "@3dcad-horeca/horeca/typescript": ["typescript@7.0.2", "", { "optionalDependencies": { "@typescript/typescript-aix-ppc64": "7.0.2", "@typescript/typescript-darwin-arm64": "7.0.2", "@typescript/typescript-darwin-x64": "7.0.2", "@typescript/typescript-freebsd-arm64": "7.0.2", "@typescript/typescript-freebsd-x64": "7.0.2", "@typescript/typescript-linux-arm": "7.0.2", "@typescript/typescript-linux-arm64": "7.0.2", "@typescript/typescript-linux-loong64": "7.0.2", "@typescript/typescript-linux-mips64el": "7.0.2", "@typescript/typescript-linux-ppc64": "7.0.2", "@typescript/typescript-linux-riscv64": "7.0.2", "@typescript/typescript-linux-s390x": "7.0.2", "@typescript/typescript-linux-x64": "7.0.2", "@typescript/typescript-netbsd-arm64": "7.0.2", "@typescript/typescript-netbsd-x64": "7.0.2", "@typescript/typescript-openbsd-arm64": "7.0.2", "@typescript/typescript-openbsd-x64": "7.0.2", "@typescript/typescript-sunos-x64": "7.0.2", "@typescript/typescript-win32-arm64": "7.0.2", "@typescript/typescript-win32-x64": "7.0.2" }, "bin": { "tsc": "bin/tsc" } }, "sha512-8FYau96o3NKOhbjKi/qNvG/W5jhzxkbdm5sj9AbZ/5T5sWqn3hJgLfGx27sRKZWTvyzCP8dLRBTf5tBTSRVUNA=="],
 
     "@babel/helper-compilation-targets/lru-cache": ["lru-cache@5.1.1", "", { "dependencies": { "yallist": "^3.0.2" } }, "sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w=="],
 

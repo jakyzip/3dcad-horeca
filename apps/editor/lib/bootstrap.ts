@@ -1,10 +1,13 @@
+import { horecaHostPanel, horecaPlugin } from '@3dcad-horeca/horeca'
 import {
   type AnyNodeDefinition,
   discoverPlugins,
+  extendPluginDiscovery,
   loadPlugin,
   nodeRegistry,
   registerNode,
 } from '@pascal-app/core'
+import { registerEditorHostPanel } from '@pascal-app/editor'
 import { builtinPlugin } from '@pascal-app/nodes'
 
 // Idempotency guards: HMR can reload this module, but `registerNode`
@@ -76,6 +79,10 @@ export async function loadExternalPlugins(): Promise<void> {
     console.info(`[pascal:registry] + ${externals.length} discovered plugin(s)`)
   }
 }
+
+// The Ho.Re.Ca pack: equipment kinds plus its sidebar panel, installed by default in new scenes.
+extendPluginDiscovery(async () => [horecaPlugin])
+registerEditorHostPanel(horecaHostPanel)
 
 loadBuiltinsSync()
 void loadExternalPlugins()

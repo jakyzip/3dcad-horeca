@@ -65,6 +65,24 @@ Resta aperto:
 
 **Verifica:** test unitari su una scena con elementi noti (quantità e totali esatti); il PDF contiene la tabella.
 
+### Stato fase 1 (2026-10-15, branch `fase-0-licenze`)
+
+Cambiato rispetto al piano: niente prezzi nel CAD, perché il contratto scelto con il CRM (`invia_distinta`, vedi `CLAUDE.md`) li lascia al Preventivatore del CRM. La distinta ha codice, articolo e quantità.
+
+Fatto, nel pacchetto `packages/horeca` (`@3dcad-horeca/horeca`):
+- `product.ts`: articolo in `metadata.product` = `{ item_id, code, name }`, validato con Zod alla lettura (id non uuid = "non valido", contato a parte).
+- `distinta.ts`: conteggio, impronta SHA-256 identica al CAD in Rust (stesso valore di test), payload `invia_distinta` con i limiti del CRM, CSV per Excel italiano.
+- Tre nodi parametrici (banco frigo, cella frigo, lavello inox) con geometria da codice, ingombro in pianta, strumento di piazzamento, campi articolo nell'inspector.
+- Tabelle nel PDF (una per tipo di attrezzatura) tramite `schedule`.
+- Pannello laterale "Ho.Re.Ca": pulsanti per piazzare, distinta, download CSV e JSON (il JSON avrà gli id di disegno, cliente e trattativa con la fase 4).
+
+Verifica: 19 test del pacchetto, `bun run ci` passa. Prova a mano nell'editor fatta dall'utente il 2026-10-15: piazzamento, articolo, distinta, CSV e tabella nel PDF funzionano.
+
+Nota: se `bun dev` dà errori `EMFILE: too many open files`, avviare solo l'app con `bun run --cwd apps/editor dev` (i pacchetti vanno prima compilati con `bun run build`).
+
+Punti aperti emersi:
+- Le icone `iconify` dell'editor vengono scaricate a runtime da `api.iconify.design`: per l'uso offline vanno incluse nel pacchetto.
+
 ## Fase 2: catalogo Ho.Re.Ca
 
 Modelli GLB da fonti CC0 o proprie, ognuno con riga in `ASSETS.md`. Per ogni elemento: dimensioni reali, ingombro 2D, codice articolo. Nome dei file e tag coerenti con `AssetInput` (`packages/core/src/schema/nodes/item.ts`).
