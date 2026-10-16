@@ -1,33 +1,25 @@
+import { BoxGeometry, CylinderGeometry, Group, Mesh, MeshStandardMaterial } from 'three'
 import {
-  BoxGeometry,
-  CylinderGeometry,
-  Group,
-  type Material,
-  Mesh,
-  MeshStandardMaterial,
-} from 'three'
+  addBox,
+  GAP,
+  GASKET,
+  PANEL_WHITE,
+  PLINTH,
+  STAINLESS,
+  STAINLESS_DARK,
+} from './geometry-base'
+import { bowlsOf, buildLavelloAGiorno, gocciolatoio, pianoForato } from './geometry-smontabili'
 import type { BancoFrigoNode, CellaFrigoNode, GenericoNode, LavelloNode } from './schema'
 
-// Medium-quality looks (see CLAUDE.md): flat PBR colours, no textures.
-export const STAINLESS = { color: '#c9ccd1', metalness: 0.75, roughness: 0.35 }
-export const STAINLESS_DARK = { color: '#8d939b', metalness: 0.7, roughness: 0.45 }
-export const PANEL_WHITE = { color: '#eef0f2', metalness: 0.1, roughness: 0.6 }
-export const GASKET = { color: '#2b2d31', metalness: 0, roughness: 0.8 }
-
-export const PLINTH = 0.1
-const GAP = 0.004
-
-export type Box = { w: number; h: number; d: number; x?: number; y: number; z?: number }
-
-export function addBox(group: Group, box: Box, material: Material, name: string) {
-  const mesh = new Mesh(new BoxGeometry(box.w, box.h, box.d), material)
-  mesh.position.set(box.x ?? 0, box.y, box.z ?? 0)
-  mesh.name = name
-  mesh.castShadow = true
-  mesh.receiveShadow = true
-  group.add(mesh)
-  return mesh
-}
+export {
+  addBox,
+  type Box,
+  GASKET,
+  PANEL_WHITE,
+  PLINTH,
+  STAINLESS,
+  STAINLESS_DARK,
+} from './geometry-base'
 
 /**
  * Refrigerated counter: steel cabinet on a recessed plinth, a worktop overhanging the front, and
@@ -109,50 +101,56 @@ export function buildCellaFrigoGeometry(node: CellaFrigoNode): Group {
   return group
 }
 
-/** Stainless sink unit: cabinet, worktop with a sunken basin, and a tap behind it. */
+/**
+ * Stainless sink: on a closed cabinet with a tap behind the bowls, or open on legs (see
+ * `geometry-smontabili.ts`); one or two bowls, or a bowl and a drainer.
+ */
 export function buildLavelloGeometry(node: LavelloNode): Group {
+  if (node.struttura === 'a giorno') return buildLavelloAGiorno(node)
   const group = new Group()
   const { width: W, depth: D, height: H } = node
   const steel = new MeshStandardMaterial(STAINLESS)
   const dark = new MeshStandardMaterial(STAINLESS_DARK)
   const gasket = new MeshStandardMaterial(GASKET)
   const top = 0.04
-  const body = H - top - PLINTH
 
   addBox(group, { w: W - 0.04, h: PLINTH, d: D - 0.08, y: PLINTH / 2 }, gasket, 'lavello-plinth')
   addBox(
     group,
-    { w: W, h: body, d: D - 0.02, y: PLINTH + body / 2, z: -0.01 },
+    { w: W, h: H - top - PLINTH, d: D - 0.02, y: PLINTH + (H - top - PLINTH) / 2, z: -0.01 },
     steel,
     'lavello-body',
   )
+  const { bowls, drainer } = bowlsOf(node)
+  pianoForato(group, W, D, H - top / 2, bowls, steel, 'lavello-top')
+  // The cabinet fills the volume under the worktop: the bowls read as dark wells in the top.
+  for (const b of bowls)
+    addBox(
+      group,
+      { w: b.w, h: 0.004, d: b.d, x: b.x, y: H - top + 0.002, z: b.z },
+      dark,
+      'lavello-basin-floor',
+    )
+  if (drainer) gocciolatoio(group, drainer, H, dark)
+  if (node.alzatina)
+    addBox(
+      group,
+      { w: W, h: 0.1, d: 0.012, y: H + 0.05, z: -D / 2 + 0.006 },
+      steel,
+      'lavello-alzatina',
+    )
 
-  // Worktop as four strips around the basin opening, so the basin reads as sunken.
-  const basinW = Math.min(0.5, W * 0.6)
-  const basinD = Math.min(0.4, D * 0.6)
-  const y = H - top / 2
-  const sideW = (W - basinW) / 2
-  const frontD = (D - basinD) / 2
-  addBox(group, { w: sideW, h: top, d: D, x: -W / 2 + sideW / 2, y }, steel, 'lavello-top')
-  addBox(group, { w: sideW, h: top, d: D, x: W / 2 - sideW / 2, y }, steel, 'lavello-top')
-  addBox(group, { w: basinW, h: top, d: frontD, y, z: D / 2 - frontD / 2 }, steel, 'lavello-top')
-  addBox(group, { w: basinW, h: top, d: frontD, y, z: -D / 2 + frontD / 2 }, steel, 'lavello-top')
-  const basinDepth = Math.min(0.25, body * 0.5)
-  addBox(
-    group,
-    { w: basinW, h: 0.01, d: basinD, y: H - top - basinDepth },
-    dark,
-    'lavello-basin-floor',
-  )
-
-  const tap = new Mesh(new CylinderGeometry(0.012, 0.012, 0.3, 16), dark)
-  tap.position.set(0, H + 0.15, -D / 2 + frontD / 2)
-  tap.name = 'lavello-tap'
-  group.add(tap)
-  const spout = new Mesh(new BoxGeometry(0.02, 0.02, 0.18), dark)
-  spout.position.set(0, H + 0.29, -D / 2 + frontD / 2 + 0.08)
-  spout.name = 'lavello-spout'
-  group.add(spout)
+  const tapZ = -D / 2 + Math.max(0.05, (D - (bowls[0]?.d ?? 0.4)) / 4)
+  for (const b of bowls) {
+    const tap = new Mesh(new CylinderGeometry(0.012, 0.012, 0.3, 16), dark)
+    tap.position.set(b.x, H + 0.15, tapZ)
+    tap.name = 'lavello-tap'
+    group.add(tap)
+    const spout = new Mesh(new BoxGeometry(0.02, 0.02, 0.18), dark)
+    spout.position.set(b.x, H + 0.29, tapZ + 0.08)
+    spout.name = 'lavello-spout'
+    group.add(spout)
+  }
   return group
 }
 

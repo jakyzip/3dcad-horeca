@@ -227,6 +227,14 @@ Un modello è un progetto il cui nome comincia per "Modello" (es. "Modello – L
 ### 8e. Banconi e vetrine componibili (da decidere con l'utente)
 Servono i moduli usati davvero (tipi, larghezze standard, angoli).
 
+### 8f. Tavoli e lavelli inox smontabili (fatto, da provare)
+Ricostruiti dal listino Ideam Ecoplus (pagg. 97 e 100), solo con i dati costruttivi: gambe quadre 40 × 40 su piedini regolabili, longheroni sotto il piano, bordo del piano 40 mm, alzatina saldata dietro (allora le gambe posteriori rientrano di 50 mm), ripiano o, senza, traverse in basso.
+- Tavolo: opzioni "Ripiano sotto" e "Alzatina" (i modelli senza, A, R, AR).
+- Lavello: "Struttura" su mobile (il vecchio) o a giorno; "Vasche" 1 vasca, 2 vasche, vasca + gocciolatoio (a destra, l'unico che esiste); misure della vasca modificabili. In pianta si vedono le vasche e le righe del gocciolatoio.
+- Un articolo del catalogo con codice `ETGE 12/7 AR` o `ELGE 2V 14/7` (anche `ELGE 1VGDX …`) diventa da solo il modello giusto, con la vasca che il listino dà per quella misura; le misure del CRM restano prioritarie. Codice: `smontabili.ts`, `geometry-smontabili.ts`.
+- Nel codice pubblico ci sono solo i dati costruttivi e le misure delle vasche, non i prezzi del listino.
+I progetti salvati prima si aprono uguali (il lavello vecchio resta su mobile); i tavoli già piazzati prendono il nuovo aspetto. Provato nel browser di prova con un progetto apposito (poi eliminato).
+
 ## Fase 9: chiudere la vendita
 
 ### 9a. Tavola PDF per il cliente (fatta, da provare)

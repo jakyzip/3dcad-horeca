@@ -18,6 +18,7 @@ import {
   TAVOLO,
   TRAMOGGIA,
 } from './schema'
+import { daCodice } from './smontabili'
 
 /** Category (normalised) → equipment kind. Categories without an entry use the generic block. */
 export type ShapeMap = Record<string, string>
@@ -163,9 +164,12 @@ export function placementFor(
     depth: metres(article.depth_mm),
     height: metres(article.height_mm),
   }
+  // A code of the open stainless line names its shape and options; the CRM's sizes still win.
+  const line = daCodice(article.code)
   return {
-    kind: shapeForArticle(shapes, article),
+    kind: line?.kind ?? shapeForArticle(shapes, article),
     defaults: {
+      ...line?.defaults,
       ...Object.fromEntries(Object.entries(sizes).filter(([, v]) => v !== undefined)),
       name: article.name || article.code,
       metadata: {

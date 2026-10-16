@@ -47,15 +47,32 @@ export type BancoFrigoNode = z.infer<typeof BancoFrigoNode>
 export const CellaFrigoNode = equipmentShape(CELLA_FRIGO)
 export type CellaFrigoNode = z.infer<typeof CellaFrigoNode>
 
-export const LavelloNode = equipmentShape(LAVELLO)
+export const STRUTTURE = ['su mobile', 'a giorno'] as const
+export type Struttura = (typeof STRUTTURE)[number]
+export const VASCHE = ['1 vasca', '2 vasche', 'vasca + gocciolatoio'] as const
+export type Vasche = (typeof VASCHE)[number]
+
+export const LavelloNode = equipmentShape(LAVELLO).extend({
+  /** On a closed cabinet, or open on four legs (the bolted-together line, see `smontabili.ts`). */
+  struttura: z.enum(STRUTTURE).default('su mobile'),
+  vasche: z.enum(VASCHE).default('1 vasca'),
+  /** Welded upstand along the back edge. */
+  alzatina: z.boolean().default(false),
+  /** Size of each bowl, metres; shrunk to fit a smaller worktop. */
+  vascaLarghezza: z.number().min(0.1).max(2).default(0.5),
+  vascaProfondita: z.number().min(0.1).max(1).default(0.4),
+  vascaAltezza: z.number().min(0.05).max(0.6).default(0.25),
+})
 export type LavelloNode = z.infer<typeof LavelloNode>
 
 export const GenericoNode = equipmentShape(GENERICO)
 export type GenericoNode = z.infer<typeof GenericoNode>
 
 export const TavoloNode = equipmentShape(TAVOLO).extend({
-  /** Lower shelf between the legs. */
+  /** Lower shelf between the legs; without it, rails join the legs low down. */
   ripiano: z.boolean().default(true),
+  /** Welded upstand along the back edge; the back legs then stand 50 mm in. */
+  alzatina: z.boolean().default(false),
 })
 export type TavoloNode = z.infer<typeof TavoloNode>
 
@@ -91,4 +108,10 @@ export type EquipmentNode = BancoFrigoNode & {
   type: string
   ripiano?: boolean
   gocciolatoio?: boolean
-}
+  alzatina?: boolean
+} & Partial<
+    Pick<
+      LavelloNode,
+      'struttura' | 'vasche' | 'vascaLarghezza' | 'vascaProfondita' | 'vascaAltezza'
+    >
+  >

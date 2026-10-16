@@ -1,5 +1,6 @@
 import type { FloorplanGeometry, FloorplanPoint, GeometryContext } from '@pascal-app/core'
 import type { EquipmentNode } from './schema'
+import { pianoLavello } from './smontabili'
 
 const FILL = '#d9dce1'
 const STROKE = '#4b5563'
@@ -8,7 +9,7 @@ const STROKE = '#4b5563'
 export function equipmentFloorplan(
   node: EquipmentNode,
   ctx: GeometryContext,
-  marks: (hw: number, hd: number) => Array<[number, number, number, number]>,
+  marks: (hw: number, hd: number, node: EquipmentNode) => Array<[number, number, number, number]>,
   options: { label?: string; dashed?: boolean } = {},
 ): FloorplanGeometry {
   const { label, dashed } = options
@@ -39,7 +40,7 @@ export function equipmentFloorplan(
       opacity: 0.92,
     },
   ]
-  for (const [x1, z1, x2, z2] of marks(hw, hd)) {
+  for (const [x1, z1, x2, z2] of marks(hw, hd, node)) {
     const a = at(x1, z1)
     const b = at(x2, z2)
     children.push({
@@ -85,15 +86,29 @@ export const cellaMarks = (hw: number, hd: number): Array<[number, number, numbe
 ]
 
 /** Sink: the basin outline. */
-export const lavelloMarks = (hw: number, hd: number): Array<[number, number, number, number]> => {
-  const bw = Math.min(0.25, hw * 0.6)
-  const bd = Math.min(0.2, hd * 0.6)
-  return [
-    [-bw, -bd, bw, -bd],
-    [bw, -bd, bw, bd],
-    [bw, bd, -bw, bd],
-    [-bw, bd, -bw, -bd],
-  ]
+/** The bowls as rectangles, and the drainer's ribs as a few lines, where the 3D puts them. */
+export const lavelloMarks = (
+  hw: number,
+  hd: number,
+  node: EquipmentNode,
+): Array<[number, number, number, number]> => {
+  const { bowls, drainer } = pianoLavello(hw * 2, hd * 2, node.vasche ?? '1 vasca', {
+    w: node.vascaLarghezza ?? 0.5,
+    d: node.vascaProfondita ?? 0.4,
+  })
+  const out: Array<[number, number, number, number]> = []
+  for (const { x, z, w, d } of bowls) {
+    const [l, r, f, b] = [x - w / 2, x + w / 2, z - d / 2, z + d / 2]
+    out.push([l, f, r, f], [r, f, r, b], [r, b, l, b], [l, b, l, f])
+  }
+  if (drainer) {
+    const lines = Math.max(2, Math.round(drainer.w / 0.08))
+    for (let i = 0; i < lines; i++) {
+      const x = drainer.x - drainer.w / 2 + (drainer.w * (i + 0.5)) / lines
+      out.push([x, drainer.z - drainer.d / 2, x, drainer.z + drainer.d / 2])
+    }
+  }
+  return out
 }
 
 /** Generic block: no mark, the article code is written inside instead. */

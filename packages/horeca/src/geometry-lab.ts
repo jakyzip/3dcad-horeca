@@ -43,27 +43,6 @@ function castors(group: Group, W: number, D: number, material: Material, name: s
   return r * 2
 }
 
-/** Stainless table on four legs, with an optional lower shelf. */
-export function buildTavoloGeometry(node: EquipmentNode): Group {
-  const group = new Group()
-  const { width: W, depth: D, height: H } = node
-  const steel = new MeshStandardMaterial(STAINLESS)
-  const top = 0.04
-  const leg = 0.04
-  const inset = 0.04
-  addBox(group, { w: W, h: top, d: D, y: H - top / 2 }, steel, 'tavolo-body')
-  for (const x of [-W / 2 + inset, W / 2 - inset]) {
-    for (const z of [-D / 2 + inset, D / 2 - inset]) {
-      addBox(group, { w: leg, h: H - top, d: leg, x, y: (H - top) / 2, z }, steel, 'tavolo-leg')
-    }
-  }
-  if (node.ripiano !== false) {
-    const y = Math.min(0.2, H * 0.25)
-    addBox(group, { w: W - inset, h: 0.02, d: D - inset, y }, steel, 'tavolo-shelf')
-  }
-  return group
-}
-
 /**
  * Wall cabinet with two sliding doors. As a "gocciolatoio" it has no bottom panel, a drying rack
  * instead, so it drips into the sink below.

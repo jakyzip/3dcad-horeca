@@ -100,7 +100,7 @@ describe('horeca plugin', () => {
     expect(BancoFrigoNode.parse(saved).elevation).toBe(0)
   })
 
-  test('options change the geometry: table shelf, drip-rack cabinet', () => {
+  test('options change the geometry: table shelf and upstand, drip-rack cabinet', () => {
     const names = (kind: string, patch: Record<string, unknown>) => {
       const def = nodeRegistry.get(kind)!
       const out: string[] = []
@@ -110,8 +110,9 @@ describe('horeca plugin', () => {
       ).traverse((c) => out.push(c.name))
       return out
     }
-    expect(names(TAVOLO, { ripiano: true })).toContain('tavolo-shelf')
-    expect(names(TAVOLO, { ripiano: false })).not.toContain('tavolo-shelf')
+    expect(names(TAVOLO, { ripiano: true })).toContain('giorno-shelf')
+    expect(names(TAVOLO, { ripiano: false })).not.toContain('giorno-shelf')
+    expect(names(TAVOLO, { alzatina: true })).toContain('giorno-alzatina')
     expect(names(PENSILE, { gocciolatoio: true })).toContain('pensile-rack')
     expect(names(PENSILE, { gocciolatoio: true })).not.toContain('pensile-bottom')
   })

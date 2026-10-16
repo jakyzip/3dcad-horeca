@@ -48,9 +48,9 @@ import {
   buildMantecatoreGeometry,
   buildPastorizzatoreGeometry,
   buildPensileGeometry,
-  buildTavoloGeometry,
   buildTramoggiaGeometry,
 } from './geometry-lab'
+import { buildTavoloGeometry } from './geometry-smontabili'
 import { readProductRef } from './product'
 import { ProductField } from './product-field'
 import { equipmentSchedule } from './schedule'
@@ -78,14 +78,20 @@ import {
   PastorizzatoreNode,
   PENSILE,
   PensileNode,
+  STRUTTURE,
   TAVOLO,
   TavoloNode,
   TRAMOGGIA,
   TramoggiaNode,
+  VASCHE,
 } from './schema'
 import { ShapeField } from './shape-field'
 
-type Marks = (hw: number, hd: number) => Array<[number, number, number, number]>
+type Marks = (
+  hw: number,
+  hd: number,
+  node: EquipmentNode,
+) => Array<[number, number, number, number]>
 
 type EquipmentSpec<S extends ZodObject> = {
   kind: string
@@ -100,6 +106,8 @@ type EquipmentSpec<S extends ZodObject> = {
   wallMounted?: { elevation: number }
   /** Kind-specific yes/no options, shown under "Opzioni". */
   options?: ReadonlyArray<{ key: string; label: string }>
+  /** Further kind-specific fields, in a group of their own before "Opzioni". */
+  extra?: { label: string; fields: ParamField<EquipmentNode>[] }
   build: (node: EquipmentNode) => Object3D
   marks: Marks
   paletteOrder: number
@@ -206,6 +214,7 @@ function parametricsFor(spec: EquipmentSpec<ZodObject>): ParametricDescriptor<Eq
       },
     ],
   })
+  if (spec.extra) groups.push({ label: spec.extra.label, fields: spec.extra.fields })
   if (spec.options?.length) {
     groups.push({
       label: 'Opzioni',
@@ -275,7 +284,20 @@ function defineEquipment<S extends ZodObject>(spec: EquipmentSpec<S>): AnyNodeDe
     geometry: (node) => build(node as unknown as EquipmentNode),
     geometryKey: (node) => {
       const n = node as unknown as EquipmentNode
-      return JSON.stringify([n.width, n.depth, n.height, n.elevation, n.ripiano, n.gocciolatoio])
+      return JSON.stringify([
+        n.width,
+        n.depth,
+        n.height,
+        n.elevation,
+        n.ripiano,
+        n.gocciolatoio,
+        n.alzatina,
+        n.struttura,
+        n.vasche,
+        n.vascaLarghezza,
+        n.vascaProfondita,
+        n.vascaAltezza,
+      ])
     },
     floorplan: (node, ctx) => {
       const n = node as unknown as EquipmentNode
@@ -413,9 +435,48 @@ export const lavelloDefinition = defineEquipment({
   schema: LavelloNode,
   label: 'Lavello inox',
   plural: 'Lavelli',
-  description: 'Lavello inox su mobile, con vasca e rubinetto.',
+  description:
+    'Lavello inox su mobile o a giorno su gambe, con una o due vasche o il gocciolatoio.',
   icon: '/icons/horeca/lavello.svg',
   size: { width: 1.2, depth: 0.7, height: 0.9 },
+  extra: {
+    label: 'Modello',
+    fields: [
+      {
+        key: 'struttura',
+        label: 'Struttura',
+        kind: 'enum',
+        options: STRUTTURE,
+        display: 'segmented',
+      },
+      { key: 'vasche', label: 'Vasche', kind: 'enum', options: VASCHE },
+      {
+        key: 'vascaLarghezza',
+        label: 'Vasca, larghezza',
+        kind: 'number',
+        unit: 'm',
+        min: 0.1,
+        step: 0.05,
+      },
+      {
+        key: 'vascaProfondita',
+        label: 'Vasca, profondità',
+        kind: 'number',
+        unit: 'm',
+        min: 0.1,
+        step: 0.05,
+      },
+      {
+        key: 'vascaAltezza',
+        label: 'Vasca, altezza',
+        kind: 'number',
+        unit: 'm',
+        min: 0.05,
+        step: 0.01,
+      },
+    ],
+  },
+  options: [{ key: 'alzatina', label: 'Alzatina' }],
   build: as(buildLavelloGeometry),
   marks: lavelloMarks,
   paletteOrder: 30,
@@ -426,10 +487,14 @@ export const tavoloDefinition = defineEquipment({
   schema: TavoloNode,
   label: 'Tavolo su gambe',
   plural: 'Tavoli',
-  description: 'Tavolo inox su quattro gambe, con ripiano inferiore facoltativo.',
+  description:
+    'Tavolo inox a giorno su gambe quadre, con alzatina e ripiano facoltativi (senza ripiano, traverse in basso).',
   icon: '/icons/horeca/tavolo.svg',
   size: { width: 1.4, depth: 0.7, height: 0.9 },
-  options: [{ key: 'ripiano', label: 'Ripiano sotto' }],
+  options: [
+    { key: 'ripiano', label: 'Ripiano sotto' },
+    { key: 'alzatina', label: 'Alzatina' },
+  ],
   build: as(buildTavoloGeometry),
   marks: genericoMarks,
   paletteOrder: 40,
