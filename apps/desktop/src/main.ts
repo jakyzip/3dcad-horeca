@@ -3,6 +3,7 @@ import { createWriteStream, mkdirSync } from 'node:fs'
 import { createServer } from 'node:net'
 import path from 'node:path'
 import { app, BrowserWindow, dialog, shell } from 'electron'
+import { checkForUpdates } from './updates'
 
 /**
  * 3DCadHo.Re.Ca as a desktop app: the editor's own web server (the standalone Next.js build
@@ -150,6 +151,7 @@ if (!app.requestSingleInstanceLock()) {
   app.whenReady().then(async () => {
     try {
       await openWindow()
+      checkForUpdates(PRODUCT, () => window)
     } catch (error) {
       dialog.showErrorBox(
         PRODUCT,

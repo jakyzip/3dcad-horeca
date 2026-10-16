@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { FotoDialog } from './foto-dialog'
 import {
   idProgettoDaUrl,
   nomeFile,
@@ -8,7 +9,7 @@ import {
   useHorecaRenders,
   zipDeiRender,
 } from './render-archivio'
-import { RENDER_WIDTHS, requestRender } from './render-store'
+import { FOTO_ANNULLATO, RENDER_WIDTHS, requestRender } from './render-store'
 
 const BUTTON =
   'h-8 rounded-md border border-border/60 bg-background px-3 text-foreground text-xs hover:bg-accent disabled:opacity-50'
@@ -121,6 +122,7 @@ function Galleria() {
 export function RenderSection() {
   const [width, setWidth] = useState(RENDER_WIDTHS[0]!.width)
   const [withLabels, setWithLabels] = useState(false)
+  const [foto, setFoto] = useState(false)
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState<{ text: string; error: boolean } | null>(null)
 
@@ -132,13 +134,14 @@ export function RenderSection() {
     setBusy(true)
     setMessage(null)
     try {
-      await useHorecaRenders.getState().aggiungi(await requestRender(width, withLabels))
+      await useHorecaRenders.getState().aggiungi(await requestRender(width, withLabels, foto))
       setMessage({
         text: 'Render aggiunto qui sotto. Cambia inquadratura e rifallo per averne altri.',
         error: false,
       })
     } catch (error) {
-      setMessage({ text: error instanceof Error ? error.message : String(error), error: true })
+      const text = error instanceof Error ? error.message : String(error)
+      if (text !== FOTO_ANNULLATO) setMessage({ text, error: true })
     } finally {
       setBusy(false)
     }
@@ -150,8 +153,17 @@ export function RenderSection() {
       <p className="text-xs opacity-60">
         Inquadra la vista 3D come vuoi l’immagine: il render la ridisegna in alta risoluzione, senza
         griglia, guide e selezione. I render restano qui, in questo progetto: scaricali quando vuoi,
-        e quelli segnati “Nella tavola” finiscono nel PDF per il cliente.
+        e quelli segnati “Nella tavola” finiscono nel PDF per il cliente. Il fotorealistico calcola
+        luce e ombre come in una foto: parte sgranato e migliora mentre guardi (al massimo in QHD).
       </p>
+      <select
+        className="h-8 rounded-md border border-border/60 bg-background px-2 text-foreground text-xs"
+        onChange={(e) => setFoto(e.target.value === 'foto')}
+        value={foto ? 'foto' : 'veloce'}
+      >
+        <option value="veloce">Veloce (come la vista 3D)</option>
+        <option value="foto">Fotorealistico (qualche minuto)</option>
+      </select>
       <select
         className="h-8 rounded-md border border-border/60 bg-background px-2 text-foreground text-xs"
         onChange={(e) => setWidth(Number(e.target.value))}
@@ -180,6 +192,7 @@ export function RenderSection() {
         </p>
       )}
       <Galleria />
+      <FotoDialog />
     </section>
   )
 }

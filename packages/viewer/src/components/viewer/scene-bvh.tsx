@@ -17,7 +17,7 @@ type SceneBvhProps = {
   verbose?: boolean
   setBoundingBox?: boolean
   maxDepth?: number
-  maxLeafSize?: number
+  targetLeafSize?: number
   indirect?: boolean
 }
 
@@ -46,7 +46,7 @@ export const SceneBvh = forwardRef<Group, SceneBvhProps>(
       verbose = false,
       setBoundingBox = true,
       maxDepth = 40,
-      maxLeafSize = 10,
+      targetLeafSize = 10,
       indirect = false,
     },
     forwardedRef,
@@ -64,7 +64,7 @@ export const SceneBvh = forwardRef<Group, SceneBvhProps>(
         verbose,
         setBoundingBox,
         maxDepth,
-        maxLeafSize,
+        targetLeafSize,
         indirect,
       }
       const group = ref.current
@@ -129,7 +129,7 @@ export const SceneBvh = forwardRef<Group, SceneBvhProps>(
       verbose,
       setBoundingBox,
       maxDepth,
-      maxLeafSize,
+      targetLeafSize,
       indirect,
       raycaster,
     ])

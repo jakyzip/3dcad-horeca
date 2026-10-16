@@ -146,7 +146,7 @@ Pannello Ho.Re.Ca → "Esporta pianta in DXF": il piano attivo come lo disegna l
 - nome e superficie di ogni ambiente al centro (sui documenti l'editor li lascia all'impaginazione, quindi li scrive l'export);
 - attrezzature con il loro codice articolo; il rilievo resta fuori, salvo spuntare "Includi il rilievo nell'export".
 Le quote allineate non usano il calcolo dello scostamento di `@tarikjabiri/dxf` 2.9.0 (sbagliato): il punto della linea di quota è passato direttamente.
-Provato senza interfaccia su una scena di prova (stanza 6 × 4 m, porta, ambiente, banco frigo): riletto con l'import 3a, misure e posizioni tornano. Non ancora aperto in AutoCAD o LibreCAD.
+Provato senza interfaccia su una scena di prova (stanza 6 × 4 m, porta, ambiente, banco frigo): riletto con l'import 3a, misure e posizioni tornano. Aperto dall'utente in un programma CAD (2026-10-16): funziona.
 
 Limiti noti: niente campiture (i muri sono contorni, non pieni); niente quote del rilievo convertite in quote dell'editor; le scale e gli oggetti di libreria escono come li disegna il foglio, senza blocchi DXF riutilizzabili.
 
@@ -172,14 +172,16 @@ Provato dall'utente il 2026-10-15: l'immagine esce bene ("non male").
 
 Idea rimandata (utente, 2026-10-15: "per ora non serve"): materiali delle attrezzature modificabili con lo strumento Dipingi (parti: struttura, piano, ante/pannelli, guarnizioni) tramite `createSlotPaintCapability`; oggi i materiali sono fissi (inox, inox scuro, bianco, gomma).
 
-### 5b. Path tracing (da decidere dopo la prova di 5a)
-`three-gpu-pathtracer` 0.0.27 (MIT, ottobre 2026) funziona solo con `WebGLRenderer` e materiali standard, mentre il viewer usa `WebGPURenderer` con materiali TSL: servirebbe una seconda scena con i materiali convertiti. Immagini più realistiche, ma minuti per immagine.
+### 5b. Render fotorealistico (fatto, da provare)
+Sezione Render → "Fotorealistico (qualche minuto)". Si apre una finestra con l'immagine che parte sgranata e si affina passaggio dopo passaggio; si ferma da sola a 256 passaggi e si può salvare quando si vuole: finisce nella galleria come gli altri render (anche con i nomi delle attrezzature, e quindi nel PDF). Al massimo in QHD (2560 × 1600 pixel di area), perché usa molta più memoria della scheda grafica; intanto la vista 3D si ferma.
+Come funziona: `three-gpu-pathtracer` 0.0.27 (MIT), la sua versione WebGPU, con la stessa tecnologia della vista 3D. Si fa una copia ferma della scena (`foto-scena.ts`): solo quello che la vista disegna come stanza, con materiali fisici dello stesso colore, il sole e la luce del cielo; i pezzi raggruppati dall'editor (BatchedMesh) diventano oggetti singoli; il soffitto si toglie se la telecamera è sopra (come nella vista). Esposizione: quella della vista × 0,6, perché la luce rimbalza su muri e pavimento. Finestra: `foto-dialog.tsx`. Se dopo 30 secondi non è uscito niente, avvisa di usare il render veloce.
+Provato nel browser di prova: circa 1,5 passaggi al secondo in Full HD, già pulito verso i 60 passaggi. Aggiornato anche `three-mesh-bvh` a 0.9.16 (richiesto dalla libreria) e rinominata l'opzione `maxLeafSize` in `targetLeafSize` nel codice dell'editor.
 
 ## Fase 6: desktop
 
 Scelta dell'utente (2026-10-15): **Electron** (niente server: chi usa l'app, per esempio il papà dell'utente, la installa sul proprio computer e lavora offline). Electron porta il suo Chromium, quindi WebGPU va anche su Linux (con gli switch `enable-unsafe-webgpu` e Vulkan). Tauri scartato: su Linux il browser di sistema non ha WebGPU. Licenze: `electron` 44.7.2 e `electron-builder` 26.15.3, MIT (da aggiungere a `THIRD_PARTY_NOTICES.md`).
 
-### 6a. App desktop (fatta per il Mac, non committata)
+### 6a. App desktop (fatta per il Mac)
 `apps/desktop`:
 - `src/main.ts`: avvia il server dell'editor (build standalone di Next in `runtime/`) con il Node di Electron (`ELECTRON_RUN_AS_NODE=1`) su una porta libera di 127.0.0.1, dati in `userData/data` (`PASCAL_DATA_DIR`), registro in `userData/logs/editor.log`; finestra con schermata "Avvio…", link esterni nel browser, istanza singola, server spento alla chiusura (anche `process.on('exit')` e SIGINT/SIGTERM);
 - `scripts/stage.ts`: build `PASCAL_PORTABLE_BUILD=1` dell'editor e preparazione in `build/runtime` con `stageWebRuntime`, estratta dallo script del CLI in `packages/cli/scripts/web-runtime.ts` (lo usa anche `stage-runtime.ts`);
@@ -192,8 +194,12 @@ Fatto anche: `executableName: 3dcadhoreca` per Linux (l'AppImage falliva per il 
 ### 6b. Icone senza internet (fatta)
 Le 52 icone Iconify usate dall'editor (8 set, licenze MIT, ISC, Apache-2.0) sono copiate in `packages/editor/src/lib/offline-icons/icons.json` e registrate all'avvio dell'editor: niente più richieste a api.iconify.design. Dopo aver aggiunto un'icona: `bun scripts/offline-icons.ts` in `packages/editor` (il test `offline-icons.test.ts` fallisce finché non lo fai). Corretta anche `lucide:scribble`, che non esiste (icona vuota anche online), con `lucide:line-squiggle`. Anche i decodificatori WebAssembly (Draco per i modelli compressi, Basis per le texture KTX2, manifold per l'export di stampa 3D), prima scaricati da gstatic.com e jsdelivr, ora stanno in `apps/editor/public/decoders` (copiati dai pacchetti con `apps/editor/scripts/copia-decoder.ts`; un test li confronta con i pacchetti). Verificato in Chrome: aprendo un progetto con modelli 3D nessuna richiesta verso host esterni. Da sistemare: le etichette 3D (2e) producono in sviluppo l'avviso React "Attempted to synchronously unmount a root while React was already rendering" (drei `Html`); non blocca nulla.
 
-### 6c. Firma per il Mac (in attesa del certificato)
+### 6c. Firma per il Mac (configurata, in attesa del certificato)
+Configurato in `electron-builder.yml`: hardened runtime, `resources/entitlements.mac.plist` (JIT di Electron), firma con il certificato "Developer ID Application" del Portachiavi, notarizzazione con il profilo `3dcadhoreca` salvato da `xcrun notarytool store-credentials` (comando `bun run release:mac`).
 L'utente è iscritto all'Apple Developer Program, ma nel Portachiavi ci sono solo "Apple Development" e "Apple Distribution": per distribuire il dmg fuori dall'App Store serve "Developer ID Application" (Xcode → Impostazioni → Account → Gestisci certificati), più una password specifica per app per la notarizzazione, che l'utente salva da sé nel Portachiavi (`xcrun notarytool store-credentials`).
+
+### 6d. Aggiornamenti automatici (fatto, da provare con la prima release firmata)
+All'avvio l'app desktop cerca una versione nuova tra le release di GitHub (`jakyzip/3dcad-horeca`, repository pubblico creato il 2026-10-16), la scarica in background e chiede "Riavvia e aggiorna" o "Più tardi" (si installa alla chiusura). Codice: `apps/desktop/src/updates.ts`, libreria `electron-updater` 6.8.9 (MIT). Registro in `logs/aggiornamenti.log`. Sul Mac funziona solo con l'app firmata; per questo il dmg è accompagnato da uno zip. Pubblicare una versione: alzare `version` in `apps/desktop/package.json`, poi `GH_TOKEN=$(gh auth token) bun run release:mac` in `apps/desktop`.
 
 ### Traduzione in italiano (scelta dell'utente, 2026-10-15: solo italiano, direttamente nel codice)
 Blocco 1 (fatto): pagine dell'app, barre, menu, tavolozza dei comandi, suggerimenti a schermo, strumenti, nomi dei tasti; circa 1.100 testi in ~175 file, glossario in `docs/progetto/GLOSSARIO.md`. Nuovi progetti "Progetto #n", nuove zone "Zona n" (i vecchi nomi inglesi continuano a contare). Restano in inglese: pannelli laterali e proprietà (blocco 2), nomi predefiniti e definizioni degli oggetti in `packages/nodes` e `core` (blocco 3), messaggi tecnici della stampa 3D, la tavola americana `lib/floorplan/site-plan` (in piedi e pollici: decidere se serve).

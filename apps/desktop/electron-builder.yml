@@ -23,8 +23,15 @@ extraResources:
     to: THIRD_PARTY_NOTICES.md
 mac:
   category: public.app-category.graphics-design
-  target: dmg
+  # The zip is what the app downloads to update itself; the dmg is for a first install.
+  target: [dmg, zip]
   icon: resources/icon.png
+  # Signed with the "Developer ID Application" certificate when the keychain has one, then
+  # notarized with the credentials saved by `xcrun notarytool store-credentials` under the
+  # profile named in APPLE_KEYCHAIN_PROFILE (see `release:mac`).
+  hardenedRuntime: true
+  entitlements: resources/entitlements.mac.plist
+  entitlementsInherit: resources/entitlements.mac.plist
 win:
   target: nsis
   icon: resources/icon.png
@@ -37,3 +44,8 @@ linux:
   target: AppImage
   category: Graphics
   icon: resources/icon.png
+# New versions are GitHub releases of the project; the app checks there at launch.
+publish:
+  provider: github
+  owner: jakyzip
+  repo: 3dcad-horeca
