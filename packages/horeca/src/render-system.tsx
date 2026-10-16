@@ -1,8 +1,10 @@
 'use client'
 
-import { useViewer } from '@pascal-app/viewer'
+import { hideCaptureExcluded } from '@pascal-app/editor'
+import { temporarilyHideNodeTypes, useViewer } from '@pascal-app/viewer'
 import { addAfterEffect, useFrame, useThree } from '@react-three/fiber'
 import { useRef } from 'react'
+import type { Scene } from 'three'
 import { useHorecaLabels } from './labels'
 import { drawLabels, type LabelPlacement, labelPlacements } from './labels-3d'
 import { type RenderRequest, useHorecaRender } from './render-store'
@@ -21,11 +23,12 @@ const MAX_PIXELS = 3840 * 2400
 type Restore = () => void
 
 /**
- * Hide what is editing aid rather than the room: grid, guides, zones, scans, selection, hover.
+ * Hide what is editing aid rather than the room: grid, guides, zones, scans, selection, hover,
+ * the walkthrough's starting marker and the lot's corner flags.
  * The name labels are page elements, not part of the canvas: hidden too, and drawn onto the
  * picture afterwards when asked for (`drawLabels`).
  */
-function cleanView(): Restore {
+function cleanView(scene: Scene): Restore {
   const viewer = useViewer.getState()
   const saved = {
     showGrid: viewer.showGrid,
@@ -42,7 +45,11 @@ function cleanView(): Restore {
   viewer.setHoveredId(null)
   viewer.setSelection({ selectedIds: [], zoneId: null })
   useHorecaLabels.getState().setShown(false)
+  const showMarkers = temporarilyHideNodeTypes(['spawn'])
+  const showExcluded = hideCaptureExcluded(scene)
   return () => {
+    showExcluded()
+    showMarkers()
     const v = useViewer.getState()
     v.setShowGrid(saved.showGrid)
     v.setShowGuides(saved.showGuides)
@@ -82,7 +89,7 @@ export function RenderSystem() {
       job.current = {
         request: current,
         frames: 0,
-        restore: cleanView(),
+        restore: cleanView(state.scene),
         dpr: state.viewport.dpr,
       }
       setDpr(ratio)

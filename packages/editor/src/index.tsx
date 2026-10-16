@@ -84,6 +84,7 @@ export {
 export { QuickMeasurementCard } from './components/editor/quick-measurement-card'
 export { SelectionManager } from './components/editor/selection-manager'
 export {
+  hideCaptureExcluded,
   type SnapshotCameraData,
   ThumbnailGenerator,
 } from './components/editor/thumbnail-generator'

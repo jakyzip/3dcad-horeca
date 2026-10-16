@@ -255,6 +255,8 @@ Ogni render resta nella sezione Render del progetto (salvato nel browser, non ne
 
 Senza render segnati resta l'opzione di farne uno della vista attuale al momento del PDF.
 
+Nei render non compaiono gli aiuti di modifica: griglia, selezione, il punto di partenza della passeggiata e le bandierine agli angoli del lotto.
+
 ### 10d. Trackpad (fatto, da provare con un trackpad vero)
 Si sceglie in Impostazioni → Preferenze → Navigazione: Automatico, Mouse o Trackpad. Con il trackpad:
 - in 3D due dita ruotano la vista e Maiusc + due dita la spostano;

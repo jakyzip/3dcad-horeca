@@ -526,7 +526,8 @@ export const SiteBoundaryEditor: React.FC = () => {
   if (!showSiteHandles) return null
 
   return (
-    <group ref={handlesRootRef}>
+    // Editing handles (the corner flags among them), not part of the site: kept out of captures.
+    <group ref={handlesRootRef} userData={{ excludeFromCapture: true }}>
       <PolygonEditor
         color={isSiteBoundaryHighlighted ? ARROW_COLOR : '#10b981'}
         minVertices={3}
