@@ -20,6 +20,7 @@ import {
   useState,
 } from 'react'
 import * as THREE from 'three/webgpu'
+import { create } from 'zustand'
 import { hasDrawableGeometry } from '../../lib/drawable-geometry'
 import { PERF_OVERLAY_ENABLED } from '../../lib/gpu-perf'
 import { applyIsolation, clearIsolation } from '../../lib/isolation'
@@ -208,6 +209,36 @@ type WebGPUDeviceLike = {
   removeEventListener?: (type: string, listener: EventListener) => void
 }
 
+/** Set when the GPU device is lost: the canvas stops drawing until the page is reloaded. */
+const useGpuLost = create<{ reason: string | null }>(() => ({ reason: null }))
+
+/**
+ * Without it a lost device leaves the last frame on screen while the DOM overlays (labels,
+ * handles) keep following the camera, which reads as a camera that no longer turns.
+ */
+function GpuLostNotice() {
+  const reason = useGpuLost((s) => s.reason)
+  if (reason === null) return null
+  return (
+    <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/40 p-6">
+      <div className="max-w-sm rounded-xl border border-border bg-background p-4 text-center text-foreground text-sm shadow-xl">
+        <p className="font-semibold">La vista 3D si è fermata</p>
+        <p className="mt-1 text-muted-foreground text-xs">
+          La scheda grafica ha interrotto il disegno (può succedere dopo un render molto grande o
+          con poca memoria). Il progetto è salvato: ricarica la pagina per riprendere.
+        </p>
+        <button
+          className="mt-3 h-8 rounded-md bg-foreground px-3 font-medium text-background text-xs"
+          onClick={() => window.location.reload()}
+          type="button"
+        >
+          Ricarica
+        </button>
+      </div>
+    </div>
+  )
+}
+
 function GPUDeviceWatcher({ intentionalWebGL = false }: { intentionalWebGL?: boolean }) {
   const gl = useThree((s) => s.gl)
 
@@ -239,6 +270,8 @@ function GPUDeviceWatcher({ intentionalWebGL = false }: { intentionalWebGL?: boo
         `[viewer] WebGPU device lost: reason="${info.reason ?? 'unknown'}", message="${info.message ?? ''}". ` +
           'The page must be reloaded to recover the GPU context.',
       )
+      // `destroyed` is our own teardown (unmount), not a failure.
+      if (info.reason !== 'destroyed') useGpuLost.setState({ reason: info.message ?? '' })
     })
 
     // Uncaptured errors are normally silent (only console-warned by Chrome at
@@ -637,6 +670,7 @@ const Viewer = forwardRef<ViewerHandle, ViewerProps>(function Viewer(
       {/* DOM overlay, deliberately outside <Canvas> — drei Html wrappers carry
           a camera transform that defeats position:fixed (see perf-panel.tsx). */}
       {(perf || PERF_OVERLAY_ENABLED) && <PerfPanel />}
+      <GpuLostNotice />
       <Canvas
         ref={subscribeWallBuildInteractions}
         key={immersiveActive ? 'webgl-xr' : 'webgpu'}

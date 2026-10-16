@@ -4,6 +4,7 @@
 @source "../../../packages/editor/src";
 @source "../../../packages/nodes/src";
 @source "../../../packages/horeca/src";
+@source "../../../packages/viewer/src";
 
 @custom-variant dark (&:is(.dark *));
 
