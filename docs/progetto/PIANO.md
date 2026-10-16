@@ -174,7 +174,7 @@ Idea rimandata (utente, 2026-10-15: "per ora non serve"): materiali delle attrez
 
 ### 5b. Render fotorealistico (fatto, da provare)
 Sezione Render → "Fotorealistico (qualche minuto)". Si apre una finestra con l'immagine che parte sgranata e si affina passaggio dopo passaggio; si ferma da sola a 256 passaggi e si può salvare quando si vuole: finisce nella galleria come gli altri render (anche con i nomi delle attrezzature, e quindi nel PDF). Al massimo in QHD (2560 × 1600 pixel di area), perché usa molta più memoria della scheda grafica; intanto la vista 3D si ferma.
-Come funziona: `three-gpu-pathtracer` 0.0.27 (MIT), la sua versione WebGPU, con la stessa tecnologia della vista 3D. Si fa una copia ferma della scena (`foto-scena.ts`): solo quello che la vista disegna come stanza, con materiali fisici dello stesso colore, il sole e la luce del cielo; i pezzi raggruppati dall'editor (BatchedMesh) diventano oggetti singoli; il soffitto si toglie se la telecamera è sopra (come nella vista). Esposizione: quella della vista × 0,6, perché la luce rimbalza su muri e pavimento. Finestra: `foto-dialog.tsx`. Se dopo 30 secondi non è uscito niente, avvisa di usare il render veloce.
+Come funziona: `three-gpu-pathtracer` 0.0.27 (MIT), la sua versione WebGPU, con la stessa tecnologia della vista 3D. Si fa una copia ferma della scena (`foto-scena.ts`): solo quello che la vista disegna come stanza, con materiali fisici dello stesso colore, il sole e la luce del cielo; i pezzi raggruppati dall'editor (BatchedMesh) diventano oggetti singoli; il soffitto si toglie se la telecamera è sopra (come nella vista). Esposizione: quella della vista × 0,6, perché la luce rimbalza su muri e pavimento. Finestra: `foto-dialog.tsx`. Se dopo 30 secondi non è uscito niente, avvisa di usare il render veloce. Con la telecamera sotto il soffitto (passeggiata) soffitto e tetto restano visibili ma lasciano passare sole e cielo: una stanza chiusa altrimenti esce quasi nera.
 Provato nel browser di prova: circa 1,5 passaggi al secondo in Full HD, già pulito verso i 60 passaggi. Aggiornato anche `three-mesh-bvh` a 0.9.16 (richiesto dalla libreria) e rinominata l'opzione `maxLeafSize` in `targetLeafSize` nel codice dell'editor.
 
 ## Fase 6: desktop
@@ -234,6 +234,8 @@ Ricostruiti dal listino Ideam Ecoplus (pagg. 97 e 100), solo con i dati costrutt
 - Un articolo del catalogo con codice `ETGE 12/7 AR` o `ELGE 2V 14/7` (anche `ELGE 1VGDX …`) diventa da solo il modello giusto, con la vasca che il listino dà per quella misura; le misure del CRM restano prioritarie. Codice: `smontabili.ts`, `geometry-smontabili.ts`.
 - Nel codice pubblico ci sono solo i dati costruttivi e le misure delle vasche, non i prezzi del listino.
 I progetti salvati prima si aprono uguali (il lavello vecchio resta su mobile); i tavoli già piazzati prendono il nuovo aspetto. Provato nel browser di prova con un progetto apposito (poi eliminato).
+
+Correzione (2026-10-16): pensili e lava-mani restavano disegnati a terra pur avendo l'altezza giusta salvata (l'editor scarta la posizione dell'oggetto che il plugin gli consegna, e teneva solo i pezzi): ora l'altezza sta su un sotto-gruppo.
 
 ## Fase 9: chiudere la vendita
 

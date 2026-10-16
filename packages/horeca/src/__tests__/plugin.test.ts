@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
 import { type AnyNode, type AnyNodeId, loadPlugin, nodeRegistry, useScene } from '@pascal-app/core'
 import { collectFloorplanSchedules } from '@pascal-app/editor'
-import { Box3, Mesh, Vector3 } from 'three'
+import { Box3, Mesh, type Object3D, Vector3 } from 'three'
 import {
   BANCO_FRIGO,
   BancoFrigoNode,
@@ -88,10 +88,17 @@ describe('horeca plugin', () => {
     const pensile = nodeRegistry.get(PENSILE)!
     const node = pensile.schema.parse(pensile.defaults()) as { elevation: number }
     expect(node.elevation).toBe(1.5)
-    expect(pensile.geometry!(node as never, {} as never).position.y).toBe(1.5)
+    // The geometry system moves the returned object's children into the node's group and drops
+    // the object: the lift has to sit on its child, not on the object itself.
+    const lift = (built: Object3D) => {
+      expect(built.position.y).toBe(0)
+      expect(built.children).toHaveLength(1)
+      return built.children[0]!.position.y
+    }
+    expect(lift(pensile.geometry!(node as never, {} as never))).toBe(1.5)
     const tavolo = nodeRegistry.get(TAVOLO)!
     expect(
-      tavolo.geometry!(tavolo.schema.parse(tavolo.defaults()) as never, {} as never).position.y,
+      lift(tavolo.geometry!(tavolo.schema.parse(tavolo.defaults()) as never, {} as never)),
     ).toBe(0)
   })
 

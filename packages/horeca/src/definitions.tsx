@@ -13,7 +13,7 @@ import {
   readFloorplanContext,
   withFloorplanGeometryMetadata,
 } from '@pascal-app/editor'
-import type { Object3D } from 'three'
+import { Group, type Object3D } from 'three'
 import type { ZodObject, ZodType } from 'zod'
 import { aggancia, dentroUnMuro, intorno, sagomaDi } from './aggancio'
 import { allacciamentiFloorplan, levelWallFaces, readAllacciamenti } from './allacciamenti'
@@ -257,10 +257,14 @@ function levelProblems(
 
 function defineEquipment<S extends ZodObject>(spec: EquipmentSpec<S>): AnyNodeDefinition {
   // The builder draws from the unit's underside; a wall-hung unit is lifted by its elevation.
+  // The geometry system moves the returned object's children into the node's group and drops
+  // the object itself, with its position: the lifted object goes one level down, as a child.
   const build = (node: EquipmentNode) => {
     const object = spec.build(node)
     object.position.y = node.elevation ?? 0
-    return object
+    const root = new Group()
+    root.add(object)
+    return root
   }
   const definition: NodeDefinition<S> = {
     kind: spec.kind,

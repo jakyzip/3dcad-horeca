@@ -145,18 +145,23 @@ function batchPiece(geometry: BufferGeometry, range: BatchRange): BufferGeometry
 }
 
 /**
- * Ceilings the camera looks down on. The view draws a ceiling only from below, so from above
- * you see into the room; the path tracer would still stop the light there and leave the room
- * dark under a lid.
+ * Ceilings and roofs, split by the camera's height. Those it looks down on are left out: the view
+ * draws a ceiling only from below, so from above you see into the room. Those over the camera stay
+ * in the picture but let the sun and the sky through, as a photographer's set lights a room: a
+ * closed room otherwise only gets the light from its door and comes out nearly black.
  */
-function ceilingsBelow(camera: Camera): Set<Object3D> {
-  const out = new Set<Object3D>()
+function overhead(camera: Camera): { below: Set<Object3D>; above: Set<Object3D> } {
+  const below = new Set<Object3D>()
+  const above = new Set<Object3D>()
   const box = new Box3()
-  for (const id of sceneRegistry.byType.ceiling ?? []) {
-    const object = sceneRegistry.nodes.get(id as AnyNodeId)
-    if (object && box.setFromObject(object).max.y < camera.position.y) out.add(object)
-  }
-  return out
+  for (const kind of ['ceiling', 'roof'])
+    for (const id of sceneRegistry.byType[kind] ?? []) {
+      const object = sceneRegistry.nodes.get(id as AnyNodeId)
+      if (!object) continue
+      if (box.setFromObject(object).max.y < camera.position.y) below.add(object)
+      else above.add(object)
+    }
+  return { below, above }
 }
 
 /**
@@ -170,7 +175,7 @@ export function sceneForPathTracing(
   camera: Camera,
 ): { scene: Scene; dispose: () => void } {
   source.updateMatrixWorld(true)
-  const skipped = ceilingsBelow(camera)
+  const { below, above } = overhead(camera)
   const scene = new Scene()
   const materials = new Map<Material, MeshPhysicalMaterial>()
   const convert = (m: Material) => {
@@ -185,9 +190,17 @@ export function sceneForPathTracing(
 
   source.traverse((object) => {
     // `traverse` still walks into what is skipped here: check the ancestors each time.
-    for (let o: Object3D | null = object; o; o = o.parent)
-      if (skipped.has(o) || (o.userData as { excludeFromCapture?: unknown }).excludeFromCapture)
+    let lid = false
+    for (let o: Object3D | null = object; o; o = o.parent) {
+      if (below.has(o) || (o.userData as { excludeFromCapture?: unknown }).excludeFromCapture)
         return
+      if (above.has(o)) lid = true
+    }
+    /** Read by the path tracer: rays looking for the sun or the sky pass through. */
+    const add = (mesh: Object3D) => {
+      if (lid) (mesh as Object3D & { visibleToShadowRays?: boolean }).visibleToShadowRays = false
+      scene.add(mesh)
+    }
     if (!drawable(object)) {
       const light = object as DirectionalLight
       if (light.isDirectionalLight && shown(light) && light.intensity > 0) {
@@ -235,7 +248,7 @@ export function sceneForPathTracing(
         batch.getMatrixAt(i, instance)
         mesh.matrix.multiplyMatrices(batch.matrixWorld, instance)
         mesh.matrixAutoUpdate = false
-        scene.add(mesh)
+        add(mesh)
       })
       return
     }
@@ -249,7 +262,7 @@ export function sceneForPathTracing(
     copy.matrix.copy(object.matrixWorld)
     copy.matrixAutoUpdate = false
     copy.matrixWorldNeedsUpdate = true
-    scene.add(copy)
+    add(copy)
   })
 
   scene.environment = filterableSky(source.environment)

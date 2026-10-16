@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'bun:test'
+import { sceneRegistry } from '@pascal-app/core'
 import {
   BatchedMesh,
   BoxGeometry,
@@ -107,5 +108,34 @@ describe('sceneForPathTracing', () => {
     expect(copy.minFilter).toBe(LinearFilter)
     expect(copy.magFilter).toBe(LinearFilter)
     expect(copy.mapping).toBe(EquirectangularReflectionMapping)
+  })
+
+  test('a ceiling is left out seen from above, and lets the light through seen from below', () => {
+    const source = new Scene()
+    const ceiling = new Group()
+    const panel = box()
+    panel.position.y = 2.5
+    ceiling.add(panel)
+    source.add(ceiling, box())
+    source.updateMatrixWorld(true)
+    sceneRegistry.nodes.set('ceiling_test', ceiling)
+    sceneRegistry.byType.ceiling!.add('ceiling_test')
+    try {
+      const high = new PerspectiveCamera()
+      high.position.set(0, 10, 5)
+      expect(meshes(sceneForPathTracing(source, high).scene)).toHaveLength(1)
+
+      const eye = new PerspectiveCamera()
+      eye.position.set(0, 1.6, 2)
+      const inside = meshes(sceneForPathTracing(source, eye).scene)
+      expect(inside).toHaveLength(2)
+      const flags = inside.map(
+        (m) => (m as Mesh & { visibleToShadowRays?: boolean }).visibleToShadowRays,
+      )
+      expect(flags.sort()).toEqual([false, undefined])
+    } finally {
+      sceneRegistry.nodes.delete('ceiling_test')
+      sceneRegistry.byType.ceiling!.delete('ceiling_test')
+    }
   })
 })
