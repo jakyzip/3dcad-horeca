@@ -24,3 +24,21 @@ export const useHorecaLabels = create<{ shown: boolean; setShown: (shown: boolea
     ),
   }),
 )
+
+/**
+ * Whether renders carry the names: unset until the user picks, and then it follows the 3D view
+ * (names shown there, names in the picture). Kept like the view's own preference.
+ */
+export const useRenderNames = create<{
+  withNames: boolean | null
+  setWithNames: (withNames: boolean) => void
+}>()(
+  persist((set) => ({ withNames: null, setWithNames: (withNames) => set({ withNames }) }), {
+    name: '3dcad-horeca:render-nomi',
+    storage: createJSONStorage(() =>
+      typeof localStorage === 'undefined'
+        ? { getItem: () => null, setItem: () => {}, removeItem: () => {} }
+        : localStorage,
+    ),
+  }),
+)

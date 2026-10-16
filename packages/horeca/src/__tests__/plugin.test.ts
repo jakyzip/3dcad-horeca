@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
 import { type AnyNode, type AnyNodeId, loadPlugin, nodeRegistry, useScene } from '@pascal-app/core'
-import { collectFloorplanSchedules } from '@pascal-app/editor'
+import { collectFloorplanSchedules, FLOORPLAN_CONTEXT_EXTENSION_KEY } from '@pascal-app/editor'
 import { Box3, Mesh, type Object3D, Vector3 } from 'three'
 import {
   BANCO_FRIGO,
@@ -17,6 +17,7 @@ import {
   PENSILE,
   TAVOLO,
 } from '../index'
+import { conContenutoPianta } from '../pianta-documento'
 import { reshapeNode } from '../shape-field'
 
 const TAV = { item_id: 'b0000000-0000-4000-8000-000000000002', code: 'BF-150', name: 'Banco frigo' }
@@ -67,7 +68,7 @@ describe('horeca plugin', () => {
   })
 
   test('every kind: defaults parse, the body has the node size, the plan draws', () => {
-    expect(EQUIPMENT_KINDS).toHaveLength(13)
+    expect(EQUIPMENT_KINDS).toHaveLength(17)
     for (const kind of EQUIPMENT_KINDS) {
       const def = nodeRegistry.get(kind)!
       const node = def.schema.parse(def.defaults()) as { width: number }
@@ -122,6 +123,62 @@ describe('horeca plugin', () => {
     expect(names(TAVOLO, { alzatina: true })).toContain('giorno-alzatina')
     expect(names(PENSILE, { gocciolatoio: true })).toContain('pensile-rack')
     expect(names(PENSILE, { gocciolatoio: true })).not.toContain('pensile-bottom')
+  })
+
+  test('documents: the customer plan leaves connections out, the services plan numbers them', () => {
+    const def = nodeRegistry.get(BANCO_FRIGO)!
+    const node = BancoFrigoNode.parse({
+      ...def.defaults(),
+      metadata: {
+        allacciamenti: [
+          { tipo: 'elettrico-230', lato: 'retro', distanza: 0.2, quota: false },
+          { tipo: 'scarico', lato: 'retro', distanza: 0.5, quota: false },
+        ],
+      },
+    })
+    const ctx = (purpose: 'document' | 'edit') =>
+      ({
+        parent: null,
+        resolve: () => undefined,
+        extensions: { [FLOORPLAN_CONTEXT_EXTENSION_KEY]: { purpose } },
+      }) as never
+    const layers = (g: unknown): string[] => {
+      const out: string[] = []
+      const walk = (x: {
+        kind?: string
+        metadata?: { dxfLayer?: string }
+        children?: unknown[]
+        text?: string
+      }) => {
+        if (x.metadata?.dxfLayer) out.push(x.metadata.dxfLayer)
+        if (x.kind === 'text' && x.text?.startsWith('h ')) out.push('altezza')
+        for (const c of x.children ?? []) walk(c as never)
+      }
+      walk(g as never)
+      return out
+    }
+    // On screen: symbols, no heights (the user asked for no dimensions).
+    expect(layers(def.floorplan!(node as never, ctx('edit')))).toEqual(['IMPIANTI'])
+    expect(
+      layers(conContenutoPianta('cliente', () => def.floorplan!(node as never, ctx('document')))),
+    ).toEqual([])
+    const texts = (g: unknown): string[] => {
+      const out: string[] = []
+      const walk = (x: { kind?: string; text?: string; children?: unknown[] }) => {
+        if (x.kind === 'text' && x.text) out.push(x.text)
+        for (const c of x.children ?? []) walk(c as never)
+      }
+      walk(g as never)
+      return out
+    }
+    // The services plan: each symbol carries its number in the table, no dimensions or heights.
+    const numbered = conContenutoPianta(
+      'impianti',
+      () => def.floorplan!(node as never, ctx('document')),
+      new Map([[node.id, 7]]),
+    )
+    expect(texts(numbered)).toEqual(expect.arrayContaining(['7', '8']))
+    expect(texts(numbered).some((t) => t.startsWith('h '))).toBe(false)
   })
 
   test('the plan sheet lists each kind with exact quantities', () => {

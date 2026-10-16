@@ -3,6 +3,7 @@ import type { SheetPdfPage } from '@pascal-app/editor'
 import type { RiepilogoImpianti } from './allacciamenti'
 import { TIPI_ALLACCIAMENTO, TIPO } from './allacciamenti'
 import type { DistintaRow } from './distinta'
+import type { RigaAllacciamento } from './numerazione'
 import { pathToPolylines } from './svg-path'
 
 /**
@@ -40,9 +41,15 @@ export type InfoTavola = {
   piano: string
 }
 
+type Pianta = { model: FloorplanGeometry[]; annotations: FloorplanGeometry[]; rotationDeg: number }
+
 export type ContenutoTavola = {
-  /** The level's plan in unrotated level metres, as `collectSheetGeometry` returns it. */
-  pianta: { model: FloorplanGeometry[]; annotations: FloorplanGeometry[]; rotationDeg: number }
+  /** The level's plan for the customer, in unrotated level metres, as `collectSheetGeometry` returns it. */
+  pianta: Pianta
+  /** The same plan with the service connections numbered, for the installers; null without any. */
+  piantaImpianti: Pianta | null
+  /** The numbered connections, with their measures, for the services sheet's table. */
+  allacciamenti: readonly RigaAllacciamento[]
   /** 3D views, in order: the first beside the plan on the A3 sheet, the others on pages of their own. */
   renders: ReadonlyArray<{ dataUrl: string; aspect: number }>
   elenco: DistintaRow[]
@@ -462,29 +469,42 @@ function pagineA3(
   info: InfoTavola,
 ): SheetPdfPage[] {
   const [first, ...more] = c.renders
-  const total = 1 + more.length
   const { w, h } = A3
   const titleH = 1.35
   const inner = { x: MARGIN, y: MARGIN, w: w - 2 * MARGIN, h: h - 2 * MARGIN }
   const body = { x: inner.x + 0.1, y: inner.y + 0.1, w: inner.w - 0.2, h: inner.h - titleH - 0.3 }
+  const servizi = c.piantaImpianti ? fogliImpiantiA3(c.piantaImpianti, c, body) : []
+  const total = 1 + servizi.length + more.length
+  const plate = (n: number, progetto: string, scala: number | null) => [
+    box(inner, INK, 0.02),
+    ...cartiglio(
+      { x: inner.x, y: inner.y + inner.h - titleH, w: inner.w, h: titleH },
+      intestazione,
+      { ...info, progetto },
+      scala,
+      `${n}/${total}`,
+    ),
+  ]
   return [
     paginaA3({ ...c, renders: first ? [first] : [] }, intestazione, info, `1/${total}`),
+    ...servizi.map(
+      (d, i): SheetPdfPage => ({
+        number: String(i + 2),
+        title: d.title,
+        widthIn: w,
+        heightIn: h,
+        plate: plate(i + 2, `${info.progetto} — pianta impianti`, d.scala),
+        windows: d.windows,
+        overlay: d.overlay,
+      }),
+    ),
     ...more.map(
       (r, i): SheetPdfPage => ({
-        number: String(i + 2),
+        number: String(i + 2 + servizi.length),
         title: 'Vista 3D',
         widthIn: w,
         heightIn: h,
-        plate: [
-          box(inner, INK, 0.02),
-          ...cartiglio(
-            { x: inner.x, y: inner.y + inner.h - titleH, w: inner.w, h: titleH },
-            intestazione,
-            info,
-            null,
-            `${i + 2}/${total}`,
-          ),
-        ],
+        plate: plate(i + 2 + servizi.length, info.progetto, null),
         windows: [],
         overlay: [imageIn(r.dataUrl, r.aspect, body)],
       }),
@@ -503,7 +523,7 @@ function paginaA3(
   const titleH = 1.35
   const inner = { x: MARGIN, y: MARGIN, w: w - 2 * MARGIN, h: h - 2 * MARGIN }
   const body = { x: inner.x, y: inner.y, w: inner.w, h: inner.h - titleH - 0.15 }
-  const side = render || c.elenco.length || c.impianti ? 5.4 : 0
+  const side = render || c.elenco.length ? 5.4 : 0
   const planArea = { x: body.x + 0.1, y: body.y + 0.1, w: body.w - side - 0.3, h: body.h - 0.2 }
   const { windows, scala } = finestraPianta(c.pianta, planArea)
 
@@ -516,22 +536,14 @@ function paginaA3(
     y += area.h + 0.25
   }
   const bottom = body.y + body.h - 0.1
-  const impiantiRows = c.impianti ? righeImpianti(c.impianti) : []
-  const impiantiH = impiantiRows.length ? (impiantiRows.length + 1) * 0.21 + 0.3 : 0
-  if (c.elenco.length) {
-    const t = tabella(
-      { x: sx, y, w: side, h: bottom - y - impiantiH },
-      'Attrezzature',
-      COLONNE_ELENCO,
-      righeElenco(c.elenco),
-    )
-    overlay.push(...t.geometry)
-    y += t.used + 0.25
-  }
-  if (impiantiRows.length)
+  if (c.elenco.length)
     overlay.push(
-      ...tabella({ x: sx, y, w: side, h: bottom - y }, 'Impianti', COLONNE_IMPIANTI, impiantiRows)
-        .geometry,
+      ...tabella(
+        { x: sx, y, w: side, h: bottom - y },
+        'Attrezzature',
+        COLONNE_ELENCO,
+        righeElenco(c.elenco),
+      ).geometry,
     )
 
   return {
@@ -554,6 +566,110 @@ function paginaA3(
   }
 }
 
+/** What the services plan's symbols and figures mean. */
+const LEGENDA_IMPIANTI = [
+  'I numeri nei cerchi rimandano alla tabella; il colore è quello dell’allacciamento.',
+  'Quote in mm al punto di allacciamento: dal muro più vicino e dal muro trasversale.',
+  'h = altezza da terra, in mm.',
+]
+
+export const COLONNE_ALLACCIAMENTI: Colonna[] = [
+  { label: 'N.', weight: 0.7, align: 'end' },
+  { label: 'Attrezzatura', weight: 2.4 },
+  { label: 'Allacciamento', weight: 2.4 },
+  { label: 'Muro', weight: 1.1, align: 'end' },
+  { label: 'Laterale', weight: 1.2, align: 'end' },
+  { label: 'h', weight: 0.9, align: 'end' },
+  { label: 'kW', weight: 0.9, align: 'end' },
+]
+
+const millimetri = (m: number | null) => (m === null ? '—' : String(Math.round(m * 1000)))
+
+export const righeAllacciamenti = (righe: readonly RigaAllacciamento[]) =>
+  righe.map((r) => [
+    String(r.n),
+    r.attrezzatura,
+    `${TIPO[r.tipo].sigla} ${TIPO[r.tipo].label}`,
+    millimetri(r.muro),
+    millimetri(r.laterale),
+    millimetri(r.altezza),
+    r.potenza === undefined ? '' : r.potenza.toFixed(2).replace('.', ','),
+  ])
+
+/** Rows a `tabella` of font `size` holds in `height`, title and header included. */
+const capienza = (height: number, size: number) =>
+  Math.max(1, Math.floor((height - size * 4.3) / (size * 2.1)))
+
+type Bozza = {
+  title: string
+  windows: SheetPdfPage['windows']
+  overlay: FloorplanGeometry[]
+  scala: number | null
+}
+
+/**
+ * The services sheets: the plan with numbered connections, the summary, the legend and the
+ * numbered table beside it; rows that do not fit go on to sheets of their own.
+ */
+function fogliImpiantiA3(pianta: Pianta, c: ContenutoTavola, body: Rect): Bozza[] {
+  const side = 6.2
+  const planArea = { x: body.x, y: body.y, w: body.w - side - 0.3, h: body.h }
+  const { windows, scala } = finestraPianta(pianta, planArea)
+  const sx = body.x + body.w - side
+  const overlay: FloorplanGeometry[] = []
+  let y = body.y
+  if (c.impianti) {
+    const t = tabella(
+      { x: sx, y, w: side, h: body.h / 2 },
+      'Impianti',
+      COLONNE_IMPIANTI,
+      righeImpianti(c.impianti),
+      0.09,
+    )
+    overlay.push(...t.geometry)
+    y += t.used + 0.15
+  }
+  for (const riga of LEGENDA_IMPIANTI) {
+    overlay.push(text(sx, y, riga, 0.075, { color: MUTED }))
+    y += 0.14
+  }
+  y += 0.1
+  const size = 0.085
+  const rows = righeAllacciamenti(c.allacciamenti)
+  const here = Math.min(rows.length, capienza(body.y + body.h - y, size))
+  overlay.push(
+    ...tabella(
+      { x: sx, y, w: side, h: body.y + body.h - y },
+      'Allacciamenti',
+      COLONNE_ALLACCIAMENTI,
+      rows.slice(0, here),
+      size,
+    ).geometry,
+  )
+  const out: Bozza[] = [{ title: 'Pianta impianti', windows, overlay, scala }]
+  // The rest, two columns of the table per sheet.
+  const colW = (body.w - 0.4) / 2
+  const perColumn = capienza(body.h, size)
+  for (let start = here; start < rows.length; start += 2 * perColumn) {
+    const geometry: FloorplanGeometry[] = []
+    for (let k = 0; k < 2; k++) {
+      const slice = rows.slice(start + k * perColumn, start + (k + 1) * perColumn)
+      if (!slice.length) break
+      geometry.push(
+        ...tabella(
+          { x: body.x + k * (colW + 0.4), y: body.y, w: colW, h: body.h },
+          'Allacciamenti (segue)',
+          COLONNE_ALLACCIAMENTI,
+          slice,
+          size,
+        ).geometry,
+      )
+    }
+    out.push({ title: 'Allacciamenti', windows: [], overlay: geometry, scala: null })
+  }
+  return out
+}
+
 function pagineA4(
   c: ContenutoTavola,
   intestazione: Intestazione,
@@ -565,8 +681,38 @@ function pagineA4(
   const body = { x: inner.x + 0.1, y: inner.y + 0.1, w: inner.w - 0.2, h: inner.h - titleH - 0.3 }
   const { windows, scala } = finestraPianta(c.pianta, body)
 
-  type Draft = { title: string; windows: SheetPdfPage['windows']; overlay: FloorplanGeometry[] }
-  const drafts: Draft[] = [{ title: 'Pianta', windows, overlay: [] }]
+  type Draft = {
+    title: string
+    windows: SheetPdfPage['windows']
+    overlay: FloorplanGeometry[]
+    scala?: number | null
+  }
+  const drafts: Draft[] = [{ title: 'Pianta', windows, overlay: [], scala }]
+  if (c.piantaImpianti) {
+    const plan = finestraPianta(c.piantaImpianti, { ...body, h: body.h - 0.5 })
+    drafts.push({
+      title: 'Pianta impianti',
+      windows: plan.windows,
+      scala: plan.scala,
+      overlay: LEGENDA_IMPIANTI.map((riga, i) =>
+        text(body.x, body.y + body.h - 0.38 + i * 0.13, riga, 0.07, { color: MUTED }),
+      ),
+    })
+    const rows = righeAllacciamenti(c.allacciamenti)
+    const perPage = capienza(body.h, 0.085)
+    for (let start = 0; start < rows.length; start += perPage)
+      drafts.push({
+        title: 'Allacciamenti',
+        windows: [],
+        overlay: tabella(
+          body,
+          start ? 'Allacciamenti (segue)' : 'Allacciamenti',
+          COLONNE_ALLACCIAMENTI,
+          rows.slice(start, start + perPage),
+          0.085,
+        ).geometry,
+      })
+  }
   for (const render of c.renders)
     drafts.push({
       title: 'Vista 3D',
@@ -617,7 +763,7 @@ function pagineA4(
         { x: inner.x, y: inner.y + inner.h - titleH, w: inner.w, h: titleH },
         intestazione,
         info,
-        d.windows.length ? scala : null,
+        d.windows.length ? (d.scala ?? null) : null,
         `${i + 1}/${drafts.length}`,
       ),
     ],

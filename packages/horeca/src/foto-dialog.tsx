@@ -139,11 +139,38 @@ function FotoWindow({ job }: { job: FotoJob }) {
   const done = samples >= FOTO_SAMPLES
   return (
     <div className="fixed inset-0 z-[1000] flex flex-col items-center justify-center gap-4 bg-black/85 p-6">
-      <canvas
-        className="max-h-[calc(100vh-9rem)] max-w-full rounded-md bg-black object-contain shadow-2xl"
-        ref={canvas}
-        style={{ aspectRatio: `${job.width} / ${job.height}` }}
-      />
+      <div
+        className="relative overflow-hidden rounded-md"
+        style={{
+          aspectRatio: `${job.width} / ${job.height}`,
+          // As wide as fits both ways; the width is set, since the names measure from it.
+          width: `min(100%, calc((100vh - 9rem) * ${job.width / job.height}))`,
+          containerType: 'inline-size',
+        }}
+      >
+        <canvas
+          className="h-full w-full rounded-md bg-black shadow-2xl"
+          ref={canvas}
+          style={{ aspectRatio: `${job.width} / ${job.height}` }}
+        />
+        {/* The names, where saving draws them: shown over the picture while it clears up. */}
+        {job.labels.map((label) => (
+          <span
+            className="pointer-events-none absolute whitespace-nowrap rounded-[0.5em] border border-black/15 bg-white/90 px-[0.66em] text-[#1f2328] shadow-sm"
+            key={label.id}
+            style={{
+              left: `${((label.x * job.labelScale) / job.width) * 100}%`,
+              top: `${((label.y * job.labelScale) / job.height) * 100}%`,
+              transform: 'translate(-50%, -50%)',
+              // 12 px in the view, scaled as the picture is: container width units.
+              fontSize: `${((12 * job.labelScale) / job.width) * 100}cqw`,
+              lineHeight: 1.6,
+            }}
+          >
+            {label.text}
+          </span>
+        ))}
+      </div>
       <div className="flex w-full max-w-xl flex-col gap-2 text-sm text-white">
         {error ? (
           <p className="text-amber-400">Il render fotorealistico non è partito: {error}</p>

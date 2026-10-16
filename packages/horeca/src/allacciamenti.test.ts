@@ -132,7 +132,7 @@ describe('plan and DXF', () => {
     const plan = allacciamentiFloorplan(unit, list, faces)
     expect(plan?.kind === 'group' && plan.metadata?.dxfLayer).toBe('IMPIANTI')
     // Back of the unit at z = 0.65, the wall face at 0.1.
-    expect(texts(plan)).toEqual(['AF', '230', 'h 0,50', '0,55'])
+    expect(texts(plan)).toEqual(['AF', '230', 'h 500', '550'])
   })
 
   test('the export puts connections on their own layer, dimensions included', () => {
@@ -164,10 +164,10 @@ describe('side dimensions', () => {
     )
     expect(dims.map((d) => d.kind)).toEqual(['dimension', 'dimension-string'])
     const depth = dims[0] as Extract<FloorplanGeometry, { kind: 'dimension' }>
-    expect(depth.text).toBe('0,50')
+    expect(depth.text).toBe('500')
     const chain = dims[1] as Extract<FloorplanGeometry, { kind: 'dimension-string' }>
     // Nearest the side wall first: 1,90 to the first point, then 15 cm steps.
-    expect(chain.segments.map((s) => s.text)).toEqual(['1,90', '0,15', '0,15'])
+    expect(chain.segments.map((s) => s.text)).toEqual(['1900', '150', '150'])
     // Room behind the points: the chain runs between them and the wall (towards −y).
     expect(chain.offsetNormal[1]).toBeLessThan(0)
   })

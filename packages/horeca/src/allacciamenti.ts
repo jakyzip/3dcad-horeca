@@ -270,9 +270,12 @@ export function wallDimensions(
   return across ? [first, across] : [first]
 }
 
-const metri = (value: number) => `${value.toFixed(2).replace('.', ',')}`
+/** Millimetres, as the walls are dimensioned on the plan and the sheets. */
+const mm = (value: number) => String(Math.round(value * 1000))
 
 const SYMBOL_R = 0.07
+/** On the services sheet the symbols carry numbers, to be read on paper at the usual scales. */
+const NUMBERED_R = 0.13
 
 const QUOTE_COLOR = '#c2410c'
 /** Centre-to-centre gap between two symbols on the same side. */
@@ -283,7 +286,10 @@ const SYMBOL_GAP = 2 * SYMBOL_R + 0.03
  * neighbour; then the close ones spread apart, evenly around where they belong, each tied to its
  * point by a slanted leader.
  */
-export function symbolSlots(list: readonly Pick<Allacciamento, 'lato' | 'distanza'>[]): number[] {
+export function symbolSlots(
+  list: readonly Pick<Allacciamento, 'lato' | 'distanza'>[],
+  gap = SYMBOL_GAP,
+): number[] {
   const slots = list.map((a) => a.distanza)
   for (const lato of LATI) {
     const order = list
@@ -299,9 +305,9 @@ export function symbolSlots(list: readonly Pick<Allacciamento, 'lato' | 'distanz
         const last = clusters[clusters.length - 1]!
         const prev = clusters[clusters.length - 2]
         if (!prev) break
-        const prevEnd = prev.centre + ((prev.items.length - 1) * SYMBOL_GAP) / 2
-        const lastStart = last.centre - ((last.items.length - 1) * SYMBOL_GAP) / 2
-        if (lastStart - prevEnd >= SYMBOL_GAP - 1e-9) break
+        const prevEnd = prev.centre + ((prev.items.length - 1) * gap) / 2
+        const lastStart = last.centre - ((last.items.length - 1) * gap) / 2
+        if (lastStart - prevEnd >= gap - 1e-9) break
         const items = [...prev.items, ...last.items]
         clusters.splice(-2, 2, {
           items,
@@ -311,7 +317,7 @@ export function symbolSlots(list: readonly Pick<Allacciamento, 'lato' | 'distanz
     }
     for (const { items, centre } of clusters)
       for (const [k, { i }] of items.entries())
-        slots[i] = centre + (k - (items.length - 1) / 2) * SYMBOL_GAP
+        slots[i] = centre + (k - (items.length - 1) / 2) * gap
   }
   return slots
 }
@@ -351,7 +357,7 @@ export function sideDimensions(
       offsetNormal: behind.direction,
       offsetDistance: 0,
       extensionOvershoot: 0.03,
-      text: metri(foot.distance),
+      text: mm(foot.distance),
       stroke: QUOTE_COLOR,
     })
   }
@@ -371,7 +377,7 @@ export function sideDimensions(
     const b = chain[i]!
     const length = Math.abs(dot(along, [b[0] - a[0], b[1] - a[1]]))
     if (length < 0.005) continue
-    segments.push({ start: a, end: b, text: metri(length) })
+    segments.push({ start: a, end: b, text: mm(length) })
   }
   if (!segments.length) return out
   // The chain runs in the gap towards the wall behind when there is room, else over the unit.
@@ -410,20 +416,23 @@ export function allacciamentiFloorplan(
   faces: readonly WallFace[],
   /** Marks the dimensions so the editor shows them with the manual dimensions (see definitions). */
   tagQuote: (g: FloorplanGeometry) => FloorplanGeometry = (g) => g,
+  /** On the services sheet: the first connection's number; symbols show numbers, not initials. */
+  primo?: number,
 ): FloorplanGeometry | null {
   if (!list.length) return null
   const at = planTransformOf(node)
   const children: FloorplanGeometry[] = []
   const quote: FloorplanGeometry[] = []
   const quoted: Array<{ lato: Lato; point: FloorplanPoint; distanza: number }> = []
-  const slots = symbolSlots(list)
+  const r = primo === undefined ? SYMBOL_R : NUMBERED_R
+  const slots = symbolSlots(list, 2 * r + 0.03)
   for (const [index, a] of list.entries()) {
     const t = TIPO[a.tipo]
     const [lx, lz] = localPoint(node, a)
     const [nx, nz] = LATO_NORMAL[a.lato]
     const point = at(lx, lz)
     // The symbol sits just outside the side, slid along it when it would touch a neighbour.
-    const out = SYMBOL_R + 0.04
+    const out = r + 0.04
     const slide =
       (slots[index] ?? a.distanza) - Math.min(Math.max(a.distanza, 0), latoLength(node, a.lato))
     const [tx, tz] = [Math.abs(nz), Math.abs(nx)]
@@ -443,7 +452,7 @@ export function allacciamentiFloorplan(
         kind: 'circle',
         cx: symbol[0],
         cy: symbol[1],
-        r: SYMBOL_R,
+        r,
         fill: '#ffffff',
         stroke: t.colore,
         strokeWidth: 1.5,
@@ -453,8 +462,15 @@ export function allacciamentiFloorplan(
         kind: 'text',
         x: symbol[0],
         y: symbol[1],
-        text: t.sigla,
-        fontSize: t.sigla.length > 2 ? 0.045 : 0.06,
+        text: primo === undefined ? t.sigla : String(primo + index),
+        fontSize:
+          primo === undefined
+            ? t.sigla.length > 2
+              ? 0.045
+              : 0.06
+            : String(primo + index).length > 2
+              ? 0.09
+              : 0.12,
         fill: t.colore,
         textAnchor: 'middle',
         dominantBaseline: 'central',
@@ -463,13 +479,13 @@ export function allacciamentiFloorplan(
     )
     if (!a.quota) continue
     // The height goes just past the symbol, away from the unit.
-    const far = out + SYMBOL_R + 0.05
+    const far = out + r + 0.05
     const label = at(lx + nx * far + tx * slide, lz + nz * far + tz * slide)
     quote.push({
       kind: 'text',
       x: label[0],
       y: label[1],
-      text: `h ${metri(a.altezza)}`,
+      text: `h ${mm(a.altezza)}`,
       fontSize: 0.05,
       fill: t.colore,
       textAnchor: 'middle',

@@ -7,14 +7,18 @@ import {
   ABBATTITORE,
   BANCO_FRIGO,
   CELLA_FRIGO,
+  CENTRALE_FRIGO,
+  EVAPORATORE,
   FRIGORIFERO,
   GENERICO,
   LAVAMANI,
   LAVASTOVIGLIE,
   LAVELLO,
   MANTECATORE,
+  MOTOCONDENSANTE,
   PASTORIZZATORE,
   PENSILE,
+  QUADRO_FRIGO,
   TAVOLO,
   TRAMOGGIA,
 } from './schema'
@@ -110,6 +114,11 @@ export const useHorecaCatalog = create<CatalogState>()(
  * "lava-mani" before "lavell", "cella" before "frigo"). Accents and hyphens are ignored.
  */
 const GUESSES: ReadonlyArray<[RegExp, string]> = [
+  // The plant first: "centrale frigo" and "quadro frigo" are not fridges.
+  [/motocondens|unita condensatric|condensing/, MOTOCONDENSANTE],
+  [/evaporator/, EVAPORATORE],
+  [/centrale (frigo|refrigera)|centrali frigo/, CENTRALE_FRIGO],
+  [/quadr[oi] (elettric[oi] )?(frigo|cella|comando)/, QUADRO_FRIGO],
   [/lavastovigl/, LAVASTOVIGLIE],
   [/lava ?mani/, LAVAMANI],
   [/lavell/, LAVELLO],

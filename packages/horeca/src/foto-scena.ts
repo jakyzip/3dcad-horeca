@@ -22,6 +22,7 @@ import {
   Scene,
   type Texture,
 } from 'three'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 
 /** Layer 0, where the room itself is drawn; editing overlays, zones and the grid sit above. */
 const SCENE_LAYER_MASK = 1
@@ -144,6 +145,45 @@ function batchPiece(geometry: BufferGeometry, range: BatchRange): BufferGeometry
   return out
 }
 
+/** Every surface in the same shape: no index, world space, position + normal + uv + colour. */
+function worldGeometry(source: BufferGeometry, matrix: Matrix4): BufferGeometry {
+  const flat = source.index ? source.toNonIndexed() : source
+  const count = flat.attributes.position!.count
+  const out = new BufferGeometry()
+  const copy = (name: string, size: number, fill: number) => {
+    const attribute = flat.attributes[name]
+    const array = new Float32Array(count * size).fill(fill)
+    if (attribute)
+      for (let i = 0; i < count; i++)
+        for (let k = 0; k < Math.min(size, attribute.itemSize); k++)
+          array[i * size + k] = attribute.getComponent(i, k)
+    out.setAttribute(name, new BufferAttribute(array, size))
+    return Boolean(attribute)
+  }
+  copy('position', 3, 0)
+  const hasNormals = copy('normal', 3, 0)
+  copy('uv', 2, 0)
+  copy('color', 3, 1)
+  for (const g of flat.groups) out.addGroup(g.start, g.count, g.materialIndex)
+  if (flat !== source) flat.dispose()
+  if (!hasNormals) out.computeVertexNormals()
+  out.applyMatrix4(matrix)
+  return out
+}
+
+/** Vertices `start` … `start + count` of a non-indexed geometry, as a geometry of their own. */
+function slice(geometry: BufferGeometry, start: number, count: number): BufferGeometry {
+  const total = geometry.attributes.position!.count
+  const end = Math.min(total, start + count)
+  const out = new BufferGeometry()
+  for (const [name, attribute] of Object.entries(geometry.attributes)) {
+    const size = attribute.itemSize
+    const array = (attribute.array as Float32Array).slice(start * size, end * size)
+    out.setAttribute(name, new BufferAttribute(array, size))
+  }
+  return out
+}
+
 /**
  * Ceilings and roofs, split by the camera's height. Those it looks down on are left out: the view
  * draws a ceiling only from below, so from above you see into the room. Those over the camera stay
@@ -188,6 +228,57 @@ export function sceneForPathTracing(
   }
   const owned: Array<{ dispose: () => void }> = []
 
+  // Every surface is gathered in world space by material, then merged: one plain geometry per
+  // material (and per lid state). The path tracer builds a BVH root per geometry group and packs
+  // at most 128 of them, which a tiled wall or a long scene of separate parts can exceed.
+  const tinted = new Map<string, MeshPhysicalMaterial>()
+  const parts = new Map<
+    string,
+    { material: MeshPhysicalMaterial; lid: boolean; pieces: BufferGeometry[] }
+  >()
+  const collect = (
+    geometry: BufferGeometry,
+    matrix: Matrix4,
+    material: Material | Material[],
+    lid: boolean,
+    tint?: Color,
+  ) => {
+    const world = worldGeometry(geometry, matrix)
+    const ranges: Array<{ start: number; count: number; material: Material | undefined }> =
+      Array.isArray(material)
+        ? (world.groups.length
+            ? world.groups
+            : [{ start: 0, count: Infinity, materialIndex: 0 }]
+          ).map((g) => ({
+            start: g.start,
+            count: g.count,
+            material: material[g.materialIndex ?? 0],
+          }))
+        : [{ start: 0, count: Infinity, material }]
+    for (const range of ranges) {
+      if (!(range.material && paints(range.material))) continue
+      let converted = convert(range.material)
+      if (tint) {
+        const key = `${converted.uuid}:${tint.getHexString()}`
+        const known = tinted.get(key)
+        if (known) converted = known
+        else {
+          const copy = converted.clone()
+          copy.color.multiply(tint)
+          tinted.set(key, copy)
+          converted = copy
+        }
+      }
+      const piece = Array.isArray(material) ? slice(world, range.start, range.count) : world
+      const key = `${converted.uuid}:${lid}`
+      const entry = parts.get(key)
+      if (entry) entry.pieces.push(piece)
+      else parts.set(key, { material: converted, lid, pieces: [piece] })
+    }
+    // Sliced by material: the whole is no longer needed.
+    if (Array.isArray(material)) world.dispose()
+  }
+
   source.traverse((object) => {
     // `traverse` still walks into what is skipped here: check the ancestors each time.
     let lid = false
@@ -195,11 +286,6 @@ export function sceneForPathTracing(
       if (below.has(o) || (o.userData as { excludeFromCapture?: unknown }).excludeFromCapture)
         return
       if (above.has(o)) lid = true
-    }
-    /** Read by the path tracer: rays looking for the sun or the sky pass through. */
-    const add = (mesh: Object3D) => {
-      if (lid) (mesh as Object3D & { visibleToShadowRays?: boolean }).visibleToShadowRays = false
-      scene.add(mesh)
     }
     if (!drawable(object)) {
       const light = object as DirectionalLight
@@ -216,14 +302,12 @@ export function sceneForPathTracing(
     if (!list.some(paints)) return
 
     if ((object as BatchedMesh).isBatchedMesh) {
-      // The editor packs many small parts into one batch; the path tracer wants each on its own.
+      // The editor packs many small parts into one batch: each instance is taken on its own.
       const batch = object as BatchedMesh
       const internals = batch as unknown as BatchInternals
       const pieces = new Map<number, BufferGeometry>()
-      const tinted = new Map<string, MeshPhysicalMaterial>()
-      const base = convert(batch.material as Material)
       const instance = new Matrix4()
-      const tint = new Color()
+      const matrix = new Matrix4()
       internals._instanceInfo.forEach((info, i) => {
         if (!(info.active && info.visible)) return
         const geometryId = batch.getGeometryIdAt(i)
@@ -231,39 +315,35 @@ export function sceneForPathTracing(
         if (!geometry) {
           geometry = batchPiece(batch.geometry, internals.getGeometryRangeAt(geometryId))
           pieces.set(geometryId, geometry)
-          owned.push(geometry)
         }
-        let material = base
-        if (internals._colorsTexture) {
-          batch.getColorAt(i, tint)
-          const key = tint.getHexString()
-          material = tinted.get(key) ?? base.clone()
-          if (!tinted.has(key)) {
-            material.color.multiply(tint)
-            tinted.set(key, material)
-            owned.push(material)
-          }
-        }
-        const mesh = new Mesh(geometry, material)
         batch.getMatrixAt(i, instance)
-        mesh.matrix.multiplyMatrices(batch.matrixWorld, instance)
-        mesh.matrixAutoUpdate = false
-        add(mesh)
+        matrix.multiplyMatrices(batch.matrixWorld, instance)
+        let tint: Color | undefined
+        if (internals._colorsTexture) {
+          tint = new Color()
+          batch.getColorAt(i, tint)
+        }
+        collect(geometry, matrix, batch.material as Material, lid, tint)
       })
+      for (const geometry of pieces.values()) geometry.dispose()
       return
     }
 
-    const copy = object.clone(false) as Drawable
-    copy.geometry = object.geometry.clone()
-    owned.push(copy.geometry)
-    copy.material = Array.isArray(object.material)
-      ? object.material.map(convert)
-      : convert(object.material)
-    copy.matrix.copy(object.matrixWorld)
-    copy.matrixAutoUpdate = false
-    copy.matrixWorldNeedsUpdate = true
-    add(copy)
+    const mesh = object as Mesh
+    collect(mesh.geometry, mesh.matrixWorld, mesh.material, lid)
   })
+
+  for (const { material, lid, pieces } of parts.values()) {
+    const merged = pieces.length === 1 ? pieces[0]! : mergeGeometries(pieces, false)
+    if (!merged) continue
+    if (merged !== pieces[0]) for (const piece of pieces) piece.dispose()
+    owned.push(merged)
+    const mesh = new Mesh(merged, material)
+    /** Read by the path tracer: rays looking for the sun or the sky pass through. */
+    if (lid) (mesh as Mesh & { visibleToShadowRays?: boolean }).visibleToShadowRays = false
+    scene.add(mesh)
+  }
+  for (const material of tinted.values()) owned.push(material)
 
   scene.environment = filterableSky(source.environment)
   if (scene.environment && scene.environment !== source.environment) owned.push(scene.environment)

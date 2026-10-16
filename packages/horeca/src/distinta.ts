@@ -43,27 +43,77 @@ function isShown(node: DistintaNode, nodes: Readonly<Record<string, DistintaNode
 
 const compare = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0)
 
-/** Count the articles placed in the scene: one per visible node carrying product data. */
+/** A copper size in inches as fitters say it: 0.875 → 7/8", 1.125 → 1 1/8". */
+export function pollici(inches: number): string {
+  const whole = Math.floor(inches + 1e-6)
+  const sixteenths = Math.round((inches - whole) * 16)
+  if (sixteenths === 0) return `${whole}"`
+  let num = sixteenths
+  let den = 16
+  while (num % 2 === 0) {
+    num /= 2
+    den /= 2
+  }
+  return `${whole ? `${whole} ` : ''}${num}/${den}"`
+}
+
+/** Refrigerant runs (the built-in lineset and liquid-line kinds): length in metres and size. */
+function lineaFrigo(node: DistintaNode): { metres: number; code: string; name: string } | null {
+  const run = node as DistintaNode & {
+    path?: ReadonlyArray<readonly [number, number, number]>
+    suctionDiameter?: number
+    liquidDiameter?: number
+    diameter?: number
+  }
+  if ((node.type !== 'lineset' && node.type !== 'liquid-line') || !run.path) return null
+  let metres = 0
+  for (let i = 1; i < run.path.length; i++) {
+    const [a, b] = [run.path[i - 1]!, run.path[i]!]
+    metres += Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2])
+  }
+  if (node.type === 'liquid-line') {
+    const size = pollici(run.diameter ?? 0.375)
+    return { metres, code: `LINEA-LIQ ${size}`, name: `Linea del liquido ${size} (m)` }
+  }
+  const sizes = `${pollici(run.suctionDiameter ?? 0.875)} + ${pollici(run.liquidDiameter ?? 0.375)}`
+  return { metres, code: `LINEA-FRIGO ${sizes}`, name: `Linea frigorifera ${sizes} (m)` }
+}
+
+/**
+ * Count the articles placed in the scene: one per visible node carrying product data. Refrigerant
+ * runs count in whole metres (rounded up per article, over all its runs): their own CRM article
+ * when one is linked, else a local row per pipe size.
+ */
 export function buildDistinta(nodes: Readonly<Record<string, DistintaNode>>): Distinta {
   const rows = new Map<string, DistintaRow>()
   const local = new Map<string, DistintaRow>()
+  const metres = new Map<DistintaRow, number>()
   let invalid = 0
   for (const node of Object.values(nodes)) {
     const read = readProductRef(node.metadata)
-    if (read.kind === 'none' || !isShown(node, nodes)) continue
+    const linea = lineaFrigo(node)
+    if ((read.kind === 'none' && !linea) || !isShown(node, nodes)) continue
     if (read.kind === 'invalid') {
       invalid++
       continue
     }
-    const [bucket, key] =
-      read.kind === 'article' ? [rows, read.ref.item_id] : [local, read.ref.code]
-    const row = bucket.get(key)
-    if (row) row.quantity++
-    else bucket.set(key, { ...read.ref, quantity: 1 })
+    const ref =
+      read.kind === 'none' ? { item_id: '', code: linea!.code, name: linea!.name } : read.ref
+    const [bucket, key] = ref.item_id ? [rows, ref.item_id] : [local, ref.code]
+    let row = bucket.get(key)
+    if (!row) {
+      row = { ...ref, quantity: 0 }
+      bucket.set(key, row)
+    }
+    if (linea) metres.set(row, (metres.get(row) ?? 0) + linea.metres)
+    else row.quantity++
   }
+  for (const [row, m] of metres) row.quantity += Math.ceil(m - 1e-6)
   const byCode = (a: DistintaRow, b: DistintaRow) =>
     compare(a.code, b.code) || compare(a.item_id, b.item_id)
-  return { rows: [...rows.values()].sort(byCode), local: [...local.values()].sort(byCode), invalid }
+  const counted = (bucket: Map<string, DistintaRow>) =>
+    [...bucket.values()].filter((r) => r.quantity > 0).sort(byCode)
+  return { rows: counted(rows), local: counted(local), invalid }
 }
 
 /**

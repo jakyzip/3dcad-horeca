@@ -57,13 +57,25 @@ export function equipmentFloorplan(
     })
   }
   if (label) {
+    // Fits the shorter side and the code's length across the width, within readable plan sizes
+    // (a character is about 0.6 of the font size wide).
+    const fontSize = Math.max(
+      0.05,
+      Math.min(
+        0.12,
+        Math.min(node.width, node.depth) / 4,
+        (node.width * 0.9) / (label.length * 0.6),
+      ),
+    )
+    // A wall unit hangs over a floor unit, whose code takes the middle: its own goes against the
+    // wall, smaller, so the two do not print over each other.
+    const [lx, ly] = dashed ? at(0, -hd + Math.min(0.06, fontSize * 0.7)) : [cx, cz]
     children.push({
       kind: 'text',
-      x: cx,
-      y: cz,
+      x: lx,
+      y: ly,
       text: label,
-      // Fits the shorter side, within readable plan sizes.
-      fontSize: Math.max(0.06, Math.min(0.15, Math.min(node.width, node.depth) / 4)),
+      fontSize: dashed ? Math.min(fontSize, 0.07) : fontSize,
       fill: '#1f2937',
       textAnchor: 'middle',
       dominantBaseline: 'central',

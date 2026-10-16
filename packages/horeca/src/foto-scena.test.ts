@@ -18,6 +18,7 @@ import {
   PerspectiveCamera,
   RGBAFormat,
   Scene,
+  Vector3,
 } from 'three'
 import { sceneForPathTracing } from './foto-scena'
 
@@ -47,11 +48,32 @@ describe('sceneForPathTracing', () => {
     const [copy] = meshes(scene)
     expect(meshes(scene)).toHaveLength(1)
     expect(copy!.geometry).not.toBe(mesh.geometry)
-    expect(copy!.matrix.elements.slice(12, 15)).toEqual([2, 1, 0])
+    // Baked into world space: the copy itself sits at the origin.
+    copy!.geometry.computeBoundingBox()
+    const centre = copy!.geometry.boundingBox!.getCenter(new Vector3())
+    expect(centre.toArray()).toEqual([2, 1, 0])
     const material = copy!.material as MeshStandardMaterial & { isMeshPhysicalMaterial: boolean }
     expect(material.isMeshPhysicalMaterial).toBe(true)
     expect(material.color.getHex()).toBe(0x336699)
     expect(material.roughness).toBeCloseTo(0.4)
+  })
+
+  test('merges by material, so no geometry carries more groups than the tracer packs', () => {
+    const source = new Scene()
+    const steel = new MeshStandardMaterial({ color: 0xcccccc })
+    const tiles = new BoxGeometry(1, 1, 1, 10, 10, 2)
+    // A tiled wall: hundreds of groups over two materials.
+    tiles.clearGroups()
+    const triangles = tiles.index!.count / 3
+    for (let i = 0; i < triangles; i++) tiles.addGroup(i * 3, 3, i % 2)
+    expect(tiles.groups.length).toBeGreaterThan(128)
+    source.add(new Mesh(tiles, [steel, new MeshStandardMaterial({ color: 0x2255aa })]))
+    source.add(box(steel), box(steel))
+
+    const copies = meshes(sceneForPathTracing(source, camera).scene)
+    expect(copies).toHaveLength(2)
+    expect(copies.every((m) => m.geometry.groups.length === 0)).toBe(true)
+    expect(copies.every((m) => !Array.isArray(m.material))).toBe(true)
   })
 
   test('leaves out what the view does not draw as the room', () => {
@@ -70,7 +92,7 @@ describe('sceneForPathTracing', () => {
     expect(meshes(sceneForPathTracing(source, camera).scene)).toHaveLength(1)
   })
 
-  test('splits a batch into one mesh per visible instance, each with its own vertices', () => {
+  test('takes each visible instance of a batch where it stands, hidden ones left out', () => {
     const source = new Scene()
     const batch = new BatchedMesh(4, 200, 400, new MeshStandardMaterial())
     const small = batch.addGeometry(new BoxGeometry(1, 1, 1))
@@ -81,12 +103,14 @@ describe('sceneForPathTracing', () => {
     source.add(batch)
 
     const copies = meshes(sceneForPathTracing(source, camera).scene)
-    expect(copies).toHaveLength(2)
-    expect(copies[0]!.geometry.attributes.position!.count).toBe(24)
-    expect(copies[0]!.matrix.elements.slice(12, 15)).toEqual([1, 0, 0])
-    expect(copies[1]!.matrix.elements.slice(12, 15)).toEqual([0, 0, 5])
-    copies[1]!.geometry.computeBoundingBox()
-    expect(copies[1]!.geometry.boundingBox!.max.x).toBeCloseTo(1)
+    expect(copies).toHaveLength(1)
+    // Two boxes of 36 corners each (no index): the hidden third is not there.
+    expect(copies[0]!.geometry.attributes.position!.count).toBe(72)
+    copies[0]!.geometry.computeBoundingBox()
+    const { min, max } = copies[0]!.geometry.boundingBox!
+    expect(max.x).toBeCloseTo(1.5)
+    expect(max.z).toBeCloseTo(6)
+    expect(min.z).toBeCloseTo(-0.5)
   })
 
   test('keeps the sun and gives the sky light a filterable copy', () => {

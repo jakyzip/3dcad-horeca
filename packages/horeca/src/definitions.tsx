@@ -5,6 +5,7 @@ import type {
   Capabilities,
   FloorplanGeometry,
   NodeDefinition,
+  NodePort,
   ParametricDescriptor,
   ParamField,
 } from '@pascal-app/core'
@@ -41,6 +42,13 @@ import {
   buildLavelloGeometry,
 } from './geometry'
 import {
+  buildCentraleFrigoGeometry,
+  buildEvaporatoreGeometry,
+  buildMotocondensanteGeometry,
+  buildQuadroFrigoGeometry,
+  compressoriDi,
+} from './geometry-frigo'
+import {
   buildAbbattitoreGeometry,
   buildFrigoriferoGeometry,
   buildLavamaniGeometry,
@@ -51,6 +59,7 @@ import {
   buildTramoggiaGeometry,
 } from './geometry-lab'
 import { buildTavoloGeometry } from './geometry-smontabili'
+import { contenutoPianta, primoNumero } from './pianta-documento'
 import { readProductRef } from './product'
 import { ProductField } from './product-field'
 import { equipmentSchedule } from './schedule'
@@ -60,8 +69,12 @@ import {
   BANCO_FRIGO,
   BancoFrigoNode,
   CELLA_FRIGO,
+  CENTRALE_FRIGO,
   CellaFrigoNode,
+  CentraleFrigoNode,
   type EquipmentNode,
+  EVAPORATORE,
+  EvaporatoreNode,
   FRIGORIFERO,
   FrigoriferoNode,
   GENERICO,
@@ -74,10 +87,14 @@ import {
   LavelloNode,
   MANTECATORE,
   MantecatoreNode,
+  MOTOCONDENSANTE,
+  MotocondensanteNode,
   PASTORIZZATORE,
   PastorizzatoreNode,
   PENSILE,
   PensileNode,
+  QUADRO_FRIGO,
+  QuadroFrigoNode,
   STRUTTURE,
   TAVOLO,
   TavoloNode,
@@ -106,6 +123,15 @@ type EquipmentSpec<S extends ZodObject> = {
   wallMounted?: { elevation: number }
   /** Kind-specific yes/no options, shown under "Opzioni". */
   options?: ReadonlyArray<{ key: string; label: string }>
+  /**
+   * Refrigerant service ports, in the unit's frame (from its underside, before yaw): where the
+   * built-in lineset tool snaps a run onto the unit.
+   */
+  ports?: (node: EquipmentNode) => Array<{
+    id: string
+    at: [number, number, number]
+    towards: [number, number, number]
+  }>
   /** Further kind-specific fields, in a group of their own before "Opzioni". */
   extra?: { label: string; fields: ParamField<EquipmentNode>[] }
   build: (node: EquipmentNode) => Object3D
@@ -255,6 +281,32 @@ function levelProblems(
   return controllaLivello(equipment, walls, readSoglie(host?.metadata))
 }
 
+/** The lineset's own default suction size: a run drawn onto the port mates without a step. */
+const REFRIGERANT_PORT_DIAMETER_IN = 0.875
+
+/** The spec's ports in level-local metres: lifted by the elevation, turned by the yaw. */
+function portsOf<S extends ZodObject>(spec: EquipmentSpec<S>, node: EquipmentNode): NodePort[] {
+  const cos = Math.cos(node.rotation)
+  const sin = Math.sin(node.rotation)
+  // Yaw about +y, as three.js turns the unit's group.
+  const turn = ([x, y, z]: [number, number, number]): [number, number, number] => [
+    x * cos + z * sin,
+    y,
+    -x * sin + z * cos,
+  ]
+  const [px, py, pz] = node.position
+  return (spec.ports?.(node) ?? []).map(({ id, at, towards }) => {
+    const [x, y, z] = turn([at[0], at[1] + (node.elevation ?? 0), at[2]])
+    return {
+      id,
+      position: [px + x, py + y, pz + z] as const,
+      direction: turn(towards),
+      diameter: REFRIGERANT_PORT_DIAMETER_IN,
+      system: 'refrigerant',
+    }
+  })
+}
+
 function defineEquipment<S extends ZodObject>(spec: EquipmentSpec<S>): AnyNodeDefinition {
   // The builder draws from the unit's underside; a wall-hung unit is lifted by its elevation.
   // The geometry system moves the returned object's children into the node's group and drops
@@ -284,6 +336,7 @@ function defineEquipment<S extends ZodObject>(spec: EquipmentSpec<S>): AnyNodeDe
         elevation: spec.wallMounted?.elevation ?? 0,
       }) as never,
     capabilities,
+    ...(spec.ports ? { ports: (node: unknown) => portsOf(spec, node as EquipmentNode) } : {}),
     parametrics: parametricsFor(spec as unknown as EquipmentSpec<ZodObject>) as never,
     geometry: (node) => build(node as unknown as EquipmentNode),
     geometryKey: (node) => {
@@ -318,14 +371,29 @@ function defineEquipment<S extends ZodObject>(spec: EquipmentSpec<S>): AnyNodeDe
         )
         if (avvisi) parts.push(avvisi)
       }
-      const list = readAllacciamenti(n.metadata)
+      const document = readFloorplanContext(ctx).purpose === 'document'
+      const contenuto = document ? contenutoPianta() : 'tutto'
+      const saved = readAllacciamenti(n.metadata)
+      // The customer's sheet shows no connections; the services sheet numbers them, its table
+      // carries the measures.
+      const list =
+        contenuto === 'cliente'
+          ? []
+          : contenuto === 'impianti'
+            ? saved.map((a) => ({ ...a, quota: false }))
+            : saved
+      const numero = contenuto === 'impianti' ? primoNumero(n.id) : undefined
       if (!list.length) return parts.length > 1 ? { kind: 'group', children: parts } : body
       const faces = list.some((a) => a.quota)
         ? levelWallFaces(ctx.parent, (id) => ctx.resolve(id))
         : []
       // Asked for by the user, so they show and hide with the manual dimensions, not the automatic ones.
-      const impianti = allacciamentiFloorplan(n, list, faces, (g) =>
-        withFloorplanGeometryMetadata(g, { annotationRole: 'manual-dimension' }),
+      const impianti = allacciamentiFloorplan(
+        n,
+        list,
+        faces,
+        (g) => withFloorplanGeometryMetadata(g, { annotationRole: 'manual-dimension' }),
+        numero,
       )
       if (impianti) parts.push(impianti)
       return parts.length > 1 ? { kind: 'group', children: parts } : body
@@ -413,9 +481,14 @@ export const bancoFrigoDefinition = defineEquipment({
   schema: BancoFrigoNode,
   label: 'Banco frigo',
   plural: 'Banchi frigo',
-  description: 'Banco refrigerato in acciaio inox con piano di lavoro e porte frontali.',
+  description:
+    'Banco refrigerato in acciaio inox con piano di lavoro e porte frontali; se è remoto, la linea frigorifera si aggancia dietro, in basso a destra.',
   icon: '/icons/horeca/banco-frigo.svg',
   size: { width: 1.5, depth: 0.7, height: 0.85 },
+  // A remote counter: its lines leave from the back, low down, towards the wall behind it.
+  ports: (n) => [
+    { id: 'linea', at: [n.width / 2 - 0.15, 0.1, -n.depth / 2 - 0.02], towards: [0, 0, -1] },
+  ],
   build: as(buildBancoFrigoGeometry),
   marks: bancoMarks,
   paletteOrder: 10,
@@ -426,9 +499,14 @@ export const cellaFrigoDefinition = defineEquipment({
   schema: CellaFrigoNode,
   label: 'Cella frigo',
   plural: 'Celle frigo',
-  description: 'Cella frigorifera modulare a pannelli, con porta sul fronte.',
+  description:
+    'Cella frigorifera modulare a pannelli, con porta sul fronte; l’evaporatore è dentro, la linea frigorifera si aggancia sul tetto, dietro a destra.',
   icon: '/icons/horeca/cella-frigo.svg',
   size: { width: 2, depth: 2, height: 2.2 },
+  // The unit cooler hangs inside, under the roof panels: its lines come in through the roof.
+  ports: (n) => [
+    { id: 'linea', at: [n.width / 2 - 0.25, n.height, -n.depth / 2 + 0.25], towards: [0, 1, 0] },
+  ],
   build: as(buildCellaFrigoGeometry),
   marks: cellaMarks,
   paletteOrder: 20,
@@ -624,6 +702,77 @@ export const genericoDefinition = defineEquipment({
   paletteOrder: 90,
 })
 
+export const motocondensanteDefinition = defineEquipment({
+  kind: MOTOCONDENSANTE,
+  schema: MotocondensanteNode,
+  label: 'Unità motocondensante',
+  plural: 'Unità motocondensanti',
+  description:
+    'Unità esterna con compressore e condensatore ventilato; le linee frigorifere si agganciano ai rubinetti sul fianco destro.',
+  icon: '/icons/horeca/motocondensante.svg',
+  size: { width: 1.1, depth: 0.45, height: 0.8 },
+  ports: (n) => [
+    { id: 'linea', at: [n.width / 2 + 0.06, n.height * 0.2, n.depth * 0.12], towards: [1, 0, 0] },
+  ],
+  build: as(buildMotocondensanteGeometry),
+  marks: diagonaleMarks,
+  paletteOrder: 80,
+})
+
+export const evaporatoreDefinition = defineEquipment({
+  kind: EVAPORATORE,
+  schema: EvaporatoreNode,
+  label: 'Evaporatore',
+  plural: 'Evaporatori',
+  description:
+    'Evaporatore ventilato da appendere dentro una cella costruita a mano o un locale refrigerato (nelle celle frigo del catalogo è già compreso); attacchi sul fianco destro.',
+  icon: '/icons/horeca/evaporatore.svg',
+  size: { width: 1.0, depth: 0.5, height: 0.4 },
+  wallMounted: { elevation: 2.0 },
+  ports: (n) => [
+    { id: 'linea', at: [n.width / 2 + 0.08, n.height * 0.55, -n.depth * 0.17], towards: [1, 0, 0] },
+  ],
+  build: as(buildEvaporatoreGeometry),
+  marks: diagonaleMarks,
+  paletteOrder: 81,
+})
+
+export const centraleFrigoDefinition = defineEquipment({
+  kind: CENTRALE_FRIGO,
+  schema: CentraleFrigoNode,
+  label: 'Centrale frigorifera',
+  plural: 'Centrali frigorifere',
+  description:
+    'Più compressori su un telaio, con ricevitore, collettori e quadro: una linea frigorifera per ogni compressore parte dall’alto.',
+  icon: '/icons/horeca/centrale-frigo.svg',
+  size: { width: 2.0, depth: 0.8, height: 1.6 },
+  ports: (n) => {
+    const comp = compressoriDi(n.width)
+    return Array.from({ length: comp.count }, (_, i) => ({
+      id: `linea-${i + 1}`,
+      at: [comp.x(i), n.height, -n.depth / 2 + 0.2] as [number, number, number],
+      towards: [0, 1, 0] as [number, number, number],
+    }))
+  },
+  build: as(buildCentraleFrigoGeometry),
+  marks: diagonaleMarks,
+  paletteOrder: 82,
+})
+
+export const quadroFrigoDefinition = defineEquipment({
+  kind: QUADRO_FRIGO,
+  schema: QuadroFrigoNode,
+  label: 'Quadro elettrico frigo',
+  plural: 'Quadri elettrici frigo',
+  description: 'Quadro di comando a parete con il regolatore della cella.',
+  icon: '/icons/horeca/quadro-frigo.svg',
+  size: { width: 0.4, depth: 0.15, height: 0.5 },
+  wallMounted: { elevation: 1.3 },
+  build: as(buildQuadroFrigoGeometry),
+  marks: genericoMarks,
+  paletteOrder: 83,
+})
+
 export const EQUIPMENT_DEFINITIONS = [
   bancoFrigoDefinition,
   cellaFrigoDefinition,
@@ -637,6 +786,10 @@ export const EQUIPMENT_DEFINITIONS = [
   pastorizzatoreDefinition,
   frigoriferoDefinition,
   tramoggiaDefinition,
+  motocondensanteDefinition,
+  evaporatoreDefinition,
+  centraleFrigoDefinition,
+  quadroFrigoDefinition,
   genericoDefinition,
 ]
 export const EQUIPMENT_KINDS: readonly string[] = [
@@ -652,5 +805,9 @@ export const EQUIPMENT_KINDS: readonly string[] = [
   PASTORIZZATORE,
   FRIGORIFERO,
   TRAMOGGIA,
+  MOTOCONDENSANTE,
+  EVAPORATORE,
+  CENTRALE_FRIGO,
+  QUADRO_FRIGO,
   GENERICO,
 ]

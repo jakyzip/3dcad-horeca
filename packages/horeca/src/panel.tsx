@@ -32,6 +32,7 @@ import { useHorecaLabels } from './labels'
 import { levelPlanEntries } from './plan-entries'
 import { RenderSection } from './render-section'
 import { RilievoNode } from './rilievo'
+import { CENTRALE_FRIGO, EVAPORATORE, MOTOCONDENSANTE, QUADRO_FRIGO } from './schema'
 import { TavolaSection } from './tavola-section'
 
 function armTool(kind: string, defaults: Record<string, unknown> | null = null) {
@@ -561,6 +562,59 @@ function PanelColumn({ children }: { children: ReactNode }) {
   )
 }
 
+const FRIGO_UNITS = [MOTOCONDENSANTE, EVAPORATORE, CENTRALE_FRIGO, QUADRO_FRIGO]
+
+/**
+ * The refrigeration plant in one place: its units, and the editor's own refrigerant line tools,
+ * which snap onto the units' service valves.
+ */
+function ImpiantoFrigoSection() {
+  const lines = [
+    { kind: 'lineset', label: 'Linea frigorifera', hint: 'aspirazione + liquido' },
+    { kind: 'liquid-line', label: 'Linea del liquido', hint: 'solo il tubo piccolo' },
+  ]
+  return (
+    <section className="flex flex-col gap-2">
+      <h3 className={HEADING}>Impianto frigorifero</h3>
+      <div className="grid grid-cols-2 gap-1.5">
+        {FRIGO_UNITS.map((kind) => {
+          const presentation = nodeRegistry.get(kind)?.presentation
+          return (
+            <button
+              className={`${BUTTON} flex items-center gap-2 text-left`}
+              key={kind}
+              onClick={() => armTool(kind)}
+              type="button"
+            >
+              {presentation?.icon.kind === 'url' && (
+                <img alt="" className="h-5 w-5" src={presentation.icon.src} />
+              )}
+              <span className="truncate">{presentation?.label ?? kind}</span>
+            </button>
+          )
+        })}
+        {lines.map((line) => (
+          <button
+            className={`${BUTTON} flex items-center gap-2 text-left`}
+            key={line.kind}
+            onClick={() => armTool(line.kind)}
+            title={line.hint}
+            type="button"
+          >
+            <img alt="" className="h-5 w-5" src="/icons/horeca/linea-frigo.svg" />
+            <span className="truncate">{line.label}</span>
+          </button>
+        ))}
+      </div>
+      <p className="text-xs opacity-60">
+        Linea: clic vicino al rubinetto di un componente per partire (si aggancia entro mezzo
+        metro), poi un clic per ogni tratto; Alt e muovi per salire o scendere; Esc per finire. In
+        distinta conta i metri.
+      </p>
+    </section>
+  )
+}
+
 /** Sidebar panels, one per kind of work: placing, services and checks, CRM, documents. */
 export function AttrezzaturePanel() {
   return (
@@ -576,6 +630,7 @@ export function AttrezzaturePanel() {
 export function ImpiantiPanel() {
   return (
     <PanelColumn>
+      <ImpiantoFrigoSection />
       <ImpiantiSection />
       <ControlliSection />
     </PanelColumn>

@@ -17,6 +17,11 @@ export const MANTECATORE = 'horeca:mantecatore'
 export const PASTORIZZATORE = 'horeca:pastorizzatore'
 export const FRIGORIFERO = 'horeca:frigorifero'
 export const TRAMOGGIA = 'horeca:tramoggia'
+// Refrigeration plant: the units the refrigerant linesets (built-in `lineset` kind) join.
+export const MOTOCONDENSANTE = 'horeca:motocondensante'
+export const EVAPORATORE = 'horeca:evaporatore'
+export const CENTRALE_FRIGO = 'horeca:centrale-frigo'
+export const QUADRO_FRIGO = 'horeca:quadro-frigo'
 
 /**
  * Floor-placed equipment shared by every Ho.Re.Ca kind: `position` is level-local meters with y at
@@ -102,6 +107,18 @@ export type FrigoriferoNode = z.infer<typeof FrigoriferoNode>
 
 export const TramoggiaNode = equipmentShape(TRAMOGGIA)
 export type TramoggiaNode = z.infer<typeof TramoggiaNode>
+
+export const MotocondensanteNode = equipmentShape(MOTOCONDENSANTE)
+export type MotocondensanteNode = z.infer<typeof MotocondensanteNode>
+
+export const EvaporatoreNode = equipmentShape(EVAPORATORE)
+export type EvaporatoreNode = z.infer<typeof EvaporatoreNode>
+
+export const CentraleFrigoNode = equipmentShape(CENTRALE_FRIGO)
+export type CentraleFrigoNode = z.infer<typeof CentraleFrigoNode>
+
+export const QuadroFrigoNode = equipmentShape(QUADRO_FRIGO)
+export type QuadroFrigoNode = z.infer<typeof QuadroFrigoNode>
 
 /** Every equipment node shares the base fields; kind-specific options are optional here. */
 export type EquipmentNode = BancoFrigoNode & {

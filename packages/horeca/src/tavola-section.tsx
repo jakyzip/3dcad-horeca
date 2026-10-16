@@ -9,9 +9,12 @@ import { crmLinkHostId, readCrmLink } from './crm-link'
 import { EQUIPMENT_KINDS } from './definitions'
 import { buildDistinta, type DistintaNode } from './distinta'
 import { logoDataUrl, useHorecaIntestazione } from './intestazione-store'
+import { numeraAllacciamenti } from './numerazione'
+import { conContenutoPianta } from './pianta-documento'
 import { levelPlanEntries } from './plan-entries'
 import { idProgettoDaUrl, useHorecaRenders } from './render-archivio'
 import { requestRender, useHorecaRender } from './render-store'
+import type { EquipmentNode } from './schema'
 import { type FormatoTavola, type Intestazione, tavolaPages } from './tavola'
 
 const BUTTON =
@@ -174,7 +177,27 @@ export function TavolaSection() {
     setMessage(null)
     try {
       const state = useScene.getState().nodes as Record<string, AnyNode>
-      const entries = levelPlanEntries(levelId as AnyNodeId, false, { automaticDimensions: true })
+      // The customer's plan without the services; the installers' with every connection dimensioned.
+      // The level's connections numbered once, for the services plan and its table alike.
+      const onLevel = ((state[levelId] as { children?: string[] } | undefined)?.children ?? [])
+        .map((id) => state[id])
+        .filter((n): n is AnyNode => Boolean(n) && n!.visible !== false)
+      const numerazione = numeraAllacciamenti(
+        onLevel.filter((n) => EQUIPMENT_KINDS.includes(n.type)) as unknown as EquipmentNode[],
+        onLevel.filter((n) => n.type === 'wall'),
+      )
+      const piantaDi = (contenuto: 'cliente' | 'impianti') => {
+        const entries = conContenutoPianta(
+          contenuto,
+          () => levelPlanEntries(levelId as AnyNodeId, false, { automaticDimensions: true }),
+          numerazione.inizio,
+        )
+        return {
+          model: entries.flatMap((e) => (e.model ? [e.model] : [])),
+          annotations: entries.flatMap((e) => (e.annotations ? [e.annotations] : [])),
+          rotationDeg: resolveSheetRotationDeg(state as never, levelId as AnyNodeId),
+        }
+      }
       // The renders chosen in the gallery; without any, one of the current view if asked.
       const fresh = !scelti.length && conRender ? await renderPerTavola() : null
       const renders = scelti.length
@@ -197,11 +220,9 @@ export function TavolaSection() {
       const pages = tavolaPages(
         formato,
         {
-          pianta: {
-            model: entries.flatMap((e) => (e.model ? [e.model] : [])),
-            annotations: entries.flatMap((e) => (e.annotations ? [e.annotations] : [])),
-            rotationDeg: resolveSheetRotationDeg(state as never, levelId as AnyNodeId),
-          },
+          pianta: piantaDi('cliente'),
+          piantaImpianti: numerazione.righe.length ? piantaDi('impianti') : null,
+          allacciamenti: numerazione.righe,
           renders,
           elenco: [...distinta.rows, ...distinta.local],
           impianti: Object.values(riepilogo.conteggi).some((n) => n > 0) ? riepilogo : null,

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { FotoDialog } from './foto-dialog'
+import { useHorecaLabels, useRenderNames } from './labels'
 import {
   idProgettoDaUrl,
   nomeFile,
@@ -121,7 +122,12 @@ function Galleria() {
 /** The 3D view as a picture: framed by the user, drawn bigger, without editing aids. */
 export function RenderSection() {
   const [width, setWidth] = useState(RENDER_WIDTHS[0]!.width)
-  const [withLabels, setWithLabels] = useState(false)
+  // Read after mount: the stored preferences are not there during server rendering.
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  const chosen = useRenderNames((s) => s.withNames)
+  const viewShows = useHorecaLabels((s) => s.shown)
+  const withLabels = mounted && (chosen ?? viewShows)
   const [foto, setFoto] = useState(false)
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState<{ text: string; error: boolean } | null>(null)
@@ -178,7 +184,7 @@ export function RenderSection() {
       <label className="flex cursor-pointer items-center gap-2 text-xs">
         <input
           checked={withLabels}
-          onChange={(e) => setWithLabels(e.target.checked)}
+          onChange={(e) => useRenderNames.getState().setWithNames(e.target.checked)}
           type="checkbox"
         />
         Con i nomi delle attrezzature

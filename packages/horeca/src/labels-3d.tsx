@@ -6,10 +6,12 @@ import {
   nodeRegistry,
   sceneRegistry,
   useScene,
+  type WallNode,
 } from '@pascal-app/core'
+import { getWallHideState, useViewer } from '@pascal-app/viewer'
 import { useFrame, useThree } from '@react-three/fiber'
 import { type FunctionComponent, useEffect, useRef } from 'react'
-import { type Camera, type Object3D, Vector3 } from 'three'
+import { type Camera, type Object3D, Raycaster, Vector2, Vector3 } from 'three'
 import { label3dText, useHorecaLabels } from './labels'
 import { RILIEVO } from './rilievo-schema'
 import type { EquipmentNode } from './schema'
@@ -26,10 +28,47 @@ function drawn(object: Object3D): boolean {
 export type LabelPlacement = { id: string; text: string; x: number; y: number }
 
 const point = new Vector3()
+const anchor = new Vector3()
+const facing = new Vector3()
+const ndc = new Vector2()
+const ray = new Raycaster()
+
+/**
+ * The walls standing in full in this view: a wall the wall mode lowers or cuts away (looking
+ * down into the room) hides nothing, as on screen.
+ */
+function standingWalls(camera: Camera): Object3D[] {
+  const { nodes } = useScene.getState()
+  const mode = useViewer.getState().wallMode
+  camera.getWorldDirection(facing)
+  const out: Object3D[] = []
+  for (const id of sceneRegistry.byType.wall ?? []) {
+    const object = sceneRegistry.nodes.get(id as AnyNodeId)
+    const wall = nodes[id as AnyNodeId] as WallNode | undefined
+    if (!(object && wall && drawn(object))) continue
+    type WallMesh = Parameters<typeof getWallHideState>[1]
+    type Direction = Parameters<typeof getWallHideState>[3]
+    if (
+      !getWallHideState(wall, object as unknown as WallMesh, mode, facing as unknown as Direction)
+    )
+      out.push(object)
+  }
+  return out
+}
+
+/** Whether a wall stands between the camera and `at`; `ndc` holds where `at` projects. */
+function behindAWall(camera: Camera, at: Vector3, walls: Object3D[]): boolean {
+  if (!walls.length) return false
+  ray.setFromCamera(ndc, camera)
+  // Stop just short of the label: the unit's own wall, flush behind it, does not count.
+  ray.far = Math.max(0, ray.ray.origin.distanceTo(at) - 0.05)
+  return ray.intersectObjects(walls, true).length > 0
+}
 
 /**
  * Where each unit's name sits on screen, in CSS pixels of a `width` × `height` view: above the
- * unit, centred. Units hidden, behind the camera or not yet built are left out. `kind` limits it
+ * unit, centred. Units hidden, behind the camera, behind a standing wall or not yet built are
+ * left out. `kind` limits it
  * to one kind; without it every Ho.Re.Ca unit is placed (the render draws them all at once).
  */
 export function labelPlacements(
@@ -39,6 +78,7 @@ export function labelPlacements(
   kind?: string,
 ): LabelPlacement[] {
   const placements: LabelPlacement[] = []
+  const walls = standingWalls(camera)
   for (const node of Object.values(useScene.getState().nodes) as AnyNode[]) {
     const type = node.type as string
     if (kind ? type !== kind : !type.startsWith('horeca:') || type === RILIEVO) continue
@@ -49,8 +89,11 @@ export function labelPlacements(
     // The label rides in the unit's own frame, as the unit's group places its geometry.
     group.updateWorldMatrix(true, false)
     point.set(0, (unit.elevation ?? 0) + unit.height + GAP, 0).applyMatrix4(group.matrixWorld)
+    anchor.copy(point)
     point.project(camera)
     if (point.z < -1 || point.z > 1) continue
+    ndc.set(point.x, point.y)
+    if (behindAWall(camera, anchor, walls)) continue
     placements.push({
       id: node.id,
       text: label3dText(unit, nodeRegistry.get(type)?.presentation?.label ?? type),

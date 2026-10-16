@@ -105,9 +105,9 @@ export const liquidLineDefinition: NodeDefinition<typeof LiquidLineNode> = {
 
   tool: () => import('./tool'),
   toolHints: [
-    { key: 'Click', label: 'Inizia la linea del liquido' },
-    { key: 'Click again', label: 'Posizionala (bloccata a 45°)' },
-    { key: 'Alt + drag', label: 'Sali in verticale ↕, fai clic per posizionare' },
+    { key: 'Clic', label: 'Inizia la linea del liquido' },
+    { key: 'Altro clic', label: 'Posizionala (bloccata a 45°)' },
+    { key: 'Alt + trascina', label: 'Sali in verticale ↕, fai clic per posizionare' },
     { key: 'F', label: 'Segui: ricalca una linea frigorifera' },
     { key: 'Esc', label: 'Annulla' },
   ],

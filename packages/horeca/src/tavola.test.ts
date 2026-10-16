@@ -98,6 +98,8 @@ describe('title block and tables', () => {
 describe('sheets', () => {
   const contenuto = {
     pianta: { model: [room], annotations: [], rotationDeg: 0 },
+    piantaImpianti: null,
+    allacciamenti: [],
     renders: [{ dataUrl: 'data:image/png;base64,AA==', aspect: 16 / 9 }],
     elenco: Array.from({ length: 60 }, (_, i) => ({
       item_id: '',
@@ -150,5 +152,91 @@ describe('sheets', () => {
     expect(rest).toHaveLength(0)
     expect(page!.overlay.some((g) => g.kind === 'image')).toBe(false)
     expect(texts(page!.plate)).toContain('1/1')
+  })
+
+  test('with connections, a services plan follows the customer sheet, with its table', () => {
+    const impianti = {
+      conteggi: {
+        'acqua-fredda': 2,
+        'acqua-calda': 0,
+        scarico: 1,
+        'elettrico-230': 0,
+        'elettrico-400': 1,
+        gas: 0,
+      },
+      potenze: {
+        'acqua-fredda': 0,
+        'acqua-calda': 0,
+        scarico: 0,
+        'elettrico-230': 0,
+        'elettrico-400': 5,
+        gas: 0,
+      },
+    }
+    const riga = (n: number) => ({
+      n,
+      attrezzatura: 'BF-200',
+      tipo: 'scarico' as const,
+      muro: 0.1,
+      laterale: 1.2345,
+      altezza: 0.2,
+    })
+    const conImpianti = {
+      ...contenuto,
+      piantaImpianti: { model: [room], annotations: [], rotationDeg: 0 },
+      allacciamenti: [
+        riga(1),
+        { ...riga(2), tipo: 'elettrico-400' as const, potenza: 5.5, laterale: null },
+      ],
+      impianti,
+    } as never
+    const a3 = tavolaPages('A3', conImpianti, INTESTAZIONE_VUOTA, info)
+    expect(a3.map((p) => p.title)).toEqual([info.progetto, 'Pianta impianti'])
+    // The summary moves to the services sheet; the customer's keeps the equipment list.
+    expect(texts(a3[0]!.overlay)).not.toContain('Impianti')
+    const servizi = texts(a3[1]!.overlay)
+    expect(servizi).toContain('Impianti')
+    expect(servizi).toContain('Allacciamenti')
+    // The measures in millimetres; a missing one shows as a dash.
+    expect(servizi).toEqual(expect.arrayContaining(['100', '1235', '200', '—', '5,50']))
+    expect(a3[1]!.windows).toHaveLength(1)
+    expect(texts(a3[1]!.plate)).toContain('2/2')
+    const a4 = tavolaPages('A4', conImpianti, INTESTAZIONE_VUOTA, info)
+    expect(a4.map((p) => p.title).slice(0, 4)).toEqual([
+      'Pianta',
+      'Pianta impianti',
+      'Allacciamenti',
+      'Vista 3D',
+    ])
+  })
+
+  test('many connections: the table goes on to sheets of its own', () => {
+    const molte = Array.from({ length: 150 }, (_, i) => ({
+      n: i + 1,
+      attrezzatura: 'X',
+      tipo: 'scarico' as const,
+      muro: 0.1,
+      laterale: 0.2,
+      altezza: 0.2,
+    }))
+    const a3 = tavolaPages(
+      'A3',
+      {
+        ...contenuto,
+        renders: [],
+        piantaImpianti: { model: [room], annotations: [], rotationDeg: 0 },
+        allacciamenti: molte,
+      } as never,
+      INTESTAZIONE_VUOTA,
+      info,
+    )
+    expect(a3.map((p) => p.title).slice(0, 3)).toEqual([
+      info.progetto,
+      'Pianta impianti',
+      'Allacciamenti',
+    ])
+    // Every number is somewhere, none twice.
+    const numbers = a3.flatMap((p) => texts(p.overlay)).filter((t) => /^\d+$/.test(t))
+    for (let n = 1; n <= 150; n++) expect(numbers).toContain(String(n))
   })
 })

@@ -114,9 +114,9 @@ export const linesetDefinition: NodeDefinition<typeof LinesetNode> = {
 
   tool: () => import('./tool'),
   toolHints: [
-    { key: 'Click', label: 'Inizia la linea frigorifera' },
-    { key: 'Click again', label: 'Posizionala (bloccata a 45°)' },
-    { key: 'Alt + drag', label: 'Sali in verticale ↕, fai clic per posizionare' },
+    { key: 'Clic', label: 'Inizia la linea frigorifera' },
+    { key: 'Altro clic', label: 'Posizionala (bloccata a 45°)' },
+    { key: 'Alt + trascina', label: 'Sali in verticale ↕, fai clic per posizionare' },
     { key: 'Esc', label: 'Annulla il punto iniziale' },
   ],
 
